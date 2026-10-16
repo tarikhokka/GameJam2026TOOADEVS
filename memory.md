@@ -47,6 +47,8 @@
 - Assembly'ler: CivilJam.Core, CivilJam.Desk, CivilJam.Flow. Desk ve Flow sadece Core'a bağlı, birbirini görmez.
 
 ### Dosya haritası
+- `Assets/_Project/Scenes/Sandbox_Flow.unity` — Onur için Unity Editor üzerinden oluşturulan Lit 2D (URP) deneme sahnesi; Canvas ve EventSystem eklendi. Canvas: Screen Space Overlay, Scale With Screen Size, 1920×1080, Match 0.5. Sonuç paneli henüz yok.
+
 `Assets/_Project/Scripts/Core/` (asmdef `CivilJam.Core`, namespace `CivilJam.Core`):
 - `Enums.cs` — GamePhase, ParamType, BuildingType, DocumentKind, ClueType, ProjectVerdict, BuildingStatus, EndingType.
 - `Runtime/` — ParamEntry (Required/Reported/Actual), DocumentData, ProjectData (Strength), GameState (kayıt), GameContext (ekranlara verilen), QuakeResult, WeeklyExpenseResult.

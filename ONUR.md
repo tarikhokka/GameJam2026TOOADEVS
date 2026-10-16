@@ -3,7 +3,7 @@
 Bu dosya Onur’un görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
-- Plan aşamasındayız. Bu çalışma kapsamında oyun kodu veya Unity sahnesi oluşturulmadı.
+- Flow kurulumu başladı: Sandbox_Flow sahnesi, Canvas ve EventSystem hazır. Sonuç ekranı ve Flow scriptleri henüz yok.
 - Kesinleşenler: level yerine gün; her gün afet olasılığı; afetsiz gün sonrası ihtimal artışı; haftalık gider; gün sonunda kayıt.
 - 14 gün, afet sonrası ihtimal sıfırlama, eski binaların tekrar değerlendirilmesi ve ek testin anında ödenmesi henüz öneridir.
 
@@ -52,3 +52,9 @@ Haftalık gün numarası ve son koşullarının akıştaki önceliği Core ile k
 
 ## Oturum notu
 - 2026-10-16 21:09 (UTC+3): Kişisel plan oluşturuldu; ortak hafıza gün sistemine uyarlandı. Kodlama başlamadı. Commit/push Onur tarafından yapılacak.
+
+- 2026-10-16: İlk adım tamamlandı. Unity Editor üzerinden Lit 2D (URP) şablonuyla `Assets/_Project/Scenes/Sandbox_Flow.unity` oluşturuldu ve kayıt doğrulandı. Canvas/UI henüz eklenmedi.
+
+- 2026-10-16: İkinci adım tamamlandı. Canvas + EventSystem oluşturuldu; Scale With Screen Size, 1920×1080 ve Match 0.5 kaydedilip sahne dosyasından doğrulandı. Sırada ResultScreen paneli var.
+
+- 2026-10-16: Ahmet’in `7545c64` Core sözleşmesi alındı ve incelendi. Flow ekranları `CivilJam.Core.IGameScreen` (Phase, Show, Hide, Completed) kullanacak; gazete `GameContext.LastQuake`, haftalık hesap `PendingWeekly` okuyacak. Ödeme seçimi `Actions.SetExpensePaid` ile iletilecek. GameManager/save-load uygulaması henüz yok. `AHMET.md` içindeki denge değerleri ekip onayı bekleyen önerilerdir.

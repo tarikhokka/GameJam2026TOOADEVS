@@ -36,3 +36,5 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Gün sistemi, haftalık gider ve gün sonu kayıt kararlarıyla ortak hafızanın güncellenmesi; Onur için C rolü çalışma planı | `memory.md`, `ONUR.md`, `CREDITS_AND_AI.md` | Onur Kabadayılar | 2026-10-16 |
 | Claude (Anthropic) | Masa ekranı kodu: veri modelleri, masa mantığı, UI script'leri, sahte Level 1 verisi, prefab/sahne kurulum aracı; B iş planı | `Assets/_Project/Scripts/Desk/**`, `OGUZHAN.md` | Oğuzhan | 2026-10-16 |
 | Claude (Anthropic) | Intro hikaye ekranı (daktilo efekti, sayfa geçişi) ve intro metinleri | `Assets/Scripts/Intro/IntroSequence.cs` | Oğuzhan | 2026-10-16 |
+| ChatGPT / Codex (OpenAI) | Unity arayüzünde Lit 2D (URP) deneme sahnesi oluşturma ve kayıt doğrulama; durum notları | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
+| ChatGPT / Codex (OpenAI) | Unity arayüzünde Canvas kurulumu, 1920×1080 ölçekleme ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |

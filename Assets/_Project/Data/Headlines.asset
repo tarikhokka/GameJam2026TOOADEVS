@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Headlines
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.HeadlineSO
   NoCollapse:
-  - "Deprem korkuttu, binalar ayakta kaldı"
+  - "Afet korkuttu, binalar ayakta kaldı"
   - "Sarsıntı geçti, şehir ayakta"
   - "Mahalleli sokakta sabahladı: Yıkım yok"
   - "Uzmanlar: Denetimli binalar sınavı geçti"
-  - "Derin bir nefes: Depremde can kaybı yaşanmadı"
+  - "Derin bir nefes: Can kaybı yaşanmadı"
   SingleCollapse:
   - "Şehir bu sabah bir binasını kaybetti: {building}"
-  - "Mahalle yasta: {building} depreme dayanamadı"
+  - "Mahalle yasta: {building} felakete dayanamadı"
   - "Yıkılan bina: {building}. Sorumlular aranıyor"
   - "Komşular anlatıyor: {building} bir anda çöktü"
   - "Soruşturma başladı: {building} neden yıkıldı?"
   MultiCollapse:
-  - "Depremde {count} bina yıkıldı"
+  - "Felakette {count} bina yıkıldı"
   - "Şehirde acı tablo: {count} bina çöktü"
   - "{count} bina ayakta kalamadı"
   - "Kara gün: {count} yapı yerle bir oldu"
@@ -33,6 +33,6 @@ MonoBehaviour:
   BribedCollapse:
   - "Yıkılan binanın onayında usulsüzlük şüphesi"
   - "Bu imza kimin?"
-  - "Belgeler sahte, imza gerçek"
+  - "Kurallar çiğnendi, imza gerçek"
   - "Savcılık harekete geçti: Onay sürecinde rüşvet iddiası"
   - "Müteahhit gözaltında, gözler onaylayan mühendiste"

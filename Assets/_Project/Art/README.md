@@ -3,6 +3,7 @@
 Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 
 ## Kurallar
+- **Stil: piksel art, toprak tonları** — referans: `Docs/Tasarim/yapi_denetim_formu.png`, `denetci_el_kitabi.png`. Piksel art için import: Filter Mode = Point, Compression = None.
 - Referans çözünürlük 1920x1080. Sprite import: Texture Type = Sprite (2D and UI), Sprite Mode = Single, Pixels Per Unit = 100.
 - Önce placeholder konur; gerçek görsel **aynı dosya adıyla üzerine yazılır** (.meta/GUID korunur, prefab referansları bozulmaz).
 - İsimler küçük harf + alt çizgi, Türkçe karakter yok: `alan_ad_durum.png`.

@@ -211,7 +211,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - (Yeni kural modeli) Hangi ihlal hangi afette yıkar? (Deprem ihlali → depremde, sel ihlali → selde?) Yangın afet olarak var mı? — A.
 - (Yeni kural modeli) "DSİ" gerçek bir kurum; hikâye kurgusal ülkede (Betonya) geçtiği için kurgusal bir ad düşünülebilir.
-- **Credits ("Emeği Geçenler") ekranı zorunlu** (ortam sesi CC BY 4.0). Sahibi belli değil; öneri: C (MainMenu onun). Metin EEE'de hazır: `CREDITS_AND_AI.md` sonu.
+- ✅ **Credits ekranı çözüldü:** Onur MainMenuScreen'e "Emeği Geçenler" paneli ekledi (metin `CREDITS_AND_AI.md` sonuyla aynı tutulur; yeni CC BY asset gelince ikisi birlikte güncellenir).
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.
@@ -258,6 +258,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
 | 2026-10-16 23:50 (UTC+3) | 23:15 kararı geri alındı: kaşe/imza ipuçları A'nın versiyonuyla kalır (lab adı uyuşmazlığı, farklı mühendis imzası). 5 ipucu | A'nın düzeltmesi iki sorunu da çözdü (açık STAMP_FAKE yazısı, görünmeyen nokta); görsel yükü yok (EEE kararı) |
 | 2026-10-17 00:10 (UTC+3) | Yeni kural modeli: tek Yapı Denetim Formu + Denetçi El Kitabı; tek ihlal = RED. Ek test, lab raporu, sahte belge ipuçları ve Reported/Actual kaldırıldı; rüşvet kalır; sel formda ve afet olarak var. Dereye uzaklık < 100 m → DSİ izni şart. (Yukarıdaki iki katmanlı sahte belge, ek test, Strength ve kaşe/imza ipucu kararlarının yerini alır) | Oğuzhan önerdi, Ahmet onayladı. Oyuncuya net ve okunabilir bulmaca; el kitabı karşılaştırması temayı (yönetmeliğe uymak) doğrudan oynatır |
+| 2026-10-17 00:30 (UTC+3) | EEE içerikleri yeni kural modeline uyarlandı: Selim "kurnaz" (rüşvetsiz, bir kuralı ince yerden deler), Sevim/Selim replikleri, manşet ve sonlarda lab raporu / sahte belge / ek test ifadeleri kaldırıldı; manşet ve sonlar afet türünden bağımsız (deprem + sel) | Yeni kural modeliyle tutarlılık; HeadlineSO'da afet türü alanı yok (EEE) || 2026-10-17 00:30 (UTC+3) | Görsel stil: piksel art, toprak tonları (`Docs/Tasarim` referanslarıyla aynı). Final görseller bu stile göre | Oğuzhan'ın form/el kitabı tasarımlarıyla görsel bütünlük (EEE) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

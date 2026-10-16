@@ -47,7 +47,13 @@
 - Assembly'ler: CivilJam.Core, CivilJam.Desk, CivilJam.Flow. Desk ve Flow sadece Core'a bağlı, birbirini görmez.
 
 ### Dosya haritası
-- `Assets/_Project/Scripts/Core/` — önceki notta repoda olmadığı belirtilmişti; bu güncellemede yerel/remote durum yeniden doğrulanmadı. Dosyalar push'lanınca buraya tek satırlık açıklamalarla eklenecek.
+`Assets/_Project/Scripts/Core/` (asmdef `CivilJam.Core`, namespace `CivilJam.Core`):
+- `Enums.cs` — GamePhase, ParamType, BuildingType, DocumentKind, ClueType, ProjectVerdict, BuildingStatus, EndingType.
+- `Runtime/` — ParamEntry (Required/Reported/Actual), DocumentData, ProjectData (Strength), GameState (kayıt), GameContext (ekranlara verilen), QuakeResult, WeeklyExpenseResult.
+- `Screens/` — IGameScreen (Show/Hide/Completed), IGameActions (ekranlardan Core'a tek giriş: ek test, onay, ret, gider seçimi).
+- `Config/` — BalanceSO, DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, HeadlineSO, EndingSO.
+- `Simulation/EarthquakeSimulator.cs` — yıkılma kuralı + JailRisk + hapis zarı.
+- Flow asmdef'i C oluşturur; Desk ve Flow referansı sadece `CivilJam.Core`. Ayrıntı ve Core önerileri: `AHMET.md`.
 - `Assets/_Project/Scripts/Desk/` (B) — Core'dan bağımsız; Core gelince adapter ile bağlanacak.
   - `CivilJam.Desk.asmdef` — Desk assembly'si (şimdilik Core referansı yok).
   - `Model/DeskModels.cs` — DeskProject/DeskDocument/DeskParam (Required/Reported/Actual), DeskDecision, DeskResult.
@@ -84,12 +90,11 @@
 - Paz 12:00: freeze. Paz 15-16:30: yükleme. 16:30-18:00: tampon.
 
 ### Durum
-- **Plan durumu:** Gün sistemi tasarımı sürüyor. Bu güncellemede kod yazılmadı.
-- **Önceki durum notu (bu oturumda doğrulanmadı):** Core veri sözleşmesi, SO'lar, EarthquakeSimulator, GameManager iskeleti, asmdef'ler tamamlandı olarak bildirilmişti.
-- **Sırada:** ProjectGenerator v0, EconomyCalculator, RuleSetSO/DayConfigSO asset'leri; gün/hafta/save veri sözleşmesinin kesinleştirilmesi.
+- **Plan durumu:** Gün sistemi tasarımı sürüyor.
+- **Core (A, 21:30):** Veri sözleşmesi gün sistemi adlarıyla push'landı (asmdef, runtime tipler, IGameScreen, IGameActions, SO sınıfları, EarthquakeSimulator). Unity'de hatasız derlendi. GameManager henüz yok.
 - **Desk (B):** v0 yazıldı ve derleniyor (henüz eski level/kota modeliyle; gün sistemine uyarlanacak). Unity'de henüz test edilmedi, kod commit'lenmedi.
-- **Bilinen sorunlar:**
-  - Önceki notta Core dosyalarının push beklediği belirtilmişti; güncel durum A ile doğrulanmalı.
+- **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
+- **Bilinen sorunlar:** —
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
@@ -123,6 +128,7 @@ Eski satırlar tarihseldir; aşağıdaki 21:09 güncellemesi level/ay sonu karar
 | 2026-10-16 21:09 (UTC+3) | C rolü Onur Kabadayılar; kişisel çalışma planı ONUR.md | Plan aşamasında sorumluluk ve açık karar takibi |
 | 2026-10-16 | Desk kendi modelleriyle çalışır, Core gelince adapter ile bağlanır | A'yı beklemeden ilerlemek, Core değişikliğinin etkisini tek dosyada tutmak |
 | 2026-10-16 | Desk prefab'ı ve Sandbox_Desk editor menüsüyle üretilir | Sahne/prefab YAML'ını elle yazmak kırılgan; üretilen iskelet Editor'de düzenlenebilir |
+| 2026-10-16 21:30 (UTC+3) | A rolü Ahmet İlman; kişisel plan AHMET.md. Ekranlar Core'a sadece IGameActions ile yazar | Para/gün/sonuç tek yerde değişir; çift ödeme/gün ilerlemesi önlenir |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

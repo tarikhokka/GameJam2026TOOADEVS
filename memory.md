@@ -25,7 +25,8 @@
   - Strength >= 1 ise ASLA yıkılmaz (dürüst yol garantisi).
   - Aksi halde Strength + gürültü(±0.15) < Intensity ise yıkılır. Intensity yapılandırılmış afet aralığından çekilir, max <= 1.0.
 - Rüşvet teklif eden her proje uygunsuzdur. Bazı uygunsuz projeler rüşvetsiz, sahte belgeyle temiz görünür; ek testle yakalanır. Dürüst usta = rüşvetsiz gelen gerçekten uygun proje.
-- İki katmanlı sahte belge: (1) bedava ipuçları (parsel/tarih/lab/kaşe/imza tutarsızlığı), (2) ücretli ek test (Reported vs Actual farkını açar).
+- İki katmanlı sahte belge: (1) bedava ipuçları (parsel/tarih/lab tutarsızlığı), (2) ücretli ek test (Reported vs Actual farkını açar).
+  - Kaşe ve imza belgelerde her zaman gerçek görünür; sahte belge bunlardan anlaşılmaz (WrongStamp/WrongSignature ipucu kaldırıldı). Uygulama: A `ClueType`/`ProjectGenerator`dan iki ipucunu çıkarır; B ekranda kaşe kodunu yazı olarak göstermez.
 - Hapis: kalıcı JailRisk. Yıkım varsa zar atılır.
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
@@ -183,6 +184,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:40 (UTC+3) | Kota kuralı yok; baskıyı günlük giderler kurar | Ahmet kararı (seçenek A). Ödenmeyen giderin sonucu sonra kararlaştırılacak; ağır olmalı |
 | 2026-10-16 22:40 (UTC+3) | Belge kaşesi (StampId) görsel değil okunabilir metin; sahte kaşe = başlıktaki lab adıyla uyuşmayan kaşe | Görsel iş yükü yok; ipucu okuyarak yakalanır, veri gerçek/sahte bilgisini sızdırmaz |
 | 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
+| 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

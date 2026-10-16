@@ -37,7 +37,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 |---|---|---|---|---|
 | Claude (Anthropic) | Proje hafıza dokümanı, iş planı, bu dosyanın şablonu | `memory.md`, `CLAUDE.md`, `CREDITS_AND_AI.md` | Tarık | 2026-10-16 |
 | Claude (Anthropic) | Geçici placeholder görselleri üreten script (düz renk + dosya adı yazısı); finalde değiştirilecek | `Assets/_Project/Art/*.png` | Tarık | 2026-10-16 |
-| Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset` | Tarık | 2026-10-16 |
+| Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması; son metinlerinin kod koşullarıyla tutarlılık düzeltmesi ve EndingSO asset'leri; oyun içi Emeği Geçenler metni | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset`, `Assets/_Project/Data/Endings/*.asset` | Tarık | 2026-10-16 |
 | Claude Code (Anthropic) | Core veri sözleşmesi kodu, deprem simülatörü, A rolü çalışma planı | `Assets/_Project/Scripts/Core/**`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
 | Claude Code (Anthropic) | Core Faz 1: proje üretici, afet sistemi, oyun oturumu/yöneticisi, kayıt, debug arayüzü, testler, veri asset ve Game sahnesi kurulum aracı; kurgusal isim listeleri | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `Assets/_Project/Scenes/Game.unity`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Gün sistemi, haftalık gider ve gün sonu kayıt kararlarıyla ortak hafızanın güncellenmesi; Onur için C rolü çalışma planı | `memory.md`, `ONUR.md`, `CREDITS_AND_AI.md` | Onur Kabadayılar | 2026-10-16 |
@@ -55,8 +55,25 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 CC BY (atıf zorunlu) asset'ler oyunun credits ekranında da görünmeli. Yeni asset eklenince bu blok da güncellenir; credits ekranı bu metni aynen kullanır.
 
 ```
+İMZA
+TOOADEVS · Civil Game Jam 2026
+
+EKİP
+Ahmet İlman — Oyun mantığı ve sistemler
+Oğuzhan Yurt — Masa ekranı
+Onur Kabadayılar — Akış ekranları ve menü
+Tarık Hokkaömeroğlu — Görsel, ses ve içerik
+
 SESLER
 Ortam sesi: "Suburban House Ambience 02" — msepitaph (freesound.org), CC BY 4.0
 Kağıt sesi: "paper5" — florian_reinke (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
+
+YAZI TİPİ
+Liberation Sans — SIL Open Font License 1.1
+
+YAPAY ZEKÂ
+Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları
+(Claude, ChatGPT/Codex, Gemini) kullanıldı. Ayrıntılı liste: CREDITS_AND_AI.md
 ```
+Not: Bu blok değişince `MainMenuScreen.cs` içindeki `CreditsText` de güncellenmeli (C).

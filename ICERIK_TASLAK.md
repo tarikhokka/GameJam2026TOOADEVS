@@ -107,17 +107,19 @@ Yer tutucular:
 
 Ton: ciddi ve duygusal; mizah yok. Oyuncuya "sen" denir. Gerçek olay/yer adı yok.
 Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
+Kural (01:30 düzeltme): Metinler sonun kod koşuluyla çelişmez. İyi son şu an "hapse girmeden son güne ulaştı" (yıkım olmuş olabilir) → "binaların hepsi ayaktaydı" denmez. Kötü son rüşvetsiz yıkımla da gelebilir → zarf/rüşvet varsayılmaz. Orta son dürüstlük varsaymaz.
+Esas kaynak: `Data/Endings/*.asset`. Bu dosya taslak/arşivdir; düzeltme önce asset'te yapılır, sonra buraya işlenir.
 
 ### Good — İyi son
 - Title: "Ayakta Kalanlar"
 - Body:
   > Ofisinin kapısını son kez kilitledin.
   >
-  > Masandan geçen her projeyi okudun. Eksik demiri, sahte raporu, masaya bırakılan zarfı geri çevirdin. Kimi gün kirayı zor ödedin, kimi gün kapında bir kabadayı bekledi.
+  > On dört gün boyunca masandan geçen her dosyaya bir karar verdin. Masaya bırakılan zarflar oldu, kapında bekleyen kabadayılar oldu. Kimi gün kirayı zor ödedin.
   >
-  > Ama yer sarsıldığında, imzanı taşıyan binaların hepsi ayaktaydı. İçlerinde uyuyan çocuklar ertesi sabah okula gitti.
+  > İmzanı taşıyan ve hâlâ ayakta duran her binada şimdi insanlar uyuyor, çocuklar büyüyor.
   >
-  > Gazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama o binalarda yaşayan herkes, farkında olmadan, sana bir sabah borçlu.
+  > Gazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama doğru atılmış her imza, birinin ertesi sabah uyanması demek.
   >
   > Deprem doğanın işidir. Binanın ayakta kalması ise bizim.
 
@@ -132,7 +134,7 @@ Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
   >
   > "Bu belgeleri incelediniz mi?"
   >
-  > Cevap veremiyorsun. Zarftaki para çoktan harcandı. O binada yaşayanlar ise geri gelmeyecek.
+  > Cevap veremiyorsun. O dosyaya bir kez daha bakabilirdin. O binada yaşayanlar ise geri gelmeyecek.
   >
   > Bir imza birkaç saniye sürer. Sonuçları bir ömür.
 - Not A/C'ye: "Hâkim isimleri okuyor" satırının altında yıkılan binaların kurgusal kayıp isimleri (`BuildingOutcome.VictimNames`) gösterilebilir. Body sabit metin; isimler ekranda ayrı listelenir.
@@ -144,7 +146,7 @@ Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
   >
   > Masadaki dosyaları kutuya koydun. Kaşeni, kalemini, yarım kalmış bir laboratuvar raporunu.
   >
-  > Bu şehirde dürüst kalmanın bir bedeli var. Bazen o bedel ayın sonunu getirememek.
+  > Bu şehirde bir mühendis olarak ayakta kalmak kolay değil. Kira, kredi, borç; hepsi aynı masada, imzanın yanında bekliyor.
   >
   > İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki depremde ayakta kalacağını artık sen değil, zaman gösterecek.
   >

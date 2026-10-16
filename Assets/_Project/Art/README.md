@@ -3,7 +3,7 @@
 Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 
 ## Kurallar
-- **Stil: piksel art, toprak tonları.** Piksel art için import: Filter Mode = Point, Compression = None. (İlk referans görseller `Docs/Tasarim/` 2026-10-17 00:50'de kaldırıldı; geçmişte `62165c0`.)
+- **Stil (ÖNERİ, Tarık onayı bekliyor): piksel art, toprak tonları.** Piksel art için import: Filter Mode = Point, Compression = None. (İlk referans görseller `Docs/Tasarim/` 2026-10-17 00:50'de kaldırıldı; geçmişte `62165c0`.)
 - Referans çözünürlük 1920x1080. Sprite import: Texture Type = Sprite (2D and UI), Sprite Mode = Single, Pixels Per Unit = 100.
 - Önce placeholder konur; gerçek görsel **aynı dosya adıyla üzerine yazılır** (.meta/GUID korunur, prefab referansları bozulmaz).
 - İsimler küçük harf + alt çizgi, Türkçe karakter yok: `alan_ad_durum.png`.

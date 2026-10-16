@@ -81,7 +81,7 @@
 - `Assets/_Project/Prefabs/Flow/` (C) — Result/DaySummary/DailyExpenses/Ending prefab'ları; Game.unity'ye A ekler.
 - `Assets/_Project/Prefabs/Desk/DeskScreen.prefab` (B) — masa ekranı; Game.unity'de Canvas altına konur (kendi içinde tam ekran stretch).
 - `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
-- `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
+- `Assets/_Project/Audio/` (EEE) — sesler `.ogg` (Kenney) ve `.wav` (`sfx_paper`, `mus_office_ambient`). İsim listesi: `Audio/README.md`.
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
 - `Assets/TextMesh Pro/` — TMP Essential Resources (A import etti, 23:15). Desk/Flow yazıları için gerekli; tekrar import etme, silme.
 - `ICERIK_TASLAK.md` (EEE) — SO metin taslakları (6 müteahhit, 20 gazete manşeti, 3 son). Onaylananlar `Data/` altındaki asset dosyalarına taşınır (A ile koordineli).
@@ -118,7 +118,7 @@
 - **Core (A):** Gün döngüsü, ProjectGenerator (müteahhit rolleri dahil), DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri. Game.unity'de Desk + 4 Flow ekranı ve 6 müteahhit bağlı. EditMode 10/10, derleme uyarısız. Ahmet Unity'de elle test etti (gün döngüsü, gazete verisi, dürüst bina asla yıkılmaz, save.json). GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
 - **Desk (B, 23:50):** Core tiplerini kullanıyor (IGameScreen, ctx.TodayProjects, ctx.Actions); kota yok (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; sesler ve ONAYLANDI/REDDEDİLDİ kaşe animasyonu.
 - **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A 01:10'da Game.unity'ye ekledi.
-- **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art, toprak tonları.
+- **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art ÖNERİ, Tarık henüz onaylamadı. (01:30) 3 EndingSO asset'i `Data/Endings/` altında; son metinleri kod koşullarıyla çelişmeyecek şekilde düzeltildi. Oyun içi Emeği Geçenler metnine ekip + yapay zekâ bilgisi eklendi (C: `MainMenuScreen.CreditsText` güncellenmeli).
 - **Sırada:**
   - C: DayIntro / Construction / Save ekranları (mavi kutuların yerine).
   - EEE: 3 EndingSO asset'i (`Data/Endings/`, metinler taslakta) → A Game.unity'ye bağlar.
@@ -169,7 +169,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - ✅ (A, 00:45, `5097e93`) Core rol mantığı uygulandı ve testli: Selim'e zarf düşmez, Kemal/Nuri rüşvetsiz proje getirmez, Rüstem sadece kabadayı günlerinde.
 - Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
 - [x] (EEE, 00:40) Headlines.asset 20 manşetle dolduruldu; eski "{count} can kaybı" kaldırıldı. A kontrol etti: tamam. Kural: `{count}` = yıkılan **bina** sayısı (sadece MultiCollapse), `{building}` = bina adı. Credits ekranı → Onur'a sorulacak (metin `CREDITS_AND_AI.md` sonunda).
-- [ ] **Son ekranları (A, 01:10):** Son ekranı şu an Onur'un yedek metnini gösteriyor; senin `ICERIK_TASLAK.md`'deki 3 son metnin oyunda değil. 3 EndingSO oluştur: sağ tık → Create → CivilJam → Ending, konum `Assets/_Project/Data/Endings/` (`Good.asset`, `Bad.asset`, `MiddleClosed.asset`). Alanlar: `Type` (Good / Bad / MiddleClosed), `Title`, `Body`, `Image` (`ending_good/bad/closed.png`). Haber ver → A "Link Data" ile Game.unity'ye bağlar.
+- [x] (EEE, 01:30: `Good`, `Bad`, `MiddleClosed` asset'leri push'landı, A "Link Data" ile bağlayabilir) **Son ekranları (A, 01:10):** Son ekranı şu an Onur'un yedek metnini gösteriyor; senin `ICERIK_TASLAK.md`'deki 3 son metnin oyunda değil. 3 EndingSO oluştur: sağ tık → Create → CivilJam → Ending, konum `Assets/_Project/Data/Endings/` (`Good.asset`, `Bad.asset`, `MiddleClosed.asset`). Alanlar: `Type` (Good / Bad / MiddleClosed), `Title`, `Body`, `Image` (`ending_good/bad/closed.png`). Haber ver → A "Link Data" ile Game.unity'ye bağlar.
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
@@ -225,7 +225,8 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
 | 2026-10-16 23:50 (UTC+3) | 23:15 kararı geri alındı: kaşe/imza ipuçları A'nın versiyonuyla kalır (lab adı uyuşmazlığı, farklı mühendis imzası). 5 ipucu | A'nın düzeltmesi iki sorunu da çözdü (açık STAMP_FAKE yazısı, görünmeyen nokta); görsel yükü yok (EEE kararı) |
 | 2026-10-17 00:30 (UTC+3) | (GERİ ALINDI 00:55 — kural modeli reddedildi) EEE içerikleri yeni kural modeline uyarlanmıştı: Selim "kurnaz", Sevim/Selim replikleri, manşet ve sonlarda afet-türünden bağımsız dil | Model Ahmet tarafından onaylanmadı; içerik mevcut modele (deprem, lab raporu, sahte belge) geri döndürüldü |
-| 2026-10-17 00:30 (UTC+3) | Görsel stil: piksel art, toprak tonları. Final görseller bu stile göre | EEE kararı (görsel alanı). Not: ilk referans olan `Docs/Tasarim` görselleri 00:50'de kaldırıldı (geçmişte `62165c0`) |
+| 2026-10-17 00:30 (UTC+3) | (ÖNERİ, KARAR DEĞİL) Görsel stil: piksel art, toprak tonları | Tarık açıkça onaylamadı; Claude referans görsellere bakarak yazmıştı. Karar Tarık'ta. Not: ilk referans olan `Docs/Tasarim` görselleri 00:50'de kaldırıldı (geçmişte `62165c0`) |
+| 2026-10-17 01:30 (UTC+3) | Son metinleri kod koşullarına uyduruldu: İyi son "binaların hepsi ayaktaydı" demez (İyi son şu an yıkım olsa da hapis yoksa geliyor); Kötü son rüşvet varsaymaz (rüşvetsiz yıkımla da hapis var); Orta son dürüstlük varsaymaz | Metin oyuncuya yanlış bir şey söylememeli. A'ya öneri: İyi son için "hiç yıkım yok" şartı + yıkımlı ama hapissiz durum için ayrı son (EEE yazar) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

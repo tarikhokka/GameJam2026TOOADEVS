@@ -956,9 +956,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e275900219e7b644962afc063102a4b, type: 2}
   - {fileID: 11400000, guid: 4aea4b1369f9b8d4bb24830d6ff7f75b, type: 2}
   endings:
-  - {fileID: 11400000, guid: 973addf757de2bc4997dac535e004421, type: 2}
-  - {fileID: 11400000, guid: aeb542fbfc10e284b98895dfb89d55fe, type: 2}
-  - {fileID: 11400000, guid: 1df6624b311e9594f912f5759ecc856b, type: 2}
+  - {fileID: 11400000, guid: 72e88ee141fc9584d9abf70d4ac54515, type: 2}
+  - {fileID: 11400000, guid: fbf75e601929e934db54bbd7109bdf30, type: 2}
+  - {fileID: 11400000, guid: f71d72d2ff6cfea4db540742096ac4f9, type: 2}
   - {fileID: 11400000, guid: 5e9cf3a4449b48548a2a57e9d6cb152e, type: 2}
   fixedSeed: 0
   fallbackGui: 1

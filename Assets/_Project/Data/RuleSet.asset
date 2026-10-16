@@ -12,52 +12,830 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1265a5273cde724e916bb10d80f617d, type: 3}
   m_Name: RuleSet
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.RuleSetSO
+  HandbookIntro: "Bu el kitab\u0131, yap\u0131 ruhsat\u0131 ba\u015Fvurular\u0131nda aranacak en d\xFC\u015F\xFCk de\u011Ferleri i\xE7erir.\n\n1. Ba\u015Fvurudaki adresten mahalleyi bul.\n2. Mahallenin deprem b\xF6lgesini tablodan \xF6\u011Fren.\n3. O b\xF6lgenin sayfas\u0131nda yap\u0131n\u0131n kat say\u0131s\u0131na uyan sat\u0131rdaki de\u011Ferlerle laboratuvar raporunu kar\u015F\u0131la\u015Ft\u0131r.\n\nTek bir de\u011Fer bile yetersizse yap\u0131 onaylanamaz."
+  Zones:
+  - Neighborhood: "Ye\u015Filtepe"
+    Zone: 1
+  - Neighborhood: "Karaa\u011Fa\xE7"
+    Zone: 1
+  - Neighborhood: Dereboyu
+    Zone: 1
+  - Neighborhood: "Ta\u015Focak"
+    Zone: 1
+  - Neighborhood: "Ba\u011Flarba\u015F\u0131"
+    Zone: 2
+  - Neighborhood: "Ku\u015Fdili"
+    Zone: 2
+  - Neighborhood: "G\xFClbah\xE7e"
+    Zone: 2
+  - Neighborhood: Akarsu
+    Zone: 2
+  - Neighborhood: "Sar\u0131kaya"
+    Zone: 3
+  - Neighborhood: Esenyurtlu
+    Zone: 3
+  - Neighborhood: "\xC7aml\u0131dere"
+    Zone: 3
+  - Neighborhood: "Kavakl\u0131"
+    Zone: 3
+  - Neighborhood: Yenikent
+    Zone: 4
+  - Neighborhood: "Bay\u0131rl\u0131"
+    Zone: 4
+  - Neighborhood: "\xC7iftlik\xF6n\xFC"
+    Zone: 4
+  - Neighborhood: "Sak\u0131zl\u0131k"
+    Zone: 4
   Rules:
-  - BuildingType: 0
-    Param: 0
-    DisplayName: "Beton dayan\u0131m\u0131"
-    Unit: MPa
-    Required: 30
-    FailRatioRange: {x: 0.55, y: 0.9}
-  - BuildingType: 0
-    Param: 1
-    DisplayName: "Donat\u0131 oran\u0131"
-    Unit: '%'
-    Required: 1
-    FailRatioRange: {x: 0.55, y: 0.9}
-  - BuildingType: 0
-    Param: 2
-    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
-    Unit: kPa
-    Required: 150
-    FailRatioRange: {x: 0.55, y: 0.9}
-  - BuildingType: 0
-    Param: 3
-    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
-    Unit: 
-    Required: 1
-    FailRatioRange: {x: 0.55, y: 0.9}
   - BuildingType: 1
     Param: 0
     DisplayName: "Beton dayan\u0131m\u0131"
     Unit: MPa
     Required: 35
+    Zone: 0
+    MinFloors: 0
+    MaxFloors: 0
+    Labels: []
+    Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
   - BuildingType: 1
     Param: 1
     DisplayName: "Donat\u0131 oran\u0131"
     Unit: '%'
     Required: 1.2
+    Zone: 0
+    MinFloors: 0
+    MaxFloors: 0
+    Labels: []
+    Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
   - BuildingType: 1
     Param: 2
     DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
     Unit: kPa
     Required: 200
+    Zone: 0
+    MinFloors: 0
+    MaxFloors: 0
+    Labels: []
+    Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
   - BuildingType: 1
     Param: 4
     DisplayName: "Yang\u0131n ka\xE7\u0131\u015F geni\u015Fli\u011Fi"
     Unit: m
     Required: 1.5
+    Zone: 0
+    MinFloors: 0
+    MaxFloors: 0
+    Labels: []
+    Description: 
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 4
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 1
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    - C40
+    Description: "Ta\u015F\u0131y\u0131c\u0131 sistemde kullan\u0131lan betonun s\u0131n\u0131f\u0131. Belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 1.2
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 1.4
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 1
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 1.2
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 0.9
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 1
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 0.8
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 1
+    DisplayName: "Donat\u0131 oran\u0131"
+    Unit: '%'
+    Required: 0.9
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Kolon kesitindeki boyuna donat\u0131 alan\u0131n\u0131n kesit alan\u0131na oran\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 16
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 18
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 14
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 16
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 14
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 16
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 12
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 6
+    DisplayName: "Donat\u0131 \xE7ap\u0131"
+    Unit: mm
+    Required: 14
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Boyuna donat\u0131da kullan\u0131lan en k\xFC\xE7\xFCk \xE7ubuk \xE7ap\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1600
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 2500
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1400
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 2000
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1200
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1800
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1000
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 7
+    DisplayName: Kolon kesiti
+    Unit: "cm\xB2"
+    Required: 1600
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin kat kolonlar\u0131n\u0131n en k\xFC\xE7\xFCk kesit alan\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 200
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 250
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 175
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 200
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 150
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 175
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 150
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 2
+    DisplayName: "Zemin ta\u015F\u0131ma g\xFCc\xFC"
+    Unit: kPa
+    Required: 150
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Zemin et\xFCd\xFCnde \xF6l\xE7\xFClen izin verilebilir ta\u015F\u0131ma g\xFCc\xFC."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 1
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 8
+    DisplayName: "Zemin s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels:
+    - ZE
+    - ZD
+    - ZC
+    - ZB
+    - ZA
+    Description: "Zemin et\xFCd\xFC raporundaki yerel zemin s\u0131n\u0131f\u0131. ZA en sa\u011Flam, ZE en zay\u0131ft\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 1.2
+    Zone: 1
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 1.4
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 1
+    Zone: 2
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 1.2
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 0.8
+    Zone: 3
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 1
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 0.6
+    Zone: 4
+    MinFloors: 1
+    MaxFloors: 4
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 3
+    DisplayName: "Deprem dayan\u0131m katsay\u0131s\u0131"
+    Unit: 
+    Required: 0.8
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Statik hesapta kullan\u0131lan deprem dayan\u0131m katsay\u0131s\u0131."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 9
+    DisplayName: "Perde duvar oran\u0131"
+    Unit: '%'
+    Required: 2
+    Zone: 1
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Betonarme perde duvar alan\u0131n\u0131n kat alan\u0131na oran\u0131. Sadece 5 ve \xFCzeri katl\u0131 yap\u0131larda aran\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 9
+    DisplayName: "Perde duvar oran\u0131"
+    Unit: '%'
+    Required: 1.5
+    Zone: 2
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Betonarme perde duvar alan\u0131n\u0131n kat alan\u0131na oran\u0131. Sadece 5 ve \xFCzeri katl\u0131 yap\u0131larda aran\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 9
+    DisplayName: "Perde duvar oran\u0131"
+    Unit: '%'
+    Required: 1.2
+    Zone: 3
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Betonarme perde duvar alan\u0131n\u0131n kat alan\u0131na oran\u0131. Sadece 5 ve \xFCzeri katl\u0131 yap\u0131larda aran\u0131r."
+    FailRatioRange: {x: 0.55, y: 0.9}
+  - BuildingType: 0
+    Param: 9
+    DisplayName: "Perde duvar oran\u0131"
+    Unit: '%'
+    Required: 1
+    Zone: 4
+    MinFloors: 5
+    MaxFloors: 0
+    Labels: []
+    Description: "Betonarme perde duvar alan\u0131n\u0131n kat alan\u0131na oran\u0131. Sadece 5 ve \xFCzeri katl\u0131 yap\u0131larda aran\u0131r."
     FailRatioRange: {x: 0.55, y: 0.9}

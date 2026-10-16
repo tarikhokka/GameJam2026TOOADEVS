@@ -19,6 +19,8 @@ namespace CivilJam.Core
         const float SloppyRatioMin = 0.85f;
         const float SloppyRatioMax = 0.95f;
         const float BribeAlsoFakeChance = 0.25f;
+        const int ParamsPerProjectMin = 5;
+        const int ParamsPerProjectMax = 6;
 
         static readonly string[] BlockLetters = { "A", "B", "C", "D" };
 
@@ -59,44 +61,46 @@ namespace CivilJam.Core
             bool bribe = kind == ProjectKind.Bribe || kind == ProjectKind.BribeFake;
             bool fake = kind == ProjectKind.Fake || kind == ProjectKind.BribeFake;
 
+            // Konum (Ç1): mahalle → deprem bölgesi. Bölge gizli; oyuncu adresteki mahalleyi el kitabında arar.
+            var (neighborhood, zone) = PickLocation(rules, names, rng);
+            int floors = type == BuildingType.Factory ? rng.RangeInclusive(1, 3) : rng.RangeInclusive(3, 8);
+
             var p = new ProjectData
             {
                 Id = $"D{day:00}-P{index + 1}",
                 BuildingType = type,
                 Kind = kind,
                 Name = MakeBuildingName(type, names, rng, usedNames),
-                Address = MakeAddress(names, rng),
-                Floors = type == BuildingType.Factory ? rng.RangeInclusive(1, 3) : rng.RangeInclusive(3, 8),
+                Neighborhood = neighborhood,
+                Zone = zone,
+                Address = MakeAddress(neighborhood, names, rng),
+                Floors = floors,
                 Fee = rng.RangeInclusive(balance.ApprovalFeeRange.x, balance.ApprovalFeeRange.y)
             };
 
-            // Parametreler
-            var typeRules = new List<ParamRule>(rules.RulesFor(type));
+            // Parametreler: bu bölge + kata uyan kurallardan 5-6'sı (Ç1). Hangi satırların geleceği projeden projeye değişir.
+            var applicable = rules.RulesFor(type, zone, floors);
+            applicable.Sort((a, b) => a.Param.CompareTo(b.Param));
+            rng.Shuffle(applicable);
+            int take = Math.Min(applicable.Count, rng.RangeInclusive(ParamsPerProjectMin, ParamsPerProjectMax));
+            var selected = applicable.GetRange(0, take);
+            selected.Sort((a, b) => a.Param.CompareTo(b.Param)); // belgede sabit sıra
+
             var failing = new HashSet<int>();
-            if (!compliant && typeRules.Count > 0)
+            if (!compliant && selected.Count > 0)
             {
-                int failCount = Math.Min(typeRules.Count, kind == ProjectKind.Sloppy ? 1 : rng.RangeInclusive(1, 2));
-                while (failing.Count < failCount) failing.Add(rng.Next(typeRules.Count));
+                int failCount = Math.Min(selected.Count, kind == ProjectKind.Sloppy ? 1 : rng.RangeInclusive(1, 2));
+                while (failing.Count < failCount) failing.Add(rng.Next(selected.Count));
             }
 
-            for (int i = 0; i < typeRules.Count; i++)
+            for (int i = 0; i < selected.Count; i++)
             {
-                var r = typeRules[i];
-                float actual;
-                if (!failing.Contains(i)) actual = r.Required * rng.Range(CompliantMarginMin, CompliantMarginMax);
-                else if (kind == ProjectKind.Sloppy) actual = r.Required * rng.Range(SloppyRatioMin, SloppyRatioMax);
-                else actual = r.Required * rng.Range(r.FailRatioRange.x, r.FailRatioRange.y);
-                actual = Round1(actual);
-                // Yuvarlama uygun/uygunsuz ayrımını bozmasın
-                if (failing.Contains(i)) actual = Math.Min(actual, Round1(r.Required * 0.97f));
-                else actual = Math.Max(actual, r.Required);
-
-                // Sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır
-                float reported = fake && failing.Contains(i)
-                    ? Round1(r.Required * rng.Range(1.02f, 1.15f))
-                    : actual;
-
-                p.Params.Add(new ParamEntry { Type = r.Param, Required = r.Required, Reported = reported, Actual = actual });
+                var r = selected[i];
+                bool fails = failing.Contains(i);
+                var entry = r.IsLabeled
+                    ? LabeledValues(r, fails, kind, fake, rng)
+                    : NumericValues(r, fails, kind, fake, rng);
+                p.Params.Add(entry);
             }
 
             // Müşteri
@@ -258,12 +262,61 @@ namespace CivilJam.Core
         /// <summary>Kültürden bağımsız Türkçe büyük harf (i → İ, ı → I).</summary>
         static string UpperTr(string s) => s.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant();
 
-        static string MakeAddress(NamePoolSO names, Random rng)
+        /// <summary>Adres her zaman "&lt;Mahalle&gt; Mah. ..." ile başlar (masa ayrı mahalle satırı göstermez).</summary>
+        static string MakeAddress(string neighborhood, NamePoolSO names, Random rng)
         {
-            string hood = rng.Pick(names != null ? names.Neighborhoods : null, "Yeşiltepe");
             string street = rng.Pick(names != null ? names.Streets : null, "Lale");
-            return $"{hood} Mah. {street} Sok. No: {rng.RangeInclusive(1, 60)}";
+            return $"{neighborhood} Mah. {street} Sok. No: {rng.RangeInclusive(1, 60)}";
         }
+
+        /// <summary>Mahalleyi RuleSet.Zones'tan seç (bölgesi belli); tablo boşsa NamePool'dan, bölge 0.</summary>
+        static (string neighborhood, int zone) PickLocation(RuleSetSO rules, NamePoolSO names, Random rng)
+        {
+            if (rules.Zones != null && rules.Zones.Count > 0)
+            {
+                var z = rules.Zones[rng.Next(rules.Zones.Count)];
+                return (z.Neighborhood, z.Zone);
+            }
+            return (rng.Pick(names != null ? names.Neighborhoods : null, "Yeşiltepe"), 0);
+        }
+
+        // ---------- Değer üretimi ----------
+
+        /// <summary>Sayısal parametre: uygun %100-130, dikkatsiz %85-95, rüşvetli/sahte kuralın FailRatioRange'i.</summary>
+        static ParamEntry NumericValues(ParamRule r, bool fails, ProjectKind kind, bool fake, Random rng)
+        {
+            float step = StepFor(r.Required);
+            float actual;
+            if (!fails) actual = r.Required * rng.Range(CompliantMarginMin, CompliantMarginMax);
+            else if (kind == ProjectKind.Sloppy) actual = r.Required * rng.Range(SloppyRatioMin, SloppyRatioMax);
+            else actual = r.Required * rng.Range(r.FailRatioRange.x, r.FailRatioRange.y);
+            actual = Snap(actual, step);
+            // Yuvarlama uygun/uygunsuz ayrımını bozmasın
+            if (fails) actual = Math.Min(actual, Snap(r.Required - step, step));
+            else actual = Math.Max(actual, r.Required);
+
+            // Sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır
+            float reported = fake && fails ? Math.Max(r.Required, Snap(r.Required * rng.Range(1.02f, 1.15f), step)) : actual;
+            return new ParamEntry { Type = r.Param, Required = r.Required, Reported = reported, Actual = actual };
+        }
+
+        /// <summary>Harfli parametre (beton sınıfı, zemin sınıfı): değerler etiket sıra numarası; yetersizlik 1-2 kademe.</summary>
+        static ParamEntry LabeledValues(ParamRule r, bool fails, ProjectKind kind, bool fake, Random rng)
+        {
+            int max = r.Labels.Count - 1;
+            int req = Math.Max(0, Math.Min(max, (int)Math.Round(r.Required)));
+            int actual;
+            if (!fails) actual = Math.Min(max, req + rng.RangeInclusive(0, 1));
+            else actual = Math.Max(0, req - (kind == ProjectKind.Sloppy ? 1 : rng.RangeInclusive(1, 2)));
+            if (fails && actual >= req) actual = Math.Max(0, req - 1);
+            int reported = fake && fails ? Math.Min(max, req + rng.RangeInclusive(0, 1)) : actual;
+            return new ParamEntry { Type = r.Param, Required = req, Reported = reported, Actual = actual, Labeled = true };
+        }
+
+        /// <summary>Okunur yuvarlama adımı: 100 ve üstü → 10, 10-100 → 1, altı → 0,1.</summary>
+        static float StepFor(float required) => required >= 100f ? 10f : required >= 10f ? 1f : 0.1f;
+
+        static float Snap(float v, float step) => (float)Math.Round(Math.Round(v / step) * step, 2);
 
         static float Round1(float v) => (float)Math.Round(v, 1);
         static int RoundTo(int v, int step) => (v / step) * step;

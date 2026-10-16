@@ -155,7 +155,9 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 
 **Çözümler ve sahipleri**
 
-**Ç1 — El kitabı ve bağlama göre kurallar (şikayet 4, 6). Ana iş, Cumartesi.**
+**Ç1 — El kitabı ve bağlama göre kurallar (şikayet 4, 6). A ✅ Core kısmı yapıldı; masa (B) ve metinler (EEE) bekleniyor.**
+- (A) Veri `RuleSet.asset`'te: **16 mahalle** (4'er tane bölge 1-4; bölge 1 en riskli), konut için **8 parametre × 4 bölge × 2 kat grubu** (1-4 kat / 5+ kat; perde duvar oranı sadece 5+ kat) = 60 kural. Her projede bunlardan 5-6'sı gelir. Mahalle adları, parametre adları/açıklamaları ve `HandbookIntro` **taslaktır**; EEE doğrudan `RuleSet.asset` içinde düzeltebilir (Inspector'da). Değerleri yeniden üretmek: `CivilJam > Core > Rebuild Handbook Rules` (EEE metinlerini korur).
+- (A) Harfli parametreler (beton sınıfı C16-C40, zemin sınıfı ZE-ZA) değer olarak **etiket sıra numarası** taşır. ⚠️ **Oğuzhan:** masa `FormatValue`'ya geçene kadar bu satırlarda "C25" yerine "2" görünür; lab raporundaki değerleri `ctx.Rules.FormatValue(param.Type, value)` ile yaz.
 - Gerekli değer artık projenin **deprem bölgesi** (1-4, mahalleden) ve **kat grubu** (1-4 kat / 5+ kat) ile değişir.
 - **8 parametre** (her projede 5-6'sı; adlar taslak, EEE son halini verir): beton sınıfı (C20/C25/C30/C35, harfli), donatı oranı (%), donatı çapı (mm), kolon kesiti (cm²), zemin taşıma gücü (kPa), zemin sınıfı (ZA–ZE, harfli), deprem dayanım katsayısı, kat yüksekliği (m).
 - **Masada "min." değeri yazmaz.** Oyuncu: adres → el kitabı s.1 "Mahalle → bölge" tablosu → ilgili bölge sayfası → kat grubu satırı → değer. (Papers, Please araması.)
@@ -348,6 +350,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim (analiz sonrası) | Son ekranına girince kayıt silinir; build'de ekranı olmayan faz otomatik geçilir (mavi kutu sadece Editor/Development Build); F9/F10 demo tuşları | A (Y3, K4, O7) |
 | 17 Ekim `2118715` sonrası | Denge (senaryo E): ücret 300-500, kira 600, deprem %20 +%15/gün | Ahmet kararı, simülasyonla seçildi: dikkatli oyuncuda para gerilimi, tek zarf yazı-tura, deprem her gece değil |
 | 17 Ekim oynanış testi | Ç1 el kitabı (bölge + kat + 8 parametre, masada "min." yok), Ç2 uygunsuz proje karışımı, Ç3 gevşek müteahhit rolleri, Ç4 tepkiler + birkaç etki (hediye, Nuri zarf artırır, Rüstem cam), Ç5 isim çeşitliliği | Ahmet oynadı: karşılaştırma çok kolay, isimden tür tahmin ediliyor, sahte belge hissedilmiyor, isimler tekrar ediyor. Sırası: Ç5+Ç2+Ç3 → Ç1 → Ç4 |
+| Ç1 Core | Deprem bölgesi 1 = en riskli (en sıkı değerler); kat grupları 1-4 / 5+; projede 5-6 parametre; harfli değerde yetersizlik 1-2 kademe | A. Simülasyon: dengeye etki yok (dikkatli %100 İyi; tek zarf %41/%45/%14) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

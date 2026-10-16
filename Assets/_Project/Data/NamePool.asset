@@ -72,10 +72,20 @@ MonoBehaviour:
   Neighborhoods:
   - "Ye\u015Filtepe"
   - "Karaa\u011Fa\xE7"
+  - Dereboyu
+  - "Ta\u015Focak"
   - "Ba\u011Flarba\u015F\u0131"
-  - Esenyurtlu
   - "Ku\u015Fdili"
+  - "G\xFClbah\xE7e"
+  - Akarsu
   - "Sar\u0131kaya"
+  - Esenyurtlu
+  - "\xC7aml\u0131dere"
+  - "Kavakl\u0131"
+  - Yenikent
+  - "Bay\u0131rl\u0131"
+  - "\xC7iftlik\xF6n\xFC"
+  - "Sak\u0131zl\u0131k"
   Streets:
   - Akasya
   - "S\xF6\u011F\xFCt"

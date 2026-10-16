@@ -3,6 +3,7 @@
 Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 
 ## Kurallar
+- **Tarz: "İyi Pizza, Güzel Pizza" (Good Pizza, Great Pizza) benzeri flat cartoon** — düz renk, kalın kontur, sevimli karakterler. Müteahhit önden, masanın karşısında; yürüme animasyonu yok. O oyunun görselleri kopyalanmaz.
 - **Stil (karar 02:20): hazır asset, piksel art yok.** Yeniden dağıtılabilir lisanslı (tercihen CC0) asset'ler; mümkünse tek kaynak/tek stil ailesinden. Her asset eklendiği anda `CREDITS_AND_AI.md`'ye yazılır; CC BY ise oyun içi Emeği Geçenler metnine de.
 - Referans çözünürlük 1920x1080. Sprite import: Texture Type = Sprite (2D and UI), Sprite Mode = Single, Pixels Per Unit = 100.
 - Önce placeholder konur; gerçek görsel **aynı dosya adıyla üzerine yazılır** (.meta/GUID korunur, prefab referansları bozulmaz).

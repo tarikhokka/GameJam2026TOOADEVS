@@ -60,6 +60,19 @@ namespace CivilJam.Flow.Editor
         public static void BuildSandbox()
         {
             if (BlockedByPlayMode()) return;
+            // DayIntro elle tasarlandı; boş bir prefab üreterek üzerine yazma.
+            var dayIntroPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{PrefabDir}/DayIntroScreen.prefab");
+            if (dayIntroPrefab == null || dayIntroPrefab.GetComponent<DayIntroScreen>() == null)
+            {
+                Debug.LogError("[FlowBuilder] DayIntroScreen prefab'ı ve bileşeni gerekli. Önce gün başı panelini Prefabs/Flow içine kaydet.");
+                return;
+            }
+            var constructionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{PrefabDir}/ConstructionScreen.prefab");
+            if (constructionPrefab == null || constructionPrefab.GetComponent<ConstructionScreen>() == null)
+            {
+                Debug.LogError("[FlowBuilder] Önce Flow > 4 - Setup Construction Screen menüsüyle inşaat prefab'ını hazırla.");
+                return;
+            }
             BuildPrefabs();
             var scene = EditorSceneManager.OpenScene(SandboxScene, OpenSceneMode.Single);
 
@@ -73,6 +86,8 @@ namespace CivilJam.Flow.Editor
             foreach (var old in Object.FindObjectsByType<FlowSandboxBootstrap>(FindObjectsInactive.Include))
                 Object.DestroyImmediate(old.gameObject);
 
+            var dayIntro = Place<DayIntroScreen>(canvas, "DayIntroScreen");
+            var construction = Place<ConstructionScreen>(canvas, "ConstructionScreen");
             var result = Place<ResultScreen>(canvas, "ResultScreen");
             var daySummary = Place<DaySummaryScreen>(canvas, "DaySummaryScreen");
             var expenses = Place<DailyExpensesScreen>(canvas, "DailyExpensesScreen");
@@ -80,6 +95,8 @@ namespace CivilJam.Flow.Editor
 
             var boot = new GameObject("FlowSandbox", typeof(FlowSandboxBootstrap));
             var so = new SerializedObject(boot.GetComponent<FlowSandboxBootstrap>());
+            so.FindProperty("dayIntro").objectReferenceValue = dayIntro;
+            so.FindProperty("construction").objectReferenceValue = construction;
             so.FindProperty("result").objectReferenceValue = result;
             so.FindProperty("daySummary").objectReferenceValue = daySummary;
             so.FindProperty("dailyExpenses").objectReferenceValue = expenses;

@@ -3,7 +3,9 @@
 Bu dosya Onur’un görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
-- Flow kurulumu başladı: Sandbox_Flow sahnesi, Canvas ve EventSystem hazır. ResultScreen paneli hazır; ekran içeriği ve Flow scriptleri henüz yok.
+- Flow scriptleri ve mevcut dört ekran hazır. 2026-10-17: DayIntroScreen ve ConstructionScreen script/prefab'ları da Sandbox_Flow'a bağlandı. Gün başı testi Onur tarafından; inşaatta 0/2 onay, yeniden açılış ve devam/çift tıklama testi Codex tarafından Unity Play modunda doğrulandı. İnşaat testinde her ekran açılışı için tek Completed kaydı, hata satırı yok.
+- DayIntro ve Construction prefab'larının gerçek Game.unity sahnesine kurulumu Ahmet'te; Windows build testi henüz yapılmadı. Sandbox'ta inşaat butonu hazır afet sonucuna gider; gerçek oyunda afet hesabını Core yapar.
+- Sırada Save ekranı var. Core, kayıt sonucunu Flow'a iletmeli; mevcut GameManager kayıt metodunun bool sonucunu kullanmıyor. Başarı bilgisi olmadan "Kaydedildi" gösterilmeyecek.
 - Kesinleşenler: level yerine gün; her gün afet olasılığı; afetsiz gün sonrası ihtimal artışı; günlük gider; gün sonunda kayıt.
 - Afet olunca olasılık sıfırlanır; değerlendirilecek binalar sadece son afetten bu yana onaylananlardır. Önceki afeti atlatanlar tekrar değerlendirilmez.
 - Afetsiz günlerde gazete yok. Gazete; bina durumları, tamamen kurgusal ölen isimleri, ölü/yaralı sayıları ve oyuncunun imzasının sorumluluğunu gösterecek.

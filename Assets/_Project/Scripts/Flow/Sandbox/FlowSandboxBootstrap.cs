@@ -10,6 +10,8 @@ namespace CivilJam.Flow
     /// </summary>
     public class FlowSandboxBootstrap : MonoBehaviour
     {
+        [SerializeField] DayIntroScreen dayIntro;
+        [SerializeField] ConstructionScreen construction;
         [SerializeField] ResultScreen result;
         [SerializeField] DaySummaryScreen daySummary;
         [SerializeField] DailyExpensesScreen dailyExpenses;
@@ -21,13 +23,17 @@ namespace CivilJam.Flow
         void Start()
         {
             _ctx = CreateContext();
-            foreach (var s in new FlowScreen[] { result, daySummary, dailyExpenses, ending })
+            foreach (var s in new FlowScreen[] { dayIntro, construction, result, daySummary, dailyExpenses, ending })
             {
                 if (s == null) continue;
                 s.Hide();
                 s.Completed += () => Debug.Log($"[FlowSandbox] {s.Phase} Completed");
             }
-            Open(result);
+            // Sandbox'ta hazır afet sonucuna geçilir; gerçek oyunda zarı Core atar.
+            if (construction != null)
+                construction.Completed += () => Open(_ctx.LastQuake != null && _ctx.LastQuake.Occurred
+                    ? (FlowScreen)result : daySummary);
+            Open(dayIntro != null ? dayIntro : result);
         }
 
         void Open(FlowScreen screen)
@@ -35,12 +41,16 @@ namespace CivilJam.Flow
             if (screen == null) return;
             if (_current != null) _current.Hide();
             _current = screen;
+            _ctx.Phase = screen.Phase;
             _current.Show(_ctx);
         }
 
         void OnGUI()
         {
             GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Gün başı")) Open(dayIntro);
+            if (GUILayout.Button("İnşaat (2)")) { _ctx.State.ApprovedToday = 2; Open(construction); }
+            if (GUILayout.Button("İnşaat (0)")) { _ctx.State.ApprovedToday = 0; Open(construction); }
             if (GUILayout.Button("Gazete")) Open(result);
             if (GUILayout.Button("Gün özeti")) Open(daySummary);
             if (GUILayout.Button("Günlük ödeme")) Open(dailyExpenses);

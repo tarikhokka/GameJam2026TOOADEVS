@@ -14,7 +14,7 @@ Bu klasöre sadece EEE yazar.
 | `sfx_paper.wav` | Desk, belge açma | P |
 | `sfx_stamp.ogg` | Desk, onay/red | P |
 | `sfx_click.ogg` | Tüm butonlar | P |
-| `sfx_glass_break.ogg` | Kabadayı olayı | - |
+| `sfx_glass_break.wav` | Kabadayı olayı (masada cam kırıldı kartı, B) | P |
 | `mus_office_ambient.wav` | Desk (loop) | P |
 | `mus_menu.ogg` | MainMenu | - |
 | `mus_ending_sad.ogg` | Kötü/Orta son | - |

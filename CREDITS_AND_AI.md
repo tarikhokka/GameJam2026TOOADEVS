@@ -16,6 +16,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Kenney Impact Sounds — `impactWood_light_001.ogg` (adı `sfx_stamp.ogg` yapıldı) | Kaşe vurma sesi (onay/red) | https://kenney.nl/assets/impact-sounds | CC0 1.0 | Tarık | 2026-10-16 |
 | Freesound #63514 "paper5" — florian_reinke (adı `sfx_paper.wav` yapıldı) | Belge açma / kağıt hışırtısı | https://freesound.org/people/florian_reinke/sounds/63514/ | CC0 1.0 | Tarık | 2026-10-16 |
 | Freesound #468415 "Suburban House Ambience 02" — msepitaph (adı `mus_office_ambient.wav` yapıldı) | Masa ekranı ortam sesi (loop) | https://freesound.org/people/msepitaph/sounds/468415/ | **CC BY 4.0 — atıf zorunlu** | Tarık | 2026-10-16 |
+| Freesound #341070 "Breaking Glass" — hifijohn (adı `sfx_glass_break.wav` yapıldı) | Kabadayı olayı: ofis camı kırılır | https://freesound.org/people/hifijohn/sounds/341070/ | CC0 1.0 | Tarık | 2026-10-17 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -69,6 +70,7 @@ Tarık Hokkaömeroğlu — Görsel, ses ve içerik
 SESLER
 Ortam sesi: "Suburban House Ambience 02" — msepitaph (freesound.org), CC BY 4.0
 Kağıt sesi: "paper5" — florian_reinke (freesound.org), CC0
+Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 
 YAZI TİPİ

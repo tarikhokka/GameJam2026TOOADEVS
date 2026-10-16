@@ -20,34 +20,13 @@
 - Eski level başına proje sayıları geçersizdir. Toplam gün sayısı, günlük proje sayıları ve içerik açılma günleri henüz belirlenmedi. Konut, sahte belgeler, fabrika/yangın içerik hedefleri; sel ve okul/hastane ek kapsamdır.
 - Deprem ayrı bir sahne/animasyon olarak gösterilmez; oyuncu depremi ve sonuçlarını gazeteden öğrenir (Quake ekranı yok, deprem/yıkılma sesi yok).
 - Deprem şiddeti oyuncuya gösterilmez. Bina sadece 2 durumlu: ayakta / yıkık.
-- ⚠️ **YENİ KURAL MODELİ (2026-10-17 00:10, Oğuzhan önerdi, Ahmet onayladı):** Aşağıdaki "Yapı Denetim Formu ve kural sözleşmesi" bölümü geçerlidir. Özet:
-  - Her projeye **tek belge** gelir: **Yapı Denetim Formu**. Tüm değerler formda açıkça yazılı, rastgele üretilir. Gizli "gerçek değer" yok.
-  - Oyuncu formu masadaki **Denetçi El Kitabı** kurallarıyla karşılaştırır. **Tek bir kurala uymayan bina REDDEDİLİR**; hepsine uyan onaylanabilir. Karar formdaki ONAY / RED kutusuyla verilir.
-  - **Kaldırıldı:** ücretli ek test, lab raporu, Reported/Actual ayrımı, parsel/tarih/lab/kaşe/imza sahte belge ipuçları.
-  - **Kalıyor:** rüşvet zarfı (rüşvet teklif eden her proje en az bir kurala uymaz).
-  - **Sel** formda ve kurallarda var; **sel afet olarak oyunda** (deprem yanında).
-  - Referans tasarım: `Docs/Tasarim/yapi_denetim_formu.png`, `Docs/Tasarim/denetci_el_kitabi.png`.
-- (KALDIRILDI, yeni kural modeli) Yıkılma kuralı: Strength = min(Actual/Required); Strength >= 1 asla yıkılmaz, aksi halde Strength + gürültü < Intensity ise yıkılır. → Yerine: kurallara tam uyan bina asla yıkılmaz (dürüst yol garantisi korunur); hangi ihlalin hangi afette yıkacağını A belirler (bkz. Açık kararlar).
-- (KALDIRILDI, yeni kural modeli) Sahte belge + ücretli ek test + lab raporu ipuçları (parsel/tarih/lab/kaşe/imza).
-
-### Yapı Denetim Formu ve kural sözleşmesi (B önerisi, A onaylı; Core alan adları A'nın)
-Künye: Adres · Yapım yılı · Yükseklik (m) · Kullanım (Konut / Fabrika) · Kat sayısı (binadaki) · Kat başı kişi · **Dereye uzaklık (m)** (yeni)
-
-| Bölüm | Alan | Değerler | Kural (uymazsa RED) |
-|---|---|---|---|
-| A Deprem | Kolon kalınlığı | sayı (cm) | ≥ 30 cm |
-| A Deprem | Beton sınıfı | C16 / C20 / C25 / C30 / C35 | ≥ C25 |
-| A Deprem | Demir tipi | NERVÜRLÜ / DÜZ | NERVÜRLÜ |
-| A Deprem | Projedeki kat sayısı | sayı | = binadaki kat sayısı (fazla kat = kaçak kat) |
-| B Yangın | Yangın merdiveni | BİNA İÇİNDE / BİNA DIŞINDA | Yükseklik > 21,5 m ise BİNA İÇİNDE |
-| B Yangın | Yangın tüpü | HER KATTA / BAZI KATLARDA / YOK | HER KATTA |
-| B Yangın | Kat başı çıkış | sayı | Kat başı kişi > 50 ise ≥ 2 |
-| C Sel | Dere yatağı içinde | EVET / HAYIR | HAYIR |
-| C Sel | DSİ izni | VAR / YOK | Dereye uzaklık < 100 m ise VAR |
-| C Sel | Taşkın bölgesi | İÇİNDE / DIŞINDA | İÇİNDE ise bodrumda ev YOK |
-| C Sel | Bodrumda ev | VAR / YOK | (üstteki kurala bağlı) |
-
-Genel kural: tek ihlal = RED. Desk el kitabını ve formu bu tablodan gösterir; ihlali Desk işaretlemez, oyuncu bulur.
+- Yıkılma kuralı (EarthquakeSimulator):
+  - Strength = min(Actual/Required).
+  - Strength >= 1 ise ASLA yıkılmaz (dürüst yol garantisi).
+  - Aksi halde Strength + gürültü(±0.15) < Intensity ise yıkılır. Intensity yapılandırılmış afet aralığından çekilir, max <= 1.0.
+- Rüşvet teklif eden her proje uygunsuzdur. Bazı uygunsuz projeler rüşvetsiz, sahte belgeyle temiz görünür; ek testle yakalanır. Dürüst usta = rüşvetsiz gelen gerçekten uygun proje.
+- İki katmanlı sahte belge: (1) bedava ipuçları (parsel/tarih/lab/kaşe/imza tutarsızlığı), (2) ücretli ek test (Reported vs Actual farkını açar).
+  - Kaşe ve imza ipuçları yazıyla ve karşılaştırmayla çalışır (A'nın 22:50 uygulaması): kaşe = "<LAB ADI> · AKREDİTE", sahtede başlıktaki lab adıyla uyuşmaz; imza = sahtede lab raporunu başvurudakinden farklı mühendis imzalar. Ayrı sahte kaşe/imza görseli yok.
 - Hapis: kalıcı JailRisk. Yıkım varsa zar atılır.
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
@@ -149,6 +128,11 @@ Genel kural: tek ihlal = RED. Desk el kitabını ve formu bu tablodan gösterir;
 - C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
 
 ### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
+> ⚠️ **Oğuzhan — ÖNCE BUNU OKU (A, 2026-10-17 00:50):** `62165c0`'daki "yeni kural modeli" (Yapı Denetim Formu + Denetçi El Kitabı, tek ihlal = RED, ek test/lab raporu/sahte belge ipuçlarının kaldırılması, sel afeti) **Ahmet tarafından onaylanmadı**; notta yazan "Ahmet onayladı" yanlıştı. Commit geri alındı (`git revert`): memory.md eski kurallara döndü, `Docs/Tasarim/*.png` kaldırıldı (geçmişte duruyor).
+> - Masa ekranını yeni forma göre değiştirmeye başladıysan **dur**; mevcut modelle devam et: başvuru + lab raporu, Reported/Actual, ücretli ek test, parsel/tarih/lab/kaşe/imza ipuçları, rüşvet zarfı. Core sözleşmesi değişmedi (`ctx.TodayProjects`, `ctx.Actions`).
+> - Oyunun kural modelini değiştiren öneriler için önce Ahmet'le konuş; "Ahmet onayladı" notunu sadece Ahmet (ya da onun açık onayıyla) yazar.
+> - Fikirlerden ileride yararlanmak istersek (ör. el kitabı, kaçak kat, yangın kuralları) Ahmet'le ayrıca konuşulur.
+
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
 
 **Oğuzhan (B / Masa) için:**
@@ -200,17 +184,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [ ] MainMenu "Devam Et": `SaveSystem.HasSave` ile göster; tıklanınca `GameLaunch.ContinueFromSave = true;` sonra Game sahnesini yükle. "Yeni Oyun" bayrağı false bırakır.
 - [ ] Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` okusun.
 
-### Ekibe notlar (B / Oğuzhan'dan, 2026-10-17 00:10) — yeni kural modeli
-**Ahmet (A / Core) için:**
-- [ ] Core veri modelini "Yapı Denetim Formu ve kural sözleşmesi" tablosuna göre güncelle (kategorik alanlar, koşullu kurallar, kaçak kat, dereye uzaklık). Alan adları ve tipler senin; Desk'e kullanacağı adları `AHMET.md` "Sözleşme değişiklikleri"ne yaz.
-- [ ] Ücretli ek test (`BuyExtraTest`, `ExtraTestCost`, `ParamEntry.Tested/Actual`), lab raporu ve sahte belge ipuçları (`ClueType`) kaldırılacak. Kaldırmadan önce haber ver: Desk bunları kullanıyor, aynı anda güncelleyelim (yoksa Desk derlenmez).
-- [ ] El kitabı metnini Desk nereden okusun? Öneri: kural metinleri `RuleSetSO`'da (bölüm + madde no + metin). Karar senin.
-- [ ] Rüşvet: teklif eden her proje en az bir kurala uymaz.
-**B (Desk) bu sırada:** formun ve el kitabının görünümünü tasarıma göre kuruyor (ONAY/RED kutularına kaşe, zarf); veriyi Core gelince bağlayacak.
-
 ### Açık kararlar (öneriler kesinleşmiş değildir)
-- (Yeni kural modeli) Hangi ihlal hangi afette yıkar? (Deprem ihlali → depremde, sel ihlali → selde?) Yangın afet olarak var mı? — A.
-- (Yeni kural modeli) "DSİ" gerçek bir kurum; hikâye kurgusal ülkede (Betonya) geçtiği için kurgusal bir ad düşünülebilir.
 - ✅ **Credits ekranı çözüldü:** Onur MainMenuScreen'e "Emeği Geçenler" paneli ekledi (metin `CREDITS_AND_AI.md` sonuyla aynı tutulur; yeni CC BY asset gelince ikisi birlikte güncellenir).
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
@@ -252,13 +226,14 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
 | 2026-10-16 22:45 (UTC+3) | Deprem sahne olarak gösterilmez, gazeteden öğrenilir; Quake ekranı ve deprem/yıkılma sesleri kaldırıldı | Takım kararı (EEE iletti); hassasiyet + kapsam. GameManager akışı ve QuakeResult verisi etkilenmez, sadece ekran yok |
 | 2026-10-16 22:15 (UTC+3) | Afet olasılığı taban %50, tavan %100; afet günü sadece gazete, afetsiz gün sadece gün özeti | Ahmet kararı; Core'da uygulandı (`GamePhase.Quake` silindi) |
+| 2026-10-17 00:50 (UTC+3) | "Yeni kural modeli" (`62165c0`, Yapı Denetim Formu) REDDEDİLDİ, commit geri alındı; mevcut model (Reported/Actual, ek test, sahte belge ipuçları) geçerli | Ahmet onay vermemişti; Core ve Desk'in yeniden yazılması gece yarısı riskli |
 | 2026-10-16 22:40 (UTC+3) | Kota kuralı yok; baskıyı günlük giderler kurar | Ahmet kararı (seçenek A). Ödenmeyen giderin sonucu sonra kararlaştırılacak; ağır olmalı |
 | 2026-10-16 22:40 (UTC+3) | Belge kaşesi (StampId) görsel değil okunabilir metin; sahte kaşe = başlıktaki lab adıyla uyuşmayan kaşe | Görsel iş yükü yok; ipucu okuyarak yakalanır, veri gerçek/sahte bilgisini sızdırmaz |
 | 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
 | 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
 | 2026-10-16 23:50 (UTC+3) | 23:15 kararı geri alındı: kaşe/imza ipuçları A'nın versiyonuyla kalır (lab adı uyuşmazlığı, farklı mühendis imzası). 5 ipucu | A'nın düzeltmesi iki sorunu da çözdü (açık STAMP_FAKE yazısı, görünmeyen nokta); görsel yükü yok (EEE kararı) |
-| 2026-10-17 00:10 (UTC+3) | Yeni kural modeli: tek Yapı Denetim Formu + Denetçi El Kitabı; tek ihlal = RED. Ek test, lab raporu, sahte belge ipuçları ve Reported/Actual kaldırıldı; rüşvet kalır; sel formda ve afet olarak var. Dereye uzaklık < 100 m → DSİ izni şart. (Yukarıdaki iki katmanlı sahte belge, ek test, Strength ve kaşe/imza ipucu kararlarının yerini alır) | Oğuzhan önerdi, Ahmet onayladı. Oyuncuya net ve okunabilir bulmaca; el kitabı karşılaştırması temayı (yönetmeliğe uymak) doğrudan oynatır |
-| 2026-10-17 00:30 (UTC+3) | EEE içerikleri yeni kural modeline uyarlandı: Selim "kurnaz" (rüşvetsiz, bir kuralı ince yerden deler), Sevim/Selim replikleri, manşet ve sonlarda lab raporu / sahte belge / ek test ifadeleri kaldırıldı; manşet ve sonlar afet türünden bağımsız (deprem + sel) | Yeni kural modeliyle tutarlılık; HeadlineSO'da afet türü alanı yok (EEE) || 2026-10-17 00:30 (UTC+3) | Görsel stil: piksel art, toprak tonları (`Docs/Tasarim` referanslarıyla aynı). Final görseller bu stile göre | Oğuzhan'ın form/el kitabı tasarımlarıyla görsel bütünlük (EEE) |
+| 2026-10-17 00:30 (UTC+3) | (GERİ ALINDI 00:55 — kural modeli reddedildi) EEE içerikleri yeni kural modeline uyarlanmıştı: Selim "kurnaz", Sevim/Selim replikleri, manşet ve sonlarda afet-türünden bağımsız dil | Model Ahmet tarafından onaylanmadı; içerik mevcut modele (deprem, lab raporu, sahte belge) geri döndürüldü |
+| 2026-10-17 00:30 (UTC+3) | Görsel stil: piksel art, toprak tonları. Final görseller bu stile göre | EEE kararı (görsel alanı). Not: ilk referans olan `Docs/Tasarim` görselleri 00:50'de kaldırıldı (geçmişte `62165c0`) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

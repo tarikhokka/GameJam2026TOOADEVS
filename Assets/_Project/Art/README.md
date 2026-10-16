@@ -14,7 +14,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 ## İhtiyaç listesi (B/C ile netleştir)
 | Dosya | Ekran | Kim kullanıyor | Durum |
 |---|---|---|---|
-| `desk_bg.png` | Desk | B | P |
+| `desk_bg.png` | Desk (oda + masa + isimlik, kalemlik, kupa, ıstampa; kitaplar YOK) | B | F |
 | `doc_paper.png` | Desk | B | P |
 | `stamp_approve.png` | Desk | B | P |
 | `stamp_reject.png` | Desk | B | P |
@@ -31,5 +31,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (Kenney Modular Characters parçalarından birleştirildi, 400x460 şeffaf) |
 | `chair_back.png` | Desk (müteahhitin arkasındaki koltuk, 320x360 şeffaf) | B | F (script ile çizildi, flat) — yerleşim: portre ile yatayda ortalı, koltuk üstü portre üstünden 90 px aşağıda; çizim sırası koltuk → portre → masa |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler", masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler", müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

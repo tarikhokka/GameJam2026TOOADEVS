@@ -68,7 +68,7 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 - Ödenmeyen zorunlu gider borca eklenir (`ExpenseCalculator.Apply`). Ofis kapanışı yok.
 - Sonlar (`GameSession.EvaluateEnding`): hapis → Kötü; son güne ulaşınca → İyi. Orta sonlar (ofis/kota) yok.
 - Kayıt: günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün DayIntro'sunu açar. Son ekranında kayıt silinmiyor.
-- Kota yok (karar). `BalanceSO.ApprovalQuota` sadece Desk HUD'u derlensin diye duruyor; silinecek.
+- Kota yok (karar). `BalanceSO.ApprovalQuota` silindi (23:20).
 
 ## B ve C için Core kullanım rehberi
 - Ekran = sahnede bir MonoBehaviour + `IGameScreen`. `Phase` hangi fazda gösterileceğini söyler; GameManager sahnedeki ekranları kendisi bulur. Bir faz için ekran yoksa IMGUI yedek arayüz çıkar.
@@ -99,6 +99,7 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 - 22:20 — `memory.md`'ye "Ekibe notlar (A / Ahmet'ten)" bölümü: Oğuzhan ve Onur için yapılacaklar listesi (ajanları her oturumda okur).
 - 22:50 — Kota kaldırıldı (karar A). Kaşe düzeltmesi: `StampId` artık okunabilir metin (`STAMP_OK/FAKE` sızıntısı giderildi); WrongStamp = kaşedeki lab adı başlıkla uyuşmaz; WrongSignature = lab raporunu farklı mühendis imzalar. DeskScreen (`b614831`) Game.unity'ye eklendi (`CoreSetupBuilder.InstallScreens`, Canvas + EventSystem). Testler 9/9. `BalanceSO.ApprovalQuota` Desk kullandığı için şimdilik duruyor (Oğuzhan kaldırınca silinecek).
   - Commit'lenmeyen: `ProjectSettings/ProjectVersion.txt` (Unity 6000.6.5f1 ile açılınca yükseltilmişti, geri alındı; ekip sürümü 6000.6.4f1).
+- 23:20 — TMP Essential Resources import edilip commit'lendi (`Assets/TextMesh Pro`, masa yazıları için gerekliydi; CREDITS'e eklendi). Oğuzhan HUD'dan kotayı kaldırdı → `BalanceSO.ApprovalQuota` silindi.
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.

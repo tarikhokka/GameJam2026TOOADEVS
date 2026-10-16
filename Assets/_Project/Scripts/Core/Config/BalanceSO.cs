@@ -34,8 +34,6 @@ namespace CivilJam.Core
         public float JailRiskPerCollapse = 0.15f;
         public float JailRiskPerBribedCollapse = 0.25f;
 
-        [Header("Kota — KALDIRILDI (karar: kota yok, baskıyı giderler kurar)")]
-        [Tooltip("Kullanmayın. Desk HUD'u bu alandan çıkınca silinecek.")]
-        public int ApprovalQuota = 3;
+        // Kota yok (karar 2026-10-16 22:40): baskıyı günlük giderler kurar.
     }
 }

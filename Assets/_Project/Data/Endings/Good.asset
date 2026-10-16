@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.EndingSO
   Type: 1
   Title: "Ayakta Kalanlar"
-  Body: "Ofisinin kapısını son kez kilitledin.\n\nOn dört gün boyunca masandan geçen her dosyaya bir karar verdin. Masaya bırakılan zarflar oldu, kapında bekleyen kabadayılar oldu. Kimi gün kirayı zor ödedin.\n\nİmzanı taşıyan ve hâlâ ayakta duran her binada şimdi insanlar uyuyor, çocuklar büyüyor.\n\nGazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama doğru atılmış her imza, birinin ertesi sabah uyanması demek.\n\nDeprem doğanın işidir. Binanın ayakta kalması ise bizim."
+  Body: "Ofisinin kapısını son kez kilitledin.\n\nGünler boyunca masandan geçen her dosyaya bir karar verdin. Masaya bırakılan zarflar oldu, kapında bekleyen kabadayılar oldu. Kimi gün kirayı zor ödedin.\n\nİmzanı taşıyan ve hâlâ ayakta duran her binada şimdi insanlar uyuyor, çocuklar büyüyor.\n\nGazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama doğru atılmış her imza, birinin ertesi sabah uyanması demek.\n\nDeprem doğanın işidir. Binanın ayakta kalması ise bizim."
   Image: {fileID: 21300000, guid: 5815c4ebab5f26a4780aa880df23cc57, type: 3}

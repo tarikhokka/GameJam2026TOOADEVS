@@ -159,7 +159,7 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
 - [ ] O1: `OGUZHAN.md` "Mevcut durum" (kota satırı, "Sırada" eski).
 
 **Tarık (EEE):**
-- [ ] **Y2:** `Data/Endings/`: senin 3 asset'in (`3da4deb`) + A'nın `MiddleCollapsed.asset` ("Enkazın Gölgesi", Orta/yıkım sonu). **MiddleCollapsed'ın taslak metnini A yazdı** — son halini sen yaz (ton: suçlamasız, ciddi). Hepsi Game.unity'ye bağlı.
+- [x] (EEE, 01:45: MiddleCollapsed son metni yazıldı — sayı varsaymaz; İyi sondaki "On dört gün" → "Günler boyunca", gün sayısı değişse de çelişmez) **Y2:** `Data/Endings/`: senin 3 asset'in (`3da4deb`) + A'nın `MiddleCollapsed.asset` ("Enkazın Gölgesi", Orta/yıkım sonu). **MiddleCollapsed'ın taslak metnini A yazdı** — son halini sen yaz (ton: suçlamasız, ciddi). Hepsi Game.unity'ye bağlı.
 - [ ] **K3:** `README.md` taslağı A'da hazır (kurulum, kontroller, nasıl oynanır, ekip). Son halini sen ver: soyadlar, oyun görseli, video bağlantısı.
 - [ ] O6: masa ve gazete görselleri final, müteahhit portreleri, `sfx_glass_break`, `mus_menu`, `mus_ending_sad`.
 

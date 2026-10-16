@@ -115,7 +115,7 @@ Esas kaynak: `Data/Endings/*.asset`. Bu dosya taslak/arşivdir; düzeltme önce 
 - Body:
   > Ofisinin kapısını son kez kilitledin.
   >
-  > On dört gün boyunca masandan geçen her dosyaya bir karar verdin. Masaya bırakılan zarflar oldu, kapında bekleyen kabadayılar oldu. Kimi gün kirayı zor ödedin.
+  > Günler boyunca masandan geçen her dosyaya bir karar verdin. Masaya bırakılan zarflar oldu, kapında bekleyen kabadayılar oldu. Kimi gün kirayı zor ödedin.
   >
   > İmzanı taşıyan ve hâlâ ayakta duran her binada şimdi insanlar uyuyor, çocuklar büyüyor.
   >
@@ -151,3 +151,15 @@ Esas kaynak: `Data/Endings/*.asset`. Bu dosya taslak/arşivdir; düzeltme önce 
   > İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki depremde ayakta kalacağını artık sen değil, zaman gösterecek.
   >
   > Işığı kapattın.
+
+### MiddleCollapsed — Orta son (yıkım oldu, hapis yok)
+- Title: "Enkazın Gölgesi" (taslak: A, son hali: EEE)
+- Koşul: son gün bitti, en az bir imzalı bina yıkıldı, hapis çıkmadı. 1 ya da çok bina yıkılmış olabilir → metin sayı varsaymaz.
+- Body:
+  > Kimse kapını çalmadı. Soruşturma dosyası kapandı, adın gazetelerde geçmedi.
+  >
+  > Ama imzanı taşıyan binaların hepsi ayakta değil. Bir zamanlar insanların yaşadığı yerde şimdi boş bir arsa ve her sabah önünden geçtiğin bir çit var. Orada yaşayanların adlarını gazetede okudun.
+  >
+  > O gün masandan geçen dosyayı hâlâ hatırlıyorsun. Bir satırı daha dikkatli okusaydın ne değişirdi, bilmiyorsun.
+  >
+  > Mahkeme seni yargılamadı. Bu soruyu artık her gün kendin soruyorsun.

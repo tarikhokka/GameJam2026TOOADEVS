@@ -60,6 +60,7 @@ namespace CivilJam.Core
                 ? new List<ProjectData>()
                 : ProjectGenerator.Generate(State.Day, Context.DayConfig, Context.Rules, Balance,
                     Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames);
+            ClientReactions.PrepareArrivals(Context, RngFor);
             Context.NotifyStateChanged();
         }
 
@@ -149,6 +150,7 @@ namespace CivilJam.Core
                 State.Money += p.BribeAmount;
                 State.TotalBribesTaken++;
             }
+            ClientReactions.OnApproved(Context, p, RngFor);
             Context.NotifyStateChanged();
         }
 
@@ -163,6 +165,7 @@ namespace CivilJam.Core
             var client = Context.GetClient(p.ClientId);
             if (client != null && client.IsThug && Context.DayConfig != null && Context.DayConfig.AllowThugs)
                 State.WindowRepairsToday++;
+            ClientReactions.OnRejected(Context, p, RngFor);
             Context.NotifyStateChanged();
         }
 
@@ -195,5 +198,13 @@ namespace CivilJam.Core
         }
 
         Random RngFor(int purpose) => new Random(unchecked(State.Seed * 7919 + State.Day * 104729 + purpose * 31));
+
+        /// <summary>Anahtara bağlı tekrarlanabilir rastgelelik (proje Id'si gibi). string.GetHashCode platforma göre değişebildiği için kendi hash'imiz.</summary>
+        Random RngFor(string key)
+        {
+            int h = 17;
+            foreach (char c in key) h = unchecked(h * 31 + c);
+            return new Random(unchecked(State.Seed * 7919 + h));
+        }
     }
 }

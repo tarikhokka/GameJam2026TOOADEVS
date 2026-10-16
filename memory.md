@@ -173,7 +173,9 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - Dürüst usta çoğunlukla uygun ama %15-20 ihtimalle dikkatsizlikten bir değeri eksik getirir; rüşvetçi bazen temiz proje getirir ve zarf vermez; Selim çoğunlukla (her zaman değil) sahte belge. İsim tek başına türü ele vermez.
 - EEE: müteahhit sayısını 6'dan **10-12**'ye çıkar (yeni ClientSO'lar, aynı alanlar).
 
-**Ç4 — Tepkiler ve hafıza (şikayet 1). A + EEE + B, Cumartesi akşam. Derinlik: metin + birkaç etki.**
+**Ç4 — Tepkiler ve hafıza (şikayet 1). A ✅ Core kısmı yapıldı; replikler/hediyeler (EEE) ve balon/hediye kartı (B) bekleniyor. Derinlik: metin + birkaç etki.**
+- (A) Core artık: `GreetingText`'i doldurur (daha önce karar verilen müteahhit `ReturnLines`, değilse `GreetingLines`), karardan sonra `ReactionText`'i doldurur (onay → `ApproveLines`; ret → zarf geri çevrildiyse `BribeRefusedLines`, değilse `RejectLines`), onayda hediye çıkarır (`ClientSO.Gift` + `GiftChance`; aynı hediye oyunda bir kez), Nuri'nin zarfını her retten sonra büyütür (`BribeRaiseOnReject` = 250, A ayarladı). Müteahhit geçmişi `GameState.ClientHistory`'de, kayıtla saklanır. Replik listesi boşsa metin boş gelir → masa balon göstermesin.
+- ⚠️ **Oğuzhan:** selamlamayı artık kendin `GreetingLines`'tan seçme; `project.GreetingText`'i göster (tekrar gelen müteahhitte "geçen sefer…" orada).
 - Her karardan sonra müteahhit tepki verir: onay → teşekkür; red → söylenme/kavga; zarf geri çevrilince; tekrar gelince ("Geçen sefer reddettiniz hocam…").
 - Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür.
 - **Hediye (Ahmet kararı, güncel):** belirli bir karakter, projesi onaylanınca **bazen** ofis için bir eşya hediye eder (saat, tablo, masa isimliği...). **Para ya da risk etkisi yok**; kabul edilince ofiste (masa ekranında) kalıcı görünür. **Geri çevrilemez, sadece kabul edilir.**
@@ -351,6 +353,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim `2118715` sonrası | Denge (senaryo E): ücret 300-500, kira 600, deprem %20 +%15/gün | Ahmet kararı, simülasyonla seçildi: dikkatli oyuncuda para gerilimi, tek zarf yazı-tura, deprem her gece değil |
 | 17 Ekim oynanış testi | Ç1 el kitabı (bölge + kat + 8 parametre, masada "min." yok), Ç2 uygunsuz proje karışımı, Ç3 gevşek müteahhit rolleri, Ç4 tepkiler + birkaç etki (hediye, Nuri zarf artırır, Rüstem cam), Ç5 isim çeşitliliği | Ahmet oynadı: karşılaştırma çok kolay, isimden tür tahmin ediliyor, sahte belge hissedilmiyor, isimler tekrar ediyor. Sırası: Ç5+Ç2+Ç3 → Ç1 → Ç4 |
 | Ç1 Core | Deprem bölgesi 1 = en riskli (en sıkı değerler); kat grupları 1-4 / 5+; projede 5-6 parametre; harfli değerde yetersizlik 1-2 kademe | A. Simülasyon: dengeye etki yok (dikkatli %100 İyi; tek zarf %41/%45/%14) |
+| Ç4 Core | Tepki/selamlama Core'da seçilir (ProjectData metinleri); hediye onayda GiftChance ile, oyunda bir kez; Nuri her retten sonra +250 TL zarf | A. Replik listesi boşsa metin boş |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

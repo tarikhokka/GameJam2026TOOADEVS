@@ -60,7 +60,7 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [x] Ç2 `ProjectKind` (Compliant / Sloppy / Bribe / Fake / BribeFake); dikkatsiz proje her gün (%85-95), sahte belge 3. günden (Day03), rüşvetlilerin %25'i sahte belgeli.
 - [x] Ç3 gevşek roller: uygun %80 dürüst usta; dikkatsiz %50/%50; sahte belge %70 Selim tipi. Dürüst usta asla rüşvet/sahte belge getirmez. Testler 15/15; `CivilJam > Core > Content Stats`.
 - [x] Ç1 bölge + kat kuralları, 8 parametre, harfli değerler (`ParamEntry.Labeled`), el kitabı verisi (`HandbookDataBuilder`, 16 mahalle, 60 kural), üretici (mahalle → bölge, 5-6 parametre), testler 19/19, simülasyon (denge korunuyor). Gazete yıkım nedeni zaten `Rules`'tan ad okuyor.
-- [ ] Ç4 müteahhit geçmişi, tepki seçimi, hediye kuralı, Nuri zarf artışı — Cumartesi akşam
+- [x] Ç4 `ClientReactions` (selamlama/tepki seçimi, hediye çıkışı, zarf artışı), `GameState.ClientHistory` (`ClientRecord`), Nuri `BribeRaiseOnReject` 250. Testler 23/23.
 - [x] Onur'un DayIntro / Construction ekranları (`8c05324`) Game.unity'de; sahne testi 7 fazı kontrol ediyor.
 
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
@@ -112,6 +112,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | Oynanış testi Ç2/Ç3/Ç5 | Yeni `ProjectKind` enum + `ProjectData.Kind` (gizli, gösterilmez); `GameState.UsedBuildingNames`; `ProjectGenerator.Generate(..., usedNames)` | B (sandbox verisi isterse Kind kullanabilir) |
 | Ç1/Ç4 sözleşme iskeleti | `RuleSetSO` (HandbookIntro, Zones/ZoneEntry, ZoneOf, RulesFor(tür,bölge,kat), FindRule, FormatValue, DisplayNameOf); `ParamRule` (Zone, MinFloors, MaxFloors, Labels, Description, IsLabeled); `ParamType` +5; `ProjectData` (Neighborhood, Zone, GreetingText, ReactionText, GiftId); `GiftSO`; `ClientSO` (Approve/Reject/BribeRefused/ReturnLines, Gift, GiftChance, BribeRaiseOnReject); `GameState.OfficeGifts`; `GameContext.Gifts`/`GetGift`; `IGameActions.AcceptGift` | B, C (sandbox `AcceptGift` eklendi), EEE |
 | Ç1 mantığı | `ParamEntry.Labeled` (harfli parametre; değer = etiket sırası); `ProjectGenerator` artık `RuleSetSO.Zones` ve `RulesFor(tür, bölge, kat)` kullanıyor | B (`FormatValue` ile göster) |
+| Ç4 mantığı | `ClientRecord` + `GameState.ClientHistory`; `ClientReactions.RecordOf(state, id)` (okuma) | B ("tekrar geldi" göstergesi isterse) |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

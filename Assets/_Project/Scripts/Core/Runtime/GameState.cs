@@ -24,6 +24,9 @@ namespace CivilJam.Core
         /// <summary>Ç4: kabul edilen ofis hediyeleri (GiftSO.Id). Masa ekranı ofiste gösterir; kayıtla birlikte saklanır.</summary>
         public List<string> OfficeGifts = new List<string>();
 
+        /// <summary>Ç4: müteahhitlerin bu oyundaki geçmişi (selamlama, zarf artışı).</summary>
+        public List<ClientRecord> ClientHistory = new List<ClientRecord>();
+
         /// <summary>Onaylanıp yapılmış tüm binalar (ayakta + yıkık).</summary>
         public List<ProjectData> Buildings = new List<ProjectData>();
 

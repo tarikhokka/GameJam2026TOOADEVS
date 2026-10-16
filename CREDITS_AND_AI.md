@@ -18,6 +18,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Freesound #468415 "Suburban House Ambience 02" — msepitaph (adı `mus_office_ambient.wav` yapıldı) | Masa ekranı ortam sesi (loop) | https://freesound.org/people/msepitaph/sounds/468415/ | **CC BY 4.0 — atıf zorunlu** | Tarık | 2026-10-16 |
 | Freesound #341070 "Breaking Glass" — hifijohn (adı `sfx_glass_break.wav` yapıldı) | Kabadayı olayı: ofis camı kırılır | https://freesound.org/people/hifijohn/sounds/341070/ | CC0 1.0 | Tarık | 2026-10-17 |
 | Freesound #811581 "Ambient Paulstretched Piano (short)" — waveplaysfx (adı `mus_menu.wav` yapıldı) | Ana menü müziği (loop) | https://freesound.org/people/waveplaysfx/sounds/811581/ | CC0 1.0 | Tarık | 2026-10-17 |
+| Freesound #330599 "The Sad Piano" — dasgoat (adı `mus_ending_sad.mp3` yapıldı) | Kötü ve Orta son ekranları müziği | https://freesound.org/people/dasgoat/sounds/330599/ | CC0 1.0 | Tarık | 2026-10-17 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -73,6 +74,7 @@ Ortam sesi: "Suburban House Ambience 02" — msepitaph (freesound.org), CC BY 4.
 Kağıt sesi: "paper5" — florian_reinke (freesound.org), CC0
 Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
 Menü müziği: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
+Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 
 YAZI TİPİ

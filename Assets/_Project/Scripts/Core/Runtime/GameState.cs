@@ -18,6 +18,9 @@ namespace CivilJam.Core
         public float DisasterChance;   // Bu gün sonu afet olasılığı
         public int LastDisasterDay;    // 0 = henüz afet olmadı. Afet sadece DayDecided > LastDisasterDay olan binaları değerlendirir.
 
+        /// <summary>Bu oyunda masaya gelmiş bina adları (aynı ad iki kez gelmesin).</summary>
+        public List<string> UsedBuildingNames = new List<string>();
+
         /// <summary>Onaylanıp yapılmış tüm binalar (ayakta + yıkık).</summary>
         public List<ProjectData> Buildings = new List<ProjectData>();
 

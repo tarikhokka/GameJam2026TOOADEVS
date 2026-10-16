@@ -187,6 +187,54 @@ namespace CivilJam.Core.Editor
             System.IO.File.WriteAllText("Logs/balance_scenarios.txt", sb.ToString());
         }
 
+        /// <summary>İçerik istatistiği: proje türleri gün gün, isim tekrarları.</summary>
+        [MenuItem("CivilJam/Core/Content Stats")]
+        public static void ContentStats()
+        {
+            const string data = "Assets/_Project/Data";
+            var balance = AssetDatabase.LoadAssetAtPath<BalanceSO>(data + "/Balance.asset");
+            var rules = AssetDatabase.LoadAssetAtPath<RuleSetSO>(data + "/RuleSet.asset");
+            var names = AssetDatabase.LoadAssetAtPath<NamePoolSO>(data + "/NamePool.asset");
+            var days = Load<DayConfigSO>(data + "/Days");
+            var expenses = Load<ExpenseSO>(data + "/Expenses");
+            var clients = Load<ClientSO>(data + "/Clients");
+            const int games = 300;
+            var byDay = new int[balance.TotalDays + 1, 4]; // 0 uygun, 1 düz uygunsuz, 2 rüşvetli, 3 sahte belgeli
+            int sumProjects = 0, sumDupNames = 0;
+            var clientCount = new Dictionary<string, int>();
+            for (int g = 0; g < games; g++)
+            {
+                var ctx = new GameContext { Balance = balance, Rules = rules, Names = names, Clients = clients };
+                var session = new GameSession(ctx, days, expenses);
+                session.NewGame(5000 + g);
+                var seenNames = new HashSet<string>(); var seenClients = new HashSet<string>();
+                for (int d = 1; d <= balance.TotalDays; d++)
+                {
+                    ctx.State.Day = d;
+                    session.BeginDay();
+                    foreach (var p in ctx.TodayProjects)
+                    {
+                        int kind = p.Kind == ProjectKind.Compliant ? 0 : p.Kind == ProjectKind.Sloppy ? 1 : p.Kind == ProjectKind.Fake ? 3 : 2;
+                        byDay[d, kind]++;
+                        sumProjects++;
+                        if (!seenNames.Add(p.Name)) sumDupNames++;
+                        seenClients.Add(p.ClientId ?? "-");
+                        clientCount[p.ClientId ?? "-"] = clientCount.TryGetValue(p.ClientId ?? "-", out var c) ? c + 1 : 1;
+                    }
+                    foreach (var p in ctx.TodayProjects) ctx.Actions.Reject(p.Id);
+                }
+            }
+            var sb = new StringBuilder();
+            sb.AppendLine($"İÇERİK İSTATİSTİĞİ ({games} oyun, ortalama / oyun)");
+            sb.AppendLine("Gün | uygun | dikkatsiz | rüşvetli (+sahte) | sahte belgeli");
+            for (int d = 1; d <= balance.TotalDays; d++)
+                sb.AppendLine($"{d,3} | {byDay[d,0]/(float)games,5:0.0} | {byDay[d,1]/(float)games,12:0.0} | {byDay[d,2]/(float)games,8:0.0} | {byDay[d,3]/(float)games,13:0.0}");
+            sb.AppendLine($"Proje/oyun {sumProjects/(float)games:0.0} · tekrar eden bina adı/oyun {sumDupNames/(float)games:0.0}");
+            sb.AppendLine("Müteahhit payı: " + string.Join(", ", clientCount.OrderByDescending(k => k.Value).Select(k => $"{k.Key} %{100f*k.Value/sumProjects:0}")));
+            System.IO.Directory.CreateDirectory("Logs");
+            System.IO.File.WriteAllText("Logs/content_stats.txt", sb.ToString());
+        }
+
         static List<T> Load<T>(string dir) where T : Object =>
             AssetDatabase.FindAssets("t:" + typeof(T).Name, new[] { dir })
                 .Select(g => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(g)))

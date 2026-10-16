@@ -56,12 +56,12 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [ ] 20:00 ikinci build.
 
 ### Oynanış testi işleri (Ahmet oynadı, 17 Ekim) — ayrıntı memory.md "🎮 Oynanış testi"
-- [ ] Ç5 isim çeşitliliği (tekrar yok + ad kalıpları) — bu gece
-- [ ] Ç2 uygunsuz proje karışımı (sahte belge 3. günden, her gün rüşvetsiz kötü proje, rüşvetçi + sahte belge) — bu gece
-- [ ] Ç3 gevşek müteahhit rolleri — bu gece
+- [x] Ç5 isim çeşitliliği: `GameState.UsedBuildingNames`, ad kalıpları (Apartmanı / Sitesi X Blok / Konutları / Evleri). Oyun başına tekrar 0.
+- [x] Ç2 `ProjectKind` (Compliant / Sloppy / Bribe / Fake / BribeFake); dikkatsiz proje her gün (%85-95), sahte belge 3. günden (Day03), rüşvetlilerin %25'i sahte belgeli.
+- [x] Ç3 gevşek roller: uygun %80 dürüst usta; dikkatsiz %50/%50; sahte belge %70 Selim tipi. Dürüst usta asla rüşvet/sahte belge getirmez. Testler 15/15; `CivilJam > Core > Content Stats`.
 - [ ] Ç1 bölge + kat kuralları, 8 parametre, harfli değerler, el kitabı verisi; gazete yıkım nedeni; simülasyon — Cumartesi
 - [ ] Ç4 müteahhit geçmişi, tepki seçimi, hediye kuralı, Nuri zarf artışı — Cumartesi akşam
-- [ ] Onur'un DayIntro / Construction ekranlarını (`8c05324`) Game.unity'ye ekle
+- [x] Onur'un DayIntro / Construction ekranları (`8c05324`) Game.unity'de; sahne testi 7 fazı kontrol ediyor.
 
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
 - [ ] Baştan sona oynanış, 4 son erişilebilir (F9/F10 ile de).
@@ -109,6 +109,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | 2026-10-16 22:15 | UYGULANDI: `WeeklyExpenseResult` → `DailyExpenseResult`; `GameContext.PendingWeekly` → `PendingExpenses`; `IsPaymentDay`/`Week`/`BalanceSO.DaysPerWeek` silindi; `GamePhase.Quake` silindi, `WeeklyExpenses` → `DailyExpenses`; `GameState`: `LastDisasterDay`, `ApprovedToday`, `WindowRepairsToday`, `TotalDeaths`, `TotalInjured`, `Jailed`; `BuildingOutcome`: `Address`, `DayApproved`, `Residents`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`; `QuakeResult.TotalDeaths/TotalInjured/ChanceBefore`; yeni `NamePoolSO`, `GameContext.Names`, `GameLaunch`, `SaveSystem`, `GameSession`, `GameManager` | B, C |
 | `5097e93` | `ClientSO.OffersBribes` (dürüst değil + BribeRange > 0) | EEE, B |
 | 17 Ekim analiz | `EndingType.MiddleQuota` → `MiddleCollapsed`; `ExpenseCalculator.DebtPaymentId` / `WindowRepairId`; `GameManager.demoKeys` (F9/F10); `BalanceSO` varsayılanları (10 gün, 2.500, 2.000, 400-700) | C (EndingScreen güncellendi), B |
+| Oynanış testi Ç2/Ç3/Ç5 | Yeni `ProjectKind` enum + `ProjectData.Kind` (gizli, gösterilmez); `GameState.UsedBuildingNames`; `ProjectGenerator.Generate(..., usedNames)` | B (sandbox verisi isterse Kind kullanabilir) |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

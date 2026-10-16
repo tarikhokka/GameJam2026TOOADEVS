@@ -59,7 +59,7 @@ namespace CivilJam.Core
             Context.TodayProjects = Context.DayConfig == null || Context.Rules == null
                 ? new List<ProjectData>()
                 : ProjectGenerator.Generate(State.Day, Context.DayConfig, Context.Rules, Balance,
-                    Context.Names, Context.Clients, RngFor(1));
+                    Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames);
             Context.NotifyStateChanged();
         }
 

@@ -14,6 +14,7 @@ namespace CivilJam.Core
         public BuildingType BuildingType;
         public int Floors;
         public int Fee;              // Onay ücreti (oyuncuya ödenir)
+        public ProjectKind Kind;     // Gizli tür (oyuncuya gösterilmez)
 
         public List<ParamEntry> Params = new List<ParamEntry>();
         public List<DocumentData> Documents = new List<DocumentData>();

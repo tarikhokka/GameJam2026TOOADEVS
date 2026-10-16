@@ -250,16 +250,18 @@ namespace CivilJam.Core.Tests
             return c;
         }
 
-        [Test]
-        public void Clients_MatchProjectRole()
+        static List<ClientSO> TarikClients() => new List<ClientSO>
         {
             // Tarık'ın 6 müteahhidinin aynısı (Data/Clients)
-            var clients = new List<ClientSO>
-            {
-                Client("rifat", true, false, 0, 0), Client("sevim", true, false, 0, 0),
-                Client("kemal", false, false, 800, 1500), Client("nuri", false, false, 1000, 2000),
-                Client("selim", false, false, 0, 0), Client("rustem", false, true, 1500, 2500)
-            };
+            Client("rifat", true, false, 0, 0), Client("sevim", true, false, 0, 0),
+            Client("kemal", false, false, 800, 1500), Client("nuri", false, false, 1000, 2000),
+            Client("selim", false, false, 0, 0), Client("rustem", false, true, 1500, 2500)
+        };
+
+        [Test]
+        public void Clients_FollowRoleRules_ButNameDoesNotRevealKind()
+        {
+            var clients = TarikClients();
             var byId = new Dictionary<string, ClientSO>();
             foreach (var c in clients) byId[c.Id] = c;
 
@@ -268,41 +270,93 @@ namespace CivilJam.Core.Tests
             _config.AllowBribes = true;
             _config.AllowFakeDocuments = true;
 
+            var kindsPerClient = new Dictionary<string, HashSet<ProjectKind>>();
             foreach (bool thugs in new[] { false, true })
             {
                 _config.AllowThugs = thugs;
-                bool sawRustem = false;
-                for (int seed = 0; seed < 200; seed++)
+                for (int seed = 0; seed < 300; seed++)
                 {
                     foreach (var p in ProjectGenerator.Generate(1, _config, _rules, _balance, null, clients, new System.Random(seed)))
                     {
                         Assert.IsFalse(string.IsNullOrEmpty(p.ClientId), "Her projeye bir müteahhit atanmalı");
                         var c = byId[p.ClientId];
 
-                        if (p.IsCompliant) Assert.IsTrue(c.IsHonest, $"Uygun proje dürüst ustadan gelmeli ({c.Id})");
-                        else Assert.IsFalse(c.IsHonest, $"Uygunsuz proje dürüst ustadan gelmemeli ({c.Id})");
-
                         if (p.OffersBribe)
                         {
                             Assert.IsTrue(c.OffersBribes, $"Rüşvetli proje rüşvet vermeyen müteahhide düştü ({c.Id})");
                             Assert.Greater(p.BribeAmount, 0, "0 TL zarf olmamalı");
+                            Assert.IsFalse(p.IsCompliant, "Rüşvet teklif eden her proje uygunsuzdur");
                         }
-                        else if (!p.IsCompliant)
+                        if (c.IsHonest)
                         {
-                            Assert.IsFalse(c.OffersBribes, $"Rüşvetçi müteahhit rüşvetsiz proje getirdi ({c.Id})");
+                            Assert.IsFalse(p.OffersBribe, "Dürüst usta rüşvet teklif etmez");
+                            Assert.IsTrue(p.Kind == ProjectKind.Compliant || p.Kind == ProjectKind.Sloppy,
+                                $"Dürüst usta sahte belge getirmez ({p.Kind})");
                         }
+                        if (c.IsThug) Assert.IsTrue(thugs, "Kabadayı, kabadayı günü değilken geldi");
 
-                        if (c.IsThug)
-                        {
-                            Assert.IsTrue(thugs, "Kabadayı, kabadayı günü değilken geldi");
-                            sawRustem = true;
-                        }
+                        if (!kindsPerClient.TryGetValue(c.Id, out var set)) kindsPerClient[c.Id] = set = new HashSet<ProjectKind>();
+                        set.Add(p.Kind);
                     }
                 }
-                if (thugs) Assert.IsTrue(sawRustem, "Kabadayı günlerinde Rüstem en az bir kez gelmeli");
             }
 
+            // Ç3: hiçbir müteahhidin adı tek bir türü ele vermemeli
+            foreach (var kv in kindsPerClient)
+                Assert.Greater(kv.Value.Count, 1, $"{kv.Key} hep aynı tür proje getiriyor: {string.Join(",", kv.Value)}");
+            Assert.IsTrue(kindsPerClient["rifat"].Contains(ProjectKind.Sloppy), "Dürüst usta da ara sıra dikkatsiz olmalı");
+            Assert.IsTrue(kindsPerClient["kemal"].Contains(ProjectKind.Compliant), "Rüşvetçi de ara sıra temiz proje getirmeli");
+
             foreach (var c in clients) UnityEngine.Object.DestroyImmediate(c);
+        }
+
+        [Test]
+        public void BuildingNames_DoNotRepeatWithinAGame()
+        {
+            var names = ScriptableObject.CreateInstance<NamePoolSO>();
+            names.BuildingNames = new List<string> { "Papatya", "Lale", "Menekşe", "Yasemin", "Çınar", "Ihlamur",
+                "Martı", "Güneş", "Huzur", "Umut", "Bahar", "Yıldız" }; // Data/NamePool ile aynı 12 ad
+            _config.ProjectsPerDay = 6;
+            var used = new HashSet<string>();
+            int total = 0;
+            for (int day = 1; day <= 10; day++)
+            {
+                foreach (var p in ProjectGenerator.Generate(day, _config, _rules, _balance, names, null, new System.Random(day), used))
+                    total++;
+            }
+            Assert.AreEqual(total, used.Count, "Bir oyunda aynı bina adı iki kez gelmemeli");
+            UnityEngine.Object.DestroyImmediate(names);
+        }
+
+        [Test]
+        public void BadProjects_IncludeSloppyEveryDay_AndFakesWhenAllowed()
+        {
+            _config.ProjectsPerDay = 6;
+            _config.NonCompliantRatio = 0.5f;
+            var seen = new HashSet<ProjectKind>();
+
+            // Sadece konut açık gün: uygunsuzların hepsi dikkatsiz (rüşvet / sahte belge yok)
+            for (int seed = 0; seed < 50; seed++)
+                foreach (var p in ProjectGenerator.Generate(1, _config, _rules, _balance, null, null, new System.Random(seed)))
+                    if (!p.IsCompliant) Assert.AreEqual(ProjectKind.Sloppy, p.Kind);
+
+            _config.AllowBribes = true;
+            _config.AllowFakeDocuments = true;
+            for (int seed = 0; seed < 200; seed++)
+                foreach (var p in ProjectGenerator.Generate(3, _config, _rules, _balance, null, null, new System.Random(seed)))
+                {
+                    seen.Add(p.Kind);
+                    if (p.Kind == ProjectKind.Sloppy)
+                    {
+                        Assert.IsFalse(p.OffersBribe);
+                        Assert.AreEqual(0, p.Documents[1].Clues.Count, "Dikkatsiz projede belge ipucu olmaz");
+                        Assert.IsTrue(p.Params.Exists(x => !x.ReportedPasses), "Dikkatsiz projenin eksik değeri belgede görünür");
+                    }
+                    if (p.Kind == ProjectKind.Fake || p.Kind == ProjectKind.BribeFake)
+                        Assert.Greater(p.Documents[1].Clues.Count, 0, "Sahte belgede en az bir ipucu olmalı");
+                }
+            foreach (var k in new[] { ProjectKind.Sloppy, ProjectKind.Bribe, ProjectKind.Fake, ProjectKind.BribeFake })
+                Assert.IsTrue(seen.Contains(k), $"{k} türü hiç üretilmedi");
         }
 
         [Test]

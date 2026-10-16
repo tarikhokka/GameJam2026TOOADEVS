@@ -50,6 +50,16 @@ namespace CivilJam.Core
         WrongSignature
     }
 
+    /// <summary>Projenin gizli türü (oyuncuya gösterilmez; test, simülasyon ve gazete için).</summary>
+    public enum ProjectKind
+    {
+        Compliant,   // Uygun
+        Sloppy,      // Rüşvetsiz, bir-iki değeri gerekenin biraz altında (dikkatsizlik); belgeler tutarlı
+        Bribe,       // Rüşvet teklif eder, değerleri yetersiz
+        Fake,        // Rüşvetsiz, sahte belge: değerler geçiyor gibi yazılır, belgelerde ipucu var
+        BribeFake    // Hem rüşvet hem sahte belge
+    }
+
     public enum ProjectVerdict
     {
         Pending,

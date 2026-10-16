@@ -163,11 +163,11 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - A: kural modeli + üretici + gazetedeki yıkım nedeni + simülasyon. **B:** sayfalı "Denetçi El Kitabı" ekranı (sayfa çevirme; masada her zaman açılabilir), lab raporundan "min." ve renkleri, künyeden yan yana başvuru değerini kaldırmak. **EEE:** el kitabı metinleri (giriş, bölüm başlıkları, parametre açıklamaları), mahalle adları (~16), parametre adları/birimleri.
 - Referans: Oğuzhan'ın reddedilen önerisindeki el kitabı görseli git geçmişinde (`62165c0`, `Docs/Tasarim/denetci_el_kitabi.png`); kural modeli değil, sadece görünüm için kullanılabilir.
 
-**Ç2 — Uygunsuz proje karışımı (şikayet 2, 3). A, bu gece.**
+**Ç2 — Uygunsuz proje karışımı (şikayet 2, 3). A ✅ yapıldı (aşağıdaki son madde B'de).**
 - Sahte belge 3. günden başlar. Rüşvetsiz ama bir değeri yetersiz proje **her gün** gelir (Ç1 ile ancak el kitabıyla fark edilir). Bazı rüşvetçiler sahte belge de getirir.
 - B: künyede yan yana başvuru değerini kaldır (oyuncu sekmeler arasında gidip gelsin).
 
-**Ç3 — Gevşek roller (şikayet 1'in kökü). A + EEE.**
+**Ç3 — Gevşek roller (şikayet 1'in kökü). A ✅ yapıldı; EEE'nin yeni müteahhitleri bekleniyor.**
 - Dürüst usta çoğunlukla uygun ama %15-20 ihtimalle dikkatsizlikten bir değeri eksik getirir; rüşvetçi bazen temiz proje getirir ve zarf vermez; Selim çoğunlukla (her zaman değil) sahte belge. İsim tek başına türü ele vermez.
 - EEE: müteahhit sayısını 6'dan **10-12**'ye çıkar (yeni ClientSO'lar, aynı alanlar).
 
@@ -176,9 +176,12 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür; dürüst usta onaydan sonra **hediye** bırakabilir (kabul = küçük para + küçük hapis riski artışı; etik ikilem).
 - A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları (aşağıdaki alanlar). **B:** karar sonrası konuşma balonu + hediye kabul/ret butonu.
 
-**Ç5 — İsim çeşitliliği (şikayet 5). A + EEE, bu gece.**
+**Ç5 — İsim çeşitliliği (şikayet 5). A ✅ yapıldı (oyun başına tekrar 0); EEE'nin ad listesi bekleniyor.**
 - A: bir oyunda aynı bina adı iki kez çıkmaz; ad kalıpları: "… Apartmanı", "… Sitesi B Blok", "… Konutları", "… Evleri".
 - EEE: `NamePool.BuildingNames` ~30 ada çıksın (12 var).
+
+**Ölçüm (A, `CivilJam > Core > Content Stats`, 300 oyun):** sahte belge 3. günden itibaren günde ~0,7-1; dikkatsiz (rüşvetsiz kötü) proje her gün ~0,7-1; tekrar eden bina adı 0; müteahhit adı türü ele vermiyor (testli). Denge korunuyor: dikkatli oyuncu %100 İyi son, kasa en fazla 1.562 TL'ye iner; tek zarf ~%49 İyi / %39 Enkazın Gölgesi / %12 hapis.
+- Gizli `ProjectData.Kind` (Compliant / Sloppy / Bribe / Fake / BribeFake) eklendi; **masada gösterilmez.**
 
 **Core sözleşme taslağı (B ve EEE beklemeden başlayabilsin; kesin adlar A'nın commit'inde, `AHMET.md` "Sözleşme değişiklikleri"ne yazılır)**
 - `RuleSetSO`: `Zones` (mahalle → bölge listesi), `ParamRule` yeni alanlar: `Zone` (1-4), `MinFloors`/`MaxFloors`, `Labels` (harfli parametreler için sıra: C20, C25…), el kitabı metni için `HandbookIntro` ve parametre başına `Description`.

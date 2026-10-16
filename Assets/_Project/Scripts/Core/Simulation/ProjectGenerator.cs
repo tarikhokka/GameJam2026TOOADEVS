@@ -4,19 +4,26 @@ using System.Collections.Generic;
 namespace CivilJam.Core
 {
     /// <summary>
-    /// Günün projelerini üretir (v0). Aynı seed + gün → aynı projeler.
-    /// Uygunsuz proje türleri (DayConfig'e göre):
-    ///  - Düz uygunsuz: belgede gerçek (kötü) değerler yazar, dikkatli okuyan yakalar.
-    ///  - Rüşvetli: rüşvet teklif eder (her rüşvetçi uygunsuzdur).
-    ///  - Sahte belgeli: rüşvetsiz, belge temiz görünür; bedava ipucu (tutarsızlık) + ek testle yakalanır.
+    /// Günün projelerini üretir. Aynı seed + gün → aynı projeler.
+    /// Uygunsuz proje türleri (ProjectKind; DayConfig'in açtıklarından eşit ağırlıkla seçilir):
+    ///  - Sloppy: rüşvetsiz, bir değeri gerekenin biraz altında (%85-95); belgeler tutarlı. Her gün gelebilir.
+    ///  - Bribe: rüşvet teklif eder, değerleri belirgin yetersiz. (AllowBribes)
+    ///  - Fake: rüşvetsiz, sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır, belgelerde ipucu var. (AllowFakeDocuments)
+    ///  - BribeFake: rüşvetli projelerin %25'i, sahte belge açıksa, aynı zamanda sahte belgelidir.
+    /// Müteahhit seçimi türü ağırlıkla etkiler ama ele vermez (Ç3): dürüst usta da dikkatsiz olabilir, rüşvetçi de temiz proje getirebilir.
     /// </summary>
     public static class ProjectGenerator
     {
         const float CompliantMarginMin = 1.0f;
         const float CompliantMarginMax = 1.3f;
+        const float SloppyRatioMin = 0.85f;
+        const float SloppyRatioMax = 0.95f;
+        const float BribeAlsoFakeChance = 0.25f;
+
+        static readonly string[] BlockLetters = { "A", "B", "C", "D" };
 
         public static List<ProjectData> Generate(int day, DayConfigSO config, RuleSetSO rules, BalanceSO balance,
-            NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng)
+            NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames = null)
         {
             int count = config.ProjectsPerDay;
             int badCount = (int)Math.Round(count * config.NonCompliantRatio);
@@ -25,55 +32,63 @@ namespace CivilJam.Core
             for (int i = 0; i < count; i++) compliance.Add(i >= badCount);
             rng.Shuffle(compliance);
 
+            usedNames = usedNames ?? new HashSet<string>();
             var result = new List<ProjectData>();
             for (int i = 0; i < count; i++)
-                result.Add(CreateProject(day, i, compliance[i], config, rules, balance, names, clients, rng));
+                result.Add(CreateProject(day, i, compliance[i] ? ProjectKind.Compliant : PickBadKind(config, rng),
+                    config, rules, balance, names, clients, rng, usedNames));
             return result;
         }
 
-        static ProjectData CreateProject(int day, int index, bool compliant, DayConfigSO config, RuleSetSO rules,
-            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng)
+        static ProjectKind PickBadKind(DayConfigSO config, Random rng)
+        {
+            var kinds = new List<ProjectKind> { ProjectKind.Sloppy };
+            if (config.AllowBribes) kinds.Add(ProjectKind.Bribe);
+            if (config.AllowFakeDocuments) kinds.Add(ProjectKind.Fake);
+            var kind = kinds[rng.Next(kinds.Count)];
+            if (kind == ProjectKind.Bribe && config.AllowFakeDocuments && rng.Chance(BribeAlsoFakeChance))
+                kind = ProjectKind.BribeFake;
+            return kind;
+        }
+
+        static ProjectData CreateProject(int day, int index, ProjectKind kind, DayConfigSO config, RuleSetSO rules,
+            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames)
         {
             var type = config.AllowFactories && rng.Chance(0.3f) ? BuildingType.Factory : BuildingType.Residential;
-            string baseName = rng.Pick(names != null ? names.BuildingNames : null, "Yeni");
+            bool compliant = kind == ProjectKind.Compliant;
+            bool bribe = kind == ProjectKind.Bribe || kind == ProjectKind.BribeFake;
+            bool fake = kind == ProjectKind.Fake || kind == ProjectKind.BribeFake;
 
             var p = new ProjectData
             {
                 Id = $"D{day:00}-P{index + 1}",
                 BuildingType = type,
-                Name = type == BuildingType.Factory ? $"{baseName} Fabrikası" : $"{baseName} Apartmanı",
+                Kind = kind,
+                Name = MakeBuildingName(type, names, rng, usedNames),
                 Address = MakeAddress(names, rng),
                 Floors = type == BuildingType.Factory ? rng.RangeInclusive(1, 3) : rng.RangeInclusive(3, 8),
                 Fee = rng.RangeInclusive(balance.ApprovalFeeRange.x, balance.ApprovalFeeRange.y)
             };
-
-            // Uygunsuz projenin türü
-            bool bribe = false, fake = false;
-            if (!compliant)
-            {
-                if (config.AllowBribes && config.AllowFakeDocuments) { bribe = rng.Chance(0.5f); fake = !bribe; }
-                else if (config.AllowBribes) bribe = true;
-                else if (config.AllowFakeDocuments) fake = true;
-            }
 
             // Parametreler
             var typeRules = new List<ParamRule>(rules.RulesFor(type));
             var failing = new HashSet<int>();
             if (!compliant && typeRules.Count > 0)
             {
-                int failCount = Math.Min(typeRules.Count, rng.RangeInclusive(1, 2));
+                int failCount = Math.Min(typeRules.Count, kind == ProjectKind.Sloppy ? 1 : rng.RangeInclusive(1, 2));
                 while (failing.Count < failCount) failing.Add(rng.Next(typeRules.Count));
             }
 
             for (int i = 0; i < typeRules.Count; i++)
             {
                 var r = typeRules[i];
-                float actual = failing.Contains(i)
-                    ? r.Required * rng.Range(r.FailRatioRange.x, r.FailRatioRange.y)
-                    : r.Required * rng.Range(CompliantMarginMin, CompliantMarginMax);
+                float actual;
+                if (!failing.Contains(i)) actual = r.Required * rng.Range(CompliantMarginMin, CompliantMarginMax);
+                else if (kind == ProjectKind.Sloppy) actual = r.Required * rng.Range(SloppyRatioMin, SloppyRatioMax);
+                else actual = r.Required * rng.Range(r.FailRatioRange.x, r.FailRatioRange.y);
                 actual = Round1(actual);
                 // Yuvarlama uygun/uygunsuz ayrımını bozmasın
-                if (failing.Contains(i)) actual = Math.Min(actual, Round1(r.Required * 0.95f));
+                if (failing.Contains(i)) actual = Math.Min(actual, Round1(r.Required * 0.97f));
                 else actual = Math.Max(actual, r.Required);
 
                 // Sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır
@@ -85,14 +100,14 @@ namespace CivilJam.Core
             }
 
             // Müşteri
-            var client = PickClient(clients, compliant, bribe, config.AllowThugs, rng);
+            var client = PickClient(clients, kind, config.AllowThugs, rng);
             if (client != null) p.ClientId = client.Id;
 
             if (bribe)
             {
                 p.OffersBribe = true;
-                var range = client != null ? client.BribeRange : new UnityEngine.Vector2Int(500, 2000);
-                p.BribeAmount = RoundTo(rng.RangeInclusive(range.x, range.y), 50);
+                var range = client != null && client.OffersBribes ? client.BribeRange : new UnityEngine.Vector2Int(500, 2000);
+                p.BribeAmount = Math.Max(50, RoundTo(rng.RangeInclusive(range.x, range.y), 50));
             }
 
             CreateDocuments(p, day, fake, names, rng);
@@ -100,24 +115,67 @@ namespace CivilJam.Core
         }
 
         /// <summary>
-        /// Müteahhidin rolü ClientSO alanlarından çıkar:
-        ///  - Uygun proje      → IsHonest (Rıfat, Sevim)
-        ///  - Rüşvetli proje   → OffersBribes (Kemal, Nuri; kabadayı günlerinde Rüstem)
-        ///  - Diğer uygunsuz   → dürüst değil + rüşvet vermez (Selim: sahte belge / düz uygunsuz)
-        /// Kabadayılar sadece DayConfig.AllowThugs günlerinde gelir. Uygun müteahhit yoksa null (yanlış rol atanmaz).
+        /// Müteahhit, türü ağırlıkla etkiler ama ele vermez (Ç3):
+        ///  - Uygun:        %80 dürüst usta, %20 dürüst olmayan (zarf vermeden temiz proje getirir)
+        ///  - Dikkatsiz:    %50 dürüst usta (dikkatsizlik), %50 dürüst olmayan
+        ///  - Rüşvetli:     rüşvet veren müteahhit (OffersBribes); kabadayı sadece AllowThugs günlerinde
+        ///  - Sahte belge:  %70 rüşvet vermeyen dürüst olmayan (Selim), %30 başka bir dürüst olmayan
+        /// Dürüst usta asla rüşvet teklif etmez ve sahte belge getirmez. Uygun müteahhit yoksa null.
         /// </summary>
-        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, bool compliant, bool bribe, bool allowThugs, Random rng)
+        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, ProjectKind kind, bool allowThugs, Random rng)
         {
             if (clients == null || clients.Count == 0) return null;
-            var pool = new List<ClientSO>();
+            var honest = new List<ClientSO>();
+            var dishonest = new List<ClientSO>();      // dürüst değil, kabadayı değil
+            var bribers = new List<ClientSO>();        // rüşvet verir (kabadayı günlerinde kabadayı dahil)
+            var forgers = new List<ClientSO>();        // dürüst değil, rüşvet vermez
             foreach (var c in clients)
             {
                 if (c == null || (c.IsThug && !allowThugs)) continue;
-                if (compliant) { if (c.IsHonest) pool.Add(c); }
-                else if (bribe) { if (c.OffersBribes) pool.Add(c); }
-                else if (!c.IsHonest && !c.OffersBribes) pool.Add(c);
+                if (c.IsHonest) { honest.Add(c); continue; }
+                if (c.OffersBribes) bribers.Add(c);
+                if (!c.IsThug) dishonest.Add(c);
+                if (!c.OffersBribes) forgers.Add(c);
             }
+
+            bool bribeKind = kind == ProjectKind.Bribe || kind == ProjectKind.BribeFake;
+            List<ClientSO> pool;
+            switch (kind)
+            {
+                case ProjectKind.Compliant: pool = rng.Chance(0.8f) ? honest : dishonest; break;
+                case ProjectKind.Sloppy: pool = rng.Chance(0.5f) ? honest : dishonest; break;
+                case ProjectKind.Bribe:
+                case ProjectKind.BribeFake: pool = bribers; break;
+                default: pool = rng.Chance(0.7f) ? forgers : dishonest; break;
+            }
+            if (pool.Count == 0) pool = bribeKind ? bribers : kind == ProjectKind.Compliant ? honest : dishonest;
             return pool.Count > 0 ? rng.Pick(pool) : null;
+        }
+
+        /// <summary>Ç5: bir oyunda aynı bina adı iki kez gelmez; ad kalıpları çeşitlenir.</summary>
+        static string MakeBuildingName(BuildingType type, NamePoolSO names, Random rng, ICollection<string> used)
+        {
+            for (int attempt = 0; attempt < 40; attempt++)
+            {
+                string baseName = rng.Pick(names != null ? names.BuildingNames : null, "Yeni");
+                string name;
+                if (type == BuildingType.Factory) name = $"{baseName} Fabrikası";
+                else
+                {
+                    switch (rng.Next(5))
+                    {
+                        case 0: name = $"{baseName} Sitesi {BlockLetters[rng.Next(BlockLetters.Length)]} Blok"; break;
+                        case 1: name = $"{baseName} Konutları"; break;
+                        case 2: name = $"{baseName} Evleri"; break;
+                        default: name = $"{baseName} Apartmanı"; break;
+                    }
+                }
+                if (!used.Contains(name)) { used.Add(name); return name; }
+            }
+            // Havuz tükendiyse numaralandır
+            string fallback = $"{rng.Pick(names != null ? names.BuildingNames : null, "Yeni")} Apartmanı {used.Count + 1}";
+            used.Add(fallback);
+            return fallback;
         }
 
         static void CreateDocuments(ProjectData p, int day, bool fake, NamePoolSO names, Random rng)

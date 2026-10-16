@@ -192,6 +192,8 @@ namespace CivilJam.Core.Editor
         {
             InstallScreenPrefabs(
                 DeskScreenPrefab,
+                FlowPrefabDir + "DayIntroScreen.prefab",
+                FlowPrefabDir + "ConstructionScreen.prefab",
                 FlowPrefabDir + "ResultScreen.prefab",
                 FlowPrefabDir + "DaySummaryScreen.prefab",
                 FlowPrefabDir + "DailyExpensesScreen.prefab",

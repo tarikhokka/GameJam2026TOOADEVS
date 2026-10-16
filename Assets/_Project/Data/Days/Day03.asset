@@ -16,7 +16,7 @@ MonoBehaviour:
   ProjectsPerDay: 4
   NonCompliantRatio: 0.5
   AllowBribes: 1
-  AllowFakeDocuments: 0
+  AllowFakeDocuments: 1
   AllowThugs: 0
   AllowFactories: 0
   IntensityMin: 0.5

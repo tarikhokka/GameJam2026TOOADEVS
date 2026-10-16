@@ -94,7 +94,7 @@
 ### Durum
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 21:30):** Veri sözleşmesi gün sistemi adlarıyla push'landı (asmdef, runtime tipler, IGameScreen, IGameActions, SO sınıfları, EarthquakeSimulator). Unity'de hatasız derlendi. GameManager henüz yok.
-- **Desk (B):** v0 yazıldı ve derleniyor (henüz eski level/kota modeliyle; gün sistemine uyarlanacak). Unity'de henüz test edilmedi, kod commit'lenmedi.
+- **Desk (B):** v0 Unity'de test edildi (Sandbox_Desk: onay, red, zarf, ek test, mesai bitişi çalışıyor) ve push'landı. Henüz kendi modelleri + sahte veriyle; sırada Core tiplerine geçiş (IGameScreen + IGameActions).
 - **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
 - **Bilinen sorunlar:** —
 

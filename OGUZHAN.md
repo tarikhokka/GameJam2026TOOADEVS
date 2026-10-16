@@ -29,7 +29,7 @@ Desk parayı kalıcı olarak değiştirmez, gün ilerletmez, afet sonucu üretme
 
 ## Adımlar
 - [x] Adım 0: AI kullanımı `CREDITS_AND_AI.md`'ye, Desk kararları `memory.md`'ye yazıldı ve push'landı.
-- [ ] Adım 1: Unity'de derle → `CivilJam > Desk > Build Sandbox_Desk Scene` → Play. 3 dosya görünüyor; onay, red, zarf, ek test çalışıyor; Console'a sonuç düşüyor.
+- [x] Adım 1: Unity'de derle → `CivilJam > Desk > Build Sandbox_Desk Scene` → Play. 3 dosya görünüyor; onay, red, zarf, ek test çalışıyor; Console'a sonuç düşüyor.
 - [ ] Adım 2: Hata/layout düzeltmeleri → Desk kodunun ilk commit + push'u.
 - [ ] Adım 3: Gün sistemine uyarlama (başlık "Gün N", kota ve ek test tahsilatı kararlara göre).
 - [ ] Adım 4: Core gelince adapter: `ProjectData` → `DeskProject`, `DeskScreen` → `IGameScreen`.
@@ -68,3 +68,4 @@ Desk parayı kalıcı olarak değiştirmez, gün ilerletmez, afet sonucu üretme
 
 ## Oturum notu
 - 2026-10-16 (UTC+3): Desk v0 kodu yazıldı (derleniyor, test edilmedi). Adım 0 push'landı. Kişisel plan oluşturuldu. Sırada Adım 1 (Unity'de deneme).
+- 2026-10-16 ~21:45: Adım 1 tamam, Sandbox_Desk'te tüm senaryolar çalıştı. A'nın Core'u geldi; yeni kural: ekranlar Core'a sadece IGameActions ile yazar. Karar: adapter yerine Desk doğrudan Core tiplerine geçecek (sandbox'ta sahte IGameActions). Desk v0 güvenli nokta olarak push'landı.

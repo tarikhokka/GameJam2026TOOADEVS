@@ -33,8 +33,8 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] EditMode testleri (7/7 geçti): Strength >= 1 asla yıkılmaz, afet kapsamı, olasılık, üretici, çift ödeme
 - [x] Unity Editor'de Game.unity'yi elle oynayıp kontrol et (Ahmet, 00:30: gün döngüsü, gazete verisi, dürüst bina, save.json ✅)
 - [x] Müteahhit rolleri: uygun → dürüst, rüşvetli → `ClientSO.OffersBribes`, diğer uygunsuz → rüşvet vermeyen (Selim); kabadayı sadece AllowThugs günleri. Tarık'ın 6 ClientSO'su Game.unity'ye bağlandı (`CoreSetupBuilder.LinkData`). Testler 10/10.
-- [ ] (C'ye bağlı) Flow prefab'larını Game.unity'ye ekle — Onur prefab'ları + Flow .meta'larını push'layınca `InstallScreens`.
-- **Faz 1 (A kısmı) KAPANDI — 2026-10-17 00:45.** Not: Oğuzhan'ın 00:07 "yeni kural modeli" önerisi Ahmet tarafından REDDEDİLDİ (00:50): `62165c0` revert edildi, Tarık'ın `4f33750` model uyarlamaları geri alındı (credits + stil notu korundu). Mevcut Core sözleşmesi geçerli.
+- [x] Flow prefab'ları (Onur `0716dc9`) Game.unity'ye eklendi (`InstallScreens`: Desk + Result + DaySummary + DailyExpenses + Ending); sahne testi 5 fazı kontrol ediyor. Testler 10/10. (01:10)
+- **Faz 1 KAPANDI — 2026-10-17 01:10** (A kısmı 00:45, Flow entegrasyonu 01:10). Not: Oğuzhan'ın 00:07 "yeni kural modeli" önerisi Ahmet tarafından REDDEDİLDİ (00:50): `62165c0` revert edildi, Tarık'ın `4f33750` model uyarlamaları geri alındı (credits + stil notu korundu). Mevcut Core sözleşmesi geçerli.
 - [x] B ve C'ye haber ver: memory.md → "Ekibe notlar (A / Ahmet'ten)"
 
 ### Faz 2 — Ekonomi ve hile (Cts 08 → 14)
@@ -104,6 +104,7 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
   - Commit'lenmeyen: `ProjectSettings/ProjectVersion.txt` (Unity 6000.6.5f1 ile açılınca yükseltilmişti, geri alındı; ekip sürümü 6000.6.4f1).
 - 23:20 — TMP Essential Resources import edilip commit'lendi (`Assets/TextMesh Pro`, masa yazıları için gerekliydi; CREDITS'e eklendi). Oğuzhan HUD'dan kotayı kaldırdı → `BalanceSO.ApprovalQuota` silindi.
 - 00:30 — Ahmet'in Unity testi: gün döngüsü, gazete verisi, dürüst bina kuralı ve save.json doğrulandı. Sorun: Flow (Onur, `ebe816d`) prefab'ları üretilmemiş → Game.unity'de gazete yok, mavi yedek arayüz. Kararlar: Flow prefab'larını Onur üretip push'layacak (A sonra Game.unity'ye ekler); DayIntro/Construction/Save ekranları Onur'a verildi. Not: memory.md → Onur maddeleri.
+- 01:10 — Flow ekranları Game.unity'de; `LinkData` artık `Data/Endings/` EndingSO'larını da bağlar (Tarık'a not). memory.md temizlendi: Durum yeniden yazıldı (Bilinen sorunlar: EndingSO yok, Unity 6.5 uyarısı, Game.unity'yi Editor'den kaydetmeme), eski entegrasyon bölümü silindi, Onur listesi tek öncelikli listeye indi, dosya haritası tamamlandı.
   - Pull'u engelleyen Unity oto-değişiklikleri stash'lendi (`Game.unity`'de DeskScreen anchor'larını 0'layan kayıt dahil). Game.unity'yi Editor'den kaydetme.
 
 ## Oturum notu

@@ -51,7 +51,8 @@
 - Assembly'ler: CivilJam.Core, CivilJam.Desk, CivilJam.Flow. Desk ve Flow sadece Core'a bağlı, birbirini görmez.
 
 ### Dosya haritası
-- `Assets/_Project/Scenes/Sandbox_Flow.unity` — Onur için Unity Editor üzerinden oluşturulan Lit 2D (URP) deneme sahnesi; Canvas ve EventSystem eklendi. Canvas: Screen Space Overlay, Scale With Screen Size, 1920×1080, Match 0.5. Canvas altında tam ekran stretch ResultScreen paneli hazır; gazete görseli ve içerikler henüz yok.
+- `Assets/_Project/Scenes/Sandbox_Flow.unity` (C) — Flow deneme sahnesi; menü CivilJam > Flow > 3 ile kurulur (4 Flow ekranı + sahte context).
+- `Assets/_Project/Scenes/MainMenu.unity` (C) — ana menü (Yeni / Devam Et / Emeği Geçenler / Çıkış); Build Settings'te 1. sıra, Game.unity 2.
 
 `Assets/_Project/Scripts/Core/` (asmdef `CivilJam.Core`, namespace `CivilJam.Core`):
 - `Enums.cs` — GamePhase, ParamType, BuildingType, DocumentKind, ClueType, ProjectVerdict, BuildingStatus, EndingType.
@@ -60,10 +61,10 @@
 - `Config/` — BalanceSO, DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, HeadlineSO, EndingSO, NamePoolSO (kurgusal isimler).
 - `Simulation/` — EarthquakeSimulator (yıkılma kuralı, son afetten beri onaylananlar, JailRisk, hapis zarı), DisasterSystem (gün sonu zar + olasılık), ProjectGenerator (seed'li günlük projeler), CasualtyGenerator, ExpenseCalculator (günlük gider v0).
 - `Game/` — GameSession (saf C# mantık + IGameActions), GameManager (MonoBehaviour, faz sırası), FallbackGui (geçici IMGUI), SaveSystem (tek slot JSON), GameLaunch (MainMenu "Devam Et" bayrağı).
-- `Editor/CoreSetupBuilder.cs` — menü: CivilJam > Core > Create Missing Data Assets / Build Game Scene (var olanın üzerine yazmaz).
-- `Tests/Editor/CoreRulesTests.cs` — EditMode testleri (Test Runner > EditMode).
-- `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool, Headlines, Days/DayXX (FromDay 1/3/5/8), Expenses/.
-- `Assets/_Project/Scenes/Game.unity` (sadece A) — GameManager + veri bağlı; Build Settings'te.
+- `Editor/CoreSetupBuilder.cs` — menü CivilJam > Core: Create Missing Data Assets / Build Game Scene (var olanın üzerine yazmaz) / **Install Screens Into Game Scene** (Desk + 4 Flow prefab'ı Canvas altına) / **Link Data Into Game Scene** (Days, Expenses, Clients listelerini Data'dan doldurur; EEE yeni asset ekleyince çalıştırılır).
+- `Tests/Editor/` — `CoreRulesTests` (yıkılma kuralı, afet kapsamı/olasılığı, üretici, kaşe metni, müteahhit rolleri, çift ödeme) + `GameSceneTests` (Game.unity: GameManager, EventSystem, veri listeleri, 5 fazın ekranı). Test Runner > EditMode; 10/10.
+- `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool, Headlines (EEE: 20 manşet), Days/DayXX (FromDay 1/3/5/8), Expenses/, Clients/ (EEE).
+- `Assets/_Project/Scenes/Game.unity` (sadece A; Editor'den KAYDETMEYİN, değişiklikler CoreSetupBuilder ile) — GameManager (veri + 6 müteahhit bağlı), Canvas altında DeskScreen + ResultScreen + DaySummaryScreen + DailyExpensesScreen + EndingScreen, EventSystem (Input System UI). Build Settings'te.
 - Flow asmdef'i C oluşturur; Desk ve Flow referansı sadece `CivilJam.Core`. Ayrıntı ve Core önerileri: `AHMET.md`.
 - `Assets/_Project/Scripts/Desk/` (B) — Core tiplerini doğrudan kullanır (ProjectData, GameContext, IGameActions).
   - `CivilJam.Desk.asmdef` — referans: CivilJam.Core, TMP, uGUI.
@@ -84,7 +85,7 @@
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
 - `Assets/TextMesh Pro/` — TMP Essential Resources (A import etti, 23:15). Desk/Flow yazıları için gerekli; tekrar import etme, silme.
 - `ICERIK_TASLAK.md` (EEE) — SO metin taslakları (6 müteahhit, 20 gazete manşeti, 3 son). Onaylananlar `Data/` altındaki asset dosyalarına taşınır (A ile koordineli).
-- `Assets/_Project/Data/Clients/` (EEE) — 6 ClientSO (Rifat, Sevim, Kemal, Nuri, Selim, Rustem). Portreler boş. GameManager'a bağlama A'da.
+- `Assets/_Project/Data/Clients/` (EEE) — 6 ClientSO (Rifat, Sevim, Kemal, Nuri, Selim, Rustem). Portreler boş. Game.unity'ye bağlı (A). Rol Core'da alanlardan çıkar: `IsHonest`, `OffersBribes` (= dürüst değil + BribeRange > 0), `IsThug`.
 
 ## 4. Takım ve klasör sahipliği
 - A (Core) — Ahmet İlman: Scripts/Core, Data.
@@ -112,20 +113,20 @@
 - Cts gece - Paz sabah: denge + cila
 - Paz 12:00: freeze. Paz 15-16:30: yükleme. 16:30-18:00: tampon.
 
-### Durum
-- **Plan durumu:** Gün sistemi tasarımı sürüyor.
-- **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
-- **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı. (23:50) Sesler (sfx_click/paper/stamp, mus_office_ambient) ve ONAYLANDI/REDDEDİLDİ karar kaşesi animasyonu eklendi.
-- **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
-- **Flow (C, 16 Ekim gece):** Result/DaySummary/DailyExpenses/Ending ekranları ve MainMenu kodlandı (Unity'de derleme/prefab kurulumu bekliyor). Game.unity'ye ekleme A'da; Build Settings'e MainMenu 1. sıra. DayIntro/Construction ekranı yok (yedek arayüz geçiyor).
-- **Sırada (B güncelledi, 00:25):** Masa Game.unity'de (A ekledi). Flow prefab'larının Game.unity'ye eklenmesi (A, Onur push'ladı); A: ekonomi/sonlar (Faz 2; kota kaldırıldı).
-- **Bilinen sorunlar:** —
-
-### Güncel entegrasyon durumu (cedfa0d sonrası yerel kontrol)
-- Desk v0 kodu, DeskScreen prefab ve Sandbox_Desk sahnesi artık repoda (`14350ec`). (Güncelleme 22:30) Desk artık Core tiplerini kullanıyor; bkz. Durum.
-- Flow: Sandbox_Flow, Canvas ve ResultScreen paneli hazır; içerik/script entegrasyonu yapılmadı.
-- (22:15 güncel) Günlük ödeme, iki afet arası bina kapsamı ve kayıp bilgileri Core'da uygulandı: `DailyExpenseResult` / `ctx.PendingExpenses`, `GamePhase.DailyExpenses`, `BuildingOutcome.Deaths/Injured/VictimNames/ResponsibilityText`. C bunları üretmez, Core'dan gösterir.
-- C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
+### Durum (güncelleme: A, 2026-10-17 01:10)
+- **Faz 1 KAPANDI.** Game.unity'de oyun MainMenu → masa → (gazete | gün özeti) → günlük ödeme → kayıt → sonraki gün → son ekranı akışıyla oynanıyor. Sadece DayIntro / Construction / Save fazları hâlâ mavi IMGUI yedek arayüzle (sahibi C).
+- **Core (A):** Gün döngüsü, ProjectGenerator (müteahhit rolleri dahil), DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri. Game.unity'de Desk + 4 Flow ekranı ve 6 müteahhit bağlı. EditMode 10/10, derleme uyarısız. Ahmet Unity'de elle test etti (gün döngüsü, gazete verisi, dürüst bina asla yıkılmaz, save.json). GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
+- **Desk (B, 23:50):** Core tiplerini kullanıyor (IGameScreen, ctx.TodayProjects, ctx.Actions); kota yok (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; sesler ve ONAYLANDI/REDDEDİLDİ kaşe animasyonu.
+- **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A 01:10'da Game.unity'ye ekledi.
+- **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art, toprak tonları.
+- **Sırada:**
+  - C: DayIntro / Construction / Save ekranları (mavi kutuların yerine).
+  - EEE: 3 EndingSO asset'i (`Data/Endings/`, metinler taslakta) → A Game.unity'ye bağlar.
+  - A: Faz 2 — ödenmeyen gider sonucu ve sonların kesin kuralları (karar bekliyor), ekonomi dengesi.
+- **Bilinen sorunlar:**
+  - EndingSO asset'i yok → son ekranı Onur'un yedek metnini gösteriyor (Tarık'ın son metinleri oyunda değil).
+  - Unity'yi **6000.6.5f1 ile açmayın** (proje sürümünü yükseltiyor; ekip 6000.6.4f1). `ProjectVersion.txt` değişirse commit'lemeyin.
+  - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
 
 ### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
 > ⚠️ **Oğuzhan — ÖNCE BUNU OKU (A, 2026-10-17 00:50):** `62165c0`'daki "yeni kural modeli" (Yapı Denetim Formu + Denetçi El Kitabı, tek ihlal = RED, ek test/lab raporu/sahte belge ipuçlarının kaldırılması, sel afeti) **Ahmet tarafından onaylanmadı**; notta yazan "Ahmet onayladı" yanlıştı. Commit geri alındı (`git revert`): memory.md eski kurallara döndü, `Docs/Tasarim/*.png` kaldırıldı (geçmişte duruyor).
@@ -165,29 +166,18 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - Rüşvetli proje → dürüst değil + `BribeRange` > 0 (Kemal, Nuri; kabadayı günleri açıksa Rüstem)
   - Sahte belgeli proje → dürüst değil + `BribeRange` 0-0 (Selim)
   - Düz uygunsuz (ilk günler) → dürüst değil + rüşvet vermeyen
-  - Durum: Core şu an sadece `IsHonest`'e bakıyor (Selim'e 0 TL zarf, Kemal'e rüşvetsiz proje düşebiliyor). Düzeltme A'da, yapılacak.
+  - ✅ (A, 00:45, `5097e93`) Core rol mantığı uygulandı ve testli: Selim'e zarf düşmez, Kemal/Nuri rüşvetsiz proje getirmez, Rüstem sadece kabadayı günlerinde.
 - Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
 - [x] (EEE, 00:40) Headlines.asset 20 manşetle dolduruldu; eski "{count} can kaybı" kaldırıldı. A kontrol etti: tamam. Kural: `{count}` = yıkılan **bina** sayısı (sadece MultiCollapse), `{building}` = bina adı. Credits ekranı → Onur'a sorulacak (metin `CREDITS_AND_AI.md` sonunda).
+- [ ] **Son ekranları (A, 01:10):** Son ekranı şu an Onur'un yedek metnini gösteriyor; senin `ICERIK_TASLAK.md`'deki 3 son metnin oyunda değil. 3 EndingSO oluştur: sağ tık → Create → CivilJam → Ending, konum `Assets/_Project/Data/Endings/` (`Good.asset`, `Bad.asset`, `MiddleClosed.asset`). Alanlar: `Type` (Good / Bad / MiddleClosed), `Title`, `Body`, `Image` (`ending_good/bad/closed.png`). Haber ver → A "Link Data" ile Game.unity'ye bağlar.
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
-- ⚠️ **Öncelik (A, 00:30) — `ebe816d` sonrası, gazete oyunda hâlâ görünmüyor.** Sebep: Flow kodu push'landı ama prefab'lar hiç üretilmedi (repoda `Prefabs/Flow` yok) ve kod Unity'de derlenmedi. GameManager Game.unity'de gazete ekranı bulamıyor → mavi yedek arayüz çıkıyor. Sırayla:
-  - [x] 1. Pull → Unity (6000.6.4f1) → Console'da Flow derleme hatası olmadığını doğrula. (A, 00:45: A'nın makinesinde de hatasız derlendi.)
-  - [x] **`.meta` dosyaları:** (C) Flow `Scripts/Flow/**/*.meta` dosyaları prefab'larla aynı commit'te push'landı. Başka kimse Flow `.meta`'sı commit'lemeyecek, yoksa prefab'larda "Missing Script" olur.
-  - [x] 2. Menü **CivilJam > Flow > 1 - Build Flow Prefabs** ve **2 - Build MainMenu Scene** çalıştır. Prefab'lar (`Prefabs/Flow/*.prefab` + `.meta`) ve `MainMenu.unity` + Build Settings değişikliğini **sen** commit'le/push'la (prefab'ları başka kimse üretmeyecek; iki kişi üretirse GUID çakışır).
-  - [x] 3. Sandbox_Flow'da (menü 3) gazete/gün özeti/ödeme/son ekranını dene.
-  - [ ] 4. (C, 17 Ekim ~00:20: prefab'lar + MainMenu.unity push'landı, Build Settings'te MainMenu 1. sırada) Haber ver → A prefab'ları Game.unity'ye ekler (Install Screens). Game.unity'yi kendin açıp KAYDETME.
-- [x] **Manşet `{count}` (A, 00:40):** `ResultScreen.cs:139` (`if (collapsed == 1) count = first.Deaths;`) satırını sil. Tarık'ın kuralı: `{count}` her zaman yıkılan bina sayısı; ölü sayısı manşette yok, gazete gövdesinde. Şu an zararsız (SingleCollapse manşetleri `{count}` kullanmıyor) ama ileride yanlış sayı basar.
-- [x] **Credits ekranı:** (C: MainMenu > Emeği Geçenler'de var.) Tarık soracak. Ortam müziği CC BY 4.0 olduğu için oyunda credits ekranı zorunlu; metin `CREDITS_AND_AI.md` sonunda hazır. (MainMenu'den bir buton yeterli.)
-- [ ] **Yeni iş (Ahmet kararı, 00:30): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (senin `FlowScreen` tabanın uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Sırası: önce gazete (yukarıdaki 1-4), sonra bunlar.
-- [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
-- [ ] Gazete: `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`; toplamlar `ctx.LastQuake.TotalDeaths/TotalInjured`; tutuklama `ctx.LastQuake.Jailed`. Afetsiz gün Result fazı hiç açılmaz.
-- [ ] Günlük ödeme: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid). Seçim `ctx.Actions.SetExpensePaid(expenseId, paid)`; uygulama Completed'dan sonra Core'da (ekran parayı değiştirmez).
-- [ ] MainMenu "Devam Et": `SaveSystem.HasSave` ile göster; tıklanınca `GameLaunch.ContinueFromSave = true;` sonra Game sahnesini yükle. "Yeni Oyun" bayrağı false bırakır.
-- [ ] Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` okusun.
+- [x] (A, 01:10) Flow ekranları oyunda: prefab'lar Game.unity'ye eklendi (Install Screens). Tamamlananlar (A koddan doğruladı): Flow derlemesi, `.meta`'lar, prefab'lar + MainMenu + Build Settings, Sandbox_Flow, manşet `{count}`, Emeği Geçenler, ekranlar `IGameScreen` (Result / DaySummary / DailyExpenses / Ending), gazete `ctx.LastQuake` alanları, ödeme `SetExpensePaid`, MainMenu `SaveSystem.HasSave` + `GameLaunch.ContinueFromSave`. Game.unity'yi kendin açıp KAYDETME.
+- [ ] **Sıradaki iş (Ahmet kararı, 00:30): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (`FlowScreen` tabanı uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Prefab'ları üretip push'layınca haber ver → A Game.unity'ye ekler.
+- Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` + `ctx.Endings` (EndingSO; henüz asset yok, yedek metnin kullanılıyor).
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
-- ✅ **Credits ekranı çözüldü:** Onur MainMenuScreen'e "Emeği Geçenler" paneli ekledi (metin `CREDITS_AND_AI.md` sonuyla aynı tutulur; yeni CC BY asset gelince ikisi birlikte güncellenir).
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.

@@ -128,14 +128,16 @@ namespace CivilJam.Core.Editor
             var days = FindAll<DayConfigSO>(DataDir + "/Days");
             var expenses = FindAll<ExpenseSO>(DataDir + "/Expenses");
             var clients = FindAll<ClientSO>(DataDir + "/Clients");
+            var endings = AssetDatabase.IsValidFolder(DataDir + "/Endings") ? FindAll<EndingSO>(DataDir + "/Endings") : new List<EndingSO>();
             FillList(so.FindProperty("dayConfigs"), days);
             FillList(so.FindProperty("expenses"), expenses);
             FillList(so.FindProperty("clients"), clients);
+            FillList(so.FindProperty("endings"), endings);
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
-            Debug.Log($"[CoreSetup] Game.unity verisi bağlandı: {days.Count} gün, {expenses.Count} gider, {clients.Count} müteahhit " +
+            Debug.Log($"[CoreSetup] Game.unity verisi bağlandı: {days.Count} gün, {expenses.Count} gider, {clients.Count} müteahhit, {endings.Count} son " +
                       $"({string.Join(", ", clients.Select(c => c.Id))})");
         }
 

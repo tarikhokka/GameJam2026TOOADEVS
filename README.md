@@ -26,19 +26,29 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 - **Belgeleri karşılaştır:** Başvuru dosyası ile laboratuvar raporu aynı parseli, aynı tarihi, aynı mühendisin imzasını ve laboratuvarın kendi kaşesini taşımalı. Tutmayan bir ayrıntı sahte belge işaretidir.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar.
 - **Zarf:** Bazı müteahhitler rüşvet teklif eder. Rüşvet teklif edilen her proje kurallara aykırıdır.
+- **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen ofisinin camı kırılabilir; tamiri sana kalır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.
 
-Oyun 10 gün sürer. Sonun, verdiğin kararlara bağlıdır.
+Oyun 10 gün sürer. Dört farklı son var; hangisini göreceğin, attığın imzalara bağlı.
+
+## Jüri için kısayollar
+
+10 günü baştan sona oynamadan bütün sonları görebilmeniz için oyun sırasında:
+
+| Tuş | Etkisi |
+|---|---|
+| F9 | Son güne atlar (o günün sonunda son belirlenir) |
+| F10 | O gecenin sonunda afet kesin olur |
 
 ## Ekip
 
 | Kişi | Rol |
 |---|---|
 | Ahmet İlman | Oyun mantığı (Core), veri, entegrasyon, build |
-| Oğuzhan | Masa ekranı (belgeler, kararlar, ses ve kaşe) |
+| Oğuzhan Yurt | Masa ekranı (belgeler, kararlar, ses ve kaşe) |
 | Onur Kabadayılar | Akış ekranları (gazete, gün özeti, ödeme, sonlar, ana menü) |
-| Tarık | Görsel, ses, içerik metinleri |
+| Tarık Hokkaömeroğlu | Görsel ve ses, içerik metinleri (müteahhitler, gazete manşetleri, sonlar), asset ve yapay zekâ kaydı |
 
 ## Hazır asset ve yapay zekâ kullanımı
 
@@ -50,7 +60,8 @@ Oyundaki bütün kişi, bina, mahalle ve şirket adları kurgusaldır. Gerçek b
 
 ## Teknik
 
+- Kaynak kod: https://github.com/tarikhokka/GameJam2026TOOADEVS
 - Unity **6000.6.4f1**, 2D (URP), uGUI + TextMeshPro, Input System.
-- Kaynak kod: `Assets/_Project/Scripts/` (`Core`, `Desk`, `Flow`).
+- Kod klasörleri: `Assets/_Project/Scripts/` (`Core`, `Desk`, `Flow`).
 - Geliştirici notları: `memory.md` (ortak kararlar), `AHMET.md`, `OGUZHAN.md`, `ONUR.md`.
 - Testler: Unity → Window → General → Test Runner → EditMode.

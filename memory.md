@@ -77,6 +77,7 @@
 - `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
 - `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
+- `ICERIK_TASLAK.md` (EEE) — SO metin taslakları (şimdilik 6 müteahhit). Onaylananlar `Data/` altındaki asset dosyalarına taşınır (A ile koordineli).
 
 ## 4. Takım ve klasör sahipliği
 - A (Core) — Ahmet İlman: Scripts/Core, Data.

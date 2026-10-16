@@ -133,11 +133,7 @@ namespace CivilJam.Flow
             string building = "";
             int count = collapsed;
             var first = quake.Outcomes.Find(o => o.Collapsed);
-            if (first != null)
-            {
-                building = first.BuildingName;
-                if (collapsed == 1) count = first.Deaths;   // tek yıkımda {count} = can kaybı
-            }
+            if (first != null) building = first.BuildingName;   // {count} her zaman yıkılan bina sayısı
             return template
                 .Replace("{building}", building)
                 .Replace("{count}", count.ToString())

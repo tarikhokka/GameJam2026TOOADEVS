@@ -35,6 +35,7 @@ namespace CivilJam.Flow.Editor
         [MenuItem("CivilJam/Flow/2 - Build MainMenu Scene")]
         public static void BuildMainMenu()
         {
+            if (BlockedByPlayMode()) return;
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
             var cam = new GameObject("Main Camera", typeof(Camera));
@@ -58,6 +59,7 @@ namespace CivilJam.Flow.Editor
         [MenuItem("CivilJam/Flow/3 - Build Sandbox_Flow Scene")]
         public static void BuildSandbox()
         {
+            if (BlockedByPlayMode()) return;
             BuildPrefabs();
             var scene = EditorSceneManager.OpenScene(SandboxScene, OpenSceneMode.Single);
 
@@ -90,6 +92,13 @@ namespace CivilJam.Flow.Editor
         }
 
         // ---------- yardımcılar ----------
+
+        static bool BlockedByPlayMode()
+        {
+            if (!EditorApplication.isPlayingOrWillChangePlaymode) return false;
+            EditorUtility.DisplayDialog("Flow", "Önce Play modundan çık (üstteki ▶ düğmesi), sonra bu menüyü tekrar çalıştır.", "Tamam");
+            return true;
+        }
 
         static T Place<T>(Canvas canvas, string prefabName) where T : Component
         {

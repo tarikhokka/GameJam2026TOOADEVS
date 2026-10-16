@@ -48,6 +48,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde ResultScreen panelini oluşturma, tam ekran yerleşim ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Ahmet’in günlük ödeme ve afet kapsamı kararlarını inceleme; ortak hafıza ve C planını güncelleme | `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | Gemini / Antigravity (Google) | Gazete sonuç ekranı arka plan şablonu ("ŞEHİR POSTASI") görsel üretimi | `Assets/_Project/Art/newspaper_bg.png` | Onur Kabadayılar | 2026-10-16 |
+| Claude Code (Anthropic) | Flow kodu: gazete, gün özeti, günlük ödeme, son ve ana menü ekranları, Flow sandbox ve prefab/sahne kurulum aracı | `Assets/_Project/Scripts/Flow/**` | Onur Kabadayılar | 2026-10-16 |
 
 ## Oyun içi "Emeği Geçenler" metni
 CC BY (atıf zorunlu) asset'ler oyunun credits ekranında da görünmeli. Yeni asset eklenince bu blok da güncellenir; credits ekranı bu metni aynen kullanır.

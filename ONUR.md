@@ -70,3 +70,5 @@ Son koşullarının akıştaki önceliği Core ile kesinleşecek. Kayıt tamamla
 - 2026-10-16: Canvas altında ResultScreen paneli oluşturuldu. Tam ekran stretch, sıfır ofset ve sahne kaydı doğrulandı. Sırada gazete görseli var.
 
 - 2026-10-16: `14350ec` Desk v0 ve `cedfa0d` Ahmet cevapları pullandı. Günlük ödeme, iki afet arası bina kapsamı ve gazete içeriğine göre plan güncellendi. Önceki haftalık plan tarihsel; kod dönüşümü A’da. Yerel ResultScreen korundu.
+
+- 2026-10-16 (gece): Flow kodu yazıldı (derleme Unity'de henüz doğrulanmadı). `Scripts/Flow/`: `CivilJam.Flow.asmdef`, `UI/` (ResultScreen = gazete, DaySummaryScreen, DailyExpensesScreen, EndingScreen, MainMenuScreen, FlowScreen tabanı, UiKit), `Sandbox/FlowSandboxBootstrap`, `Editor/FlowBuilder`. Güncel Core adları: `PendingExpenses` (eski `PendingWeekly` yok), `GamePhase.DailyExpenses`. Kurulum: Unity'de menü CivilJam > Flow > 1 (prefab'lar), 2 (MainMenu sahnesi + Build Settings), 3 (Sandbox_Flow). Game.unity'ye ekleme A'da.

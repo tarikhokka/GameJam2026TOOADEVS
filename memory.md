@@ -74,6 +74,10 @@
   - `Sandbox/SandboxDeskContext.cs` — sahte gün: 3 proje (dürüst, rüşvetçi, sahte belgeli), 3 müşteri, RuleSet.
   - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar.
   - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build Sandbox_Desk Scene (prefab + sahneyi yeniden kurar).
+- `Assets/_Project/Scripts/Flow/` (C, asmdef `CivilJam.Flow`, sadece Core'a bağlı) — ekranlar UI'ı kodla kurar, `FlowScreen` tabanı Completed'ı bir kez tetikler.
+  - `UI/ResultScreen` (Result, gazete: newspaper_bg kutularına yerleşim), `DaySummaryScreen`, `DailyExpensesScreen` (SetExpensePaid), `EndingScreen` (EndingSO yoksa yedek metin; "Ana menüye dön" MainMenu sahnesini yükler), `MainMenuScreen` (MainMenu sahnesi; Yeni/Devam/Credits/Çıkış).
+  - `Sandbox/FlowSandboxBootstrap` — Sandbox_Flow'da sahte context. `Editor/FlowBuilder` — menü CivilJam > Flow > 1 Prefab, 2 MainMenu sahnesi, 3 Sandbox_Flow.
+- `Assets/_Project/Prefabs/Flow/` (C) — Result/DaySummary/DailyExpenses/Ending prefab'ları; Game.unity'ye A ekler.
 - `Assets/_Project/Prefabs/Desk/DeskScreen.prefab` (B) — masa ekranı; Game.unity'de Canvas altına konur (kendi içinde tam ekran stretch).
 - `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
 - `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
@@ -113,6 +117,7 @@
 - **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
 - **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı. (23:50) Sesler (sfx_click/paper/stamp, mus_office_ambient) ve ONAYLANDI/REDDEDİLDİ karar kaşesi animasyonu eklendi.
 - **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
+- **Flow (C, 16 Ekim gece):** Result/DaySummary/DailyExpenses/Ending ekranları ve MainMenu kodlandı (Unity'de derleme/prefab kurulumu bekliyor). Game.unity'ye ekleme A'da; Build Settings'e MainMenu 1. sıra. DayIntro/Construction ekranı yok (yedek arayüz geçiyor).
 - **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —
 

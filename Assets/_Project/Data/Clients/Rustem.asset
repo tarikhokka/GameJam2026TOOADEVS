@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa169d7b61bda445bf85f992ca361b7, type: 3}
+  m_Name: Rustem
+  m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
+  Id: rustem
+  DisplayName: "Balyoz Rüstem"
+  Portrait: {fileID: 0}
+  IsHonest: 0
+  IsThug: 1
+  BribeRange: {x: 1500, y: 2500}
+  GreetingLines:
+  - "Hocam selamünaleyküm. Ben uzatmayı sevmem."
+  - "Projeyi getirdim. Siz de onaylayacaksınız, değil mi hocam?"
+  - "Bu mahallede herkes beni tanır hocam. Siz de tanıyın istedim."
+  BribeLines:
+  - "Al hocam bunu. Ofisinizin camları çok güzel bu arada... Kırılsa yazık olur."
+  - "İmza atarsın, zarfı alırsın. Atmazsan... neyse, sen atarsın."
+  - "Ben iyilikten anlarım hocam. Kötülükten de anlarım."

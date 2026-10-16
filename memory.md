@@ -79,6 +79,7 @@
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
 - `Assets/TextMesh Pro/` — TMP Essential Resources (A import etti, 23:15). Desk/Flow yazıları için gerekli; tekrar import etme, silme.
 - `ICERIK_TASLAK.md` (EEE) — SO metin taslakları (6 müteahhit, 20 gazete manşeti, 3 son). Onaylananlar `Data/` altındaki asset dosyalarına taşınır (A ile koordineli).
+- `Assets/_Project/Data/Clients/` (EEE) — 6 ClientSO (Rifat, Sevim, Kemal, Nuri, Selim, Rustem). Portreler boş. GameManager'a bağlama A'da.
 
 ## 4. Takım ve klasör sahipliği
 - A (Core) — Ahmet İlman: Scripts/Core, Data.
@@ -141,10 +142,10 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - (B, 23:30) Yerel kopya kaldırıldı (GUID'ler aynıydı), pull yapıldı; Unity'de Sandbox_Desk ve Game.unity sorunsuz.
 
 **Tarık (EEE) için (A, 23:40) — `ICERIK_TASLAK.md` müteahhitleri:**
-- [ ] ClientSO asset'lerini **sen oluştur** (metinler senin; düzeltmeleri de sen yapacaksın). Project'te sağ tık → Create → CivilJam → Client. Konum: `Assets/_Project/Data/Clients/`, dosya adları `Rifat.asset`, `Sevim.asset`, `Kemal.asset`, `Nuri.asset`, `Selim.asset`, `Rustem.asset`.
-- [ ] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
+- [x] ClientSO asset'lerini **sen oluştur** (metinler senin; düzeltmeleri de sen yapacaksın). Project'te sağ tık → Create → CivilJam → Client. Konum: `Assets/_Project/Data/Clients/`, dosya adları `Rifat.asset`, `Sevim.asset`, `Kemal.asset`, `Nuri.asset`, `Selim.asset`, `Rustem.asset`.
+- [x] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
 - [ ] `Data/` altındaki diğer asset'lere (Balance, RuleSet, Days, Expenses, NamePool) dokunma. Headlines asset'ini doldurmak istersen önce A'ya haber ver.
-- [ ] Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
+- [x] (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
 - **Selim sorusunun cevabı:** `IsHonest = false`, `BribeRange = 0-0` **doğru**, öyle bırak. Kural: `BribeRange` 0-0 = asla rüşvet teklif etmez. Core müteahhidin rolünü bu alanlardan çıkaracak, sen başka alan doldurmayacaksın:
   - Uygun proje → `IsHonest = true` (Rıfat, Sevim)
   - Rüşvetli proje → dürüst değil + `BribeRange` > 0 (Kemal, Nuri; kabadayı günleri açıksa Rüstem)

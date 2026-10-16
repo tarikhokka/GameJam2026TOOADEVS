@@ -166,6 +166,15 @@ namespace CivilJam.Core
             Context.NotifyStateChanged();
         }
 
+        public bool AcceptGift(string projectId)
+        {
+            var p = Context.GetTodayProject(projectId);
+            if (p == null || string.IsNullOrEmpty(p.GiftId) || State.OfficeGifts.Contains(p.GiftId)) return false;
+            State.OfficeGifts.Add(p.GiftId);
+            Context.NotifyStateChanged();
+            return true;
+        }
+
         public void SetExpensePaid(string expenseId, bool paid)
         {
             var exp = Context.PendingExpenses;

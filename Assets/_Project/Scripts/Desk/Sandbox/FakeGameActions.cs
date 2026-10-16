@@ -29,6 +29,16 @@ namespace CivilJam.Desk
             return true;
         }
 
+        // (A, Core) IGameActions'a Ç4 ile eklendi; sandbox'ta hediyeyi ofis listesine yazar. memory.md'de not var.
+        public bool AcceptGift(string projectId)
+        {
+            var project = context.GetTodayProject(projectId);
+            if (project == null || string.IsNullOrEmpty(project.GiftId) || context.State.OfficeGifts.Contains(project.GiftId)) return false;
+            context.State.OfficeGifts.Add(project.GiftId);
+            context.NotifyStateChanged();
+            return true;
+        }
+
         public void Approve(string projectId, bool acceptBribe)
         {
             var project = context.GetTodayProject(projectId);

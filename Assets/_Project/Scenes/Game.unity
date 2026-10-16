@@ -1064,6 +1064,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fbf75e601929e934db54bbd7109bdf30, type: 2}
   - {fileID: 11400000, guid: f71d72d2ff6cfea4db540742096ac4f9, type: 2}
   - {fileID: 11400000, guid: 5e9cf3a4449b48548a2a57e9d6cb152e, type: 2}
+  gifts: []
   fixedSeed: 0
   fallbackGui: 1
   demoKeys: 1

@@ -110,6 +110,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | `5097e93` | `ClientSO.OffersBribes` (dürüst değil + BribeRange > 0) | EEE, B |
 | 17 Ekim analiz | `EndingType.MiddleQuota` → `MiddleCollapsed`; `ExpenseCalculator.DebtPaymentId` / `WindowRepairId`; `GameManager.demoKeys` (F9/F10); `BalanceSO` varsayılanları (10 gün, 2.500, 2.000, 400-700) | C (EndingScreen güncellendi), B |
 | Oynanış testi Ç2/Ç3/Ç5 | Yeni `ProjectKind` enum + `ProjectData.Kind` (gizli, gösterilmez); `GameState.UsedBuildingNames`; `ProjectGenerator.Generate(..., usedNames)` | B (sandbox verisi isterse Kind kullanabilir) |
+| Ç1/Ç4 sözleşme iskeleti | `RuleSetSO` (HandbookIntro, Zones/ZoneEntry, ZoneOf, RulesFor(tür,bölge,kat), FindRule, FormatValue, DisplayNameOf); `ParamRule` (Zone, MinFloors, MaxFloors, Labels, Description, IsLabeled); `ParamType` +5; `ProjectData` (Neighborhood, Zone, GreetingText, ReactionText, GiftId); `GiftSO`; `ClientSO` (Approve/Reject/BribeRefused/ReturnLines, Gift, GiftChance, BribeRaiseOnReject); `GameState.OfficeGifts`; `GameContext.Gifts`/`GetGift`; `IGameActions.AcceptGift` | B, C (sandbox `AcceptGift` eklendi), EEE |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

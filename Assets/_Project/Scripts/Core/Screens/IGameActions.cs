@@ -14,6 +14,9 @@ namespace CivilJam.Core
 
         void Reject(string projectId);
 
+        /// <summary>Ç4: onaydan sonra gelen ofis hediyesini kabul et (geri çevirme yok). Hediye yoksa veya zaten alındıysa false.</summary>
+        bool AcceptGift(string projectId);
+
         /// <summary>Günlük hesaplaşmada bir kalemi ödenecek/ödenmeyecek işaretle. Kesinleştirme ekran Completed olunca yapılır.</summary>
         void SetExpensePaid(string expenseId, bool paid);
     }

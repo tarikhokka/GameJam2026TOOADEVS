@@ -21,6 +21,9 @@ namespace CivilJam.Core
         /// <summary>Bu oyunda masaya gelmiş bina adları (aynı ad iki kez gelmesin).</summary>
         public List<string> UsedBuildingNames = new List<string>();
 
+        /// <summary>Ç4: kabul edilen ofis hediyeleri (GiftSO.Id). Masa ekranı ofiste gösterir; kayıtla birlikte saklanır.</summary>
+        public List<string> OfficeGifts = new List<string>();
+
         /// <summary>Onaylanıp yapılmış tüm binalar (ayakta + yıkık).</summary>
         public List<ProjectData> Buildings = new List<ProjectData>();
 

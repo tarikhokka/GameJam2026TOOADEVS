@@ -177,11 +177,13 @@ namespace CivilJam.Core.Editor
             FillList(so.FindProperty("expenses"), expenses);
             FillList(so.FindProperty("clients"), clients);
             FillList(so.FindProperty("endings"), endings);
+            var gifts = AssetDatabase.IsValidFolder(DataDir + "/Gifts") ? FindAll<GiftSO>(DataDir + "/Gifts") : new List<GiftSO>();
+            FillList(so.FindProperty("gifts"), gifts);
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
-            Debug.Log($"[CoreSetup] Game.unity verisi bağlandı: {days.Count} gün, {expenses.Count} gider, {clients.Count} müteahhit, {endings.Count} son " +
+            Debug.Log($"[CoreSetup] Game.unity verisi bağlandı: {days.Count} gün, {expenses.Count} gider, {clients.Count} müteahhit, {endings.Count} son, {gifts.Count} hediye " +
                       $"({string.Join(", ", clients.Select(c => c.Id))})");
         }
 

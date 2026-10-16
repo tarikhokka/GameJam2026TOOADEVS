@@ -123,6 +123,7 @@ namespace CivilJam.Flow
             public bool BuyExtraTest(string projectId) => false;
             public void Approve(string projectId, bool acceptBribe) { }
             public void Reject(string projectId) { }
+            public bool AcceptGift(string projectId) => false; // (A, Core) Ç4 ile IGameActions'a eklendi
 
             public void SetExpensePaid(string expenseId, bool paid)
             {

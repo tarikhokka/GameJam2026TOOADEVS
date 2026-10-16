@@ -173,8 +173,9 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 
 **Ç4 — Tepkiler ve hafıza (şikayet 1). A + EEE + B, Cumartesi akşam. Derinlik: metin + birkaç etki.**
 - Her karardan sonra müteahhit tepki verir: onay → teşekkür; red → söylenme/kavga; zarf geri çevrilince; tekrar gelince ("Geçen sefer reddettiniz hocam…").
-- Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür; dürüst usta onaydan sonra **hediye** bırakabilir (kabul = küçük para + küçük hapis riski artışı; etik ikilem).
-- A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları (aşağıdaki alanlar). **B:** karar sonrası konuşma balonu + hediye kabul/ret butonu.
+- Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür.
+- **Hediye (Ahmet kararı, güncel):** belirli bir karakter, projesi onaylanınca **bazen** ofis için bir eşya hediye eder (saat, tablo, masa isimliği...). **Para ya da risk etkisi yok**; kabul edilince ofiste (masa ekranında) kalıcı görünür. **Geri çevrilemez, sadece kabul edilir.**
+- A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları + hediye asset'leri. **B:** karar sonrası konuşma balonu + hediye kartı (sadece "Kabul et") + ofiste hediyelerin görünmesi.
 
 **Ç5 — İsim çeşitliliği (şikayet 5). A ✅ yapıldı (oyun başına tekrar 0); EEE'nin ad listesi bekleniyor.**
 - A: bir oyunda aynı bina adı iki kez çıkmaz; ad kalıpları: "… Apartmanı", "… Sitesi B Blok", "… Konutları", "… Evleri".
@@ -183,12 +184,42 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 **Ölçüm (A, `CivilJam > Core > Content Stats`, 300 oyun):** sahte belge 3. günden itibaren günde ~0,7-1; dikkatsiz (rüşvetsiz kötü) proje her gün ~0,7-1; tekrar eden bina adı 0; müteahhit adı türü ele vermiyor (testli). Denge korunuyor: dikkatli oyuncu %100 İyi son, kasa en fazla 1.562 TL'ye iner; tek zarf ~%49 İyi / %39 Enkazın Gölgesi / %12 hapis.
 - Gizli `ProjectData.Kind` (Compliant / Sloppy / Bribe / Fake / BribeFake) eklendi; **masada gösterilmez.**
 
-**Core sözleşme taslağı (B ve EEE beklemeden başlayabilsin; kesin adlar A'nın commit'inde, `AHMET.md` "Sözleşme değişiklikleri"ne yazılır)**
-- `RuleSetSO`: `Zones` (mahalle → bölge listesi), `ParamRule` yeni alanlar: `Zone` (1-4), `MinFloors`/`MaxFloors`, `Labels` (harfli parametreler için sıra: C20, C25…), el kitabı metni için `HandbookIntro` ve parametre başına `Description`.
-- `ProjectData`: `Neighborhood`, `Zone` (gizli; oyuncu el kitabından bulur), `Floors` (var).
-- `ParamEntry.Required` **kalır ama masada gösterilmez**; harfli değerler `DeskFormat` ile etikete çevrilir.
-- `ClientSO` yeni replik listeleri: `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines`, `GiftLines`; alanlar: `GiftAmount`, `BribeRaiseOnReject`.
-- `ProjectData.ReactionText` (karardan sonra Core doldurur, masa gösterir), `ProjectData.GiftAmount` + `IGameActions.AcceptGift(id)`.
+**Core sözleşmesi — KESİN ADLAR (A, push'landı; alanlar var, Ç1/Ç4 mantığı arkadan dolacak)**
+- **Ç1 (el kitabı):**
+  - `RuleSetSO.HandbookIntro` (string), `RuleSetSO.Zones` → `List<ZoneEntry>` (`Neighborhood`, `Zone` 1-4).
+  - `ParamRule` yeni alanlar: `Zone` (0 = bütün bölgeler), `MinFloors` / `MaxFloors` (0 = sınırsız), `Labels` (harfli parametrede kötüden iyiye sıra, ör. C20, C25, C30, C35), `Description` (el kitabı açıklaması), `IsLabeled`.
+  - `RuleSetSO` yardımcıları: `ZoneOf(mahalle)`, `RulesFor(tür)` (el kitabı sayfaları için hepsi), `RulesFor(tür, bölge, kat)`, `FindRule(tür, parametre, bölge, kat)`, **`FormatValue(parametre, değer)`** (harfli → "C25", sayısal → "32,5 MPa"; masa ve gazete bunu kullansın), `DisplayNameOf(parametre)`.
+  - Yeni `ParamType` değerleri (enum'un sonuna): `ConcreteGrade`, `BarDiameter`, `ColumnSection`, `SoilClass`, `ShearWallRatio`. Mevcutlar kalıyor.
+  - `ProjectData.Neighborhood` (adresteki mahalle; masada ayrı satır yok), `ProjectData.Zone` (gizli; oyuncu el kitabından bulur). `Address` her zaman "<Mahalle> Mah. ..." ile başlar.
+  - `ParamEntry.Required` kalır ama **masada gösterilmez**.
+- **Ç4 (tepkiler ve hediye):**
+  - `ProjectData.GreetingText` (masaya gelişte; tekrar gelen müteahhitte "geçen sefer..."), `ProjectData.ReactionText` (karardan hemen sonra), `ProjectData.GiftId` (onaydan sonra hediye varsa `GiftSO.Id`, yoksa boş).
+  - `IGameActions.AcceptGift(projectId)` → bool. **`DeclineGift` yok** (geri çevrilemez).
+  - `GameState.OfficeGifts` (kabul edilen hediye Id'leri, kayıtla saklanır), `GameContext.Gifts` + `ctx.GetGift(id)` → `GiftSO` (`Id`, `DisplayName`, `Sprite`, `Note`).
+  - `ClientSO` yeni alanlar: `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` ({last} = "onaylamıştınız"/"reddetmiştiniz"), `Gift` (GiftSO), `GiftChance`, `BribeRaiseOnReject`.
+- **Zaman:** Ç1 mantığı (bölge/kat kuralları, 8 parametre, üretici, RuleSet verisi) **Cumartesi öğlen**; Ç4 mantığı (geçmiş, tepki seçimi, hediye çıkışı, Nuri) **Cumartesi akşamüstü**. O zamana kadar alanlar boş/varsayılan gelir; masa kodu derlenir.
+
+**Oğuzhan'ın 4 sorusuna cevaplar (Ahmet onayladı)**
+1. Adlar: yukarıdaki kesin liste. Taslaktakiler aynen kaldı; eklenenler `FormatValue`, `GreetingText`, `GiftId`, `OfficeGifts`, `GetGift`. Hediye için `DeclineGift` YOK.
+2. El kitabı sayfaları: senin önerdiğin sıra uygun → giriş + kontrol listesi → mahalle → bölge tablosu → bölge 1-4 sayfaları → akredite laboratuvarlar. Kontrol listesi genel kalsın ("değerleri el kitabıyla karşılaştır"), cevabı vermesin. Lab listesi önemli: "bilinmeyen laboratuvar" ipucu ancak onunla yakalanır.
+3. Hediye: kart değil, **ofis eşyası**. Onaydan sonra (konuşma balonuyla aynı an) "X Usta size bir <eşya> bıraktı" + sadece **Kabul et**. Kabul edilince eşya masa ekranında (ofiste) kalıcı görünür; para/risk yok.
+4. Ayrı "Mahalle" satırı yok; mahalle adresten okunur (aramanın parçası). Core adresin "… Mah." ile başlamasını garanti eder.
+
+**Başkasının dosyasına dokundum (not):** `Desk/Sandbox/FakeGameActions.cs` (Oğuzhan) ve `Flow/Sandbox/FlowSandboxBootstrap.cs` (Onur) → `AcceptGift` metodu eklendi; `IGameActions`'a yeni metot gelince yoksa derlenmezdi. Başka satır yok.
+
+**Görev dağılımı (Ahmet kararı)**
+- **Oğuzhan (B) — masa tarafı Ç1 + Ç2 + Ç4:**
+  - [ ] Lab raporundan "min." değerini ve ek test renklerini kaldır; künyede başvuru değerini yan yana yazmayı kaldır (Ç1, Ç2).
+  - [ ] Sayfalı "Denetçi El Kitabı" (sayfa çevirme, masada her an açılabilir): giriş + kontrol listesi, mahalle → bölge tablosu (`ctx.Rules.Zones`), bölge 1-4 sayfaları (`ctx.Rules.RulesFor(tür)`; kural satırı: `DisplayName`, kat aralığı, `FormatValue(Param, Required)`, `Description`), akredite laboratuvarlar (`ctx.Names.LabNames`).
+  - [ ] Değerleri her yerde `ctx.Rules.FormatValue` ile göster (harfli parametreler).
+  - [ ] Masaya gelişte `GreetingText`, karardan sonra `ReactionText` konuşma balonu (müteahhit portresiyle).
+  - [ ] Hediye: `GiftId` doluysa "<müteahhit> size <GiftSO.DisplayName> bıraktı" + sadece "Kabul et" → `ctx.Actions.AcceptGift(id)`; kabul edilen hediyeler (`ctx.State.OfficeGifts` → `ctx.GetGift(id).Sprite`) masa ekranında ofiste kalıcı görünsün.
+  - [ ] Kabadayı reddedilince olay kartı + `sfx_glass_break` (O4).
+- **Tarık (EEE) — içerik:**
+  - [ ] El kitabı metinleri: `HandbookIntro`, parametre adları/birimleri/`Description` (8 parametre), ~16 mahalle adı (A bölgelere dağıtır).
+  - [ ] Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).
+  - [ ] Hediye asset'leri: `Assets/_Project/Data/Gifts/` → Create → CivilJam → Gift (saat, tablo, masa isimliği...; `Id`, `DisplayName`, `Sprite`, `Note`) ve hangi müteahhidin vereceği (`ClientSO.Gift`). Bitince haber ver → A "Link Data" ile bağlar.
+  - [ ] Yeni müteahhitler (10-12'ye) ve ~30 bina adı (Ç3, Ç5).
 
 ### 📌 Analiz sonrası işler (A, 17 Ekim gece) — ÖNCE BUNU OKU
 Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet paylaşır). Kararlar §2'de. Kodlar: K = kritik, Y = yüksek, O = orta, D = düşük.

@@ -16,6 +16,7 @@ namespace CivilJam.Core
         public NamePoolSO Names;
         public IReadOnlyList<ClientSO> Clients;
         public IReadOnlyList<EndingSO> Endings;
+        public IReadOnlyList<GiftSO> Gifts;
         public IGameActions Actions;
 
         public GamePhase Phase;
@@ -41,5 +42,12 @@ namespace CivilJam.Core
         }
 
         public ProjectData GetTodayProject(string id) => TodayProjects.Find(p => p.Id == id);
+
+        public GiftSO GetGift(string id)
+        {
+            if (Gifts == null || string.IsNullOrEmpty(id)) return null;
+            foreach (var g in Gifts) if (g != null && g.Id == id) return g;
+            return null;
+        }
     }
 }

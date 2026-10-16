@@ -24,8 +24,14 @@ namespace CivilJam.Core
         ConcreteStrength, // Beton dayanımı
         RebarRatio,       // Donatı oranı
         SoilQuality,      // Zemin etüdü
-        SeismicDesign,    // Deprem yönetmeliği uyumu
-        FireSafety        // Yangın güvenliği (fabrika)
+        SeismicDesign,    // Deprem dayanım katsayısı
+        FireSafety,       // Yangın güvenliği (fabrika; kapsam dışı)
+        // Ç1 (el kitabı) — yeni parametreler. Sona eklendi: kayıtlı int değerleri bozulmasın.
+        ConcreteGrade,    // Beton sınıfı (harfli: C20, C25, ... → Labels)
+        BarDiameter,      // Donatı çapı (mm)
+        ColumnSection,    // Kolon kesiti (cm²)
+        SoilClass,        // Zemin sınıfı (harfli: ZE ... ZA → Labels)
+        ShearWallRatio    // Perde duvar oranı (%)
     }
 
     public enum BuildingType

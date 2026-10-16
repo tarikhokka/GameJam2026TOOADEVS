@@ -9,7 +9,9 @@ namespace CivilJam.Core
     {
         public string Id;
         public string Name;          // Ör. "Papatya Apartmanı"
-        public string Address;
+        public string Address;       // Her zaman "<Mahalle> Mah. ..." ile başlar
+        public string Neighborhood;  // Ç1: adresteki mahalle (masada ayrı satır yok; oyuncu adresten okur)
+        public int Zone;             // Ç1: deprem bölgesi 1-4 (GİZLİ; oyuncu el kitabından bulur)
         public string ClientId;      // ClientSO.Id
         public BuildingType BuildingType;
         public int Floors;
@@ -28,6 +30,11 @@ namespace CivilJam.Core
         public bool BribeAccepted;
         public bool ExtraTestBought;
         public int DayDecided;
+
+        // Müteahhit konuşması (Ç4; Core doldurur, masa gösterir)
+        public string GreetingText;  // Masaya gelişte (tekrar gelen müteahhitte "geçen sefer...")
+        public string ReactionText;  // Karardan hemen sonra (teşekkür / söylenme / kavga)
+        public string GiftId;        // Onaydan sonra hediye varsa GiftSO.Id, yoksa boş. Kabul: IGameActions.AcceptGift
 
         // Yapıldıktan sonra
         public BuildingStatus Status = BuildingStatus.Standing;

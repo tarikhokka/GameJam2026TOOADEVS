@@ -44,12 +44,12 @@
 - Oyun mantığı saf C# (MonoBehaviour yok): üretim, deprem, ekonomi.
 - Veri:
   - ScriptableObject: DayConfigSO (eski plan adı LevelConfigSO), RuleSetSO, ClientSO, ExpenseSO, BalanceSO, HeadlineSO, EndingSO.
-  - Runtime plain C#: ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult, WeeklyExpenseResult (eski plan adı MonthEndResult). Bu adlar hedef mimaridir; kod yeniden adlandırılmadı.
+  - Runtime plain C#: ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult, WeeklyExpenseResult (mevcut kod). Günlük ödeme kararıyla DailyExpenseResult dönüşümü planlandı; henüz uygulanmadı.
 - Ekranlar IGameScreen uygular: Show(GameContext), Hide(), event Completed. GameManager sadece state değiştirir.
 - Assembly'ler: CivilJam.Core, CivilJam.Desk, CivilJam.Flow. Desk ve Flow sadece Core'a bağlı, birbirini görmez.
 
 ### Dosya haritası
-- `Assets/_Project/Scenes/Sandbox_Flow.unity` — Onur için Unity Editor üzerinden oluşturulan Lit 2D (URP) deneme sahnesi; Canvas ve EventSystem eklendi. Canvas: Screen Space Overlay, Scale With Screen Size, 1920×1080, Match 0.5. Sonuç paneli henüz yok.
+- `Assets/_Project/Scenes/Sandbox_Flow.unity` — Onur için Unity Editor üzerinden oluşturulan Lit 2D (URP) deneme sahnesi; Canvas ve EventSystem eklendi. Canvas: Screen Space Overlay, Scale With Screen Size, 1920×1080, Match 0.5. Canvas altında tam ekran stretch ResultScreen paneli hazır; gazete görseli ve içerikler henüz yok.
 
 `Assets/_Project/Scripts/Core/` (asmdef `CivilJam.Core`, namespace `CivilJam.Core`):
 - `Enums.cs` — GamePhase, ParamType, BuildingType, DocumentKind, ClueType, ProjectVerdict, BuildingStatus, EndingType.
@@ -100,6 +100,13 @@
 - **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
 - **Bilinen sorunlar:** —
 
+### Güncel entegrasyon durumu (cedfa0d sonrası yerel kontrol)
+- Desk v0 kodu, DeskScreen prefab ve Sandbox_Desk sahnesi artık repoda (`14350ec`). Desk hâlâ kendi modellerini kullanır.
+- Flow: Sandbox_Flow, Canvas ve ResultScreen paneli hazır; içerik/script entegrasyonu yapılmadı.
+- Günlük ödeme, iki afet arasındaki bina kapsamı ve kayıp bilgileri şu an belge kararıdır. Core'da WeeklyExpenseResult/PendingWeekly ve tüm ayaktaki binaları değerlendiren simulator hâlâ mevcut; dönüşüm A'nın sorumluluğunda.
+- BuildingOutcome'a ölen isimleri ve ölü/yaralı sayıları henüz eklenmedi; C bunları üretmez, Core'dan gösterir.
+- C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
+
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının başlangıcı, artışı ve tavanı (sıfırlama kararlaştı).
@@ -109,7 +116,7 @@
 - Kota, hapis ve ofis kapanışı aynı anda tetiklenirse son önceliği.
 
 ## 7. Karar günlüğü
-Eski satırlar tarihseldir; aşağıdaki 21:09 güncellemesi level/ay sonu kararlarının yerini alır.
+Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:00 notu da haftalık ödemeyi kaldırır.
 
 | Tarih-saat | Karar | Gerekçe |
 |---|---|---|

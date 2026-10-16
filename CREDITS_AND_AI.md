@@ -38,3 +38,5 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Intro hikaye ekranı (daktilo efekti, sayfa geçişi) ve intro metinleri | `Assets/Scripts/Intro/IntroSequence.cs` | Oğuzhan | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde Lit 2D (URP) deneme sahnesi oluşturma ve kayıt doğrulama; durum notları | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde Canvas kurulumu, 1920×1080 ölçekleme ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
+| ChatGPT / Codex (OpenAI) | Unity arayüzünde ResultScreen panelini oluşturma, tam ekran yerleşim ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
+| ChatGPT / Codex (OpenAI) | Ahmet’in günlük ödeme ve afet kapsamı kararlarını inceleme; ortak hafıza ve C planını güncelleme | `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |

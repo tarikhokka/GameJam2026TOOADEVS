@@ -67,6 +67,9 @@
   - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView, ParamRowView, ActionPanel, UiPool, DeskFormat.
   - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i sahte veriyle başlatır.
   - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build DeskScreen Prefab / Build Sandbox_Desk Scene.
+- `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
+- `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
+- `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
 
 ## 4. Takım ve klasör sahipliği
 - A (Core) — Ahmet İlman: Scripts/Core, Data.
@@ -97,6 +100,7 @@
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 21:30):** Veri sözleşmesi gün sistemi adlarıyla push'landı (asmdef, runtime tipler, IGameScreen, IGameActions, SO sınıfları, EarthquakeSimulator). Unity'de hatasız derlendi. GameManager henüz yok.
 - **Desk (B):** v0 Unity'de test edildi (Sandbox_Desk: onay, red, zarf, ek test, mesai bitişi çalışıyor) ve push'landı. Henüz kendi modelleri + sahte veriyle; sırada Core tiplerine geçiş (IGameScreen + IGameActions).
+- **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: kaşe/kağıt/deprem/yıkılma sesleri, ClientSO metin taslakları.
 - **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
 - **Bilinen sorunlar:** —
 
@@ -143,6 +147,8 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:00 (UTC+3) | Ödeme haftalıktan günlüğe çekildi (21:09 haftalık gider kararının yerini alır) | Ahmet kararı; ödenmeyen giderin sonucu açık |
 | 2026-10-16 22:00 (UTC+3) | Afet son afetten bu yana onaylanan binaları değerlendirir; afet olunca olasılık sıfırlanır | Onur'un sorularına Ahmet'in cevabı (AHMET.md) |
 | 2026-10-16 22:00 (UTC+3) | Afetsiz gün gazete yok; afette yıkım durumu, ölen isimleri, ölü/yaralı sayısı, oyuncu sorumluluğu gösterilir | Temanın ağırlığı sonuç ekranında; Core'da BuildingOutcome genişletilecek |
+| 2026-10-16 22:30 (UTC+3) | Görsel/ses önce placeholder; final aynı dosya adıyla üzerine yazılır. Sprite Mode Single, PPU 100, ses `.ogg` | .meta/GUID korunur, B/C prefab referansları bozulmaz |
+| 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

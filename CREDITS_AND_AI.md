@@ -12,6 +12,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Ses / Müzik
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
+| Kenney Interface Sounds — `bong_001.ogg` (adı `sfx_click.ogg` yapıldı) | Buton tıklama sesi | https://kenney.nl/assets/interface-sounds | CC0 1.0 | Tarık | 2026-10-16 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |

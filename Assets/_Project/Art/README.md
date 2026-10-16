@@ -22,7 +22,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `city_bg.png` | Construction/Quake | C | P |
 | `newspaper_bg.png` | Result | C | P |
 | `daysummary_bg.png` | DaySummary | C | P |
-| `weekly_bg.png` | WeeklyExpenses | C | P |
+| `payment_bg.png` | Günlük ödeme | C | P |
 | `menu_bg.png`, `logo.png` | MainMenu | C | P |
 
 Durum: `-` yok, `P` placeholder, `F` final.

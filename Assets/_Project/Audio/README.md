@@ -16,7 +16,7 @@ Bu klasöre sadece EEE yazar.
 | `sfx_click.ogg` | Tüm butonlar | P |
 | `sfx_glass_break.wav` | Kabadayı olayı (masada cam kırıldı kartı, B) | P |
 | `mus_office_ambient.wav` | Desk (loop) | P |
-| `mus_menu.ogg` | MainMenu | - |
+| `mus_menu.wav` | MainMenu (loop) | P |
 | `mus_ending_sad.ogg` | Kötü/Orta son | - |
 
 Durum: `-` yok, `P` placeholder, `F` final.

@@ -64,3 +64,41 @@ Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
   - "Al hocam bunu. Ofisinizin camları çok güzel bu arada... Kırılsa yazık olur."
   - "İmza atarsın, zarfı alırsın. Atmazsan... neyse, sen atarsın."
   - "Ben iyilikten anlarım hocam. Kötülükten de anlarım."
+
+## Gazete manşetleri (HeadlineSO)
+
+Ton: ciddi, sade, saygılı. Depremzedeler asla olumsuz gösterilmez. Gerçek olay, tarih veya şehir adı yok.
+Manşette ölü/yaralı sayısı yok; sayılar ve isimler gazetenin gövdesinde (C) gösterilir. Manşet olayı ve sorumluluğu anlatır.
+
+Yer tutucular:
+- `{building}` = bina adı ("Papatya Apartmanı"). **Arkasına ek gelmez** (Türkçe ek uyumu bozulur: "Apartmanı'nın"); cümleler buna göre yazıldı.
+- `{count}` = yıkılan **bina** sayısı (sadece MultiCollapse'ta). Ahmet'in örneğindeki "{count} can kaybı" kullanımı kaldırıldı.
+- Not A/C'ye: can kaybı manşette istenirse ayrı bir `{deaths}` yer tutucusu eklenmeli, `{count}` ile karıştırılmamalı.
+
+### NoCollapse — afet oldu, hiçbir bina yıkılmadı
+- "Deprem korkuttu, binalar ayakta kaldı"
+- "Sarsıntı geçti, şehir ayakta"
+- "Mahalleli sokakta sabahladı: Yıkım yok"
+- "Uzmanlar: Denetimli binalar sınavı geçti"
+- "Derin bir nefes: Depremde can kaybı yaşanmadı"
+
+### SingleCollapse — tek bina yıkıldı
+- "Şehir bu sabah bir binasını kaybetti: {building}"
+- "Mahalle yasta: {building} depreme dayanamadı"
+- "Yıkılan bina: {building}. Sorumlular aranıyor"
+- "Komşular anlatıyor: {building} bir anda çöktü"
+- "Soruşturma başladı: {building} neden yıkıldı?"
+
+### MultiCollapse — birden fazla bina yıkıldı
+- "Depremde {count} bina yıkıldı"
+- "Şehirde acı tablo: {count} bina çöktü"
+- "{count} bina ayakta kalamadı"
+- "Kara gün: {count} yapı yerle bir oldu"
+- "Denetim sorusu: {count} binanın onayı incelenecek"
+
+### BribedCollapse — rüşvetle onaylanan bina yıkıldı
+- "Yıkılan binanın onayında usulsüzlük şüphesi"
+- "Bu imza kimin?"
+- "Belgeler sahte, imza gerçek"
+- "Savcılık harekete geçti: Onay sürecinde rüşvet iddiası"
+- "Müteahhit gözaltında, gözler onaylayan mühendiste"

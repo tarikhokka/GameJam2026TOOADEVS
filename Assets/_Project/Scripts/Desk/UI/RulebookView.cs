@@ -68,8 +68,7 @@ namespace CivilJam.Desk
                         sb.AppendLine($"<b>Yönetmelik · {DeskFormat.BuildingName(type)}</b>");
                         header = true;
                     }
-                    string unit = string.IsNullOrEmpty(rule.Unit) ? "" : " " + rule.Unit;
-                    sb.AppendLine($"• {rule.DisplayName}: en az {DeskFormat.Number(rule.Required)}{unit}");
+                    sb.AppendLine($"• {rule.DisplayName}: en az {DeskFormat.Value(context.Rules, rule.Param, rule.Required)}");
                 }
             }
 

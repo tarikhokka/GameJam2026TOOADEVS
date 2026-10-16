@@ -373,9 +373,8 @@ namespace CivilJam.Desk.Editor
             var rowView = rowTemplate.AddComponent<ParamRowView>();
             var cells = rowTemplate.GetComponentsInChildren<TMP_Text>();
             Wire(rowView, "nameText", cells[0]);
-            Wire(rowView, "requiredText", cells[1]);
-            Wire(rowView, "reportedText", cells[2]);
-            Wire(rowView, "actualText", cells[3]);
+            Wire(rowView, "reportedText", cells[1]);
+            Wire(rowView, "actualText", cells[2]);
             rowTemplate.SetActive(false);
 
             // Kaşe (layout dışı, sağ üst köşe, hafif yamuk)
@@ -437,10 +436,11 @@ namespace CivilJam.Desk.Editor
             Layout(row, prefH: 44);
 
             var style = isHeader ? FontStyles.Bold : FontStyles.Normal;
+            // Gerekli değer sütunu yok (Ç1): oyuncu El Kitabı'na bakar.
             string[] labels = isHeader
-                ? new[] { "Parametre", "Gerekli", "Beyan", "Ek test" }
-                : new[] { "Parametre", "min. 0", "0", "?" };
-            float[] widths = { 2, 1, 1, 1 };
+                ? new[] { "Parametre", "Beyan", "Ek test" }
+                : new[] { "Parametre", "0", "?" };
+            float[] widths = { 2, 1, 1 };
 
             for (int i = 0; i < labels.Length; i++)
             {

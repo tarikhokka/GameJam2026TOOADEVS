@@ -17,25 +17,34 @@ namespace CivilJam.Desk
             _ => "Konut",
         };
 
-        // Parametre adı/birimi yönetmelikten (RuleSetSO) okunur; kural yoksa yedek ad kullanılır.
-        public static (string name, string unit) Param(RuleSetSO rules, BuildingType building, ParamType type)
+        // Parametre adı yönetmelikten (RuleSetSO) okunur; kural yoksa yedek ad kullanılır.
+        public static string ParamName(RuleSetSO rules, BuildingType building, ParamType type)
         {
             if (rules != null)
             {
                 foreach (var rule in rules.RulesFor(building))
-                    if (rule.Param == type)
-                        return (rule.DisplayName, rule.Unit);
+                    if (rule.Param == type && !string.IsNullOrEmpty(rule.DisplayName))
+                        return rule.DisplayName;
             }
 
             return type switch
             {
-                ParamType.ConcreteStrength => ("Beton dayanımı", ""),
-                ParamType.RebarRatio => ("Donatı oranı", ""),
-                ParamType.SoilQuality => ("Zemin etüdü", ""),
-                ParamType.SeismicDesign => ("Deprem yönetmeliği uyumu", ""),
-                ParamType.FireSafety => ("Yangın güvenliği", ""),
-                _ => (type.ToString(), ""),
+                ParamType.ConcreteStrength => "Beton dayanımı",
+                ParamType.RebarRatio => "Donatı oranı",
+                ParamType.SoilQuality => "Zemin taşıma gücü",
+                ParamType.SeismicDesign => "Deprem dayanım katsayısı",
+                ParamType.FireSafety => "Yangın güvenliği",
+                ParamType.ConcreteGrade => "Beton sınıfı",
+                ParamType.BarDiameter => "Donatı çapı",
+                ParamType.ColumnSection => "Kolon kesiti",
+                ParamType.SoilClass => "Zemin sınıfı",
+                ParamType.ShearWallRatio => "Perde duvar oranı",
+                _ => type.ToString(),
             };
         }
+
+        // Değer metni Core'dan (RuleSetSO.FormatValue): harfli parametrede etiket (C25), değilse sayı + birim.
+        public static string Value(RuleSetSO rules, ParamType type, float value) =>
+            rules != null ? rules.FormatValue(type, value) : Number(value);
     }
 }

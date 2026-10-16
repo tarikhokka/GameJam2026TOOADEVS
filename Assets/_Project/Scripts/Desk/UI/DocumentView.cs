@@ -86,8 +86,10 @@ namespace CivilJam.Desk
             for (int i = 0; i < rowCount; i++)
             {
                 var param = project.Params[i];
-                var (name, unit) = DeskFormat.Param(context.Rules, project.BuildingType, param.Type);
-                rows[i].Bind(name, unit, param);
+                rows[i].Bind(
+                    DeskFormat.ParamName(context.Rules, project.BuildingType, param.Type),
+                    DeskFormat.Value(context.Rules, param.Type, param.Reported),
+                    param.Tested ? DeskFormat.Value(context.Rules, param.Type, param.Actual) : null);
             }
 
             BindDecisionStamp(project);
@@ -144,18 +146,13 @@ namespace CivilJam.Desk
             }
         }
 
-        // Lab raporunda parsel/tarih/imzanın yanında başvurudaki değer de soluk yazılır. Her dosyada aynı görünür,
-        // uyuşmazlık işaretlenmez: karşılaştırmayı oyuncu yapar.
+        // Karşılaştırmayı oyuncu sekmeler arasında gidip gelerek yapar (Ç2: başvuru değeri yan yana yazılmaz).
         private static string BuildMeta(ProjectData project, DocumentData doc)
         {
-            var application = doc.Kind == DocumentKind.LabReport
-                ? project.Documents.Find(d => d.Kind == DocumentKind.Application)
-                : null;
-
             var sb = new StringBuilder();
             sb.AppendLine($"<b>Proje:</b> {project.Name}");
-            sb.AppendLine($"<b>Parsel:</b> {doc.ParcelNo}{FromApplication(application?.ParcelNo)}");
-            sb.AppendLine($"<b>Tarih:</b> {doc.Date}{FromApplication(application?.Date)}");
+            sb.AppendLine($"<b>Parsel:</b> {doc.ParcelNo}");
+            sb.AppendLine($"<b>Tarih:</b> {doc.Date}");
 
             if (doc.Kind == DocumentKind.Application)
             {
@@ -168,11 +165,8 @@ namespace CivilJam.Desk
                 sb.AppendLine($"<b>Laboratuvar:</b> {doc.LabName}");
             }
 
-            sb.Append($"<b>İmza:</b> <i>{doc.SignatureName}</i>{FromApplication(application?.SignatureName)}");
+            sb.Append($"<b>İmza:</b> <i>{doc.SignatureName}</i>");
             return sb.ToString();
         }
-
-        private static string FromApplication(string value) =>
-            value == null ? "" : $"   <color=#7A7468><size=80%>(başvuruda: {value})</size></color>";
     }
 }

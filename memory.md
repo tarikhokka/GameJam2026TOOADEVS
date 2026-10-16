@@ -213,12 +213,14 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 
 **Görev dağılımı (Ahmet kararı)**
 - **Oğuzhan (B) — masa tarafı Ç1 + Ç2 + Ç4:**
-  - [ ] Lab raporundan "min." değerini ve ek test renklerini kaldır; künyede başvuru değerini yan yana yazmayı kaldır (Ç1, Ç2).
+  - [x] Lab raporundan "min." değerini ve ek test renklerini kaldır; künyede başvuru değerini yan yana yazmayı kaldır (Ç1, Ç2).
+    - (B, 17 Ekim) Tablo: Parametre | Beyan | Ek test; değerler `ctx.Rules.FormatValue` ile (`DeskFormat.Value`). Sandbox ve Game.unity'de test edildi.
   - [ ] Sayfalı "Denetçi El Kitabı" (sayfa çevirme, masada her an açılabilir): giriş + kontrol listesi, mahalle → bölge tablosu (`ctx.Rules.Zones`), bölge 1-4 sayfaları (`ctx.Rules.RulesFor(tür)`; kural satırı: `DisplayName`, kat aralığı, `FormatValue(Param, Required)`, `Description`), akredite laboratuvarlar (`ctx.Names.LabNames`).
   - [ ] Değerleri her yerde `ctx.Rules.FormatValue` ile göster (harfli parametreler).
   - [ ] Masaya gelişte `GreetingText`, karardan sonra `ReactionText` konuşma balonu (müteahhit portresiyle).
   - [ ] Hediye: `GiftId` doluysa "<müteahhit> size <GiftSO.DisplayName> bıraktı" + sadece "Kabul et" → `ctx.Actions.AcceptGift(id)`; kabul edilen hediyeler (`ctx.State.OfficeGifts` → `ctx.GetGift(id).Sprite`) masa ekranında ofiste kalıcı görünsün.
-  - [ ] Kabadayı reddedilince olay kartı + `sfx_glass_break` (O4).
+  - [x] Kabadayı reddedilince olay kartı + `sfx_glass_break` (O4).
+    - (B) `d9d4aca`'da yapıldı.
 - **Tarık (EEE) — içerik:**
   - [ ] El kitabı metinleri: `HandbookIntro`, parametre adları/birimleri/`Description` (8 parametre), ~16 mahalle adı (A bölgelere dağıtır).
   - [ ] Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).

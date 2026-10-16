@@ -163,6 +163,12 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
+- ⚠️ **Öncelik (A, 00:30) — `ebe816d` sonrası, gazete oyunda hâlâ görünmüyor.** Sebep: Flow kodu push'landı ama prefab'lar hiç üretilmedi (repoda `Prefabs/Flow` yok) ve kod Unity'de derlenmedi. GameManager Game.unity'de gazete ekranı bulamıyor → mavi yedek arayüz çıkıyor. Sırayla:
+  - [ ] 1. Pull → Unity (6000.6.4f1) → Console'da Flow derleme hatası olmadığını doğrula.
+  - [ ] 2. Menü **CivilJam > Flow > 1 - Build Flow Prefabs** ve **2 - Build MainMenu Scene** çalıştır. Prefab'lar (`Prefabs/Flow/*.prefab` + `.meta`) ve `MainMenu.unity` + Build Settings değişikliğini **sen** commit'le/push'la (prefab'ları başka kimse üretmeyecek; iki kişi üretirse GUID çakışır).
+  - [ ] 3. Sandbox_Flow'da (menü 3) gazete/gün özeti/ödeme/son ekranını dene.
+  - [ ] 4. Haber ver → A prefab'ları Game.unity'ye ekler (Install Screens). Game.unity'yi kendin açıp KAYDETME.
+- [ ] **Yeni iş (Ahmet kararı, 00:30): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (senin `FlowScreen` tabanın uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Sırası: önce gazete (yukarıdaki 1-4), sonra bunlar.
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
 - [ ] Gazete: `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`; toplamlar `ctx.LastQuake.TotalDeaths/TotalInjured`; tutuklama `ctx.LastQuake.Jailed`. Afetsiz gün Result fazı hiç açılmaz.
 - [ ] Günlük ödeme: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid). Seçim `ctx.Actions.SetExpensePaid(expenseId, paid)`; uygulama Completed'dan sonra Core'da (ekran parayı değiştirmez).

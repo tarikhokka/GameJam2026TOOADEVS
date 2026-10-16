@@ -100,6 +100,8 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 - 22:50 — Kota kaldırıldı (karar A). Kaşe düzeltmesi: `StampId` artık okunabilir metin (`STAMP_OK/FAKE` sızıntısı giderildi); WrongStamp = kaşedeki lab adı başlıkla uyuşmaz; WrongSignature = lab raporunu farklı mühendis imzalar. DeskScreen (`b614831`) Game.unity'ye eklendi (`CoreSetupBuilder.InstallScreens`, Canvas + EventSystem). Testler 9/9. `BalanceSO.ApprovalQuota` Desk kullandığı için şimdilik duruyor (Oğuzhan kaldırınca silinecek).
   - Commit'lenmeyen: `ProjectSettings/ProjectVersion.txt` (Unity 6000.6.5f1 ile açılınca yükseltilmişti, geri alındı; ekip sürümü 6000.6.4f1).
 - 23:20 — TMP Essential Resources import edilip commit'lendi (`Assets/TextMesh Pro`, masa yazıları için gerekliydi; CREDITS'e eklendi). Oğuzhan HUD'dan kotayı kaldırdı → `BalanceSO.ApprovalQuota` silindi.
+- 00:30 — Ahmet'in Unity testi: gün döngüsü, gazete verisi, dürüst bina kuralı ve save.json doğrulandı. Sorun: Flow (Onur, `ebe816d`) prefab'ları üretilmemiş → Game.unity'de gazete yok, mavi yedek arayüz. Kararlar: Flow prefab'larını Onur üretip push'layacak (A sonra Game.unity'ye ekler); DayIntro/Construction/Save ekranları Onur'a verildi. Not: memory.md → Onur maddeleri.
+  - Pull'u engelleyen Unity oto-değişiklikleri stash'lendi (`Game.unity`'de DeskScreen anchor'larını 0'layan kayıt dahil). Game.unity'yi Editor'den kaydetme.
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.

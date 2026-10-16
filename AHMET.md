@@ -51,7 +51,7 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [ ] Ekibe kalanlar (memory.md "Analiz sonrası işler"): Y1 öğretici + lab listesi + intro (B), Y4 Esc menüsü (C), K4 ara ekranları (C), O4 kabadayı kartı (B), O6 görsel/ses (EEE), README son hali (EEE).
 
 ### Faz 3 — İçerik ve his (Cts 14 → 20)
-- [ ] Denge turu: 5 oyun stili (dürüst, rüşvetçi, her şeyi reddeden, dikkatsiz, karışık); JailRisk sayıları.
+- [x] Denge turu: `BalanceReport` simülasyonu (6 oyuncu tipi × 300 oyun) + senaryo karşılaştırması → senaryo E seçildi (ücret 300-500, kira 600, deprem %20 +%15). JailRisk sayıları değişmedi (tek zarf = yazı-tura, yeterli).
 - [ ] Vakit kalırsa: yangın ayrı afet. Yeni asset'leri bağla (`CivilJam > Core > Link Data`).
 - [ ] 20:00 ikinci build.
 

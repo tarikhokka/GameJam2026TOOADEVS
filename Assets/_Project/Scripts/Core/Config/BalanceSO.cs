@@ -14,11 +14,11 @@ namespace CivilJam.Core
         public int DebtLimit = 2000;      // Borç bunu aşarsa ofis kapanır (Orta son)
         public int ExtraTestCost = 300;   // Anında düşülür
         public int WindowRepairCost = 200;
-        public Vector2Int ApprovalFeeRange = new Vector2Int(400, 700);
+        public Vector2Int ApprovalFeeRange = new Vector2Int(300, 500);
 
         [Header("Afet olasılığı")]
-        [Range(0f, 1f)] public float DisasterChanceStart = 0.50f;     // Taban (karar)
-        [Range(0f, 1f)] public float DisasterChanceIncrement = 0.10f; // Afetsiz gün sonrası artış (öneri)
+        [Range(0f, 1f)] public float DisasterChanceStart = 0.20f;     // Taban (karar, denge turu 17 Ekim)
+        [Range(0f, 1f)] public float DisasterChanceIncrement = 0.15f; // Afetsiz gün sonrası artış (karar, denge turu 17 Ekim)
         [Range(0f, 1f)] public float DisasterChanceCap = 1.00f;       // Tavan (karar)
         public bool ResetChanceAfterDisaster = true;                  // Karar: afet olunca tabana döner
 

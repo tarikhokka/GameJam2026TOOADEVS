@@ -17,9 +17,9 @@ MonoBehaviour:
   DebtLimit: 2000
   ExtraTestCost: 300
   WindowRepairCost: 200
-  ApprovalFeeRange: {x: 400, y: 700}
-  DisasterChanceStart: 0.5
-  DisasterChanceIncrement: 0.1
+  ApprovalFeeRange: {x: 300, y: 500}
+  DisasterChanceStart: 0.2
+  DisasterChanceIncrement: 0.15
   DisasterChanceCap: 1
   ResetChanceAfterDisaster: 1
   StrengthNoise: 0.15

@@ -46,7 +46,7 @@ namespace CivilJam.Core.Editor
             GetOrCreate<DayConfigSO>(DataDir + "/Days/Day05.asset", d => { d.FromDay = 5; d.ProjectsPerDay = 5; d.NonCompliantRatio = 0.5f; d.AllowBribes = true; d.AllowFakeDocuments = true; d.AllowThugs = true; });
             GetOrCreate<DayConfigSO>(DataDir + "/Days/Day08.asset", d => { d.FromDay = 8; d.ProjectsPerDay = 6; d.NonCompliantRatio = 0.5f; d.AllowBribes = true; d.AllowFakeDocuments = true; d.AllowThugs = true; d.AllowFactories = true; });
 
-            GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Rent.asset", e => { e.Id = "rent"; e.DisplayName = "Ofis kirası"; e.Amount = 400; e.Mandatory = true; });
+            GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Rent.asset", e => { e.Id = "rent"; e.DisplayName = "Ofis kirası"; e.Amount = 600; e.Mandatory = true; });
             GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Loan.asset", e => { e.Id = "loan"; e.DisplayName = "Kredi taksiti"; e.Amount = 300; e.Mandatory = true; });
             // Sigorta kapsam dışı (karar 2026-10-17): etkisi olmayan kalem oyuncuyu yanıltıyordu.
 

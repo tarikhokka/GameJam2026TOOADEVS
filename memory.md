@@ -14,7 +14,7 @@
 ## 2. Kesinleşen oyun kararları
 - Level sistemi kaldırıldı; oyun gün sistemiyle ilerler. Aşağıdaki akış Core'da uygulandı (GameManager, 22:15).
 - Akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Result/gazete, yoksa DaySummary) → DailyExpenses (her gün) → gün sonu Save → (NextDay | Ending). Afet günü gün özeti yok, sadece gazete.
-- Her gün sonunda afet olasılığı vardır. Taban %50, tavan %100 (karar). Afet olmazsa sonraki gün olasılık artar (öneri +%10); afet olunca tabana (%50) döner.
+- Her gün sonunda afet olasılığı vardır. **Taban %20, afetsiz her gün +%15, tavan %100; afet olunca tabana döner** (denge turu kararı, 17 Ekim; önce %50/+%10 idi, oyun başına 5,6 deprem veriyordu → şimdi ~3,3).
 - Afet, son afetten bu yana (iki afet arasında) oyuncunun onayladığı binaları değerlendirir; önceki afetleri atlatmış binalar tekrar değerlendirilmez.
 - Afetsiz günün sonunda gazete gösterilmez. Afet olunca gazete/sonuçta şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü/yaralı sayısı, yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi.
 - Oyun **10 gün** (karar 17 Ekim). İçerik açılışları `Data/Days`: 1. gün konut, 3. gün rüşvet, 5. gün sahte belge + kabadayı. **Fabrika/yangın kapsam dışı** (karar 17 Ekim; Day08 `AllowFactories = 0`), vakit kalırsa yangın ayrı afet olarak dönebilir. Sel ve okul/hastane kapsam dışı.
@@ -31,8 +31,8 @@
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
 - Eski level tekrar kuralı kaldırıldı; başarısız gün sonrası devam/tekrar davranışı henüz kesinleşmedi.
-- Giderler her gün ödenir: kira 400 + kredi 300 (zorunlu), kabadayı cam tamiri (olursa). Ek test gider değildir, anında kasadan düşer. **Sigorta kapsam dışı** (karar 17 Ekim, etkisi yoktu).
-- **Borç kuralı (karar 17 Ekim):** kasada yetmeyen gider ödenemez, zorunluysa borca yazılır; kasa asla eksiye düşmez. Borç varsa isteğe bağlı "Borç ödemesi" kalemi çıkar (kısmen ödenebilir). **Borç 2.000 TL'yi aşarsa ofis kapanır → Orta son.** Başlangıç parası 2.500 TL, onay ücreti 400-700 TL. Her şeyi reddeden oyuncu 7. gün ofisini kaybeder (testli).
+- Giderler her gün ödenir: **kira 600** + kredi 300 (zorunlu), kabadayı cam tamiri (olursa). Ek test gider değildir, anında kasadan düşer. **Sigorta kapsam dışı** (karar 17 Ekim, etkisi yoktu).
+- **Borç kuralı (karar 17 Ekim):** kasada yetmeyen gider ödenemez, zorunluysa borca yazılır; kasa asla eksiye düşmez. Borç varsa isteğe bağlı "Borç ödemesi" kalemi çıkar (kısmen ödenebilir). **Borç 2.000 TL'yi aşarsa ofis kapanır → Orta son.** Başlangıç parası 2.500 TL, **onay ücreti 300-500 TL** (denge turu). Simülasyon (`CivilJam > Core > Balance Report`, 300 oyun/tip): dikkatli oyuncu %100 İyi son ama kasa 1.663 TL'ye kadar iner; tek zarf alan %49 İyi / %42 Enkazın Gölgesi / %8 hapis; her şeyi reddeden 5. gün ofisini kaybeder; her zarfı alan %86-96 hapis.
 - Kota YOK (karar, 22:40). "Her şeyi reddet" stratejisine karşı baskıyı günlük giderler ve borç kuralı kurar.
 - Save/Load: tek slot JSON (`persistentDataPath/save.json`), sadece `GameState`. Günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün başını açar. **Son ekranına girince kayıt silinir** (bitmiş oyun devam ettirilemez). Gün içi manuel kayıt yok.
 - **Sonlar (karar 17 Ekim)** — günlük ödemeden sonra değerlendirilir, öncelik en ağırdan:
@@ -206,7 +206,6 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - Bilgi: son ve borç kuralları kesinleşti (§2). Son ekranı `ctx.State.Ending` (Good / Bad / MiddleClosed / **MiddleCollapsed**) + `ctx.Endings` (4 EndingSO bağlı). Borç varsa ödeme ekranına `debt_payment` kalemi gelir.
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
-- Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - JailRisk sayılarının (yıkım +0.15, rüşvetli yıkım +0.25) 10 günlük oyunda dengesi; denge turunda bakılacak.
 
 ## 7. Karar günlüğü
@@ -255,6 +254,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim (analiz sonrası) | Sonlar ve öncelik: Kötü (hapis) > Orta/ofis kapandı > Orta/yıkım (yeni `MiddleCollapsed`) > İyi (hiç yıkım yok) | Ahmet kararı (K2). İyi son metni "binaların hepsi ayaktaydı" ile tutarlı |
 | 17 Ekim (analiz sonrası) | Oyun 10 gün; fabrika/yangın ve sigorta kapsam dışı | Ahmet kararı. Jüri süresi; yarım kalmış yangın kuralı ve etkisiz sigorta oyuncuyu yanıltıyordu |
 | 17 Ekim (analiz sonrası) | Son ekranına girince kayıt silinir; build'de ekranı olmayan faz otomatik geçilir (mavi kutu sadece Editor/Development Build); F9/F10 demo tuşları | A (Y3, K4, O7) |
+| 17 Ekim `2118715` sonrası | Denge (senaryo E): ücret 300-500, kira 600, deprem %20 +%15/gün | Ahmet kararı, simülasyonla seçildi: dikkatli oyuncuda para gerilimi, tek zarf yazı-tura, deprem her gece değil |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -1,3 +1,4 @@
+using CivilJam.Core;
 using TMPro;
 using UnityEngine;
 
@@ -15,16 +16,18 @@ namespace CivilJam.Desk
         [SerializeField] private Color failColor = new Color(0.75f, 0.15f, 0.12f);
         [SerializeField] private Color hiddenColor = new Color(0.55f, 0.55f, 0.55f);
 
-        public void Bind(DeskParam param, bool revealActual)
+        public void Bind(string displayName, string unit, ParamEntry param)
         {
-            nameText.text = param.Name;
-            requiredText.text = $"min. {DeskFormat.Number(param.Required)} {param.Unit}";
-            reportedText.text = $"{DeskFormat.Number(param.Reported)} {param.Unit}";
+            string suffix = string.IsNullOrEmpty(unit) ? "" : " " + unit;
 
-            if (revealActual)
+            nameText.text = displayName;
+            requiredText.text = $"min. {DeskFormat.Number(param.Required)}{suffix}";
+            reportedText.text = $"{DeskFormat.Number(param.Reported)}{suffix}";
+
+            if (param.Tested)
             {
-                actualText.text = $"{DeskFormat.Number(param.Actual)} {param.Unit}";
-                actualText.color = param.Actual >= param.Required ? okColor : failColor;
+                actualText.text = $"{DeskFormat.Number(param.Actual)}{suffix}";
+                actualText.color = param.ActualPasses ? okColor : failColor;
             }
             else
             {

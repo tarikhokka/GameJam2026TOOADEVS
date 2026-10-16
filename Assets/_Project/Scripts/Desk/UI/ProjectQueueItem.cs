@@ -1,4 +1,5 @@
 using System;
+using CivilJam.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,23 +20,23 @@ namespace CivilJam.Desk
         [SerializeField] private Color rejectedColor = new Color(0.7f, 0.22f, 0.2f);
         [SerializeField] private Color pendingColor = new Color(0.3f, 0.3f, 0.3f);
 
-        public void Bind(DeskProject project, DeskDecision decision, bool selected, Action onClick)
+        public void Bind(ProjectData project, bool selected, Action onClick)
         {
-            nameText.text = $"<b>{project.Name}</b>\n<size=80%>{project.BuildingType}</size>";
+            nameText.text = $"<b>{project.Name}</b>\n<size=80%>{DeskFormat.BuildingName(project.BuildingType)} · {project.Floors} kat</size>";
             background.color = selected ? selectedColor : normalColor;
 
-            switch (decision.Verdict)
+            switch (project.Verdict)
             {
-                case DeskVerdict.Approved:
+                case ProjectVerdict.Approved:
                     statusText.text = "ONAYLANDI";
                     statusText.color = approvedColor;
                     break;
-                case DeskVerdict.Rejected:
+                case ProjectVerdict.Rejected:
                     statusText.text = "REDDEDİLDİ";
                     statusText.color = rejectedColor;
                     break;
                 default:
-                    statusText.text = decision.ExtraTestBought ? "Bekliyor · test yapıldı" : "Bekliyor";
+                    statusText.text = project.ExtraTestBought ? "Bekliyor · test yapıldı" : "Bekliyor";
                     statusText.color = pendingColor;
                     break;
             }

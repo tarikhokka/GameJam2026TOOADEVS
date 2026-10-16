@@ -36,24 +36,19 @@ namespace CivilJam.Desk.Editor
         [MenuItem("CivilJam/Desk/Build DeskScreen Prefab")]
         public static void BuildPrefabMenu()
         {
-            if (AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath) != null &&
-                !EditorUtility.DisplayDialog("DeskScreen prefab'ı zaten var",
-                    "Üzerine yazılırsa prefab'da elle yaptığın değişiklikler kaybolur. Devam edilsin mi?",
-                    "Üzerine yaz", "Vazgeç"))
-                return;
-
+            if (!ConfirmOverwrite()) return;
             if (BuildPrefab() != null)
                 Debug.Log($"[Desk] Prefab kuruldu: {PrefabPath}");
         }
 
+        // Prefab'ı ve sandbox sahnesini birlikte yeniden kurar (prefab yapısı değişince sahnedeki örnek de tazelenir).
         [MenuItem("CivilJam/Desk/Build Sandbox_Desk Scene")]
         public static void BuildSandboxScene()
         {
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            if (prefab == null) prefab = BuildPrefab();
-            if (prefab == null) return;
+            if (!ConfirmOverwrite()) return;
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-
+            var prefab = BuildPrefab();
+            if (prefab == null) return;
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
             var cameraGo = new GameObject("Main Camera") { tag = "MainCamera" };
@@ -85,6 +80,14 @@ namespace CivilJam.Desk.Editor
             EnsureFolder(SceneFolder);
             EditorSceneManager.SaveScene(scene, ScenePath);
             Debug.Log($"[Desk] Sandbox sahnesi kuruldu: {ScenePath}. Play'e bas.");
+        }
+
+        private static bool ConfirmOverwrite()
+        {
+            return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath) == null ||
+                   EditorUtility.DisplayDialog("DeskScreen prefab'ı yeniden kurulacak",
+                       "Prefab'da elle yaptığın değişiklikler kaybolur. Devam edilsin mi?",
+                       "Yeniden kur", "Vazgeç");
         }
 
         private static GameObject BuildPrefab()
@@ -218,8 +221,9 @@ namespace CivilJam.Desk.Editor
             stamp.anchoredPosition = new Vector2(-50, -40);
             stamp.localRotation = Quaternion.Euler(0, 0, 10);
             AddImage(stamp, new Color(StampRed.r, StampRed.g, StampRed.b, 0.12f));
-            Stretch(NewText("Label", stamp, "ONAYLIDIR\n<size=60%>Mühür / Kaşe</size>", 34, StampRed,
-                TextAlignmentOptions.Center, FontStyles.Bold).rectTransform);
+            var stampLabel = NewText("Label", stamp, "ONAYLIDIR\n<size=60%>Kaşe</size>", 34, StampRed,
+                TextAlignmentOptions.Center, FontStyles.Bold);
+            Stretch(stampLabel.rectTransform);
 
             var empty = NewText("EmptyState", area, "Soldan bir dosya seç.", 36, LightText, TextAlignmentOptions.Center);
             Stretch(empty.rectTransform);
@@ -232,6 +236,7 @@ namespace CivilJam.Desk.Editor
             Wire(view, "titleText", title);
             Wire(view, "metaText", meta);
             Wire(view, "stampRoot", stamp.gameObject);
+            Wire(view, "stampText", stampLabel);
             Wire(view, "paramHeader", header);
             Wire(view, "paramContainer", list);
             Wire(view, "paramRowTemplate", rowView);

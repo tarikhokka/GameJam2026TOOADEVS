@@ -1,22 +1,40 @@
+using System.Text;
+using CivilJam.Core;
 using UnityEngine;
 
 namespace CivilJam.Desk
 {
-    // Sandbox_Desk sahnesinde masayı sahte Level 1 verisiyle başlatır; mesai bitince sonucu loglar ve baştan açar.
+    // Sandbox_Desk sahnesinde masayı sahte bir günle başlatır; mesai bitince sonucu loglar ve baştan açar.
     public class DeskSandboxBootstrap : MonoBehaviour
     {
         [SerializeField] private DeskScreen screen;
 
+        private GameContext context;
+
         private void Start()
         {
             screen.Completed += OnCompleted;
-            screen.Show(MockDeskData.CreateLevel1());
+            StartDay();
         }
 
-        private void OnCompleted(DeskResult result)
+        private void StartDay()
         {
-            Debug.Log(result);
-            screen.Show(MockDeskData.CreateLevel1());
+            context = SandboxDeskContext.Create();
+            screen.Show(context);
+        }
+
+        private void OnCompleted()
+        {
+            var state = context.State;
+            var sb = new StringBuilder();
+            sb.AppendLine($"[Desk] Mesai bitti. Kasa {state.Money}, bugün onay {state.ApprovedToday}/{context.Balance.ApprovalQuota}, " +
+                          $"alınan zarf {state.TotalBribesTaken}");
+            foreach (var p in context.TodayProjects)
+                sb.AppendLine($"  {p.Name}: {p.Verdict}{(p.BribeAccepted ? " +zarf" : "")}{(p.ExtraTestBought ? " +test" : "")}" +
+                              $" (gerçekte {(p.IsCompliant ? "uygun" : "UYGUNSUZ")})");
+            Debug.Log(sb.ToString());
+
+            StartDay();
         }
     }
 }

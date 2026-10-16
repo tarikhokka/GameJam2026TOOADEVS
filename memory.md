@@ -64,15 +64,15 @@
 - `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool, Headlines, Days/DayXX (FromDay 1/3/5/8), Expenses/.
 - `Assets/_Project/Scenes/Game.unity` (sadece A) — GameManager + veri bağlı; Build Settings'te.
 - Flow asmdef'i C oluşturur; Desk ve Flow referansı sadece `CivilJam.Core`. Ayrıntı ve Core önerileri: `AHMET.md`.
-- `Assets/_Project/Scripts/Desk/` (B) — Core'dan bağımsız; Core gelince adapter ile bağlanacak.
-  - `CivilJam.Desk.asmdef` — Desk assembly'si (şimdilik Core referansı yok).
-  - `Model/DeskModels.cs` — DeskProject/DeskDocument/DeskParam (Required/Reported/Actual), DeskDecision, DeskResult.
-  - `DeskSession.cs` — saf C# masa mantığı: onay, red, rüşvet, ücretli ek test, kota.
-  - `Mock/MockDeskData.cs` — sahte Level 1 (dürüst usta, rüşvetçi, sahte belgeli).
-  - `UI/DeskScreen.cs` — ekran kökü: Show(DeskSessionConfig), Hide(), event Completed(DeskResult).
-  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView, ParamRowView, ActionPanel, UiPool, DeskFormat.
-  - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i sahte veriyle başlatır.
-  - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build DeskScreen Prefab / Build Sandbox_Desk Scene.
+- `Assets/_Project/Scripts/Desk/` (B) — Core tiplerini doğrudan kullanır (ProjectData, GameContext, IGameActions).
+  - `CivilJam.Desk.asmdef` — referans: CivilJam.Core, TMP, uGUI.
+  - `UI/DeskScreen.cs` — IGameScreen (Phase = Desk). Show(GameContext); kararlar context.Actions ile; "Mesaiyi bitir" → Completed.
+  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView, ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
+  - `Sandbox/FakeGameActions.cs` — sadece sandbox için sahte IGameActions.
+  - `Sandbox/SandboxDeskContext.cs` — sahte gün: 3 proje (dürüst, rüşvetçi, sahte belgeli), 3 müşteri, RuleSet.
+  - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar.
+  - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build Sandbox_Desk Scene (prefab + sahneyi yeniden kurar).
+- `Assets/_Project/Prefabs/Desk/DeskScreen.prefab` (B) — masa ekranı; Game.unity'de Canvas altına konur (kendi içinde tam ekran stretch).
 - `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
 - `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
@@ -105,13 +105,13 @@
 ### Durum
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
-- **Desk (B):** v0 Unity'de test edildi (Sandbox_Desk: onay, red, zarf, ek test, mesai bitişi çalışıyor) ve push'landı. Henüz kendi modelleri + sahte veriyle; sırada Core tiplerine geçiş (IGameScreen + IGameActions).
+- **Desk (B):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions; günlük kota adları). Sandbox_Desk'te sahte IGameActions ile test edildi. DeskScreen prefab'ı Game.unity'ye eklenmeye hazır (A ekler).
 - **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (B'nin 9. adımı bekliyor), ClientSO metin taslakları.
-- **Sırada:** Desk→Core bağlantısı (B: DeskScreen `IGameScreen`, Phase = Desk, `ctx.TodayProjects` + `ctx.Actions`); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
+- **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —
 
 ### Güncel entegrasyon durumu (cedfa0d sonrası yerel kontrol)
-- Desk v0 kodu, DeskScreen prefab ve Sandbox_Desk sahnesi artık repoda (`14350ec`). Desk hâlâ kendi modellerini kullanır.
+- Desk v0 kodu, DeskScreen prefab ve Sandbox_Desk sahnesi artık repoda (`14350ec`). (Güncelleme 22:30) Desk artık Core tiplerini kullanıyor; bkz. Durum.
 - Flow: Sandbox_Flow, Canvas ve ResultScreen paneli hazır; içerik/script entegrasyonu yapılmadı.
 - (22:15 güncel) Günlük ödeme, iki afet arası bina kapsamı ve kayıp bilgileri Core'da uygulandı: `DailyExpenseResult` / `ctx.PendingExpenses`, `GamePhase.DailyExpenses`, `BuildingOutcome.Deaths/Injured/VictimNames/ResponsibilityText`. C bunları üretmez, Core'dan gösterir.
 - C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
@@ -120,10 +120,10 @@
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
 
 **Oğuzhan (B / Masa) için:**
-- [ ] `CivilJam.Desk.asmdef` referanslarına `CivilJam.Core` ekle.
-- [ ] `DeskScreen` → `CivilJam.Core.IGameScreen` uygulasın: `Phase => GamePhase.Desk`, `Show(GameContext ctx)`, `Hide()`, `event Action Completed` (parametresiz; mesai bitince bir kez tetikle).
-- [ ] Projeleri `ctx.TodayProjects`'ten oku (Desk modelleri yerine ya da adapter ile). Parametrelerde `Reported` göster; `Tested` ise `Actual` da göster. `Documents[0]` = başvuru, `Documents[1]` = lab raporu (parsel/tarih/lab/kaşe/imza tutarsızlıkları bedava ipucu). Rüşvet: `OffersBribe`, `BribeAmount`. Yönetmelik kitapçığı: `ctx.Rules`. Ek test ücreti: `ctx.Balance.ExtraTestCost`.
-- [ ] Kararları sadece `ctx.Actions` ile gönder: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` (bool döner). Para/kota hesabını Desk yapmaz; HUD için `ctx.StateChanged`'e abone ol, `ctx.State.Money` oku.
+- [x] `CivilJam.Desk.asmdef` referanslarına `CivilJam.Core` ekle.
+- [x] `DeskScreen` → `CivilJam.Core.IGameScreen` uygulasın: `Phase => GamePhase.Desk`, `Show(GameContext ctx)`, `Hide()`, `event Action Completed` (parametresiz; mesai bitince bir kez tetikle).
+- [x] Projeleri `ctx.TodayProjects`'ten oku (Desk modelleri yerine ya da adapter ile). Parametrelerde `Reported` göster; `Tested` ise `Actual` da göster. `Documents[0]` = başvuru, `Documents[1]` = lab raporu (parsel/tarih/lab/kaşe/imza tutarsızlıkları bedava ipucu). Rüşvet: `OffersBribe`, `BribeAmount`. Yönetmelik kitapçığı: `ctx.Rules`. Ek test ücreti: `ctx.Balance.ExtraTestCost`.
+- [x] Kararları sadece `ctx.Actions` ile gönder: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` (bool döner). Para/kota hesabını Desk yapmaz; HUD için `ctx.StateChanged`'e abone ol, `ctx.State.Money` oku.
 - [ ] Bitince haber ver: DeskScreen prefab'ını `Game.unity`'ye A ekler (Game.unity'yi sadece A kaydeder).
 
 **Onur (C / Akış) için:**
@@ -165,6 +165,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 21:09 (UTC+3) | C rolü Onur Kabadayılar; kişisel çalışma planı ONUR.md | Plan aşamasında sorumluluk ve açık karar takibi |
 | 2026-10-16 | Desk kendi modelleriyle çalışır, Core gelince adapter ile bağlanır | A'yı beklemeden ilerlemek, Core değişikliğinin etkisini tek dosyada tutmak |
 | 2026-10-16 | Desk prefab'ı ve Sandbox_Desk editor menüsüyle üretilir | Sahne/prefab YAML'ını elle yazmak kırılgan; üretilen iskelet Editor'de düzenlenebilir |
+| 2026-10-16 22:30 (UTC+3) | Desk adapter yerine doğrudan Core tiplerini kullanır; sandbox'ta sahte IGameActions (yukarıdaki adapter kararının yerini alır) | Core erken geldi; tek model, sandbox ve oyun aynı kod; "ekranlar sadece IGameActions ile yazar" kuralına uyum |
 | 2026-10-16 21:30 (UTC+3) | A rolü Ahmet İlman; kişisel plan AHMET.md. Ekranlar Core'a sadece IGameActions ile yazar | Para/gün/sonuç tek yerde değişir; çift ödeme/gün ilerlemesi önlenir |
 | 2026-10-16 22:00 (UTC+3) | Ödeme haftalıktan günlüğe çekildi (21:09 haftalık gider kararının yerini alır) | Ahmet kararı; ödenmeyen giderin sonucu açık |
 | 2026-10-16 22:00 (UTC+3) | Afet son afetten bu yana onaylanan binaları değerlendirir; afet olunca olasılık sıfırlanır | Onur'un sorularına Ahmet'in cevabı (AHMET.md) |

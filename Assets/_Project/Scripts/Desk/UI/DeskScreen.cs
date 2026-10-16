@@ -1,50 +1,60 @@
 using System;
+using CivilJam.Core;
 using UnityEngine;
 
 namespace CivilJam.Desk
 {
-    // Masa ekranının kökü. Show ile bir oturum başlatır, oyuncu mesaiyi bitirince Completed atar.
-    // Core'daki IGameScreen gelince ona bir adapter ile bağlanacak.
-    public class DeskScreen : MonoBehaviour
+    // Masa ekranı. GameContext'ten okur, oyuncu kararlarını sadece context.Actions ile Core'a iletir.
+    // Oyuncu "Mesaiyi bitir"e basınca Completed bir kez tetiklenir.
+    public class DeskScreen : MonoBehaviour, IGameScreen
     {
         [SerializeField] private DeskHud hud;
         [SerializeField] private ProjectQueueView queue;
         [SerializeField] private DocumentView documentView;
         [SerializeField] private ActionPanel actionPanel;
 
-        public event Action<DeskResult> Completed;
+        public GamePhase Phase => GamePhase.Desk;
+        public event Action Completed;
 
-        public DeskSession Session { get; private set; }
-
+        private GameContext context;
         private string selectedId;
         private int selectedDocIndex;
+        private bool completed;
 
         private void Awake()
         {
             queue.Selected += Select;
             documentView.TabSelected += i => { selectedDocIndex = i; Redraw(); };
 
-            actionPanel.ExtraTestClicked += () => Session.BuyExtraTest(selectedId);
-            actionPanel.ApproveClicked += () => Decide(() => Session.Approve(selectedId, takeBribe: false));
-            actionPanel.TakeBribeClicked += () => Decide(() => Session.Approve(selectedId, takeBribe: true));
-            actionPanel.RejectClicked += () => Decide(() => Session.Reject(selectedId));
-            actionPanel.FinishClicked += () => Completed?.Invoke(Session.BuildResult());
+            actionPanel.ExtraTestClicked += () => { context.Actions.BuyExtraTest(selectedId); Redraw(); };
+            actionPanel.ApproveClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: false));
+            actionPanel.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
+            actionPanel.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
+            actionPanel.FinishClicked += Finish;
         }
 
-        public void Show(DeskSessionConfig config)
+        public void Show(GameContext gameContext)
         {
-            if (Session != null) Session.Changed -= Redraw;
-
-            Session = new DeskSession(config);
-            Session.Changed += Redraw;
+            Unsubscribe();
+            context = gameContext;
+            context.StateChanged += Redraw;
+            completed = false;
 
             gameObject.SetActive(true);
-            Select(Session.FirstPendingId());
+            Select(FirstPendingId());
         }
 
         public void Hide()
         {
+            Unsubscribe();
             gameObject.SetActive(false);
+        }
+
+        private void OnDestroy() => Unsubscribe();
+
+        private void Unsubscribe()
+        {
+            if (context != null) context.StateChanged -= Redraw;
         }
 
         private void Select(string projectId)
@@ -58,27 +68,48 @@ namespace CivilJam.Desk
         private void Decide(Action decision)
         {
             decision();
-            string next = Session.FirstPendingId();
+            string next = FirstPendingId();
             if (next != null) Select(next);
+            else Redraw();
         }
+
+        private void Finish()
+        {
+            if (completed || !AllDecided()) return;
+            completed = true;
+            Completed?.Invoke();
+        }
+
+        private string FirstPendingId() =>
+            context.TodayProjects.Find(p => p.Verdict == ProjectVerdict.Pending)?.Id;
+
+        private bool AllDecided() =>
+            context.TodayProjects.TrueForAll(p => p.Verdict != ProjectVerdict.Pending);
+
+        private bool CanBuyExtraTest(ProjectData project) =>
+            project.Verdict == ProjectVerdict.Pending
+            && !project.ExtraTestBought
+            && context.Balance != null
+            && context.State.Money >= context.Balance.ExtraTestCost;
 
         private void Redraw()
         {
-            hud.Refresh(Session);
-            queue.Refresh(Session, selectedId);
+            if (context == null) return;
 
-            if (selectedId == null)
+            hud.Refresh(context);
+            queue.Refresh(context.TodayProjects, selectedId);
+
+            var project = selectedId != null ? context.GetTodayProject(selectedId) : null;
+            if (project == null)
             {
                 documentView.ShowEmpty();
-                actionPanel.ShowEmpty(Session.AllDecided);
+                actionPanel.ShowEmpty(AllDecided());
                 return;
             }
 
-            var project = Session.GetProject(selectedId);
-            var decision = Session.GetDecision(selectedId);
-            documentView.Show(project, selectedDocIndex, decision.ExtraTestBought);
-            actionPanel.Show(project, decision, Session.CanBuyExtraTest(selectedId),
-                Session.Config.ExtraTestCost, Session.AllDecided);
+            documentView.Show(context, project, selectedDocIndex);
+            actionPanel.Show(project, context.GetClient(project.ClientId), CanBuyExtraTest(project),
+                context.Balance != null ? context.Balance.ExtraTestCost : 0, AllDecided());
         }
     }
 }

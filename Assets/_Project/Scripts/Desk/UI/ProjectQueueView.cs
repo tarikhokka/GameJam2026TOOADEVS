@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CivilJam.Core;
 using UnityEngine;
 
 namespace CivilJam.Desk
@@ -14,15 +15,14 @@ namespace CivilJam.Desk
 
         private readonly List<ProjectQueueItem> items = new List<ProjectQueueItem>();
 
-        public void Refresh(DeskSession session, string selectedId)
+        public void Refresh(IReadOnlyList<ProjectData> projects, string selectedId)
         {
-            var projects = session.Config.Projects;
             UiPool.Resize(items, itemTemplate, content, projects.Count);
 
             for (int i = 0; i < projects.Count; i++)
             {
                 string id = projects[i].Id;
-                items[i].Bind(projects[i], session.GetDecision(id), id == selectedId, () => Selected?.Invoke(id));
+                items[i].Bind(projects[i], id == selectedId, () => Selected?.Invoke(id));
             }
         }
     }

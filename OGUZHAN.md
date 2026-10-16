@@ -3,10 +3,11 @@
 Bu dosya Oğuzhan'ın görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
-- Desk v0 kodu yazıldı ve derleniyor (`Assets/_Project/Scripts/Desk/`). Unity'de henüz test edilmedi, kod commit'lenmedi.
-- Kod hâlâ eski level/kota modeliyle; gün sistemine uyarlanacak (bkz. açık noktalar).
-- Core (A) repoda yok. Desk kendi modelleriyle (`DeskProject`, `DeskDocument`, `DeskParam`) sahte veriyle çalışıyor; Core gelince tek adapter ile bağlanacak.
-- Desk placeholder görselleri Tarık tarafından eklendi: `desk_bg`, `doc_paper`, `stamp_approve`, `stamp_reject`, `signature`.
+- Desk Core tiplerini doğrudan kullanıyor: `DeskScreen` = `IGameScreen` (Phase = Desk), projeler `ctx.TodayProjects`, kararlar `ctx.Actions`, HUD `ctx.StateChanged`.
+- Gün sistemine uygun: başlık "Gün N", kota `ApprovedToday / ApprovalQuota`.
+- Sandbox_Desk sahte `IGameActions` (`FakeGameActions`) ve sahte günle (`SandboxDeskContext`) test edildi.
+- Sırada: DeskScreen prefab'ının Game.unity'ye eklenmesi (A yapar).
+- Desk placeholder görselleri Tarık tarafından eklendi: `desk_bg`, `doc_paper`, `stamp_approve`, `stamp_reject`, `signature` (henüz prefab'a takılmadı).
 
 ## Benim alanım
 - `Assets/_Project/Scripts/Desk/`
@@ -25,15 +26,15 @@ Bu dosya Oğuzhan'ın görev ve oturum takibi içindir. Ortak proje kararları `
 | Kota ve gün sonu kuralları | Onay sayısını / kotayı gösterme |
 | Onaylanan binaların afet sonucu | — (C gösterir) |
 
-Desk parayı kalıcı olarak değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları `DeskResult` ile bildirir. Desk sadece Core'a bağlıdır; Flow'a bağımlılık eklenmez.
+Desk parayı değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları sadece `ctx.Actions` ile iletir, mesai bitince `Completed` tetikler. Desk sadece Core'a bağlıdır; Flow'a bağımlılık eklenmez.
 
 ## Adımlar
 - [x] Adım 0: AI kullanımı `CREDITS_AND_AI.md`'ye, Desk kararları `memory.md`'ye yazıldı ve push'landı.
 - [x] Adım 1: Unity'de derle → `CivilJam > Desk > Build Sandbox_Desk Scene` → Play. 3 dosya görünüyor; onay, red, zarf, ek test çalışıyor; Console'a sonuç düşüyor.
-- [ ] Adım 2: Hata/layout düzeltmeleri → Desk kodunun ilk commit + push'u.
-- [ ] Adım 3: Gün sistemine uyarlama (başlık "Gün N", kota ve ek test tahsilatı kararlara göre).
-- [ ] Adım 4: Core gelince adapter: `ProjectData` → `DeskProject`, `DeskScreen` → `IGameScreen`.
-- [ ] Adım 5: `DeskScreen` prefab'ını A'ya teslim; A `Game.unity`'ye bağlar.
+- [x] Adım 2: Desk v0 güvenli nokta olarak push'landı (`14350ec`).
+- [x] Adım 3: Core tiplerine geçiş + gün sistemi (adapter yerine doğrudan Core; "Gün N", günlük kota). Unity'de test edildi.
+- [ ] Adım 4: Commit + push, A'ya haber → A `DeskScreen` prefab'ını `Game.unity`'ye ekler; Game.unity'de birlikte dene.
+- [ ] Adım 5: (İsteğe bağlı) Sandbox'ta `FakeGameActions` yerine Core'un `GameSession`'ını kullanmak.
 - [ ] Adım 6: Bedava ipuçlarını okunur yapma (kaşe/imza görseli, iki belgeyi karşılaştırma kolaylığı).
 - [ ] Adım 7: Sahte belgeler + kabadayı olayının masadaki kısmı.
 - [ ] Adım 8: Fabrika / yangın parametreleri (yeni satır tipleri).
@@ -44,17 +45,15 @@ Desk parayı kalıcı olarak değiştirmez, gün ilerletmez, afet sonucu üretme
 ## Sahte veri senaryoları (Sandbox_Desk)
 1. Dürüst usta: rüşvet yok, belgeler tutarlı, değerler uygun → onaylanmalı.
 2. Rüşvetçi müteahhit: zarf var, beyan edilen değerler gerekenin altında → reddedilmeli.
-3. Sahte belgeli: beyan temiz görünüyor; parsel ters, tarih geçersiz (31.09), kaşe yok; ek test gerçek değerlerin düşük olduğunu gösteriyor → reddedilmeli.
+3. Sahte belgeli: beyan temiz görünüyor; parsel ters (14/41), tarih geçersiz (31.09), lab akredite değil, kaşe farklı ("YYL · ONAY"); ek test gerçek değerlerin düşük olduğunu gösteriyor → reddedilmeli.
 
 ## Açık noktalar
 **A'ya:**
-- `ProjectData` / `DocumentData` / `ParamEntry` alanları ve `IGameScreen`, `GameContext` imzası ne zaman push'lanacak?
-- Ek test ücreti anında mı düşüyor, haftalık gidere mi yazılıyor?
-- Kota var mı; günlük mü haftalık mı?
-- Bir projenin kaç belgesi olabilir; bedava ipuçları veride işaretli mi (örn. `IsForged` alanı) yoksa sadece metin farkı mı?
+- DeskScreen prefab'ı hazır (`IGameScreen`, Phase = Desk). Game.unity'ye ekleyince haber ver; sahne senin.
+- `StampId` görünen metin mi (şu an kaşenin üstüne yazıyoruz) yoksa ileride kaşe görseline mi eşlenecek?
+- Kota tutmazsa masada bir uyarı gösterelim mi (örn. "Mesaiyi bitir"e basınca)?
 
 **Onur'a (C):**
-- Desk bitince akış nereye gidiyor; `DeskResult`'tan hangi verileri gün özetinde göstereceksin?
 - Kabadayı olayı masada mı (tehdit) yoksa gün özetinde mi (cam kırıldı) gösterilecek?
 - `Assets/Scripts/Intro/IntroSequence.cs` akışın parçası; senin alanına taşıyalım mı? ("Office" sahnesini yüklüyor, öyle bir sahne yok.)
 
@@ -63,9 +62,11 @@ Desk parayı kalıcı olarak değiştirmez, gün ilerletmez, afet sonucu üretme
 
 ## Çalışma kuralı
 - Adım adım ilerle; her adım Unity'de test edilmeden commit'lenmez.
+- Commit/push sadece Oğuzhan "yap" dedikten sonra.
 - Saatte bir `main`'i çek. Commit'te `.meta` dosyalarını unutma.
 - Her AI kullanımı / hazır asset anında `CREDITS_AND_AI.md`'ye.
 
 ## Oturum notu
 - 2026-10-16 (UTC+3): Desk v0 kodu yazıldı (derleniyor, test edilmedi). Adım 0 push'landı. Kişisel plan oluşturuldu. Sırada Adım 1 (Unity'de deneme).
 - 2026-10-16 ~21:45: Adım 1 tamam, Sandbox_Desk'te tüm senaryolar çalıştı. A'nın Core'u geldi; yeni kural: ekranlar Core'a sadece IGameActions ile yazar. Karar: adapter yerine Desk doğrudan Core tiplerine geçecek (sandbox'ta sahte IGameActions). Desk v0 güvenli nokta olarak push'landı.
+- 2026-10-16 ~22:30: Desk Core'a geçti (eski modeller silindi; FakeGameActions + SandboxDeskContext). A'nın Faz 1'indeki Weekly→Daily ad değişikliğine uyarlandı (ApprovedToday, ApprovalQuota). Unity'de test edildi. memory.md'deki "Ekibe notlar" maddeleri [x] yapıldı. Sırada commit + push ve A'ya haber.

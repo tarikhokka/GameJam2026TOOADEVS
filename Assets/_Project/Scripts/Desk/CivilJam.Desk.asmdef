@@ -2,6 +2,7 @@
     "name": "CivilJam.Desk",
     "rootNamespace": "CivilJam.Desk",
     "references": [
+        "CivilJam.Core",
         "Unity.TextMeshPro",
         "UnityEngine.UI"
     ],

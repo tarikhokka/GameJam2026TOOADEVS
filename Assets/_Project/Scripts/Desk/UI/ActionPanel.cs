@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using CivilJam.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,31 +52,45 @@ namespace CivilJam.Desk
             finishButton.gameObject.SetActive(allDecided);
         }
 
-        public void Show(DeskProject project, DeskDecision decision, bool canBuyTest, int testCost, bool allDecided)
+        public void Show(ProjectData project, ClientSO client, bool canBuyTest, int testCost, bool allDecided)
         {
-            clientNameText.text = project.ClientName;
-            clientLineText.text = $"“{project.ClientLine}”";
+            clientNameText.text = client != null ? client.DisplayName : "Başvuru sahibi";
+            string greeting = PickLine(client?.GreetingLines, project.Id);
+            clientLineText.text = string.IsNullOrEmpty(greeting) ? "" : $"“{greeting}”";
 
-            bool pending = decision.Verdict == DeskVerdict.Pending;
+            bool pending = project.Verdict == ProjectVerdict.Pending;
 
-            bribeRoot.SetActive(pending && project.HasBribe);
-            if (project.HasBribe)
-                bribeText.text = $"Dosyanın arasından bir zarf çıktı.\nİçinde <b>{DeskFormat.Money(project.BribeAmount)}</b> var.";
+            bribeRoot.SetActive(pending && project.OffersBribe);
+            if (project.OffersBribe)
+            {
+                string bribeLine = PickLine(client?.BribeLines, project.Id);
+                string quote = string.IsNullOrEmpty(bribeLine) ? "" : $"<i>“{bribeLine}”</i>\n";
+                bribeText.text = $"{quote}Dosyanın arasında bir zarf var: <b>{DeskFormat.Money(project.BribeAmount)}</b>";
+            }
 
             SetDecisionButtonsVisible(pending);
             extraTestButton.interactable = canBuyTest;
-            extraTestLabel.text = decision.ExtraTestBought
+            extraTestLabel.text = project.ExtraTestBought
                 ? "Ek test yapıldı"
                 : $"Ek test iste ({DeskFormat.Money(testCost)})";
 
-            verdictText.text = decision.Verdict switch
+            verdictText.text = project.Verdict switch
             {
-                DeskVerdict.Approved => decision.TookBribe ? "ONAYLANDI <size=70%>(zarf alındı)</size>" : "ONAYLANDI",
-                DeskVerdict.Rejected => "REDDEDİLDİ",
+                ProjectVerdict.Approved => project.BribeAccepted ? "ONAYLANDI <size=70%>(zarf alındı)</size>" : "ONAYLANDI",
+                ProjectVerdict.Rejected => "REDDEDİLDİ",
                 _ => "",
             };
 
             finishButton.gameObject.SetActive(allDecided);
+        }
+
+        // Aynı proje her çizimde aynı repliği göstersin diye proje kimliğine göre seçilir.
+        private static string PickLine(List<string> lines, string projectId)
+        {
+            if (lines == null || lines.Count == 0) return null;
+            int hash = 0;
+            foreach (char c in projectId) hash = hash * 31 + c;
+            return lines[Mathf.Abs(hash) % lines.Count];
         }
 
         private void SetDecisionButtonsVisible(bool visible)

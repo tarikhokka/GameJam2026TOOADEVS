@@ -19,7 +19,7 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "Merhaba hocam. Formu eksiksiz doldurdum, her satırı iki kez kontrol ettim."
+  - "Merhaba hocam. Laboratuvar raporları ekte, numuneleri de kendim teslim ettim."
   - "Biraz pahalıya çıktı ama içim rahat. Siz yine de inceleyin."
   - "Bu sefer okul yolunun üstünde hocam, ona göre sağlam yaptık."
   BribeLines: []

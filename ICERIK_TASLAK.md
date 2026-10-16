@@ -2,7 +2,7 @@
 
 Onaylanan metinler `Assets/_Project/Data/` altındaki SO asset'lerine taşınır. Bu dosya taslaktır; oyun buradan okumaz.
 
-Kurallar (00:30 yeni kural modeline uyarlandı: sahte belge, lab raporu, ek test yok; afetler deprem + sel → manşet ve sonlarda afet türünden bağımsız dil): isimler tamamen kurgusal; mizah müteahhitlerde; oyuncuya "Hocam" denir (cinsiyetsiz); gerçek firma/olay çağrışımı yok.
+Kurallar: isimler tamamen kurgusal; mizah müteahhitlerde; oyuncuya "Hocam" denir (cinsiyetsiz); gerçek firma/olay çağrışımı yok.
 Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
 
 ## Müteahhitler (ClientSO)
@@ -18,7 +18,7 @@ Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
 ### 2. Sevim Sağlamer — dürüst usta
 - Id: `sevim` · IsHonest: ✅ · IsThug: ❌ · BribeRange: 0-0
 - Selamlama:
-  - "Merhaba hocam. Formu eksiksiz doldurdum, her satırı iki kez kontrol ettim."
+  - "Merhaba hocam. Laboratuvar raporları ekte, numuneleri de kendim teslim ettim."
   - "Biraz pahalıya çıktı ama içim rahat. Siz yine de inceleyin."
   - "Bu sefer okul yolunun üstünde hocam, ona göre sağlam yaptık."
 - Rüşvet: —
@@ -45,12 +45,12 @@ Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
   - "Bayram değil seyran değil, ama ben size bir hediye getirdim."
   - "Şimdi imza atarsanız zarf da sizin, hatır da sizin."
 
-### 5. Selim Kâğıtçıoğlu — kurnaz (rüşvet teklif etmez; formu temiz gösterir ama bir kuralı ince yerden deler)
+### 5. Selim Kâğıtçıoğlu — sahte belgeci (rüşvet teklif etmez, belgeleri kusursuz görünür)
 - Id: `selim` · IsHonest: ❌ · IsThug: ❌ · BribeRange: 0-0
 - Selamlama:
-  - "İyi günler hocam. Form eksiksiz, buyurun inceleyin."
+  - "İyi günler hocam. Bütün evraklar eksiksiz, laboratuvar raporu da taze."
   - "Kaşesi de imzası da yerinde hocam, buyurun inceleyin."
-  - "El kitabını ezbere bilirim hocam. Ufak bir kat farkı olmuş, o kadar olur."
+  - "Ek teste gerek yok hocam, raporlar her şeyi söylüyor zaten."
 - Rüşvet: —
 - Not: A onayladı: `IsHonest=false`, BribeRange 0-0 = asla rüşvet teklif etmez.
 
@@ -76,21 +76,21 @@ Yer tutucular:
 - Not A/C'ye: can kaybı manşette istenirse ayrı bir `{deaths}` yer tutucusu eklenmeli, `{count}` ile karıştırılmamalı.
 
 ### NoCollapse — afet oldu, hiçbir bina yıkılmadı
-- "Afet korkuttu, binalar ayakta kaldı"
+- "Deprem korkuttu, binalar ayakta kaldı"
 - "Sarsıntı geçti, şehir ayakta"
 - "Mahalleli sokakta sabahladı: Yıkım yok"
 - "Uzmanlar: Denetimli binalar sınavı geçti"
-- "Derin bir nefes: Can kaybı yaşanmadı"
+- "Derin bir nefes: Depremde can kaybı yaşanmadı"
 
 ### SingleCollapse — tek bina yıkıldı
 - "Şehir bu sabah bir binasını kaybetti: {building}"
-- "Mahalle yasta: {building} felakete dayanamadı"
+- "Mahalle yasta: {building} depreme dayanamadı"
 - "Yıkılan bina: {building}. Sorumlular aranıyor"
 - "Komşular anlatıyor: {building} bir anda çöktü"
 - "Soruşturma başladı: {building} neden yıkıldı?"
 
 ### MultiCollapse — birden fazla bina yıkıldı
-- "Felakette {count} bina yıkıldı"
+- "Depremde {count} bina yıkıldı"
 - "Şehirde acı tablo: {count} bina çöktü"
 - "{count} bina ayakta kalamadı"
 - "Kara gün: {count} yapı yerle bir oldu"
@@ -99,7 +99,7 @@ Yer tutucular:
 ### BribedCollapse — rüşvetle onaylanan bina yıkıldı
 - "Yıkılan binanın onayında usulsüzlük şüphesi"
 - "Bu imza kimin?"
-- "Kurallar çiğnendi, imza gerçek"
+- "Belgeler sahte, imza gerçek"
 - "Savcılık harekete geçti: Onay sürecinde rüşvet iddiası"
 - "Müteahhit gözaltında, gözler onaylayan mühendiste"
 
@@ -113,13 +113,13 @@ Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
 - Body:
   > Ofisinin kapısını son kez kilitledin.
   >
-  > Masandan geçen her formu okudun. Eksik demiri, kaçak katı, masaya bırakılan zarfı geri çevirdin. Kimi gün kirayı zor ödedin, kimi gün kapında bir kabadayı bekledi.
+  > Masandan geçen her projeyi okudun. Eksik demiri, sahte raporu, masaya bırakılan zarfı geri çevirdin. Kimi gün kirayı zor ödedin, kimi gün kapında bir kabadayı bekledi.
   >
-  > Ama felaket geldiğinde, imzanı taşıyan binaların hepsi ayaktaydı. İçlerinde uyuyan çocuklar ertesi sabah okula gitti.
+  > Ama yer sarsıldığında, imzanı taşıyan binaların hepsi ayaktaydı. İçlerinde uyuyan çocuklar ertesi sabah okula gitti.
   >
   > Gazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama o binalarda yaşayan herkes, farkında olmadan, sana bir sabah borçlu.
   >
-  > Afet doğanın işidir. Binanın ayakta kalması ise bizim.
+  > Deprem doğanın işidir. Binanın ayakta kalması ise bizim.
 
 ### Bad — Kötü son (mahkeme / hapis)
 - Title: "Hüküm"
@@ -128,9 +128,9 @@ Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
   >
   > Hâkim isimleri tek tek okuyor. Her isimde salon biraz daha sessizleşiyor.
   >
-  > Savcı bir dosya kaldırıyor: Yapı Denetim Formu. En altta senin imzan.
+  > Savcı bir dosya kaldırıyor: ruhsat, laboratuvar raporu ve en altta senin imzan.
   >
-  > "Bu formu incelediniz mi?"
+  > "Bu belgeleri incelediniz mi?"
   >
   > Cevap veremiyorsun. Zarftaki para çoktan harcandı. O binada yaşayanlar ise geri gelmeyecek.
   >
@@ -142,10 +142,10 @@ Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
 - Body:
   > Kira yine ödenemedi. Bankadan son uyarı geldi. Bu sabah ofisinin kapısına bir kilit asıldı.
   >
-  > Masadaki dosyaları kutuya koydun. Kaşeni, kalemini, yarım kalmış bir denetim formunu.
+  > Masadaki dosyaları kutuya koydun. Kaşeni, kalemini, yarım kalmış bir laboratuvar raporunu.
   >
   > Bu şehirde dürüst kalmanın bir bedeli var. Bazen o bedel ayın sonunu getirememek.
   >
-  > İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki felakette ayakta kalacağını artık sen değil, zaman gösterecek.
+  > İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki depremde ayakta kalacağını artık sen değil, zaman gösterecek.
   >
   > Işığı kapattın.

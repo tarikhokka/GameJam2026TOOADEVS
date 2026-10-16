@@ -132,6 +132,8 @@
 > - Masa ekranını yeni forma göre değiştirmeye başladıysan **dur**; mevcut modelle devam et: başvuru + lab raporu, Reported/Actual, ücretli ek test, parsel/tarih/lab/kaşe/imza ipuçları, rüşvet zarfı. Core sözleşmesi değişmedi (`ctx.TodayProjects`, `ctx.Actions`).
 > - Oyunun kural modelini değiştiren öneriler için önce Ahmet'le konuş; "Ahmet onayladı" notunu sadece Ahmet (ya da onun açık onayıyla) yazar.
 > - Fikirlerden ileride yararlanmak istersek (ör. el kitabı, kaçak kat, yangın kuralları) Ahmet'le ayrıca konuşulur.
+>
+> ⚠️ **Tarık — (A, 00:55):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
 
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
 

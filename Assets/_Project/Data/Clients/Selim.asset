@@ -19,7 +19,7 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "İyi günler hocam. Form eksiksiz, buyurun inceleyin."
+  - "İyi günler hocam. Bütün evraklar eksiksiz, laboratuvar raporu da taze."
   - "Kaşesi de imzası da yerinde hocam, buyurun inceleyin."
-  - "El kitabını ezbere bilirim hocam. Ufak bir kat farkı olmuş, o kadar olur."
+  - "Ek teste gerek yok hocam, raporlar her şeyi söylüyor zaten."
   BribeLines: []

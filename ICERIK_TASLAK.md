@@ -102,3 +102,50 @@ Yer tutucular:
 - "Belgeler sahte, imza gerçek"
 - "Savcılık harekete geçti: Onay sürecinde rüşvet iddiası"
 - "Müteahhit gözaltında, gözler onaylayan mühendiste"
+
+## Sonlar (EndingSO)
+
+Ton: ciddi ve duygusal; mizah yok. Oyuncuya "sen" denir. Gerçek olay/yer adı yok.
+Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
+
+### Good — İyi son
+- Title: "Ayakta Kalanlar"
+- Body:
+  > Ofisinin kapısını son kez kilitledin.
+  >
+  > Masandan geçen her projeyi okudun. Eksik demiri, sahte raporu, masaya bırakılan zarfı geri çevirdin. Kimi gün kirayı zor ödedin, kimi gün kapında bir kabadayı bekledi.
+  >
+  > Ama yer sarsıldığında, imzanı taşıyan binaların hepsi ayaktaydı. İçlerinde uyuyan çocuklar ertesi sabah okula gitti.
+  >
+  > Gazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama o binalarda yaşayan herkes, farkında olmadan, sana bir sabah borçlu.
+  >
+  > Deprem doğanın işidir. Binanın ayakta kalması ise bizim.
+
+### Bad — Kötü son (mahkeme / hapis)
+- Title: "Hüküm"
+- Body:
+  > Mahkeme salonu kalabalık. Ön sıralarda, yıkılan binada yakınlarını kaybedenler oturuyor. Ellerinde fotoğraflar var.
+  >
+  > Hâkim isimleri tek tek okuyor. Her isimde salon biraz daha sessizleşiyor.
+  >
+  > Savcı bir dosya kaldırıyor: ruhsat, laboratuvar raporu ve en altta senin imzan.
+  >
+  > "Bu belgeleri incelediniz mi?"
+  >
+  > Cevap veremiyorsun. Zarftaki para çoktan harcandı. O binada yaşayanlar ise geri gelmeyecek.
+  >
+  > Bir imza birkaç saniye sürer. Sonuçları bir ömür.
+- Not A/C'ye: "Hâkim isimleri okuyor" satırının altında yıkılan binaların kurgusal kayıp isimleri (`BuildingOutcome.VictimNames`) gösterilebilir. Body sabit metin; isimler ekranda ayrı listelenir.
+
+### MiddleClosed — Orta son (borçtan ofis kapandı)
+- Title: "Kapanan Kapı"
+- Body:
+  > Kira yine ödenemedi. Bankadan son uyarı geldi. Bu sabah ofisinin kapısına bir kilit asıldı.
+  >
+  > Masadaki dosyaları kutuya koydun. Kaşeni, kalemini, yarım kalmış bir laboratuvar raporunu.
+  >
+  > Bu şehirde dürüst kalmanın bir bedeli var. Bazen o bedel ayın sonunu getirememek.
+  >
+  > İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki depremde ayakta kalacağını artık sen değil, zaman gösterecek.
+  >
+  > Işığı kapattın.

@@ -24,5 +24,8 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `daysummary_bg.png` | DaySummary | C | P |
 | `payment_bg.png` | Günlük ödeme | C | P |
 | `menu_bg.png`, `logo.png` | MainMenu | C | P |
+| `ending_good.png` | Ending (İyi) | C | P |
+| `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
+| `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
 
 Durum: `-` yok, `P` placeholder, `F` final.

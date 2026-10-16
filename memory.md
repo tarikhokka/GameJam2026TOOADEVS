@@ -106,7 +106,7 @@
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
 - **Desk (B):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions; günlük kota adları). Sandbox_Desk'te sahte IGameActions ile test edildi. DeskScreen prefab'ı Game.unity'ye eklenmeye hazır (A ekler).
-- **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (B'nin 9. adımı bekliyor), ClientSO metin taslakları.
+- **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
 - **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —
 

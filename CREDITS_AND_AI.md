@@ -15,6 +15,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Kenney Interface Sounds — `bong_001.ogg` (adı `sfx_click.ogg` yapıldı) | Buton tıklama sesi | https://kenney.nl/assets/interface-sounds | CC0 1.0 | Tarık | 2026-10-16 |
 | Kenney Impact Sounds — `impactWood_light_001.ogg` (adı `sfx_stamp.ogg` yapıldı) | Kaşe vurma sesi (onay/red) | https://kenney.nl/assets/impact-sounds | CC0 1.0 | Tarık | 2026-10-16 |
 | Freesound #63514 "paper5" — florian_reinke (adı `sfx_paper.wav` yapıldı) | Belge açma / kağıt hışırtısı | https://freesound.org/people/florian_reinke/sounds/63514/ | CC0 1.0 | Tarık | 2026-10-16 |
+| Freesound #468415 "Suburban House Ambience 02" — msepitaph (adı `mus_office_ambient.wav` yapıldı) | Masa ekranı ortam sesi (loop) | https://freesound.org/people/msepitaph/sounds/468415/ | **CC BY 4.0 — atıf zorunlu** | Tarık | 2026-10-16 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -44,3 +45,13 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde Canvas kurulumu, 1920×1080 ölçekleme ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde ResultScreen panelini oluşturma, tam ekran yerleşim ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Ahmet’in günlük ödeme ve afet kapsamı kararlarını inceleme; ortak hafıza ve C planını güncelleme | `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
+
+## Oyun içi "Emeği Geçenler" metni
+CC BY (atıf zorunlu) asset'ler oyunun credits ekranında da görünmeli. Yeni asset eklenince bu blok da güncellenir; credits ekranı bu metni aynen kullanır.
+
+```
+SESLER
+Ortam sesi: "Suburban House Ambience 02" — msepitaph (freesound.org), CC BY 4.0
+Kağıt sesi: "paper5" — florian_reinke (freesound.org), CC0
+Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
+```

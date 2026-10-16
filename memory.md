@@ -48,7 +48,7 @@
 - `Assets/_Project/Scripts/Core/` — henüz repoda yok (16 Ekim 2026 itibarıyla ne yerelde ne origin/main'de). Dosyalar push'lanınca buraya tek satırlık açıklamalarla eklenecek.
 
 ## 4. Takım ve klasör sahipliği
-- A (Core): Scripts/Core, Data.
+- A (Core) — Ahmet İlman: Scripts/Core, Data.
 - B (Masa): Scripts/Desk, Prefabs/Desk, Scenes/Sandbox_Desk.
 - C (Akış): Scripts/Flow, Prefabs/Flow, Scenes/Sandbox_Flow, MainMenu.
 - 4. kişi (EEE): Art, Audio, SO içerikleri, CREDITS_AND_AI.md.

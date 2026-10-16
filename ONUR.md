@@ -3,13 +3,17 @@
 Bu dosya Onur’un görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
+- 2026-10-17 intro devri: Oğuzhan'ın `02d4749` kodu `.meta` GUID'i korunarak `Assets/_Project/Scripts/Flow/UI/IntroSequence.cs` konumuna alındı. MainMenu: Yeni Oyun → 6 sayfalık hikâye → Game; Devam Et doğrudan kayıtlı Game'e gider. Ayrı intro sahnesi veya Game.unity değişikliği gerekmiyor. Flow runtime asmdef'ine `Unity.InputSystem` eklendi.
+- Tarık incelemesi: intro'daki sel/yangın ve sayısal bina/kayıp istatistikleri çıkarıldı; deprem ve güvenli yapı denetimi metni kullanıldı, kurgu notu eklendi. Bu metin değişikliği Tarık'ın son incelemesine açık. CREDITS intro satırının güncellemesi Oğuzhan'da; kendi Flow satırıma ekleme yapılmadı.
+- Ahmet'in `efc003a` commit'i alındı: Ç2/Ç3/Ç5 uygulandı (gizli ProjectKind, gevşek roller, UsedBuildingNames ile tekrarsız bina adları); DayIntro/Construction Game'e eklendi. Ç1 el kitabı/bölge kuralları ve Ç4 tepki/hediye alanları hâlâ plan; kesin sözleşme gelmeden bunlara bağlanılmayacak. Tarık'ın `17bf7ba` görsel kararı: flat cartoon referansı, hazır asset, piksel art yok.
+- Intro doğrulaması (17 Ekim): İlk Unity EditMode 13/13; Ahmet'in `efc003a` kodu alındıktan sonra son koşuda 15/15 geçti. MainMenu Play testinde 6 sayfa, daktilo efekti, fare/Space/Enter ile ilerleme ve son sayfadan Game'in 1. gününe geçiş doğrulandı; Play kapatıldı. Yerelde kayıt olmadığından Devam Et butonunun canlı testi yapılmadı; mevcut doğrudan Game yükleme yolu koddan kontrol edildi. İlk Play kontrolünden sonra `efc003a` geldi; bu commit ekranları Game'e ekliyor. Tarık: intro'nun 2. ve 3. sayfasındaki yeni metni incele. Oğuzhan: CREDITS satırındaki yolu yeni Flow konumuna güncelle; CREDITS'e tarafımdan dokunulmadı.
 - Flow scriptleri ve mevcut dört ekran hazır. 2026-10-17: DayIntroScreen ve ConstructionScreen script/prefab'ları da Sandbox_Flow'a bağlandı. Gün başı testi Onur tarafından; inşaatta 0/2 onay, yeniden açılış ve devam/çift tıklama testi Codex tarafından Unity Play modunda doğrulandı. İnşaat testinde her ekran açılışı için tek Completed kaydı, hata satırı yok.
-- DayIntro ve Construction prefab'larının gerçek Game.unity sahnesine kurulumu Ahmet'te; Windows build testi henüz yapılmadı. Sandbox'ta inşaat butonu hazır afet sonucuna gider; gerçek oyunda afet hesabını Core yapar.
+- DayIntro ve Construction prefab'ları Ahmet tarafından `efc003a` ile Game.unity'ye kuruldu; Windows build testi henüz yapılmadı. Sandbox'ta inşaat butonu hazır afet sonucuna gider; gerçek oyunda afet hesabını Core yapar.
 - Sırada Save ekranı var. Core, kayıt sonucunu Flow'a iletmeli; mevcut GameManager kayıt metodunun bool sonucunu kullanmıyor. Başarı bilgisi olmadan "Kaydedildi" gösterilmeyecek.
 - Kesinleşenler: level yerine gün; her gün afet olasılığı; afetsiz gün sonrası ihtimal artışı; günlük gider; gün sonunda kayıt.
 - Afet olunca olasılık sıfırlanır; değerlendirilecek binalar sadece son afetten bu yana onaylananlardır. Önceki afeti atlatanlar tekrar değerlendirilmez.
 - Afetsiz günlerde gazete yok. Gazete; bina durumları, tamamen kurgusal ölen isimleri, ölü/yaralı sayıları ve oyuncunun imzasının sorumluluğunu gösterecek.
-- 14 gün, olasılık sayıları ve ek testin anında ödenmesi henüz öneridir. Gün sonu kayıt kesin; yükleme ve son ekranındaki kayıt davranışı açık.
+- Güncel kesin kararlar: 10 gün; deprem olasılığı %20 + afetsiz gün başına %15; ek test ücreti anında düşer. Gün sonunda sonraki gün kaydedilir; Devam Et o günün başını açar; son ekranında kayıt silinir.
 
 ## Benim alanım
 - `Assets/_Project/Scripts/Flow/`

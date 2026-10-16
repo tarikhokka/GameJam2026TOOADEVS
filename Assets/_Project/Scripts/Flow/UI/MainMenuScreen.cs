@@ -24,10 +24,13 @@ namespace CivilJam.Flow
             "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0";
 
         GameObject _menuPanel, _creditsPanel;
+        Transform _root;
+        bool _launching;
 
         void Start()
         {
             var root = UiKit.Stretch(transform, "Root");
+            _root = root;
             UiKit.Image(root, "Bg", background, background != null ? Color.white : UiKit.Dark, Vector2.zero, Vector2.one);
 
             _menuPanel = UiKit.Stretch(root, "Menu").gameObject;
@@ -86,12 +89,31 @@ namespace CivilJam.Flow
 
         void NewGame()
         {
+            if (_launching) return;
+            _launching = true;
             GameLaunch.ContinueFromSave = false;
-            SceneManager.LoadScene(gameSceneName);
+            _menuPanel.SetActive(false);
+            _creditsPanel.SetActive(false);
+
+            var intro = UiKit.Stretch(_root, "StoryIntro");
+            UiKit.Image(intro, "Background", null, UiKit.Dark, Vector2.zero, Vector2.one);
+            var content = UiKit.Stretch(intro, "Content");
+            var fade = content.gameObject.AddComponent<CanvasGroup>();
+            fade.alpha = 0f;
+            var story = UiKit.Text(content, "Story", "", 48f, UiKit.Paper,
+                TextAlignmentOptions.Center, new Vector2(0.16f, 0.25f), new Vector2(0.84f, 0.8f), true, 32f);
+            var hint = UiKit.Text(intro, "Hint", "", 26f, UiKit.Paper,
+                TextAlignmentOptions.Center, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.16f));
+            UiKit.Text(intro, "FictionNotice", "Bu hikâyedeki ülke, kişiler ve olaylar kurgusaldır.",
+                20f, UiKit.Paper, TextAlignmentOptions.Center,
+                new Vector2(0.12f, 0.02f), new Vector2(0.88f, 0.07f));
+            intro.gameObject.AddComponent<IntroSequence>().Initialize(story, fade, hint, gameSceneName);
         }
 
         void Continue()
         {
+            if (_launching) return;
+            _launching = true;
             GameLaunch.ContinueFromSave = true;
             SceneManager.LoadScene(gameSceneName);
         }

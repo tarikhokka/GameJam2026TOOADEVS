@@ -209,7 +209,7 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
   - (B, 17 Ekim) Sabit panel yerine üst bardaki "El Kitabı" butonuyla açılan pencere; içerik aynı 4 madde + yönetmelik alt sınırları. 1. gün masa açılınca 4 kart. Ayrıca lab raporunda parsel/tarih/imzanın yanında başvurudaki değer soluk yazılıyor (işaretleme yok).
 - [x] **Y1 akredite lab listesi:** `ctx.Names.LabNames` = akredite laboratuvarlar. "Hızlı Sonuç Lab. Ltd." bu listede yok → oyuncu listeyle yakalar. Panelde göster.
   - (B, 17 Ekim) El Kitabı penceresinde "Akredite laboratuvarlar" bölümü.
-- [ ] **Y1 intro:** `Assets/Scripts/Intro/IntroSequence.cs` repoda yok ama CREDITS'te kayıtlı ve var olmayan "Office" sahnesini yüklüyor. Ya repoya al (Game sahnesine geçecek şekilde, A'ya haber ver) ya da CREDITS satırını sil.
+- [x] **Y1 intro (C, 17 Ekim):** Oğuzhan'ın `02d4749` kodu GUID korunarak `Assets/_Project/Scripts/Flow/UI/IntroSequence.cs` içine taşındı. MainMenu Yeni Oyun → hikâye → Game; Devam Et doğrudan Game. Ayrı intro sahnesi ve Game.unity düzenlemesi gerekmiyor. Runtime Flow asmdef'ine `Unity.InputSystem` eklendi. Sel/yangın ve sayısal istatistikler çıkarıldı, kurgu notu eklendi; metnin son incelemesi Tarık'ta. Intro CREDITS satırını Oğuzhan güncelleyecek; C'nin Flow satırına eklenmedi. Test durumu: `ONUR.md`.
 - [x] O4: Rüstem reddedilince masada "camın kırıldı" kartı + `sfx_glass_break` (Tarık'tan).
   - (B, 17 Ekim) Yapıldı (`EventCardView`); ses Tarık'ın `7243543`'ü.
 - [x] O1: `OGUZHAN.md` "Mevcut durum" (kota satırı, "Sırada" eski).
@@ -266,6 +266,8 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - JailRisk sayılarının (yıkım +0.15, rüşvetli yıkım +0.25) 10 günlük oyunda dengesi; denge turunda bakılacak.
 
 ## 7. Karar günlüğü
+
+- 2026-10-17 (C): Oğuzhan'ın hikâye intro'su Flow'a devredildi; Yeni Oyun için MainMenu içinde gösterilir, bitince mevcut Game sahnesi yüklenir. Devam Et intro'yu atlar. Günlük DayIntro ekranından ayrıdır.
 Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:00 notu da haftalık ödemeyi kaldırır.
 
 | Tarih-saat | Karar | Gerekçe |

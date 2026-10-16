@@ -48,10 +48,19 @@
 
 ### Dosya haritası
 - `Assets/_Project/Scripts/Core/` — önceki notta repoda olmadığı belirtilmişti; bu güncellemede yerel/remote durum yeniden doğrulanmadı. Dosyalar push'lanınca buraya tek satırlık açıklamalarla eklenecek.
+- `Assets/_Project/Scripts/Desk/` (B) — Core'dan bağımsız; Core gelince adapter ile bağlanacak.
+  - `CivilJam.Desk.asmdef` — Desk assembly'si (şimdilik Core referansı yok).
+  - `Model/DeskModels.cs` — DeskProject/DeskDocument/DeskParam (Required/Reported/Actual), DeskDecision, DeskResult.
+  - `DeskSession.cs` — saf C# masa mantığı: onay, red, rüşvet, ücretli ek test, kota.
+  - `Mock/MockDeskData.cs` — sahte Level 1 (dürüst usta, rüşvetçi, sahte belgeli).
+  - `UI/DeskScreen.cs` — ekran kökü: Show(DeskSessionConfig), Hide(), event Completed(DeskResult).
+  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView, ParamRowView, ActionPanel, UiPool, DeskFormat.
+  - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i sahte veriyle başlatır.
+  - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build DeskScreen Prefab / Build Sandbox_Desk Scene.
 
 ## 4. Takım ve klasör sahipliği
 - A (Core) — Ahmet İlman: Scripts/Core, Data.
-- B (Masa): Scripts/Desk, Prefabs/Desk, Scenes/Sandbox_Desk.
+- B (Masa) — Oğuzhan: Scripts/Desk, Prefabs/Desk, Scenes/Sandbox_Desk.
 - C (Akış) — Onur Kabadayılar: Scripts/Flow, Prefabs/Flow, Scenes/Sandbox_Flow, MainMenu.
 - 4. kişi (EEE): Art, Audio, SO içerikleri, CREDITS_AND_AI.md.
 - Scenes/Game.unity sadece A.
@@ -78,6 +87,7 @@
 - **Plan durumu:** Gün sistemi tasarımı sürüyor. Bu güncellemede kod yazılmadı.
 - **Önceki durum notu (bu oturumda doğrulanmadı):** Core veri sözleşmesi, SO'lar, EarthquakeSimulator, GameManager iskeleti, asmdef'ler tamamlandı olarak bildirilmişti.
 - **Sırada:** ProjectGenerator v0, EconomyCalculator, RuleSetSO/DayConfigSO asset'leri; gün/hafta/save veri sözleşmesinin kesinleştirilmesi.
+- **Desk (B):** v0 yazıldı ve derleniyor (henüz eski level/kota modeliyle; gün sistemine uyarlanacak). Unity'de henüz test edilmedi, kod commit'lenmedi.
 - **Bilinen sorunlar:**
   - Önceki notta Core dosyalarının push beklediği belirtilmişti; güncel durum A ile doğrulanmalı.
 
@@ -111,6 +121,8 @@ Eski satırlar tarihseldir; aşağıdaki 21:09 güncellemesi level/ay sonu karar
 | 2026-10-16 21:09 (UTC+3) | Level kaldırıldı; gün sistemi. Afetsiz gün sonrası afet ihtimali artar | Onur tarafından kesinleştirildi; oranlar henüz açık |
 | 2026-10-16 21:09 (UTC+3) | Giderler haftalık; kayıt gün sonunda | Ay sonu ödeme/kayıt akışının yerini alır |
 | 2026-10-16 21:09 (UTC+3) | C rolü Onur Kabadayılar; kişisel çalışma planı ONUR.md | Plan aşamasında sorumluluk ve açık karar takibi |
+| 2026-10-16 | Desk kendi modelleriyle çalışır, Core gelince adapter ile bağlanır | A'yı beklemeden ilerlemek, Core değişikliğinin etkisini tek dosyada tutmak |
+| 2026-10-16 | Desk prefab'ı ve Sandbox_Desk editor menüsüyle üretilir | Sahne/prefab YAML'ını elle yazmak kırılgan; üretilen iskelet Editor'de düzenlenebilir |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

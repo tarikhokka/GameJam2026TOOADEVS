@@ -33,3 +33,5 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Proje hafıza dokümanı, iş planı, bu dosyanın şablonu | `memory.md`, `CLAUDE.md`, `CREDITS_AND_AI.md` | Tarık | 2026-10-16 |
 | Claude (Anthropic) | Geçici placeholder görselleri üreten script (düz renk + dosya adı yazısı); finalde değiştirilecek | `Assets/_Project/Art/*.png` | Tarık | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Gün sistemi, haftalık gider ve gün sonu kayıt kararlarıyla ortak hafızanın güncellenmesi; Onur için C rolü çalışma planı | `memory.md`, `ONUR.md`, `CREDITS_AND_AI.md` | Onur Kabadayılar | 2026-10-16 |
+| Claude (Anthropic) | Masa ekranı kodu: veri modelleri, masa mantığı, UI script'leri, sahte Level 1 verisi, prefab/sahne kurulum aracı; B iş planı | `Assets/_Project/Scripts/Desk/**` | Oğuzhan | 2026-10-16 |
+| Claude (Anthropic) | Intro hikaye ekranı (daktilo efekti, sayfa geçişi) ve intro metinleri | `Assets/Scripts/Intro/IntroSequence.cs` | Oğuzhan | 2026-10-16 |

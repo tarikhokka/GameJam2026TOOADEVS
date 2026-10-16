@@ -12,7 +12,7 @@ Bu klasöre sadece EEE yazar.
 | Dosya | Nerede | Durum |
 |---|---|---|
 | `sfx_paper.ogg` | Desk, belge açma | - |
-| `sfx_stamp.ogg` | Desk, onay/red | - |
+| `sfx_stamp.ogg` | Desk, onay/red | P |
 | `sfx_click.ogg` | Tüm butonlar | P |
 | `sfx_glass_break.ogg` | Kabadayı olayı | - |
 | `mus_office_ambient.ogg` | Desk | - |

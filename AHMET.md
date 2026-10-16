@@ -21,7 +21,7 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] SO sınıfları: DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, BalanceSO, HeadlineSO, EndingSO
 - [x] EarthquakeSimulator (yıkılma kuralı)
 - [x] Unity'de derle (hatasız), .meta'ları üret, commit + push
-- [ ] Ekibe haber ver
+- [x] Ekibe haber ver (memory.md → "Ekibe notlar")
 - [x] `memory.md` dosya haritasını doldur
 
 ### Faz 1 — Dikey dilim v0 (Cum 22 → Cts 02)
@@ -32,7 +32,7 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] Game.unity + IMGUI yedek arayüz (ekranı olmayan fazlar için) + Data asset'leri (Editor menüsüyle)
 - [x] EditMode testleri (7/7 geçti): Strength >= 1 asla yıkılmaz, afet kapsamı, olasılık, üretici, çift ödeme
 - [ ] Unity Editor'de Game.unity'yi elle oynayıp kontrol et
-- [ ] B ve C'ye haber ver: Desk ekranı `IGameScreen` (Phase = Desk) olunca Game.unity'ye eklenecek
+- [x] B ve C'ye haber ver: memory.md → "Ekibe notlar (A / Ahmet'ten)"
 
 ### Faz 2 — Ekonomi ve hile (Cts 08 → 14)
 - [ ] EconomyCalculator: günlük giderler, borç, ofis kapanışı
@@ -96,6 +96,7 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 - 22:15 — Faz 1: yukarıdaki sözleşme değişiklikleri + `Simulation/` (ProjectGenerator, DisasterSystem, CasualtyGenerator, ExpenseCalculator), `Game/` (GameSession, GameManager, FallbackGui, SaveSystem, GameLaunch), `Util/RandomExtensions`, `Editor/CoreSetupBuilder` (menü: CivilJam > Core), `Tests/Editor/CoreRulesTests`.
   - Üretilenler: `Assets/_Project/Data/` (Balance, RuleSet, NamePool, Headlines, Days/Day01-03-05-08, Expenses/Rent-Loan-Insurance), `Assets/_Project/Scenes/Game.unity`, `EditorBuildSettings`'e Game.unity eklendi.
   - Commit'lenmeyenler: `.vsconfig`, `ProjectSettings/SceneTemplateSettings.json` (Unity kendiliğinden üretti).
+- 22:20 — `memory.md`'ye "Ekibe notlar (A / Ahmet'ten)" bölümü: Oğuzhan ve Onur için yapılacaklar listesi (ajanları her oturumda okur).
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.

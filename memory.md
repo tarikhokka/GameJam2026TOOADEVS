@@ -116,6 +116,23 @@
 - (22:15 güncel) Günlük ödeme, iki afet arası bina kapsamı ve kayıp bilgileri Core'da uygulandı: `DailyExpenseResult` / `ctx.PendingExpenses`, `GamePhase.DailyExpenses`, `BuildingOutcome.Deaths/Injured/VictimNames/ResponsibilityText`. C bunları üretmez, Core'dan gösterir.
 - C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
 
+### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
+Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
+
+**Oğuzhan (B / Masa) için:**
+- [ ] `CivilJam.Desk.asmdef` referanslarına `CivilJam.Core` ekle.
+- [ ] `DeskScreen` → `CivilJam.Core.IGameScreen` uygulasın: `Phase => GamePhase.Desk`, `Show(GameContext ctx)`, `Hide()`, `event Action Completed` (parametresiz; mesai bitince bir kez tetikle).
+- [ ] Projeleri `ctx.TodayProjects`'ten oku (Desk modelleri yerine ya da adapter ile). Parametrelerde `Reported` göster; `Tested` ise `Actual` da göster. `Documents[0]` = başvuru, `Documents[1]` = lab raporu (parsel/tarih/lab/kaşe/imza tutarsızlıkları bedava ipucu). Rüşvet: `OffersBribe`, `BribeAmount`. Yönetmelik kitapçığı: `ctx.Rules`. Ek test ücreti: `ctx.Balance.ExtraTestCost`.
+- [ ] Kararları sadece `ctx.Actions` ile gönder: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` (bool döner). Para/kota hesabını Desk yapmaz; HUD için `ctx.StateChanged`'e abone ol, `ctx.State.Money` oku.
+- [ ] Bitince haber ver: DeskScreen prefab'ını `Game.unity`'ye A ekler (Game.unity'yi sadece A kaydeder).
+
+**Onur (C / Akış) için:**
+- [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
+- [ ] Gazete: `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`; toplamlar `ctx.LastQuake.TotalDeaths/TotalInjured`; tutuklama `ctx.LastQuake.Jailed`. Afetsiz gün Result fazı hiç açılmaz.
+- [ ] Günlük ödeme: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid). Seçim `ctx.Actions.SetExpensePaid(expenseId, paid)`; uygulama Completed'dan sonra Core'da (ekran parayı değiştirmez).
+- [ ] MainMenu "Devam Et": `SaveSystem.HasSave` ile göster; tıklanınca `GameLaunch.ContinueFromSave = true;` sonra Game sahnesini yükle. "Yeni Oyun" bayrağı false bırakır.
+- [ ] Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` okusun.
+
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).

@@ -138,6 +138,20 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - (A, 23:20) `BalanceSO.ApprovalQuota` silindi.
 - [ ] **TextMesh Pro klasörü (A, 23:30):** `Assets/TextMesh Pro` artık repoda (`701cb5e`); sen commit'leme. Sende yerel kopya varsa pull "untracked working tree files would be overwritten" hatası verir. Çözüm: Unity'yi kapat → yerel `Assets/TextMesh Pro` klasörünü ve `Assets/TextMesh Pro.meta`'yı sil (ya da masaüstüne taşı) → `git pull` → Unity'yi aç. Güvenli: TMP Essential dosyaları ve GUID'leri her projede aynı, prefab font referansları kırılmaz. İstisna: TMP Settings'te bilerek değişiklik yaptıysan (varsayılan font, kendi Türkçe font asset'in) silmeden önce not al, pull'dan sonra tekrar yapıp commit'le.
 
+**Tarık (EEE) için (A, 23:40) — `ICERIK_TASLAK.md` müteahhitleri:**
+- [ ] ClientSO asset'lerini **sen oluştur** (metinler senin; düzeltmeleri de sen yapacaksın). Project'te sağ tık → Create → CivilJam → Client. Konum: `Assets/_Project/Data/Clients/`, dosya adları `Rifat.asset`, `Sevim.asset`, `Kemal.asset`, `Nuri.asset`, `Selim.asset`, `Rustem.asset`.
+- [ ] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
+- [ ] `Data/` altındaki diğer asset'lere (Balance, RuleSet, Days, Expenses, NamePool) dokunma. Headlines asset'ini doldurmak istersen önce A'ya haber ver.
+- [ ] Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
+- **Selim sorusunun cevabı:** `IsHonest = false`, `BribeRange = 0-0` **doğru**, öyle bırak. Kural: `BribeRange` 0-0 = asla rüşvet teklif etmez. Core müteahhidin rolünü bu alanlardan çıkaracak, sen başka alan doldurmayacaksın:
+  - Uygun proje → `IsHonest = true` (Rıfat, Sevim)
+  - Rüşvetli proje → dürüst değil + `BribeRange` > 0 (Kemal, Nuri; kabadayı günleri açıksa Rüstem)
+  - Sahte belgeli proje → dürüst değil + `BribeRange` 0-0 (Selim)
+  - Düz uygunsuz (ilk günler) → dürüst değil + rüşvet vermeyen
+  - Durum: Core şu an sadece `IsHonest`'e bakıyor (Selim'e 0 TL zarf, Kemal'e rüşvetsiz proje düşebiliyor). Düzeltme A'da, yapılacak.
+- Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
+- ⚠️ **Açık çakışma — A'nın kararını bekliyor:** 23:07 kararın "kaşe/imza ipucu kaldırıldı" ile A'nın 22:50 düzeltmesi aynı anda yapıldı. Kodda ikisi hâlâ ipucu: kaşe = `"<LAB ADI> · AKREDİTE"` (sahtede başlıktaki lab adıyla uyuşmaz), imza = lab raporunu başvurudakinden farklı mühendis imzalar (nokta yok artık; `STAMP_FAKE` yazısı da yok). Hangisinin geçerli olacağını Ahmet netleştirip burayı güncelleyecek.
+
 **Onur (C / Akış) için:**
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
 - [ ] Gazete: `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`; toplamlar `ctx.LastQuake.TotalDeaths/TotalInjured`; tutuklama `ctx.LastQuake.Jailed`. Afetsiz gün Result fazı hiç açılmaz.

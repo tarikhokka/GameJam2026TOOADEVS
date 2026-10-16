@@ -5,7 +5,7 @@
 - Unity 6000.6.4f1, 2D, uGUI + TextMeshPro, hedef platform Windows, 1920x1080. Kontrol sadece fare, Esc menü açar.
 - Oyun (çalışma adı "İmza"): masa başı karar oyunu. Oyuncu bina onaylayan inşaat mühendisi.
   - Masaya proje ve laboratuvar belgeleri gelir; oyuncu onaylar veya reddeder; rüşvet teklif eden müteahhitler olur.
-  - Onaylanan binalar yapılır → gün sonu afet kontrolü → afet varsa gazete/sonuç, yoksa gün özeti → haftalık ödeme günüyse hesaplaşma → gün sonu kayıt.
+  - Onaylanan binalar yapılır → gün sonu afet kontrolü → afet varsa gazete/sonuç, yoksa gün özeti (gazete yok) → günlük ödeme → gün sonu kayıt.
 - Jüri ölçütleri: Oynanabilirlik 25, Temayla ilişki 25, Yaratıcılık 20, Görsel/işitsel bütünlük 15, Teknik bütünlük 15.
 - Hassasiyet: Deprem Türkiye'de hassas bir konu.
   - Depremzedeler asla olumsuz gösterilmez; isimler tamamen kurgusal; gerçek olaylara doğrudan atıf yok.
@@ -13,8 +13,10 @@
 
 ## 2. Kesinleşen oyun kararları
 - Level sistemi kaldırıldı; oyun gün sistemiyle ilerleyecek. Hâlâ plan aşamasındayız; aşağıdaki yeni akış kodda uygulanmış kabul edilmez.
-- Planlanan akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Quake/Result, yoksa DaySummary) → ödeme günüyse WeeklyExpenses → gün sonu Save → (NextDay | Ending).
-- Her gün sonunda afet olasılığı vardır. Afet olmazsa bir sonraki gün olasılık artar. Başlangıç oranı, artış, üst sınır ve afet sonrası sıfırlama henüz kararlaştırılmadı.
+- Planlanan akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Quake/Result, yoksa DaySummary) → her gün ödeme (günlük giderler) → gün sonu Save → (NextDay | Ending).
+- Her gün sonunda afet olasılığı vardır. Afet olmazsa bir sonraki gün olasılık artar; afet olunca olasılık sıfırlanır. Başlangıç oranı, artış ve üst sınır henüz kararlaştırılmadı (öneri: AHMET.md).
+- Afet, son afetten bu yana (iki afet arasında) oyuncunun onayladığı binaları değerlendirir; önceki afetleri atlatmış binalar tekrar değerlendirilmez.
+- Afetsiz günün sonunda gazete gösterilmez. Afet olunca gazete/sonuçta şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü/yaralı sayısı, yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi.
 - Eski level başına proje sayıları geçersizdir. Toplam gün sayısı, günlük proje sayıları ve içerik açılma günleri henüz belirlenmedi. Konut, sahte belgeler, fabrika/yangın içerik hedefleri; sel ve okul/hastane ek kapsamdır.
 - Deprem şiddeti oyuncuya gösterilmez. Bina sadece 2 durumlu: ayakta / yıkık.
 - Yıkılma kuralı (EarthquakeSimulator):
@@ -27,7 +29,7 @@
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
 - Eski level tekrar kuralı kaldırıldı; başarısız gün sonrası devam/tekrar davranışı henüz kesinleşmedi.
-- Giderler haftada bir ödenecek. Kalemler: kira, kredi taksiti, ek test, sigorta, kabadayı cam tamiri. Ek testin anında tahsil edilmesi ve sigortanın kapsam başlangıcı henüz netleştirilmeli. Ödenmeyen kira/kredi borç biriktirir; borç limiti aşılırsa ofis kapanır (orta son).
+- Giderler her gün ödenecek (haftalık ödeme kaldırıldı). Kalemler: kira, kredi taksiti, ek test, sigorta, kabadayı cam tamiri. Ek testin anında tahsil edilmesi ve sigortanın kapsam başlangıcı henüz netleştirilmeli. Ödenmeyen giderlerin sonucu henüz cevaplanmadı (önceki plan: borç birikir, limit aşılırsa ofis kapanır / orta son).
 - Kota: eski level kotasının günlük/haftalık karşılığı ve eksik kalmasının sonucu henüz belirlenmedi.
 - Save/Load: kayıt gün sonunda yapılacak; ay sonu kaydı kaldırıldı. Tek slot JSON / persistentDataPath yaklaşımı korunuyor. GameState gün, para, borç ve afet olasılığı gibi devam için gereken durumu kapsamalı; kesin kayıt şeması A ile netleştirilecek. Gün içi manuel kayıt kararı yok.
 - Sonlar:
@@ -100,11 +102,11 @@
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
-- Afet olasılığının başlangıcı, artışı, tavanı ve afet sonrası davranışı.
-- Önceki günlerin ayakta kalan binalarının sonraki afetlere dahil edilmesi.
+- Afet olasılığının başlangıcı, artışı ve tavanı (sıfırlama kararlaştı).
+- Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.
 - Başarısız gün, kota, sonlar ve JailRisk kurallarının gün sistemine uyarlanması.
-- Haftalık ilk ödeme günü, ek test tahsilatı ve sigortanın kapsam dönemi.
-- Save sonrası yüklemenin sonraki sabaha dönmesi ve kayıt şemasının kesinleştirilmesi.
+- Save sonrası yüklemenin sonraki sabaha dönmesi, son ekranında kayıt ve kayıt şemasının kesinleştirilmesi.
+- Kota, hapis ve ofis kapanışı aynı anda tetiklenirse son önceliği.
 
 ## 7. Karar günlüğü
 Eski satırlar tarihseldir; aşağıdaki 21:09 güncellemesi level/ay sonu kararlarının yerini alır.
@@ -131,6 +133,9 @@ Eski satırlar tarihseldir; aşağıdaki 21:09 güncellemesi level/ay sonu karar
 | 2026-10-16 | Desk kendi modelleriyle çalışır, Core gelince adapter ile bağlanır | A'yı beklemeden ilerlemek, Core değişikliğinin etkisini tek dosyada tutmak |
 | 2026-10-16 | Desk prefab'ı ve Sandbox_Desk editor menüsüyle üretilir | Sahne/prefab YAML'ını elle yazmak kırılgan; üretilen iskelet Editor'de düzenlenebilir |
 | 2026-10-16 21:30 (UTC+3) | A rolü Ahmet İlman; kişisel plan AHMET.md. Ekranlar Core'a sadece IGameActions ile yazar | Para/gün/sonuç tek yerde değişir; çift ödeme/gün ilerlemesi önlenir |
+| 2026-10-16 22:00 (UTC+3) | Ödeme haftalıktan günlüğe çekildi (21:09 haftalık gider kararının yerini alır) | Ahmet kararı; ödenmeyen giderin sonucu açık |
+| 2026-10-16 22:00 (UTC+3) | Afet son afetten bu yana onaylanan binaları değerlendirir; afet olunca olasılık sıfırlanır | Onur'un sorularına Ahmet'in cevabı (AHMET.md) |
+| 2026-10-16 22:00 (UTC+3) | Afetsiz gün gazete yok; afette yıkım durumu, ölen isimleri, ölü/yaralı sayısı, oyuncu sorumluluğu gösterilir | Temanın ağırlığı sonuç ekranında; Core'da BuildingOutcome genişletilecek |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -32,7 +32,7 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [ ] EditMode testi: Strength >= 1 asla yıkılmaz
 
 ### Faz 2 — Ekonomi ve hile (Cts 08 → 14)
-- [ ] EconomyCalculator: haftalık giderler, borç, ofis kapanışı
+- [ ] EconomyCalculator: günlük giderler, borç, ofis kapanışı
 - [ ] Rüşvet + sahte belge (bedava ipucu + ücretli ek test), JailRisk
 - [ ] Kota kontrolü
 
@@ -45,20 +45,38 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [ ] Baştan sona oynanış, 3 son erişilebilir; denge BalanceSO'dan
 - [ ] Windows build (Game.unity sahibi olarak)
 
-## Onur'un sorularına Core önerileri (ekip onayı bekliyor, kesin değil)
-Varsayılan değerler `BalanceSO`'da duruyor; karar değişirse sadece asset değişir.
-- Afet sonucu: bugüne kadar onaylanmış ve ayakta olan TÜM binalar dahil (`GameState.Buildings`). Yıkılan bina listede kalır, tekrar değerlendirilmez.
-- Gazete / gün özeti verisi: `QuakeResult.Outcomes` (bina adı, yıkıldı mı, FailedParams), gün no, para, JailRisk değişimi.
-- Afet olasılığı: başlangıç 0.10, afetsiz gün +0.10, tavan 0.80, afet olunca başlangıca döner.
-- Hafta 7 gün; ödeme günü 7, 14…; toplam 14 gün öneri. Ödenmeyen zorunlu gider borca eklenir; borç limiti aşılırsa ofis kapanır (Orta son).
-- Ek test parası anında düşülür (oyuncu sonucu hemen görür).
-- Kayıt gün sonunda; yükleme sonraki günün sabahını (DayIntro) açar. Son ekranında kayıt silinir.
-- Son önceliği: Kötü (hapis) > Orta (ofis kapandı) > Orta (kota) > İyi.
+## Onur'un sorularına cevaplar (ONUR.md "A'ya soracağım açık noktalar")
+Ahmet tarafından 2026-10-16 22:00 civarı cevaplandı.
+
+| # | Soru | Cevap | Durum |
+|---|---|---|---|
+| 1 | Afet sonucu hangi binaları içeriyor? | İki afet arasında oyuncunun onayladığı binalar: son afetten bu yana onaylananlar. Daha önceki afetleri atlatmış binalar tekrar değerlendirilmez. | ✅ Karar |
+| 2 | Gazete / gün özetinde ne gösterilecek? | Afetsiz günün sonunda gazete **gösterilmez**. Afet olunca şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü ve yaralı sayısı, binanın yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi. | ✅ Karar |
+| 3 | Ödeme günü ve ödenmeyen giderlerin sonucu? | **ÖNEMLİ:** ödeme haftalık değil **günlük** olacak. Ödenmeyen giderlerin sonucu henüz cevaplanmadı. | ✅ Günlük ödeme / ❓ ödenmeyen gider |
+| 4 | Afet olunca olasılık sıfırlanıyor mu? | Evet. | ✅ Karar |
+| 5 | Gün sonu yüklemesi / son ekranında kayıt? | Şimdilik cevaplanmadı. | ❓ Açık |
+| 6 | Kota, hapis ve ofis kapanışı aynı anda tetiklenirse öncelik? | Şimdilik cevaplanmadı. | ❓ Açık |
+
+Önceki önerilerden hâlâ geçerli (onay bekliyor): afet olasılığı 0.10 başlangıç, afetsiz gün +0.10, tavan 0.80; toplam 14 gün; ek test parası anında düşülür. Değerler `BalanceSO`'da.
+
+### Bu kararların Core koduna etkisi (yapılmadı, Faz 1'de)
+- `EarthquakeSimulator.Run` şu an ayaktaki TÜM binaları değerlendiriyor → sadece son afetten sonra onaylananları değerlendirecek (ör. `ProjectData.DayDecided > GameState.LastDisasterDay`).
+- `BuildingOutcome`'a eklenecek: ölenlerin isimleri, ölü sayısı, yaralı sayısı, sorumluluk metni (ayakta kaldı / yıkıldı → oyuncunun imzası).
+- Günlük ödeme: `WeeklyExpenseResult` → `DailyExpenseResult`, `GameContext.PendingWeekly` / `IsPaymentDay` / `Week`, `BalanceSO.DaysPerWeek`, `GameState.ApprovedThisWeek` / `WindowRepairsThisWeek`, `GamePhase.WeeklyExpenses` yeniden adlandırılacak/sadeleşecek. B ve C bu adları kullanıyorsa haber verilecek.
+- Afet sonrası olasılık sıfırlama zaten `BalanceSO.ResetChanceAfterDisaster = true` ile planlı.
 
 ## Sözleşme değişiklikleri
 | Tarih-saat | Değişiklik | Etkilenen |
 |---|---|---|
 | 2026-10-16 21:20 | İlk sözleşme (gün sistemi adlarıyla) | B, C |
+| 2026-10-16 22:00 | PLANLI (kodda değil): günlük ödeme yeniden adlandırması, afet kapsamı, BuildingOutcome kayıp verisi — yukarıdaki "Core koduna etkisi" | B, C |
+
+## Yapılan değişiklikler günlüğü
+- `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).
+  - Rebase sırasında `memory.md` ve `CREDITS_AND_AI.md`'de çakışma çıktı; iki tarafın içeriği de korunarak çözüldü (B'nin Desk dosya haritası ve kararları + Tarık'ın placeholder satırı kaldı).
+  - Commit'lenmeyenler: `.vsconfig`, Unity'nin kendiliğinden değiştirdiği `ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json`.
+- 22:00 — Onur'un sorularına cevaplar ve günlük ödeme kararı `AHMET.md` + `memory.md`'ye işlendi. Kod değişmedi.
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.
+- 2026-10-16 22:00 (UTC+3): Onur'un 6 sorusundan 4'ü cevaplandı (5 ve 6 açık; ödenmeyen gider sonucu açık). Ödeme günlüğe çekildi. Faz 1'e henüz başlanmadı.

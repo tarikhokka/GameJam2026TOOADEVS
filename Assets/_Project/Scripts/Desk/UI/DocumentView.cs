@@ -144,12 +144,18 @@ namespace CivilJam.Desk
             }
         }
 
+        // Lab raporunda parsel/tarih/imzanın yanında başvurudaki değer de soluk yazılır. Her dosyada aynı görünür,
+        // uyuşmazlık işaretlenmez: karşılaştırmayı oyuncu yapar.
         private static string BuildMeta(ProjectData project, DocumentData doc)
         {
+            var application = doc.Kind == DocumentKind.LabReport
+                ? project.Documents.Find(d => d.Kind == DocumentKind.Application)
+                : null;
+
             var sb = new StringBuilder();
             sb.AppendLine($"<b>Proje:</b> {project.Name}");
-            sb.AppendLine($"<b>Parsel:</b> {doc.ParcelNo}");
-            sb.AppendLine($"<b>Tarih:</b> {doc.Date}");
+            sb.AppendLine($"<b>Parsel:</b> {doc.ParcelNo}{FromApplication(application?.ParcelNo)}");
+            sb.AppendLine($"<b>Tarih:</b> {doc.Date}{FromApplication(application?.Date)}");
 
             if (doc.Kind == DocumentKind.Application)
             {
@@ -162,8 +168,11 @@ namespace CivilJam.Desk
                 sb.AppendLine($"<b>Laboratuvar:</b> {doc.LabName}");
             }
 
-            sb.Append($"<b>İmza:</b> <i>{doc.SignatureName}</i>");
+            sb.Append($"<b>İmza:</b> <i>{doc.SignatureName}</i>{FromApplication(application?.SignatureName)}");
             return sb.ToString();
         }
+
+        private static string FromApplication(string value) =>
+            value == null ? "" : $"   <color=#7A7468><size=80%>(başvuruda: {value})</size></color>";
     }
 }

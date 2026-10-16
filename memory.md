@@ -73,10 +73,12 @@
   - `CivilJam.Desk.asmdef` — referans: CivilJam.Core, TMP, uGUI.
   - `UI/DeskScreen.cs` — IGameScreen (Phase = Desk). Show(GameContext); kararlar context.Actions ile; "Mesaiyi bitir" → Completed.
   - `UI/DeskAudio.cs` — masa sesleri: tık, kağıt, kaşe + ofis müziği (döngü, %25); klipler prefab'da referansla bağlı.
-  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView (karar kaşesi animasyonu dahil), ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
+  - `UI/RulebookView.cs` — "El Kitabı" penceresi (üst bardaki buton): kontrol listesi, yönetmelik alt sınırları (`ctx.Rules`), akredite laboratuvarlar (`ctx.Names.LabNames`). Sadece gösterir.
+  - `UI/TutorialView.cs` — 1. gün masa açılınca 4 öğretici kart (metinler bu dosyada; taslak, EEE onayı bekliyor).
+  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView (karar kaşesi animasyonu; lab raporunda parsel/tarih/imzanın yanında başvurudaki değer soluk yazılır, işaretlenmez), ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
   - `Sandbox/FakeGameActions.cs` — sadece sandbox için sahte IGameActions.
   - `Sandbox/SandboxDeskContext.cs` — sahte gün: 3 proje (dürüst, rüşvetçi, sahte belgeli), 3 müşteri, RuleSet.
-  - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar.
+  - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar ve aynı sahte günü bir sonraki gün numarasıyla açar.
   - `Editor/DeskSandboxBuilder.cs` — menü: CivilJam > Desk > Build Sandbox_Desk Scene (prefab + sahneyi yeniden kurar).
 - `Assets/_Project/Scripts/Flow/` (C, asmdef `CivilJam.Flow`, sadece Core'a bağlı) — ekranlar UI'ı kodla kurar, `FlowScreen` tabanı Completed'ı bir kez tetikler.
   - `UI/ResultScreen` (Result, gazete: newspaper_bg kutularına yerleşim), `DaySummaryScreen`, `DailyExpensesScreen` (SetExpensePaid), `EndingScreen` (EndingSO yoksa yedek metin; "Ana menüye dön" MainMenu sahnesini yükler), `MainMenuScreen` (MainMenu sahnesi; Yeni/Devam/Credits/Çıkış).
@@ -120,12 +122,13 @@
 - **Faz 1 KAPANDI.** Game.unity'de oyun MainMenu → masa → (gazete | gün özeti) → günlük ödeme → kayıt → sonraki gün → son ekranı akışıyla oynanıyor. Sadece DayIntro / Construction / Save fazları hâlâ mavi IMGUI yedek arayüzle (sahibi C).
 - **Core (A, analiz sonrası):** Borç kuralı + ofis kapanışı, 4 son ve öncelikleri, son ekranında kayıt silme, build'de yedek arayüz kapalı, F9/F10 demo tuşları, 10 gün / 2.500 TL / ücret 400-700, fabrika ve sigorta kapsam dışı, 4 EndingSO bağlı. EditMode 13/13. **İlk Windows build alındı** (`Builds/Imza/Imza.exe`, açılış testi temiz; `Builds/` git dışında). `README.md` taslağı repoda.
 - **Desk (B, 23:50):** Core tiplerini kullanıyor (IGameScreen, ctx.TodayProjects, ctx.Actions); kota yok (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; sesler ve ONAYLANDI/REDDEDİLDİ kaşe animasyonu.
+  - (B, 17 Ekim) Y1: "El Kitabı" penceresi (kontrol listesi + yönetmelik + akredite lab listesi), lab raporunda başvuru değerleri yan yana, 1. gün 4 öğretici kart. Kural değişikliği yok, Core'a dokunulmadı. Sandbox ve Game.unity'de test edildi. Kart metinleri taslak → Tarık onaylayacak.
 - **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A `0bebf9b`'de Game.unity'ye ekledi.
 - **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art, toprak tonları.
 - **Sırada:** bkz. aşağıda "📌 Analiz sonrası işler" (kişi bazlı). Özet: C → Esc menüsü + ara ekranlar; B → öğretici/denetçi notu + lab listesi + intro kararı; EEE → MiddleCollapsed son metni, README son hali, final görsel/ses; A → denge turu, 20:00 ikinci build.
 - **Bilinen sorunlar:**
   - Esc menüsü yok (README'de var, Onur yapacak).
-  - Oyuncuya kuralları anlatan öğretici yok (Oğuzhan + Tarık).
+  - Oyuncuya kuralları anlatan öğretici yok (Oğuzhan + Tarık). — (B, 17 Ekim) Masaya eklendi (El Kitabı + 1. gün kartları); metinler Tarık'ın onayını bekliyor.
   - Unity'yi **6000.6.5f1 ile açmayın** (proje sürümünü yükseltiyor; ekip 6000.6.4f1). `ProjectVersion.txt` değişirse commit'lemeyin.
   - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
 
@@ -152,11 +155,14 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
 - [ ] D4: Emeği Geçenler'e takım ve AI satırı.
 
 **Oğuzhan (B):**
-- [ ] **Y1 öğretici:** masada sabit "Denetçi notu" paneli (değerleri min. değerle karşılaştır · iki belgede parsel/tarih/imza aynı olmalı · lab kaşesi raporun laboratuvarıyla aynı olmalı · şüphede ek test) + 1. gün kısa giriş.
-- [ ] **Y1 akredite lab listesi:** `ctx.Names.LabNames` = akredite laboratuvarlar. "Hızlı Sonuç Lab. Ltd." bu listede yok → oyuncu listeyle yakalar. Panelde göster.
+- [x] **Y1 öğretici:** masada sabit "Denetçi notu" paneli (değerleri min. değerle karşılaştır · iki belgede parsel/tarih/imza aynı olmalı · lab kaşesi raporun laboratuvarıyla aynı olmalı · şüphede ek test) + 1. gün kısa giriş.
+  - (B, 17 Ekim) Sabit panel yerine üst bardaki "El Kitabı" butonuyla açılan pencere; içerik aynı 4 madde + yönetmelik alt sınırları. 1. gün masa açılınca 4 kart. Ayrıca lab raporunda parsel/tarih/imzanın yanında başvurudaki değer soluk yazılıyor (işaretleme yok).
+- [x] **Y1 akredite lab listesi:** `ctx.Names.LabNames` = akredite laboratuvarlar. "Hızlı Sonuç Lab. Ltd." bu listede yok → oyuncu listeyle yakalar. Panelde göster.
+  - (B, 17 Ekim) El Kitabı penceresinde "Akredite laboratuvarlar" bölümü.
 - [ ] **Y1 intro:** `Assets/Scripts/Intro/IntroSequence.cs` repoda yok ama CREDITS'te kayıtlı ve var olmayan "Office" sahnesini yüklüyor. Ya repoya al (Game sahnesine geçecek şekilde, A'ya haber ver) ya da CREDITS satırını sil.
 - [ ] O4: Rüstem reddedilince masada "camın kırıldı" kartı + `sfx_glass_break` (Tarık'tan).
-- [ ] O1: `OGUZHAN.md` "Mevcut durum" (kota satırı, "Sırada" eski).
+- [x] O1: `OGUZHAN.md` "Mevcut durum" (kota satırı, "Sırada" eski).
+  - (B, 17 Ekim) Güncellendi.
 
 **Tarık (EEE):**
 - [x] (EEE, 01:45: MiddleCollapsed son metni yazıldı — sayı varsaymaz; İyi sondaki "On dört gün" → "Günler boyunca", gün sayısı değişse de çelişmez) **Y2:** `Data/Endings/`: senin 3 asset'in (`3da4deb`) + A'nın `MiddleCollapsed.asset` ("Enkazın Gölgesi", Orta/yıkım sonu). **MiddleCollapsed'ın taslak metnini A yazdı** — son halini sen yaz (ton: suçlamasız, ciddi). Hepsi Game.unity'ye bağlı.

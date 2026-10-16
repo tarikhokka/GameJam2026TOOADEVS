@@ -21,6 +21,7 @@ namespace CivilJam.Desk
                 Phase = GamePhase.Desk,
                 Balance = balance,
                 Rules = CreateRules(),
+                Names = CreateNames(),
                 State = new GameState { Day = 1, Money = balance.StartMoney, DisasterChance = balance.DisasterChanceStart },
                 Clients = new List<ClientSO>
                 {
@@ -130,6 +131,14 @@ namespace CivilJam.Desk
             rules.Rules.Add(Rule(ParamType.RebarRatio, "Donatı oranı", "%", 1.0f));
             rules.Rules.Add(Rule(ParamType.SoilQuality, "Zemin taşıma gücü", "kPa", 200));
             return rules;
+        }
+
+        // El kitabındaki akredite lab listesi. "Hızlı Sonuç Lab. Ltd." bilerek listede yok (UnknownLab ipucu).
+        private static NamePoolSO CreateNames()
+        {
+            var names = ScriptableObject.CreateInstance<NamePoolSO>();
+            names.LabNames.AddRange(new[] { GoodLab, "Merkez Yapı Lab.", "Anadolu Malzeme Test" });
+            return names;
         }
 
         private static ParamRule Rule(ParamType type, string name, string unit, float required) => new ParamRule

@@ -109,10 +109,12 @@ namespace CivilJam.Desk.Editor
 
             AddImage(Stretch(NewRect("Background", root)), DeskColor);
 
-            Wire(screen, "hud", BuildHud(root));
+            Wire(screen, "hud", BuildHud(root, out var rulebookButton));
             Wire(screen, "queue", BuildQueue(root));
             Wire(screen, "documentView", BuildDocument(root));
             Wire(screen, "actionPanel", BuildActions(root));
+            Wire(screen, "rulebook", BuildRulebook(root, rulebookButton)); // diğer panellerin üstünde çizilsin diye sonda
+            Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "deskAudio", BuildAudio(root));
 
             EnsureFolder(PrefabFolder);
@@ -160,15 +162,17 @@ namespace CivilJam.Desk.Editor
             return null;
         }
 
-        private static DeskHud BuildHud(Transform parent)
+        private static DeskHud BuildHud(Transform parent, out Button rulebookButton)
         {
             var hud = Anchor(NewRect("Hud", parent), new Vector2(0, 1), Vector2.one, new Vector2(0, -80), Vector2.zero);
             AddImage(hud, HudColor);
-            var layout = HLayout(hud, 20, new RectOffset(30, 30, 0, 0));
+            var layout = HLayout(hud, 20, new RectOffset(30, 30, 10, 10));
             layout.childForceExpandHeight = true;
 
             var title = NewText("LevelTitle", hud, "Ay", 36, LightText, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
             Layout(title, flexW: 1);
+            rulebookButton = NewButton("RulebookButton", hud, "El Kitabı", NeutralButton, Color.white, 26);
+            Layout(rulebookButton, prefW: 220);
             var money = NewText("Money", hud, "Kasa", 30, LightText, TextAlignmentOptions.MidlineRight);
             Layout(money, prefW: 420);
             var quota = NewText("Quota", hud, "Onay", 30, LightText, TextAlignmentOptions.MidlineRight);
@@ -178,6 +182,90 @@ namespace CivilJam.Desk.Editor
             Wire(view, "levelTitleText", title);
             Wire(view, "moneyText", money);
             Wire(view, "quotaText", quota);
+            return view;
+        }
+
+        // El kitabı penceresi. Kök her zaman aktif (grafiği yok, tıklamayı engellemez); açılıp kapanan "Panel".
+        // Arka perde ile kitap kardeş: kitaba tıklama perdenin butonuna kabarmasın.
+        private static RulebookView BuildRulebook(Transform parent, Button openButton)
+        {
+            var root = Stretch(NewRect("Rulebook", parent));
+            var panel = Stretch(NewRect("Panel", root));
+
+            var backdrop = Stretch(NewRect("Backdrop", panel));
+            var backdropButton = backdrop.gameObject.AddComponent<Button>();
+            backdropButton.targetGraphic = AddImage(backdrop, new Color(0, 0, 0, 0.55f));
+            backdropButton.transition = Selectable.Transition.None;
+
+            var book = NewRect("Book", panel);
+            book.anchorMin = book.anchorMax = book.pivot = new Vector2(0.5f, 0.5f);
+            book.sizeDelta = new Vector2(1100, 860);
+            AddImage(book, PaperColor);
+            VLayout(book, 16, new RectOffset(50, 50, 40, 40));
+
+            Layout(NewText("Title", book, "Denetçi El Kitabı", 44, Ink, TextAlignmentOptions.TopLeft, FontStyles.Bold), prefH: 60);
+            var body = NewText("Body", book, "Kurallar", 26, Ink, TextAlignmentOptions.TopLeft);
+            body.enableAutoSizing = true;
+            body.fontSizeMin = 16;
+            body.fontSizeMax = 26;
+            Layout(body, prefH: 0, flexH: 1);
+            var close = NewButton("CloseButton", book, "Kapat", NeutralButton, Color.white, 28);
+            Layout(close, prefH: 70);
+
+            panel.gameObject.SetActive(false);
+
+            var view = root.gameObject.AddComponent<RulebookView>();
+            Wire(view, "openButton", openButton);
+            Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "bodyText", body);
+            Wire(view, "closeButton", close);
+            Wire(view, "backdropButton", backdropButton);
+            return view;
+        }
+
+        // 1. gün öğretici kartı: perde + ortada kart (başlık, metin, sayfa, Atla / İleri). Kart metinleri TutorialView'da.
+        private static TutorialView BuildTutorial(Transform parent)
+        {
+            var panel = Stretch(NewRect("Tutorial", parent));
+            AddImage(panel, new Color(0, 0, 0, 0.6f)); // perde: arkadaki masaya tıklanmasın
+
+            var card = NewRect("Card", panel);
+            card.anchorMin = card.anchorMax = card.pivot = new Vector2(0.5f, 0.5f);
+            card.sizeDelta = new Vector2(940, 560);
+            AddImage(card, PaperColor);
+            VLayout(card, 20, new RectOffset(56, 56, 44, 40));
+
+            var title = NewText("Title", card, "Başlık", 42, Ink, TextAlignmentOptions.TopLeft, FontStyles.Bold);
+            Layout(title, prefH: 60);
+            var body = NewText("Body", card, "Metin", 30, Ink, TextAlignmentOptions.TopLeft);
+            body.enableAutoSizing = true;
+            body.fontSizeMin = 18;
+            body.fontSizeMax = 30;
+            Layout(body, prefH: 0, flexH: 1);
+
+            var footer = NewRect("Footer", card);
+            var footerLayout = HLayout(footer, 16, new RectOffset(0, 0, 0, 0));
+            footerLayout.childForceExpandHeight = true;
+            Layout(footer, prefH: 70);
+            var page = NewText("Page", footer, "1 / 4", 26, Ink, TextAlignmentOptions.MidlineLeft);
+            Layout(page, flexW: 1);
+            var skip = NewButton("SkipButton", footer, "Atla", NeutralButton, Color.white, 26);
+            Layout(skip, prefW: 180);
+            var next = NewButton("NextButton", footer, "İleri", ApproveGreen, Color.white, 30);
+            Layout(next, prefW: 240);
+
+            panel.gameObject.SetActive(false);
+
+            // Bileşen panele değil, hep aktif ayrı bir objeye konur: pasif objede Awake çalışmaz.
+            var holder = Stretch(NewRect("TutorialController", parent));
+            var view = holder.gameObject.AddComponent<TutorialView>();
+            Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "titleText", title);
+            Wire(view, "bodyText", body);
+            Wire(view, "pageText", page);
+            Wire(view, "nextButton", next);
+            Wire(view, "nextLabel", next.GetComponentInChildren<TMP_Text>());
+            Wire(view, "skipButton", skip);
             return view;
         }
 

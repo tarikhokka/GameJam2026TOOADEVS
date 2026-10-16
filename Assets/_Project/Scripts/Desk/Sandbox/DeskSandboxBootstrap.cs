@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace CivilJam.Desk
 {
-    // Sandbox_Desk sahnesinde masayı sahte bir günle başlatır; mesai bitince sonucu loglar ve baştan açar.
+    // Sandbox_Desk sahnesinde masayı sahte bir günle başlatır; mesai bitince sonucu loglar ve sonraki günü açar.
     public class DeskSandboxBootstrap : MonoBehaviour
     {
         [SerializeField] private DeskScreen screen;
 
         private GameContext context;
+        private int day;
 
         private void Start()
         {
@@ -17,9 +18,11 @@ namespace CivilJam.Desk
             StartDay();
         }
 
+        // Aynı sahte gün tekrar açılır ama gün sayısı artar (öğretici sadece 1. gün çıkar).
         private void StartDay()
         {
             context = SandboxDeskContext.Create();
+            context.State.Day = ++day;
             screen.Show(context);
         }
 

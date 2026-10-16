@@ -14,6 +14,8 @@ namespace CivilJam.Desk
         [SerializeField] private DocumentView documentView;
         [SerializeField] private ActionPanel actionPanel;
         [SerializeField] private DeskAudio deskAudio;
+        [SerializeField] private RulebookView rulebook;
+        [SerializeField] private TutorialView tutorial;
 
         [Tooltip("Karar kaşesi basıldıktan sonra sıradaki dosyaya geçmeden önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -48,6 +50,8 @@ namespace CivilJam.Desk
             actionPanel.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
             actionPanel.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
             actionPanel.FinishClicked += Finish;
+            if (rulebook != null) rulebook.Toggled += PlayPaper;
+            if (tutorial != null) tutorial.PageChanged += PlayPaper;
         }
 
         public void Show(GameContext gameContext)
@@ -59,8 +63,10 @@ namespace CivilJam.Desk
             stamping = false;
 
             gameObject.SetActive(true);
+            if (rulebook != null) rulebook.Bind(context);
             if (deskAudio != null) deskAudio.StartMusic();
             Select(FirstPendingId());
+            if (tutorial != null && context.State.Day == 1) tutorial.Open();
         }
 
         public void Hide()
@@ -68,6 +74,8 @@ namespace CivilJam.Desk
             Unsubscribe();
             StopAllCoroutines();
             stamping = false;
+            if (rulebook != null) rulebook.Close();
+            if (tutorial != null) tutorial.Close();
             if (deskAudio != null) deskAudio.StopMusic();
             gameObject.SetActive(false);
         }

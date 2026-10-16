@@ -8,6 +8,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Görsel
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
+| Kenney "Modular Characters" parçaları (ten, saç, yüz, gömlek) — 6 müteahhit portresi bu parçalardan birleştirildi | `Assets/_Project/Art/portrait_*.png` (masa, müteahhit) | https://kenney.nl/assets/modular-characters | CC0 1.0 | Tarık | 2026-10-17 |
 
 ## Ses / Müzik
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -42,6 +43,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Gün başı ve inşaat ekranlarının Unity UI kurulumu, Core verilerini gösteren script'ler, prefab ve sandbox bağlantıları; inşaat ekranı için 0/2 onay ve devam butonu Play testi | `Assets/_Project/Scripts/Flow/UI/DayIntroScreen.cs`, `Assets/_Project/Scripts/Flow/UI/ConstructionScreen.cs`, `Assets/_Project/Scripts/Flow/Editor/ConstructionSetup.cs`, `Assets/_Project/Scripts/Flow/Editor/FlowBuilder.cs`, `Assets/_Project/Scripts/Flow/Sandbox/FlowSandboxBootstrap.cs`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Prefabs/Flow/ConstructionScreen.prefab`, `Assets/_Project/Scenes/Sandbox_Flow.unity`, `ONUR.md` | Onur Kabadayılar | 2026-10-17 |
 | Claude (Anthropic) | Proje hafıza dokümanı, iş planı, bu dosyanın şablonu | `memory.md`, `CLAUDE.md`, `CREDITS_AND_AI.md` | Tarık | 2026-10-16 |
 | Claude (Anthropic) | Geçici placeholder görselleri üreten script (düz renk + dosya adı yazısı); finalde değiştirilecek | `Assets/_Project/Art/*.png` | Tarık | 2026-10-16 |
+| Claude (Anthropic) | Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması; son metinlerinin kod koşullarıyla tutarlılık düzeltmesi, EndingSO asset'leri ve "Enkazın Gölgesi" son metninin son hali; README son düzenlemesi (ekip, kabadayı, sonlar, jüri kısayolları); oyun içi Emeği Geçenler metni | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset`, `Assets/_Project/Data/Endings/*.asset` | Tarık | 2026-10-16 |
 | Claude Code (Anthropic) | Core veri sözleşmesi kodu, deprem simülatörü, A rolü çalışma planı | `Assets/_Project/Scripts/Core/**`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
 | Claude Code (Anthropic) | Core Faz 1: proje üretici, afet sistemi, oyun oturumu/yöneticisi, kayıt, debug arayüzü, testler, veri asset ve Game sahnesi kurulum aracı; kurgusal isim listeleri | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `Assets/_Project/Scenes/Game.unity`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
@@ -78,6 +80,9 @@ Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
 Menü müziği: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
 Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
+
+GÖRSELLER
+Müteahhit karakterleri: "Modular Characters" — Kenney (kenney.nl), CC0
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1

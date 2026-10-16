@@ -29,5 +29,6 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_good.png` | Ending (İyi) | C | P |
 | `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
+| `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (Kenney Modular Characters parçalarından birleştirildi, 400x460 şeffaf) |
 
 Durum: `-` yok, `P` placeholder, `F` final.

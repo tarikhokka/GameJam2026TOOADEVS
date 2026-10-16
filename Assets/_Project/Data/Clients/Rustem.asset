@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: rustem
   DisplayName: "Balyoz Rüstem"
-  Portrait: {fileID: 0}
+  Portrait: {fileID: 21300000, guid: c313673d0ea7e824faf808a42c0995ef, type: 3}
   IsHonest: 0
   IsThug: 1
   BribeRange: {x: 1500, y: 2500}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: selim
   DisplayName: "Selim Kâğıtçıoğlu"
-  Portrait: {fileID: 0}
+  Portrait: {fileID: 21300000, guid: 8e50244066204e044a9f3ac2cc725647, type: 3}
   IsHonest: 0
   IsThug: 0
   BribeRange: {x: 0, y: 0}

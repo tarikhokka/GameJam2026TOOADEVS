@@ -66,7 +66,7 @@ namespace CivilJam.Flow
         }
 
         public static Button Button(Transform parent, string name, string label, Action onClick,
-            Vector2 anchorMin, Vector2 anchorMax, float fontSize = 34f)
+            Vector2 anchorMin, Vector2 anchorMax, float fontSize = 34f, bool allowWhilePaused = false)
         {
             var rt = Rect(parent, name, anchorMin, anchorMax);
             var img = rt.gameObject.AddComponent<Image>();
@@ -79,7 +79,10 @@ namespace CivilJam.Flow
             colors.pressedColor = new Color(0.75f, 0.7f, 0.6f, 1f);
             colors.disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.6f);
             btn.colors = colors;
-            btn.onClick.AddListener(() => onClick());
+            btn.onClick.AddListener(() =>
+            {
+                if (allowWhilePaused || !PauseMenu.InputBlocked) onClick();
+            });
 
             Text(rt, "Label", label, fontSize, Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
             return btn;

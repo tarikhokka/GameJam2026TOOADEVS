@@ -33,6 +33,7 @@ namespace CivilJam.Flow
 
         void StartDay()
         {
+            if (PauseMenu.InputBlocked) return;
             startDayButton.interactable = false;
             Finish();
         }

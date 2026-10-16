@@ -31,6 +31,7 @@ namespace CivilJam.Flow
 
         void Continue()
         {
+            if (PauseMenu.InputBlocked) return;
             continueButton.interactable = false;
             Finish();
         }

@@ -55,7 +55,7 @@ namespace CivilJam.Flow
 
         private void Update()
         {
-            if (AdvancePressed())
+            if (!PauseMenu.InputBlocked && AdvancePressed())
                 skipRequested = true;
         }
 
@@ -63,18 +63,20 @@ namespace CivilJam.Flow
         {
             for (int pageIndex = 0; pageIndex < pages.Length; pageIndex++)
             {
+                while (PauseMenu.InputBlocked) yield return null;
                 storyText.text = pages[pageIndex];
                 storyText.maxVisibleCharacters = 0;
                 SetHint(pageIndex, "Metni tamamlamak için tıkla · Space / Enter");
                 yield return Fade(1f);
                 yield return TypePage(pages[pageIndex]);
+                while (PauseMenu.InputBlocked) yield return null;
                 SetHint(pageIndex, pageIndex == pages.Length - 1
                     ? "Mesaiye başlamak için tıkla · Space / Enter"
                     : "Devam etmek için tıkla · Space / Enter");
 
                 // sayfa bitti, oyuncunun devam etmesini bekle
                 skipRequested = false;
-                yield return new WaitUntil(() => skipRequested);
+                yield return new WaitUntil(() => !PauseMenu.InputBlocked && skipRequested);
                 skipRequested = false;
 
                 yield return Fade(0f);
@@ -94,6 +96,7 @@ namespace CivilJam.Flow
 
             for (int i = 1; i <= total; i++)
             {
+                while (PauseMenu.InputBlocked) yield return null;
                 // yazarken tıklanırsa sayfanın tamamını göster
                 if (skipRequested)
                 {
@@ -105,7 +108,8 @@ namespace CivilJam.Flow
                 if (typeSound != null && !char.IsWhiteSpace(storyText.textInfo.characterInfo[i - 1].character))
                     typeSound.Play();
 
-                yield return new WaitForSecondsRealtime(charDelay);
+                for (float elapsed = 0; elapsed < charDelay; elapsed += PauseMenu.AnimationDeltaTime)
+                    yield return null;
             }
 
         }
@@ -119,13 +123,15 @@ namespace CivilJam.Flow
         private IEnumerator Fade(float target)
         {
             if (fadeGroup == null) yield break;
+            while (PauseMenu.InputBlocked) yield return null;
 
             float start = fadeGroup.alpha;
-            for (float t = 0; t < fadeDuration; t += Time.unscaledDeltaTime)
+            for (float t = 0; t < fadeDuration; t += PauseMenu.AnimationDeltaTime)
             {
                 fadeGroup.alpha = Mathf.Lerp(start, target, t / fadeDuration);
                 yield return null;
             }
+            while (PauseMenu.InputBlocked) yield return null;
             fadeGroup.alpha = target;
         }
 

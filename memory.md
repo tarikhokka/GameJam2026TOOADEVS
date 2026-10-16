@@ -127,9 +127,9 @@
   - (B, 17 Ekim) O4: kabadayı reddedilince kaşeden sonra cam sesi (`sfx_glass_break`) + "Camın kırıldı!" kartı (tamir ücreti `Balance.WindowRepairCost`, "bugünün giderlerine eklendi"). Sandbox (4. dosya: Rüstem) ve Game.unity'de test edildi.
 - **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A `0bebf9b`'de Game.unity'ye ekledi.
 - **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: hazır asset (tercihen CC0), piksel art yok. Tarz: "İyi Pizza, Güzel Pizza" (Good Pizza, Great Pizza) benzeri flat cartoon; müteahhit masanın önüne kayarak gelir (karar 17 Ekim gece).
-- **Sırada:** bkz. aşağıda "📌 Analiz sonrası işler" (kişi bazlı). Özet: C → Esc menüsü + ara ekranlar; B → öğretici/denetçi notu + lab listesi + intro kararı; EEE → MiddleCollapsed son metni, README son hali, final görsel/ses; A → denge turu, 20:00 ikinci build.
+- **Sırada:** bkz. aşağıda "📌 Analiz sonrası işler" (kişi bazlı). Özet: C → ödeme/Save, credits ve müzik (Esc tamam); B → öğretici/denetçi notu + lab listesi + intro kararı; EEE → MiddleCollapsed son metni, README son hali, final görsel/ses; A → denge turu, 20:00 ikinci build.
 - **Bilinen sorunlar:**
-  - Esc menüsü yok (README'de var, Onur yapacak).
+  - Esc menüsü C tarafından eklendi; son Windows build'de kontrol edilecek.
   - Oyuncuya kuralları anlatan öğretici yok (Oğuzhan + Tarık). — (B, 17 Ekim) Masaya eklendi (El Kitabı + 1. gün kartları); metinler Tarık'ın onayını bekliyor.
   - Unity'yi **6000.6.5f1 ile açmayın** (proje sürümünü yükseltiyor; ekip 6000.6.4f1). `ProjectVersion.txt` değişirse commit'lemeyin.
   - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
@@ -198,7 +198,7 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
 - `Flow/UI/ResultScreen.cs` (Onur): ayakta kalan binada `ResponsibilityText` gösteriliyor; kapsamda bina yokken ayrı cümle (O3). İki küçük blok, `(A, Core)` yorumlu.
 
 **Onur (C):**
-- [ ] **Y4 Esc menüsü:** her ekranda Esc → Devam / Ana menü / Çıkış. README "Esc menü açar" diyor; gelene kadar yalan.
+- [x] **Y4 Esc menüsü (C, 17 Ekim):** `Flow/UI/PauseMenu.cs` MainMenu, Game ve sandbox'larda otomatik kurulur; sahne kurulumu gerekmez. Devam / Ana menü / Çıkış; arka UI girdileri, intro ilerlemesi ve debug tuşları engellenir; zaman/ses geri yüklenir. EditMode 15/15 + Flow PlayMode 3/3. Son Windows build kontrolü bekliyor.
 - [ ] **K4:** DayIntro / Construction / Save ekranları (önceki madde). Not: build'de artık mavi kutu çıkmıyor, ekranı olmayan faz atlanıyor; yani bunlar görsel kazanç, engel değil.
 - [ ] `EndingScreen` ve `ResultScreen` değişikliklerime göz at; istersen kendi üslubunla düzenle.
 - [ ] Kötü sonda "hâkim isimleri okuyor" anı: `ctx.State` yerine son afetin `VictimNames`'i gerekiyorsa A'ya söyle, Core'dan veririm.
@@ -217,7 +217,7 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
 
 **Tarık (EEE):**
 - [x] (EEE, 01:45: MiddleCollapsed son metni yazıldı — sayı varsaymaz; İyi sondaki "On dört gün" → "Günler boyunca", gün sayısı değişse de çelişmez) **Y2:** `Data/Endings/`: senin 3 asset'in (`3da4deb`) + A'nın `MiddleCollapsed.asset` ("Enkazın Gölgesi", Orta/yıkım sonu). **MiddleCollapsed'ın taslak metnini A yazdı** — son halini sen yaz (ton: suçlamasız, ciddi). Hepsi Game.unity'ye bağlı.
-- [ ] (EEE, 02:00: soyadlar, roller, kabadayı maddesi, "dört son", repo linki ve Jüri kısayolları (F9/F10, build'de de çalışıyor) eklendi. KALAN (Pazar): video linki + oyun ekran görüntüsü — README'ye "eklenecek" diye boş yer açılmadı. ⚠️ C: README "Menü: Esc" diyor, Esc menüsü henüz yok; build'e kadar yapılmazsa satır silinmeli) **K3:** `README.md` taslağı A'da hazır (kurulum, kontroller, nasıl oynanır, ekip). Son halini sen ver: soyadlar, oyun görseli, video bağlantısı.
+- [ ] (EEE, 02:00: soyadlar, roller, kabadayı maddesi, "dört son", repo linki ve Jüri kısayolları (F9/F10, build'de de çalışıyor) eklendi. KALAN (Pazar): video linki + oyun ekran görüntüsü — README'ye "eklenecek" diye boş yer açılmadı. C, 17 Ekim: Esc menüsü eklendi; son Windows build kontrolü bekliyor) **K3:** `README.md` taslağı A'da hazır (kurulum, kontroller, nasıl oynanır, ekip). Son halini sen ver: soyadlar, oyun görseli, video bağlantısı.
 - [ ] (EEE, 02:15: SESLER TAMAM — `sfx_glass_break` (B bağlayacak), `mus_menu` (C), `mus_ending_sad` (C, Kötü + iki Orta son); hepsi CC0, CREDITS + Emeği Geçenler metninde. KALAN: görseller + portreler) O6: masa ve gazete görselleri final, müteahhit portreleri, `sfx_glass_break`, `mus_menu`, `mus_ending_sad`.
 
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".

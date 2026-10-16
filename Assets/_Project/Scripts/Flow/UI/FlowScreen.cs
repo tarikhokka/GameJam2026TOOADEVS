@@ -44,7 +44,7 @@ namespace CivilJam.Flow
 
         protected void Finish()
         {
-            if (_completed) return;
+            if (_completed || PauseMenu.InputBlocked) return;
             _completed = true;
             Completed?.Invoke();
         }

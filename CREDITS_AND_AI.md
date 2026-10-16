@@ -38,6 +38,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Yapay zekâ kullanımı
 | Araç | Ne için kullanıldı | Hangi dosyalar | Kullanan | Tarih |
 |---|---|---|---|---|
+| ChatGPT / Codex (OpenAI) | Esc duraklatma menüsü, arka ekran girdi kilidi, intro duraklatma uyumu ve PlayMode testleri | `Assets/_Project/Scripts/Flow/UI/PauseMenu.cs`, `UiKit.cs`, `FlowScreen.cs`, `DayIntroScreen.cs`, `ConstructionScreen.cs`, `IntroSequence.cs`, `Assets/_Project/Scripts/Flow/Tests/PlayMode/` | Onur Kabadayılar | 2026-10-17 |
 | ChatGPT / Codex (OpenAI) | Gün başı ve inşaat ekranlarının Unity UI kurulumu, Core verilerini gösteren script'ler, prefab ve sandbox bağlantıları; inşaat ekranı için 0/2 onay ve devam butonu Play testi | `Assets/_Project/Scripts/Flow/UI/DayIntroScreen.cs`, `Assets/_Project/Scripts/Flow/UI/ConstructionScreen.cs`, `Assets/_Project/Scripts/Flow/Editor/ConstructionSetup.cs`, `Assets/_Project/Scripts/Flow/Editor/FlowBuilder.cs`, `Assets/_Project/Scripts/Flow/Sandbox/FlowSandboxBootstrap.cs`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Prefabs/Flow/ConstructionScreen.prefab`, `Assets/_Project/Scenes/Sandbox_Flow.unity`, `ONUR.md` | Onur Kabadayılar | 2026-10-17 |
 | Claude (Anthropic) | Proje hafıza dokümanı, iş planı, bu dosyanın şablonu | `memory.md`, `CLAUDE.md`, `CREDITS_AND_AI.md` | Tarık | 2026-10-16 |
 | Claude (Anthropic) | Geçici placeholder görselleri üreten script (düz renk + dosya adı yazısı); finalde değiştirilecek | `Assets/_Project/Art/*.png` | Tarık | 2026-10-16 |

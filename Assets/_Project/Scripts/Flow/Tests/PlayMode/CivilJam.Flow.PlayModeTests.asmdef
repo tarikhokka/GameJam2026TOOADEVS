@@ -1,0 +1,21 @@
+{
+    "name": "CivilJam.Flow.PlayModeTests",
+    "rootNamespace": "CivilJam.Flow.Tests",
+    "references": [
+        "CivilJam.Core",
+        "CivilJam.Flow",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "Unity.InputSystem",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": ["nunit.framework.dll"],
+    "autoReferenced": false,
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

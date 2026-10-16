@@ -146,6 +146,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [x] ClientSO asset'lerini **sen oluştur** (metinler senin; düzeltmeleri de sen yapacaksın). Project'te sağ tık → Create → CivilJam → Client. Konum: `Assets/_Project/Data/Clients/`, dosya adları `Rifat.asset`, `Sevim.asset`, `Kemal.asset`, `Nuri.asset`, `Selim.asset`, `Rustem.asset`.
 - [x] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
 - [ ] `Data/` altındaki diğer asset'lere (Balance, RuleSet, Days, Expenses, NamePool) dokunma. Headlines asset'ini doldurmak istersen önce A'ya haber ver.
+  - (EEE, 00:15) A ile konuşuldu, Headlines.asset EEE tarafından dolduruldu: 20 manşet, `ICERIK_TASLAK.md` ile aynı. Eski "{count} can kaybı" kullanımı kaldırıldı.
 - [x] (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
 - **Selim sorusunun cevabı:** `IsHonest = false`, `BribeRange = 0-0` **doğru**, öyle bırak. Kural: `BribeRange` 0-0 = asla rüşvet teklif etmez. Core müteahhidin rolünü bu alanlardan çıkaracak, sen başka alan doldurmayacaksın:
   - Uygun proje → `IsHonest = true` (Rıfat, Sevim)
@@ -164,6 +165,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [ ] Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` okusun.
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
+- **Credits ("Emeği Geçenler") ekranı zorunlu** (ortam sesi CC BY 4.0). Sahibi belli değil; öneri: C (MainMenu onun). Metin EEE'de hazır: `CREDITS_AND_AI.md` sonu.
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.

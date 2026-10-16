@@ -118,7 +118,7 @@
 - **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı. (23:50) Sesler (sfx_click/paper/stamp, mus_office_ambient) ve ONAYLANDI/REDDEDİLDİ karar kaşesi animasyonu eklendi.
 - **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
 - **Flow (C, 16 Ekim gece):** Result/DaySummary/DailyExpenses/Ending ekranları ve MainMenu kodlandı (Unity'de derleme/prefab kurulumu bekliyor). Game.unity'ye ekleme A'da; Build Settings'e MainMenu 1. sıra. DayIntro/Construction ekranı yok (yedek arayüz geçiyor).
-- **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
+- **Sırada (B güncelledi, 00:25):** Masa Game.unity'de (A ekledi). Flow prefab'larının Game.unity'ye eklenmesi (A, Onur push'ladı); A: ekonomi/sonlar (Faz 2; kota kaldırıldı).
 - **Bilinen sorunlar:** —
 
 ### Güncel entegrasyon durumu (cedfa0d sonrası yerel kontrol)

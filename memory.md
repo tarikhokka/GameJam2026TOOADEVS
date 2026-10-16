@@ -88,6 +88,7 @@
 - Scenes/Game.unity sadece A.
 - Onur’un kişisel C rolü planı: `ONUR.md`. Ortak kararların kaynağı bu dosyadır; kişisel plan ortak kararları değiştirmez.
 - Kural: kimse başkasının sahne/prefab dosyasını açıp kaydetmez. Saatte bir main'i çek.
+- ⚠️ **ÖNEMLİ:** `Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset` Play'de kendiliğinden değişir (Türkçe karakterler dinamik atlasa eklenir). **Commit'lemeyin**; commit'lenirse diğerlerinin pull'u takılır. Değişiklik listesinde görürseniz dokunmayın, pull engellerse `git checkout -- "<dosya yolu>"` ile geri alın.
 
 ## 5. Jam kuralları (ihlal = diskalifiye)
 - Repo PUBLIC olmalı (private kalırsa puandan bağımsız diskalifiye). Build ile repo kodu uyumlu olmalı.

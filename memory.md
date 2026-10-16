@@ -160,6 +160,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - Düz uygunsuz (ilk günler) → dürüst değil + rüşvet vermeyen
   - Durum: Core şu an sadece `IsHonest`'e bakıyor (Selim'e 0 TL zarf, Kemal'e rüşvetsiz proje düşebiliyor). Düzeltme A'da, yapılacak.
 - Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
+- [x] (EEE, 00:40) Headlines.asset 20 manşetle dolduruldu; eski "{count} can kaybı" kaldırıldı. A kontrol etti: tamam. Kural: `{count}` = yıkılan **bina** sayısı (sadece MultiCollapse), `{building}` = bina adı. Credits ekranı → Onur'a sorulacak (metin `CREDITS_AND_AI.md` sonunda).
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
@@ -168,6 +169,8 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - [ ] 2. Menü **CivilJam > Flow > 1 - Build Flow Prefabs** ve **2 - Build MainMenu Scene** çalıştır. Prefab'lar (`Prefabs/Flow/*.prefab` + `.meta`) ve `MainMenu.unity` + Build Settings değişikliğini **sen** commit'le/push'la (prefab'ları başka kimse üretmeyecek; iki kişi üretirse GUID çakışır).
   - [ ] 3. Sandbox_Flow'da (menü 3) gazete/gün özeti/ödeme/son ekranını dene.
   - [ ] 4. Haber ver → A prefab'ları Game.unity'ye ekler (Install Screens). Game.unity'yi kendin açıp KAYDETME.
+- [ ] **Manşet `{count}` (A, 00:40):** `ResultScreen.cs:139` (`if (collapsed == 1) count = first.Deaths;`) satırını sil. Tarık'ın kuralı: `{count}` her zaman yıkılan bina sayısı; ölü sayısı manşette yok, gazete gövdesinde. Şu an zararsız (SingleCollapse manşetleri `{count}` kullanmıyor) ama ileride yanlış sayı basar.
+- [ ] **Credits ekranı:** Tarık soracak. Ortam müziği CC BY 4.0 olduğu için oyunda credits ekranı zorunlu; metin `CREDITS_AND_AI.md` sonunda hazır. (MainMenu'den bir buton yeterli.)
 - [ ] **Yeni iş (Ahmet kararı, 00:30): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (senin `FlowScreen` tabanın uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Sırası: önce gazete (yukarıdaki 1-4), sonra bunlar.
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
 - [ ] Gazete: `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`; toplamlar `ctx.LastQuake.TotalDeaths/TotalInjured`; tutuklama `ctx.LastQuake.Jailed`. Afetsiz gün Result fazı hiç açılmaz.

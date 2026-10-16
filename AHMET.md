@@ -40,7 +40,7 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [ ] Kota kontrolü
 
 ### Faz 3 — İçerik mantığı (Cts 14 → 20)
-- [ ] Fabrika/yangın; yıkım nedeni şablon cümleleri; manşet seçimi
+- [ ] Fabrika/yangın; yıkım nedeni şablon cümleleri (manşet seçimi Flow'da yapıldı — ResultScreen, Tarık'ın Headlines.asset'i)
 - [ ] EndingResolver (İyi / Kötü / Orta); Save/Load JSON
 - [ ] Gizli gün atlama kısayolu
 

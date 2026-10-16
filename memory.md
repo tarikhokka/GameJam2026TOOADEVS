@@ -77,6 +77,7 @@
 - `Assets/_Project/Art/` (EEE) — placeholder sprite'lar (Single, PPU 100). Dosya adları ve hangi ekranın kullandığı: `Art/README.md`. Final görsel aynı adla üzerine yazılır.
 - `Assets/_Project/Audio/` (EEE) — sesler `.ogg`. İsim listesi: `Audio/README.md`.
 - `CREDITS_AND_AI.md` (EEE) — hazır asset + AI kullanım kaydı.
+- `Assets/TextMesh Pro/` — TMP Essential Resources (A import etti, 23:15). Desk/Flow yazıları için gerekli; tekrar import etme, silme.
 - `ICERIK_TASLAK.md` (EEE) — SO metin taslakları (şimdilik 6 müteahhit). Onaylananlar `Data/` altındaki asset dosyalarına taşınır (A ile koordineli).
 
 ## 4. Takım ve klasör sahipliği

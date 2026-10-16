@@ -30,6 +30,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
 | Unity 2D proje şablonu (Welcome klasörü, URP ayarları) | `Assets/Welcome`, `Assets/Settings` | Unity Hub şablonu | Unity Companion License | Tarık | 2026-10-16 |
+| TextMesh Pro Essential Resources (LiberationSans SDF font, shader'lar, TMP Settings) | `Assets/TextMesh Pro` (tüm TMP yazıları) | Unity uGUI paketi (com.unity.ugui) içinden import | Unity Companion License; LiberationSans: SIL OFL 1.1 | Ahmet İlman | 2026-10-16 |
 
 ## Yapay zekâ kullanımı
 | Araç | Ne için kullanıldı | Hangi dosyalar | Kullanan | Tarih |

@@ -25,8 +25,8 @@
   - Strength >= 1 ise ASLA yıkılmaz (dürüst yol garantisi).
   - Aksi halde Strength + gürültü(±0.15) < Intensity ise yıkılır. Intensity yapılandırılmış afet aralığından çekilir, max <= 1.0.
 - Rüşvet teklif eden her proje uygunsuzdur. Bazı uygunsuz projeler rüşvetsiz, sahte belgeyle temiz görünür; ek testle yakalanır. Dürüst usta = rüşvetsiz gelen gerçekten uygun proje.
-- İki katmanlı sahte belge: (1) bedava ipuçları (parsel/tarih/lab tutarsızlığı), (2) ücretli ek test (Reported vs Actual farkını açar).
-  - Kaşe ve imza belgelerde her zaman gerçek görünür; sahte belge bunlardan anlaşılmaz (WrongStamp/WrongSignature ipucu kaldırıldı). Uygulama: A `ClueType`/`ProjectGenerator`dan iki ipucunu çıkarır; B ekranda kaşe kodunu yazı olarak göstermez.
+- İki katmanlı sahte belge: (1) bedava ipuçları (parsel/tarih/lab/kaşe/imza tutarsızlığı), (2) ücretli ek test (Reported vs Actual farkını açar).
+  - Kaşe ve imza ipuçları yazıyla ve karşılaştırmayla çalışır (A'nın 22:50 uygulaması): kaşe = "<LAB ADI> · AKREDİTE", sahtede başlıktaki lab adıyla uyuşmaz; imza = sahtede lab raporunu başvurudakinden farklı mühendis imzalar. Ayrı sahte kaşe/imza görseli yok.
 - Hapis: kalıcı JailRisk. Yıkım varsa zar atılır.
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
@@ -151,7 +151,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
   - Düz uygunsuz (ilk günler) → dürüst değil + rüşvet vermeyen
   - Durum: Core şu an sadece `IsHonest`'e bakıyor (Selim'e 0 TL zarf, Kemal'e rüşvetsiz proje düşebiliyor). Düzeltme A'da, yapılacak.
 - Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
-- ⚠️ **Açık çakışma — A'nın kararını bekliyor:** 23:07 kararın "kaşe/imza ipucu kaldırıldı" ile A'nın 22:50 düzeltmesi aynı anda yapıldı. Kodda ikisi hâlâ ipucu: kaşe = `"<LAB ADI> · AKREDİTE"` (sahtede başlıktaki lab adıyla uyuşmaz), imza = lab raporunu başvurudakinden farklı mühendis imzalar (nokta yok artık; `STAMP_FAKE` yazısı da yok). Hangisinin geçerli olacağını Ahmet netleştirip burayı güncelleyecek.
+- ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
@@ -205,6 +205,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:40 (UTC+3) | Belge kaşesi (StampId) görsel değil okunabilir metin; sahte kaşe = başlıktaki lab adıyla uyuşmayan kaşe | Görsel iş yükü yok; ipucu okuyarak yakalanır, veri gerçek/sahte bilgisini sızdırmaz |
 | 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
 | 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
+| 2026-10-16 23:50 (UTC+3) | 23:15 kararı geri alındı: kaşe/imza ipuçları A'nın versiyonuyla kalır (lab adı uyuşmazlığı, farklı mühendis imzası). 5 ipucu | A'nın düzeltmesi iki sorunu da çözdü (açık STAMP_FAKE yazısı, görünmeyen nokta); görsel yükü yok (EEE kararı) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

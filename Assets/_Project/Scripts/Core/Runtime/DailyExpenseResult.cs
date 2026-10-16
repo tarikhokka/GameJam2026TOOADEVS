@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace CivilJam.Core
 {
-    /// <summary>Haftalık hesaplaşma. Flow kalemleri gösterir, oyuncu seçimini IGameActions.SetExpensePaid ile bildirir.</summary>
+    /// <summary>Günlük hesaplaşma (her gün sonunda). Flow kalemleri gösterir, oyuncu seçimini IGameActions.SetExpensePaid ile bildirir.</summary>
     [Serializable]
-    public class WeeklyExpenseResult
+    public class DailyExpenseResult
     {
-        public int Week;
+        public int Day;
         public List<ExpenseLine> Lines = new List<ExpenseLine>();
         public int MoneyBefore;
         public int MoneyAfter;
         public int DebtBefore;
         public int DebtAfter;
-        public bool OfficeClosed;      // Borç limiti aşıldı → Orta son
+        public bool Applied;           // Core uyguladı mı (çift ödeme koruması)
 
         public int TotalSelected
         {
@@ -32,7 +32,7 @@ namespace CivilJam.Core
         public string ExpenseId;       // ExpenseSO.Id
         public string DisplayName;
         public int Amount;
-        public bool Mandatory;         // Ödenmezse borca eklenir (kira, kredi)
+        public bool Mandatory;         // Ödenmezse sonucu henüz kararlaştırılmadı (geçici: borca eklenir)
         public bool Paid;
     }
 }

@@ -12,9 +12,9 @@
   - Mizah karakterlerde; sonlar ve deprem sonrası ciddi ve duygusal.
 
 ## 2. Kesinleşen oyun kararları
-- Level sistemi kaldırıldı; oyun gün sistemiyle ilerleyecek. Hâlâ plan aşamasındayız; aşağıdaki yeni akış kodda uygulanmış kabul edilmez.
-- Planlanan akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Result/gazete, yoksa DaySummary) → her gün ödeme (günlük giderler) → gün sonu Save → (NextDay | Ending).
-- Her gün sonunda afet olasılığı vardır. Afet olmazsa bir sonraki gün olasılık artar; afet olunca olasılık sıfırlanır. Başlangıç oranı, artış ve üst sınır henüz kararlaştırılmadı (öneri: AHMET.md).
+- Level sistemi kaldırıldı; oyun gün sistemiyle ilerler. Aşağıdaki akış Core'da uygulandı (GameManager, 22:15).
+- Akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Result/gazete, yoksa DaySummary) → DailyExpenses (her gün) → gün sonu Save → (NextDay | Ending). Afet günü gün özeti yok, sadece gazete.
+- Her gün sonunda afet olasılığı vardır. Taban %50, tavan %100 (karar). Afet olmazsa sonraki gün olasılık artar (öneri +%10); afet olunca tabana (%50) döner.
 - Afet, son afetten bu yana (iki afet arasında) oyuncunun onayladığı binaları değerlendirir; önceki afetleri atlatmış binalar tekrar değerlendirilmez.
 - Afetsiz günün sonunda gazete gösterilmez. Afet olunca gazete/sonuçta şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü/yaralı sayısı, yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi.
 - Eski level başına proje sayıları geçersizdir. Toplam gün sayısı, günlük proje sayıları ve içerik açılma günleri henüz belirlenmedi. Konut, sahte belgeler, fabrika/yangın içerik hedefleri; sel ve okul/hastane ek kapsamdır.
@@ -42,11 +42,11 @@
 
 ## 3. Mimari
 - Tek `Game` sahnesi + ekranlar prefab. Diğer sahneler: MainMenu, Sandbox_Desk, Sandbox_Flow.
-- Oyun mantığı saf C# (MonoBehaviour yok): üretim, deprem, ekonomi.
+- Oyun mantığı saf C# (MonoBehaviour yok): üretim, deprem, ekonomi (GameSession). Tek MonoBehaviour GameManager: faz sırası + ekran gösterme.
 - Veri:
-  - ScriptableObject: DayConfigSO (eski plan adı LevelConfigSO), RuleSetSO, ClientSO, ExpenseSO, BalanceSO, HeadlineSO, EndingSO.
-  - Runtime plain C#: ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult, WeeklyExpenseResult (mevcut kod). Günlük ödeme kararıyla DailyExpenseResult dönüşümü planlandı; henüz uygulanmadı.
-- Ekranlar IGameScreen uygular: Show(GameContext), Hide(), event Completed. GameManager sadece state değiştirir.
+  - ScriptableObject: DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, BalanceSO, HeadlineSO, EndingSO, NamePoolSO.
+  - Runtime plain C#: ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult (+BuildingOutcome), DailyExpenseResult.
+- Ekranlar IGameScreen uygular: Phase, Show(GameContext), Hide(), event Completed. GameManager sahnedeki ekranları kendisi bulur; ekranı olmayan faz için IMGUI yedek arayüz gösterir. Ekranlar Core'a sadece `ctx.Actions` (IGameActions) ile yazar. B/C kullanım rehberi: `AHMET.md`.
 - Assembly'ler: CivilJam.Core, CivilJam.Desk, CivilJam.Flow. Desk ve Flow sadece Core'a bağlı, birbirini görmez.
 
 ### Dosya haritası
@@ -54,10 +54,15 @@
 
 `Assets/_Project/Scripts/Core/` (asmdef `CivilJam.Core`, namespace `CivilJam.Core`):
 - `Enums.cs` — GamePhase, ParamType, BuildingType, DocumentKind, ClueType, ProjectVerdict, BuildingStatus, EndingType.
-- `Runtime/` — ParamEntry (Required/Reported/Actual), DocumentData, ProjectData (Strength), GameState (kayıt), GameContext (ekranlara verilen), QuakeResult, WeeklyExpenseResult.
-- `Screens/` — IGameScreen (Show/Hide/Completed), IGameActions (ekranlardan Core'a tek giriş: ek test, onay, ret, gider seçimi).
-- `Config/` — BalanceSO, DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, HeadlineSO, EndingSO.
-- `Simulation/EarthquakeSimulator.cs` — yıkılma kuralı + JailRisk + hapis zarı.
+- `Runtime/` — ParamEntry (Required/Reported/Actual), DocumentData, ProjectData (Strength), GameState (kayıt), GameContext (ekranlara verilen), QuakeResult + BuildingOutcome (kayıplar, sorumluluk metni), DailyExpenseResult.
+- `Screens/` — IGameScreen (Phase/Show/Hide/Completed), IGameActions (ekranlardan Core'a tek giriş: ek test, onay, ret, gider seçimi).
+- `Config/` — BalanceSO, DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, HeadlineSO, EndingSO, NamePoolSO (kurgusal isimler).
+- `Simulation/` — EarthquakeSimulator (yıkılma kuralı, son afetten beri onaylananlar, JailRisk, hapis zarı), DisasterSystem (gün sonu zar + olasılık), ProjectGenerator (seed'li günlük projeler), CasualtyGenerator, ExpenseCalculator (günlük gider v0).
+- `Game/` — GameSession (saf C# mantık + IGameActions), GameManager (MonoBehaviour, faz sırası), FallbackGui (geçici IMGUI), SaveSystem (tek slot JSON), GameLaunch (MainMenu "Devam Et" bayrağı).
+- `Editor/CoreSetupBuilder.cs` — menü: CivilJam > Core > Create Missing Data Assets / Build Game Scene (var olanın üzerine yazmaz).
+- `Tests/Editor/CoreRulesTests.cs` — EditMode testleri (Test Runner > EditMode).
+- `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool, Headlines, Days/DayXX (FromDay 1/3/5/8), Expenses/.
+- `Assets/_Project/Scenes/Game.unity` (sadece A) — GameManager + veri bağlı; Build Settings'te.
 - Flow asmdef'i C oluşturur; Desk ve Flow referansı sadece `CivilJam.Core`. Ayrıntı ve Core önerileri: `AHMET.md`.
 - `Assets/_Project/Scripts/Desk/` (B) — Core'dan bağımsız; Core gelince adapter ile bağlanacak.
   - `CivilJam.Desk.asmdef` — Desk assembly'si (şimdilik Core referansı yok).
@@ -99,22 +104,21 @@
 
 ### Durum
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
-- **Core (A, 21:30):** Veri sözleşmesi gün sistemi adlarıyla push'landı (asmdef, runtime tipler, IGameScreen, IGameActions, SO sınıfları, EarthquakeSimulator). Unity'de hatasız derlendi. GameManager henüz yok.
+- **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
 - **Desk (B):** v0 Unity'de test edildi (Sandbox_Desk: onay, red, zarf, ek test, mesai bitişi çalışıyor) ve push'landı. Henüz kendi modelleri + sahte veriyle; sırada Core tiplerine geçiş (IGameScreen + IGameActions).
 - **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (B'nin 9. adımı bekliyor), ClientSO metin taslakları.
-- **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
+- **Sırada:** Desk→Core bağlantısı (B: DeskScreen `IGameScreen`, Phase = Desk, `ctx.TodayProjects` + `ctx.Actions`); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —
 
 ### Güncel entegrasyon durumu (cedfa0d sonrası yerel kontrol)
 - Desk v0 kodu, DeskScreen prefab ve Sandbox_Desk sahnesi artık repoda (`14350ec`). Desk hâlâ kendi modellerini kullanır.
 - Flow: Sandbox_Flow, Canvas ve ResultScreen paneli hazır; içerik/script entegrasyonu yapılmadı.
-- Günlük ödeme, iki afet arasındaki bina kapsamı ve kayıp bilgileri şu an belge kararıdır. Core'da WeeklyExpenseResult/PendingWeekly ve tüm ayaktaki binaları değerlendiren simulator hâlâ mevcut; dönüşüm A'nın sorumluluğunda.
-- BuildingOutcome'a ölen isimleri ve ölü/yaralı sayıları henüz eklenmedi; C bunları üretmez, Core'dan gösterir.
+- (22:15 güncel) Günlük ödeme, iki afet arası bina kapsamı ve kayıp bilgileri Core'da uygulandı: `DailyExpenseResult` / `ctx.PendingExpenses`, `GamePhase.DailyExpenses`, `BuildingOutcome.Deaths/Injured/VictimNames/ResponsibilityText`. C bunları üretmez, Core'dan gösterir.
 - C'nin sıradaki işi gazete görseli/yerleşimi, ardından gazetesiz gün özeti ve günlük hesap ekranıdır. Mevcut panel kullanılabilir.
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
-- Afet olasılığının başlangıcı, artışı ve tavanı (sıfırlama kararlaştı).
+- Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.
 - Başarısız gün, kota, sonlar ve JailRisk kurallarının gün sistemine uyarlanması.
 - Save sonrası yüklemenin sonraki sabaha dönmesi, son ekranında kayıt ve kayıt şemasının kesinleştirilmesi.
@@ -151,6 +155,8 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:30 (UTC+3) | Görsel/ses önce placeholder; final aynı dosya adıyla üzerine yazılır. Sprite Mode Single, PPU 100, ses `.ogg` | .meta/GUID korunur, B/C prefab referansları bozulmaz |
 | 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
 | 2026-10-16 22:45 (UTC+3) | Deprem sahne olarak gösterilmez, gazeteden öğrenilir; Quake ekranı ve deprem/yıkılma sesleri kaldırıldı | Takım kararı (EEE iletti); hassasiyet + kapsam. GameManager akışı ve QuakeResult verisi etkilenmez, sadece ekran yok |
+| 2026-10-16 22:15 (UTC+3) | Afet olasılığı taban %50, tavan %100; afet günü sadece gazete, afetsiz gün sadece gün özeti | Ahmet kararı; Core'da uygulandı (`GamePhase.Quake` silindi) |
+| 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -1,16 +1,19 @@
 namespace CivilJam.Core
 {
-    /// <summary>Oyun akışındaki ekran/durum. GameManager bunu değiştirir, ekranlar okur.</summary>
+    /// <summary>
+    /// Oyun akışındaki ekran/durum. GameManager bunu değiştirir, ekranlar okur.
+    /// Akış: DayIntro → Desk → Construction → (afet varsa Result/gazete, yoksa DaySummary) → DailyExpenses → Save → DayIntro | Ending.
+    /// Deprem ayrı ekran değildir; oyuncu gazeteden öğrenir.
+    /// </summary>
     public enum GamePhase
     {
         MainMenu,
         DayIntro,
         Desk,
         Construction,
-        Quake,
-        Result,
-        DaySummary,
-        WeeklyExpenses,
+        Result,        // Gazete (sadece afet olan gün)
+        DaySummary,    // Gazetesiz gün özeti (afet olmayan gün)
+        DailyExpenses,
         Save,
         Ending
     }

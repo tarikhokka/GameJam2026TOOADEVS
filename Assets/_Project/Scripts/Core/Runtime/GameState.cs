@@ -5,7 +5,7 @@ namespace CivilJam.Core
 {
     /// <summary>
     /// Kaydedilen tek şey. JsonUtility ile serileşir: sadece public alanlar, property yok.
-    /// Kayıt gün sonunda alınır; yükleme sonraki günün DayIntro'sunu açar.
+    /// Kayıt gün sonunda alınır.
     /// </summary>
     [Serializable]
     public class GameState
@@ -16,19 +16,23 @@ namespace CivilJam.Core
         public int Debt;
         public float JailRisk;         // 0..1, kalıcı
         public float DisasterChance;   // Bu gün sonu afet olasılığı
+        public int LastDisasterDay;    // 0 = henüz afet olmadı. Afet sadece DayDecided > LastDisasterDay olan binaları değerlendirir.
 
-        /// <summary>Onaylanıp yapılmış tüm binalar (ayakta + yıkık). Afette ayakta olanlar değerlendirilir.</summary>
+        /// <summary>Onaylanıp yapılmış tüm binalar (ayakta + yıkık).</summary>
         public List<ProjectData> Buildings = new List<ProjectData>();
 
-        // Hafta içi birikenler (haftalık hesaplaşmada sıfırlanır)
-        public int ApprovedThisWeek;
-        public int WindowRepairsThisWeek; // Kabadayı cam tamiri adedi
+        // Gün içi (her gün sıfırlanır)
+        public int ApprovedToday;
+        public int WindowRepairsToday; // Kabadayı cam tamiri adedi
 
         // İstatistik / son koşulları
         public int TotalApproved;
         public int TotalBribesTaken;
         public int TotalCollapses;
         public int BribedCollapses;
+        public int TotalDeaths;
+        public int TotalInjured;
+        public bool Jailed;
 
         public EndingType Ending = EndingType.None;
     }

@@ -1,0 +1,18 @@
+{
+    "name": "CivilJam.Core.Editor",
+    "rootNamespace": "CivilJam.Core.Editor",
+    "references": [
+        "CivilJam.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

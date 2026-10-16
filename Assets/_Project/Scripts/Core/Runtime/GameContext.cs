@@ -13,6 +13,7 @@ namespace CivilJam.Core
         public RuleSetSO Rules;
         public DayConfigSO DayConfig;   // Bugün geçerli içerik ayarı
         public HeadlineSO Headlines;
+        public NamePoolSO Names;
         public IReadOnlyList<ClientSO> Clients;
         public IReadOnlyList<EndingSO> Endings;
         public IGameActions Actions;
@@ -22,14 +23,11 @@ namespace CivilJam.Core
         /// <summary>Bugün masaya gelen projeler.</summary>
         public List<ProjectData> TodayProjects = new List<ProjectData>();
 
-        /// <summary>Son gün sonu afet kontrolü (afet olmadıysa Occurred = false).</summary>
+        /// <summary>Bugünün gün sonu afet kontrolü. Occurred = false ise gazete yok.</summary>
         public QuakeResult LastQuake;
 
-        /// <summary>Sadece ödeme günü dolu; WeeklyExpenses ekranı bunu gösterir.</summary>
-        public WeeklyExpenseResult PendingWeekly;
-
-        public bool IsPaymentDay => Balance != null && State.Day % Balance.DaysPerWeek == 0;
-        public int Week => Balance == null ? 1 : (State.Day - 1) / Balance.DaysPerWeek + 1;
+        /// <summary>Bugünün gider kalemleri; DailyExpenses ekranı bunu gösterir.</summary>
+        public DailyExpenseResult PendingExpenses;
 
         /// <summary>Para/borç/risk değiştiğinde tetiklenir (HUD yenilemesi için).</summary>
         public event Action StateChanged;

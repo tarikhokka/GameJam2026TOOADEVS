@@ -16,7 +16,7 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 ## Roadmap (gün sistemine göre)
 ### Faz 0 — Veri sözleşmesi (Cum → 22:00) ⚠️ B ve C bunu bekliyor
 - [x] `CivilJam.Core` asmdef
-- [x] Enum'lar, runtime tipler (ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult, WeeklyExpenseResult)
+- [x] Enum'lar, runtime tipler (ProjectData, DocumentData, ParamEntry, GameState, GameContext, QuakeResult, WeeklyExpenseResult → Faz 1'de DailyExpenseResult)
 - [x] `IGameScreen`, `IGameActions`
 - [x] SO sınıfları: DayConfigSO, RuleSetSO, ClientSO, ExpenseSO, BalanceSO, HeadlineSO, EndingSO
 - [x] EarthquakeSimulator (yıkılma kuralı)
@@ -25,11 +25,14 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] `memory.md` dosya haritasını doldur
 
 ### Faz 1 — Dikey dilim v0 (Cum 22 → Cts 02)
-- [ ] ProjectGenerator v0 (seed'li, konut, uygun/uygunsuz karışık)
-- [ ] DisasterChance güncellemesi (afetsiz gün → artar, tavan)
-- [ ] GameManager durum makinesi: DayIntro → Desk → Construction → afet kontrolü → Quake/Result | DaySummary → (WeeklyExpenses) → Save → NextDay | Ending
-- [ ] Game.unity + placeholder ekranlar; BalanceSO/RuleSetSO/DayConfigSO asset'leri
-- [ ] EditMode testi: Strength >= 1 asla yıkılmaz
+- [x] Sözleşme kararlara uyarlandı: günlük ödeme, afet kapsamı, kayıp verisi, Quake fazı kaldırıldı
+- [x] ProjectGenerator v0 (seed'li; düz uygunsuz / rüşvetli / sahte belgeli; fabrika DayConfig ile)
+- [x] DisasterSystem: taban %50, afetsiz gün +%10, tavan %100, afette tabana döner
+- [x] GameSession (saf C#, IGameActions) + GameManager (MonoBehaviour, faz sırası)
+- [x] Game.unity + IMGUI yedek arayüz (ekranı olmayan fazlar için) + Data asset'leri (Editor menüsüyle)
+- [x] EditMode testleri (7/7 geçti): Strength >= 1 asla yıkılmaz, afet kapsamı, olasılık, üretici, çift ödeme
+- [ ] Unity Editor'de Game.unity'yi elle oynayıp kontrol et
+- [ ] B ve C'ye haber ver: Desk ekranı `IGameScreen` (Phase = Desk) olunca Game.unity'ye eklenecek
 
 ### Faz 2 — Ekonomi ve hile (Cts 08 → 14)
 - [ ] EconomyCalculator: günlük giderler, borç, ofis kapanışı
@@ -57,26 +60,44 @@ Ahmet tarafından 2026-10-16 22:00 civarı cevaplandı.
 | 5 | Gün sonu yüklemesi / son ekranında kayıt? | Şimdilik cevaplanmadı. | ❓ Açık |
 | 6 | Kota, hapis ve ofis kapanışı aynı anda tetiklenirse öncelik? | Şimdilik cevaplanmadı. | ❓ Açık |
 
-Önceki önerilerden hâlâ geçerli (onay bekliyor): afet olasılığı 0.10 başlangıç, afetsiz gün +0.10, tavan 0.80; toplam 14 gün; ek test parası anında düşülür. Değerler `BalanceSO`'da.
+Ek kararlar (Ahmet, 22:10): deprem animasyonu/sahnesi yok; sadece gazete (afet günü) veya gün özeti (afetsiz gün) gösterilir. Afet olasılığı tabanı **%50**, tavanı **%100**.
 
-### Bu kararların Core koduna etkisi (yapılmadı, Faz 1'de)
-- `EarthquakeSimulator.Run` şu an ayaktaki TÜM binaları değerlendiriyor → sadece son afetten sonra onaylananları değerlendirecek (ör. `ProjectData.DayDecided > GameState.LastDisasterDay`).
-- `BuildingOutcome`'a eklenecek: ölenlerin isimleri, ölü sayısı, yaralı sayısı, sorumluluk metni (ayakta kaldı / yıkıldı → oyuncunun imzası).
-- Günlük ödeme: `WeeklyExpenseResult` → `DailyExpenseResult`, `GameContext.PendingWeekly` / `IsPaymentDay` / `Week`, `BalanceSO.DaysPerWeek`, `GameState.ApprovedThisWeek` / `WindowRepairsThisWeek`, `GamePhase.WeeklyExpenses` yeniden adlandırılacak/sadeleşecek. B ve C bu adları kullanıyorsa haber verilecek.
-- Afet sonrası olasılık sıfırlama zaten `BalanceSO.ResetChanceAfterDisaster = true` ile planlı.
+Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek test parası anında düşülür. Değerler `BalanceSO`'da.
+
+### GEÇİCİ kurallar (kararlar netleşene kadar kodda böyle; tek yerde değişir)
+- Ödenmeyen zorunlu gider borca eklenir (`ExpenseCalculator.Apply`). Ofis kapanışı yok.
+- Sonlar (`GameSession.EvaluateEnding`): hapis → Kötü; son güne ulaşınca → İyi. Orta sonlar (ofis/kota) yok.
+- Kayıt: günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün DayIntro'sunu açar. Son ekranında kayıt silinmiyor.
+- Kota (`BalanceSO.ApprovalQuota`) henüz hiçbir yerde kontrol edilmiyor.
+
+## B ve C için Core kullanım rehberi
+- Ekran = sahnede bir MonoBehaviour + `IGameScreen`. `Phase` hangi fazda gösterileceğini söyler; GameManager sahnedeki ekranları kendisi bulur. Bir faz için ekran yoksa IMGUI yedek arayüz çıkar.
+- `Show(GameContext ctx)` içinde okunacaklar:
+  - Desk: `ctx.TodayProjects` (Params: `Reported` göster, `Tested` ise `Actual` da; `Documents[0]` başvuru, `Documents[1]` lab raporu; `OffersBribe`/`BribeAmount`), `ctx.Rules` (yönetmelik kitapçığı), `ctx.Balance.ExtraTestCost`.
+  - Result (gazete): `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`, `FailedParams`; toplamlar `TotalDeaths` / `TotalInjured`; `Jailed`.
+  - DaySummary: `ctx.State` (Day, Money, Debt, DisasterChance), `ctx.TodayProjects` kararları.
+  - DailyExpenses: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid).
+- Yazma sadece `ctx.Actions`: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` → bool, `SetExpensePaid(expenseId, paid)`. Aynı projeye ikinci karar etkisizdir.
+- HUD: `ctx.StateChanged` olayına abone ol.
+- MainMenu "Devam Et": `GameLaunch.ContinueFromSave = true;` sonra Game sahnesini yükle. Kayıt var mı: `SaveSystem.HasSave`.
 
 ## Sözleşme değişiklikleri
 | Tarih-saat | Değişiklik | Etkilenen |
 |---|---|---|
 | 2026-10-16 21:20 | İlk sözleşme (gün sistemi adlarıyla) | B, C |
-| 2026-10-16 22:00 | PLANLI (kodda değil): günlük ödeme yeniden adlandırması, afet kapsamı, BuildingOutcome kayıp verisi — yukarıdaki "Core koduna etkisi" | B, C |
+| 2026-10-16 22:00 | PLANLI: günlük ödeme yeniden adlandırması, afet kapsamı, BuildingOutcome kayıp verisi | B, C |
+| 2026-10-16 22:15 | UYGULANDI: `WeeklyExpenseResult` → `DailyExpenseResult`; `GameContext.PendingWeekly` → `PendingExpenses`; `IsPaymentDay`/`Week`/`BalanceSO.DaysPerWeek` silindi; `GamePhase.Quake` silindi, `WeeklyExpenses` → `DailyExpenses`; `GameState`: `LastDisasterDay`, `ApprovedToday`, `WindowRepairsToday`, `TotalDeaths`, `TotalInjured`, `Jailed`; `BuildingOutcome`: `Address`, `DayApproved`, `Residents`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`; `QuakeResult.TotalDeaths/TotalInjured/ChanceBefore`; yeni `NamePoolSO`, `GameContext.Names`, `GameLaunch`, `SaveSystem`, `GameSession`, `GameManager` | B, C |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).
   - Rebase sırasında `memory.md` ve `CREDITS_AND_AI.md`'de çakışma çıktı; iki tarafın içeriği de korunarak çözüldü (B'nin Desk dosya haritası ve kararları + Tarık'ın placeholder satırı kaldı).
   - Commit'lenmeyenler: `.vsconfig`, Unity'nin kendiliğinden değiştirdiği `ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json`.
 - 22:00 — Onur'un sorularına cevaplar ve günlük ödeme kararı `AHMET.md` + `memory.md`'ye işlendi. Kod değişmedi.
+- 22:15 — Faz 1: yukarıdaki sözleşme değişiklikleri + `Simulation/` (ProjectGenerator, DisasterSystem, CasualtyGenerator, ExpenseCalculator), `Game/` (GameSession, GameManager, FallbackGui, SaveSystem, GameLaunch), `Util/RandomExtensions`, `Editor/CoreSetupBuilder` (menü: CivilJam > Core), `Tests/Editor/CoreRulesTests`.
+  - Üretilenler: `Assets/_Project/Data/` (Balance, RuleSet, NamePool, Headlines, Days/Day01-03-05-08, Expenses/Rent-Loan-Insurance), `Assets/_Project/Scenes/Game.unity`, `EditorBuildSettings`'e Game.unity eklendi.
+  - Commit'lenmeyenler: `.vsconfig`, `ProjectSettings/SceneTemplateSettings.json` (Unity kendiliğinden üretti).
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.
 - 2026-10-16 22:00 (UTC+3): Onur'un 6 sorusundan 4'ü cevaplandı (5 ve 6 açık; ödenmeyen gider sonucu açık). Ödeme günlüğe çekildi. Faz 1'e henüz başlanmadı.
+- 2026-10-16 22:15 (UTC+3): Faz 1 kodu tamam, derleme uyarısız, 7/7 test geçti. Game.unity yedek arayüzle baştan sona oynanabilir durumda (Editor'de elle henüz denenmedi). Sırada: elle oynanış kontrolü, Desk'in Core'a bağlanması (B), Flow ekranları (C).

@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473d1ab39f7ced64e9a4bc806e64346f, type: 3}
+  m_Name: NamePool
+  m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.NamePoolSO
+  FirstNames:
+  - Elif
+  - Zeynep
+  - Defne
+  - Ece
+  - Nehir
+  - Ada
+  - Melis
+  - Sude
+  - Derya
+  - "G\xFCls\xFCm"
+  - Hatice
+  - Nermin
+  - Kerem
+  - Emir
+  - Baran
+  - Doruk
+  - Arda
+  - Tuna
+  - "Yi\u011Fit"
+  - Cem
+  - Selim
+  - "R\u0131za"
+  - Kadir
+  - Orhan
+  LastNames:
+  - Akbulut
+  - "Sar\u0131\xE7am"
+  - Tepeli
+  - Yazgan
+  - "Erin\xE7"
+  - Koyuncu
+  - Ilgaz
+  - Bozdemir
+  - "Kayal\u0131"
+  - "Ormanc\u0131"
+  - "G\xF6kalp"
+  - Sevindik
+  - "U\xE7arl\u0131"
+  - "Demirta\u015Fl\u0131"
+  - Kumru
+  - Eryaman
+  - "Ta\u015Fk\u0131ran"
+  - "Alpasl\u0131"
+  BuildingNames:
+  - Papatya
+  - Lale
+  - "Menek\u015Fe"
+  - Yasemin
+  - "\xC7\u0131nar"
+  - Ihlamur
+  - "Mart\u0131"
+  - "G\xFCne\u015F"
+  - Huzur
+  - Umut
+  - Bahar
+  - "Y\u0131ld\u0131z"
+  Neighborhoods:
+  - "Ye\u015Filtepe"
+  - "Karaa\u011Fa\xE7"
+  - "Ba\u011Flarba\u015F\u0131"
+  - Esenyurtlu
+  - "Ku\u015Fdili"
+  - "Sar\u0131kaya"
+  Streets:
+  - Akasya
+  - "S\xF6\u011F\xFCt"
+  - Kavak
+  - Defne
+  - Erguvan
+  - Nar
+  LabNames:
+  - "Merkez Yap\u0131 Lab."
+  - Anadolu Malzeme Test
+  - "Kale Zemin Et\xFCt"
+  EngineerNames:
+  - "M\xFCh. S. Erdem"
+  - "M\xFCh. T. Kaplan"
+  - "M\xFCh. N. Aksoy"
+  - "M\xFCh. B. Yal\u0131n"

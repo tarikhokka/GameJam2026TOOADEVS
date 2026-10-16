@@ -14,6 +14,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 |---|---|---|---|---|---|
 | Kenney Interface Sounds — `bong_001.ogg` (adı `sfx_click.ogg` yapıldı) | Buton tıklama sesi | https://kenney.nl/assets/interface-sounds | CC0 1.0 | Tarık | 2026-10-16 |
 | Kenney Impact Sounds — `impactWood_light_001.ogg` (adı `sfx_stamp.ogg` yapıldı) | Kaşe vurma sesi (onay/red) | https://kenney.nl/assets/impact-sounds | CC0 1.0 | Tarık | 2026-10-16 |
+| Freesound #63514 "paper5" — florian_reinke (adı `sfx_paper.wav` yapıldı) | Belge açma / kağıt hışırtısı | https://freesound.org/people/florian_reinke/sounds/63514/ | CC0 1.0 | Tarık | 2026-10-16 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |

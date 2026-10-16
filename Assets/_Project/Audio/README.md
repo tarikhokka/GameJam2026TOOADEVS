@@ -11,7 +11,7 @@ Bu klasöre sadece EEE yazar.
 ## İhtiyaç listesi
 | Dosya | Nerede | Durum |
 |---|---|---|
-| `sfx_paper.ogg` | Desk, belge açma | - |
+| `sfx_paper.wav` | Desk, belge açma | P |
 | `sfx_stamp.ogg` | Desk, onay/red | P |
 | `sfx_click.ogg` | Tüm butonlar | P |
 | `sfx_glass_break.ogg` | Kabadayı olayı | - |

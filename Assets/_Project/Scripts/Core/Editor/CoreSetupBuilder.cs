@@ -139,10 +139,17 @@ namespace CivilJam.Core.Editor
                       $"({string.Join(", ", clients.Select(c => c.Id))})");
         }
 
+        const string FlowPrefabDir = "Assets/_Project/Prefabs/Flow/";
+
         [MenuItem("CivilJam/Core/Install Screens Into Game Scene")]
         public static void InstallScreens()
         {
-            InstallScreenPrefabs(DeskScreenPrefab);
+            InstallScreenPrefabs(
+                DeskScreenPrefab,
+                FlowPrefabDir + "ResultScreen.prefab",
+                FlowPrefabDir + "DaySummaryScreen.prefab",
+                FlowPrefabDir + "DailyExpensesScreen.prefab",
+                FlowPrefabDir + "EndingScreen.prefab");
         }
 
         /// <summary>

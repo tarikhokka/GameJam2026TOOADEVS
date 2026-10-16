@@ -32,7 +32,8 @@ namespace CivilJam.Core.Tests
                 if (mb is IGameScreen screen)
                     Assert.IsTrue(phases.Add(screen.Phase), $"{screen.Phase} için birden fazla ekran var");
 
-            Assert.IsTrue(phases.Contains(GamePhase.Desk), "Desk ekranı Game.unity'de yok");
+            foreach (var required in new[] { GamePhase.Desk, GamePhase.Result, GamePhase.DaySummary, GamePhase.DailyExpenses, GamePhase.Ending })
+                Assert.IsTrue(phases.Contains(required), $"{required} ekranı Game.unity'de yok");
         }
     }
 }

@@ -15,6 +15,7 @@ namespace CivilJam.Desk
         [SerializeField] private AudioClip click;
         [SerializeField] private AudioClip paper;
         [SerializeField] private AudioClip stamp;
+        [SerializeField] private AudioClip glassBreak;
         [SerializeField] private AudioClip officeMusic;
 
         [Header("Seviye")]
@@ -27,6 +28,7 @@ namespace CivilJam.Desk
         public void PlayClick() => Play(click);
         public void PlayPaper() => Play(paper);
         public void PlayStamp() => Play(stamp);
+        public void PlayGlassBreak() => Play(glassBreak);
 
         public void StartMusic()
         {

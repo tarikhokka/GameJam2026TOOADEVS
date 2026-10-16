@@ -16,6 +16,7 @@ namespace CivilJam.Desk
         [SerializeField] private DeskAudio deskAudio;
         [SerializeField] private RulebookView rulebook;
         [SerializeField] private TutorialView tutorial;
+        [SerializeField] private EventCardView eventCard;
 
         [Tooltip("Karar kaşesi basıldıktan sonra sıradaki dosyaya geçmeden önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -76,6 +77,7 @@ namespace CivilJam.Desk
             stamping = false;
             if (rulebook != null) rulebook.Close();
             if (tutorial != null) tutorial.Close();
+            if (eventCard != null) eventCard.Close();
             if (deskAudio != null) deskAudio.StopMusic();
             gameObject.SetActive(false);
         }
@@ -103,22 +105,46 @@ namespace CivilJam.Desk
         }
 
         // Karar kaşesi basılır, kısa bir beklemeden sonra sıradaki bekleyen dosyaya geçilir.
+        // Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı gösterilir.
         private void Decide(Action decision)
         {
             if (stamping) return;
             stamping = true;
+
+            int repairsBefore = context.State.WindowRepairsToday;
+            var project = context.GetTodayProject(selectedId);
 
             decision();
             Redraw();
             documentView.AnimateDecisionStamp();
             if (deskAudio != null) deskAudio.PlayStamp();
 
-            StartCoroutine(AdvanceAfterStamp());
+            bool windowBroken = context.State.WindowRepairsToday > repairsBefore;
+            StartCoroutine(AdvanceAfterStamp(windowBroken ? project : null));
         }
 
-        private IEnumerator AdvanceAfterStamp()
+        private IEnumerator AdvanceAfterStamp(ProjectData thugProject)
         {
             yield return new WaitForSeconds(stampDelay);
+
+            if (thugProject != null && eventCard != null)
+            {
+                if (deskAudio != null) deskAudio.PlayGlassBreak();
+                var client = context.GetClient(thugProject.ClientId);
+                string name = client != null ? client.DisplayName : "Müteahhit";
+                int cost = context.Balance != null ? context.Balance.WindowRepairCost : 0;
+                eventCard.Open("Camın kırıldı!",
+                    $"{name} kararını beğenmedi. Biraz sonra ofisinin camına bir taş geldi.\n\n" +
+                    $"Cam tamiri: <b>{DeskFormat.Money(cost)}</b>. Bugünün giderlerine eklendi.",
+                    AdvanceToNext);
+                yield break;
+            }
+
+            AdvanceToNext();
+        }
+
+        private void AdvanceToNext()
+        {
             stamping = false;
 
             string next = FirstPendingId();

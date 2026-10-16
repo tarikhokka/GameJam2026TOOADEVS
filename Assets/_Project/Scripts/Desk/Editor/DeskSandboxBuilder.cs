@@ -115,6 +115,7 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "actionPanel", BuildActions(root));
             Wire(screen, "rulebook", BuildRulebook(root, rulebookButton)); // diğer panellerin üstünde çizilsin diye sonda
             Wire(screen, "tutorial", BuildTutorial(root));
+            Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "deskAudio", BuildAudio(root));
 
             EnsureFolder(PrefabFolder);
@@ -146,6 +147,7 @@ namespace CivilJam.Desk.Editor
             Wire(audio, "click", FindClip("sfx_click"));
             Wire(audio, "paper", FindClip("sfx_paper"));
             Wire(audio, "stamp", FindClip("sfx_stamp"));
+            Wire(audio, "glassBreak", FindClip("sfx_glass_break"));
             Wire(audio, "officeMusic", FindClip("mus_office_ambient"));
             return audio;
         }
@@ -266,6 +268,41 @@ namespace CivilJam.Desk.Editor
             Wire(view, "nextButton", next);
             Wire(view, "nextLabel", next.GetComponentInChildren<TMP_Text>());
             Wire(view, "skipButton", skip);
+            return view;
+        }
+
+        // Olay kartı (kabadayı vb.): perde + ortada kart (başlık, metin, Tamam). Metni DeskScreen verir.
+        private static EventCardView BuildEventCard(Transform parent)
+        {
+            var panel = Stretch(NewRect("EventCard", parent));
+            AddImage(panel, new Color(0, 0, 0, 0.6f)); // perde: arkadaki masaya tıklanmasın
+
+            var card = NewRect("Card", panel);
+            card.anchorMin = card.anchorMax = card.pivot = new Vector2(0.5f, 0.5f);
+            card.sizeDelta = new Vector2(820, 440);
+            card.localRotation = Quaternion.Euler(0, 0, -2);
+            AddImage(card, PaperColor);
+            VLayout(card, 20, new RectOffset(56, 56, 44, 40));
+
+            var title = NewText("Title", card, "Olay", 46, StampRed, TextAlignmentOptions.TopLeft, FontStyles.Bold);
+            Layout(title, prefH: 64);
+            var body = NewText("Body", card, "Metin", 30, Ink, TextAlignmentOptions.TopLeft);
+            body.enableAutoSizing = true;
+            body.fontSizeMin = 18;
+            body.fontSizeMax = 30;
+            Layout(body, prefH: 0, flexH: 1);
+            var ok = NewButton("OkButton", card, "Tamam", NeutralButton, Color.white, 30);
+            Layout(ok, prefH: 70);
+
+            panel.gameObject.SetActive(false);
+
+            // Bileşen panele değil, hep aktif ayrı bir objeye konur: pasif objede Awake çalışmaz.
+            var holder = Stretch(NewRect("EventCardController", parent));
+            var view = holder.gameObject.AddComponent<EventCardView>();
+            Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "titleText", title);
+            Wire(view, "bodyText", body);
+            Wire(view, "okButton", ok);
             return view;
         }
 

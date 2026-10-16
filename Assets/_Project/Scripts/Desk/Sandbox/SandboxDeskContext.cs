@@ -6,7 +6,7 @@ namespace CivilJam.Desk
 {
     // Sandbox_Desk'i besleyen sabit, sahte gün. Belge kuralları Core'daki ProjectGenerator ile aynıdır:
     // iki belgeyi aynı mühendis imzalar, lab kaşesi "<LAB ADI> · AKREDİTE"; ipuçları bu düzeni bozar.
-    // Üç tip: dürüst usta, rüşvetçi müteahhit, sahte belgeli proje. İsimler tamamen kurgusaldır.
+    // Dört tip: dürüst usta, rüşvetçi müteahhit, sahte belgeli proje, kabadayı. İsimler tamamen kurgusaldır.
     public static class SandboxDeskContext
     {
         private const string MunicipalityStamp = "BELEDİYE · İMAR MÜDÜRLÜĞÜ";
@@ -32,8 +32,11 @@ namespace CivilJam.Desk
                         bribes: new[] { "Rakamlara takılmayın, bu da çay parası." }),
                     Client("nurettin", "Nurettin Kalfa", honest: false,
                         greetings: new[] { "Raporlar laboratuvardan bu sabah çıktı, sıcağı sıcağına getirdim." }),
+                    Client("rustem", "Balyoz Rüstem", honest: false, thug: true,
+                        greetings: new[] { "Hocam selamünaleyküm. Ben uzatmayı sevmem." },
+                        bribes: new[] { "Ofisinizin camları çok güzel bu arada... Kırılsa yazık olur." }),
                 },
-                TodayProjects = new List<ProjectData> { HonestProject(), BribeProject(), FakeDocProject() },
+                TodayProjects = new List<ProjectData> { HonestProject(), BribeProject(), FakeDocProject(), ThugProject() },
             };
 
             context.Actions = new FakeGameActions(context);
@@ -124,6 +127,35 @@ namespace CivilJam.Desk
             };
         }
 
+        // Kabadayı: zarf var, değerler düşük. Reddedilirse cam kırılır (olay kartı).
+        private static ProjectData ThugProject()
+        {
+            const string parcel = "301/9", date = "02.10.2026", engineer = "Müh. O. Tezel";
+            return new ProjectData
+            {
+                Id = "D1-P4",
+                Name = "Yıldız Pasajı",
+                Address = "Çarşı Mah. Demirci Sk. No: 11",
+                ClientId = "rustem",
+                BuildingType = BuildingType.Residential,
+                Floors = 4,
+                Fee = 500,
+                OffersBribe = true,
+                BribeAmount = 2000,
+                Params =
+                {
+                    Param(ParamType.ConcreteStrength, 30, 22, 21),
+                    Param(ParamType.RebarRatio, 1.0f, 0.8f, 0.8f),
+                    Param(ParamType.SoilQuality, 200, 210, 205),
+                },
+                Documents =
+                {
+                    Application(parcel, date, engineer),
+                    LabReport(parcel, date, GoodLab, LabStamp(GoodLab), engineer),
+                },
+            };
+        }
+
         private static RuleSetSO CreateRules()
         {
             var rules = ScriptableObject.CreateInstance<RuleSetSO>();
@@ -150,12 +182,14 @@ namespace CivilJam.Desk
             Required = required,
         };
 
-        private static ClientSO Client(string id, string name, bool honest, string[] greetings, string[] bribes = null)
+        private static ClientSO Client(string id, string name, bool honest, string[] greetings, string[] bribes = null,
+            bool thug = false)
         {
             var client = ScriptableObject.CreateInstance<ClientSO>();
             client.Id = id;
             client.DisplayName = name;
             client.IsHonest = honest;
+            client.IsThug = thug;
             client.GreetingLines = new List<string>(greetings);
             client.BribeLines = bribes != null ? new List<string>(bribes) : new List<string>();
             return client;

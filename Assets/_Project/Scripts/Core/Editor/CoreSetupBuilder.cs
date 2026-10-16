@@ -109,6 +109,36 @@ namespace CivilJam.Core.Editor
 
         const string DeskScreenPrefab = "Assets/_Project/Prefabs/Desk/DeskScreen.prefab";
 
+        /// <summary>
+        /// Game.unity'deki GameManager'ın veri listelerini Data klasöründen yeniden doldurur
+        /// (Days, Expenses, Clients). EEE yeni asset ekleyince tekrar çalıştırılır.
+        /// </summary>
+        [MenuItem("CivilJam/Core/Link Data Into Game Scene")]
+        public static void LinkData()
+        {
+            var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            var gm = Object.FindAnyObjectByType<GameManager>();
+            if (gm == null)
+            {
+                Debug.LogError("[CoreSetup] Game.unity'de GameManager yok");
+                return;
+            }
+
+            var so = new SerializedObject(gm);
+            var days = FindAll<DayConfigSO>(DataDir + "/Days");
+            var expenses = FindAll<ExpenseSO>(DataDir + "/Expenses");
+            var clients = FindAll<ClientSO>(DataDir + "/Clients");
+            FillList(so.FindProperty("dayConfigs"), days);
+            FillList(so.FindProperty("expenses"), expenses);
+            FillList(so.FindProperty("clients"), clients);
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"[CoreSetup] Game.unity verisi bağlandı: {days.Count} gün, {expenses.Count} gider, {clients.Count} müteahhit " +
+                      $"({string.Join(", ", clients.Select(c => c.Id))})");
+        }
+
         [MenuItem("CivilJam/Core/Install Screens Into Game Scene")]
         public static void InstallScreens()
         {

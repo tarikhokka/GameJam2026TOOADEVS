@@ -537,7 +537,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0daf62edf427f0445936ff7ef1e8fcae, type: 2}
   - {fileID: 11400000, guid: 10abe719db8258a49acefc7dc0b53f37, type: 2}
   - {fileID: 11400000, guid: 13c6b72750a8baa4b8f280ca7d26716f, type: 2}
-  clients: []
+  clients:
+  - {fileID: 11400000, guid: e28c27034780b69439908b31d3b31774, type: 2}
+  - {fileID: 11400000, guid: b7fb7db3df5842a47a1aff23c412ecfa, type: 2}
+  - {fileID: 11400000, guid: 7adf0325b10b9b34d9705510013d2f9e, type: 2}
+  - {fileID: 11400000, guid: 68374f8f16278f54884b13099af4d8aa, type: 2}
+  - {fileID: 11400000, guid: 1e275900219e7b644962afc063102a4b, type: 2}
+  - {fileID: 11400000, guid: 4aea4b1369f9b8d4bb24830d6ff7f75b, type: 2}
   endings: []
   fixedSeed: 0
   fallbackGui: 1

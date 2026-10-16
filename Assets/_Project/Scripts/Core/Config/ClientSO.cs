@@ -16,5 +16,8 @@ namespace CivilJam.Core
         public Vector2Int BribeRange = new Vector2Int(500, 2000);
         [TextArea] public List<string> GreetingLines = new List<string>();
         [TextArea] public List<string> BribeLines = new List<string>();
+
+        /// <summary>Rüşvet teklif eder mi: dürüst değil ve BribeRange 0-0 değil. (Selim: 0-0 → asla teklif etmez.)</summary>
+        public bool OffersBribes => !IsHonest && BribeRange.y > 0;
     }
 }

@@ -173,7 +173,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [x] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
 - [ ] `Data/` altındaki diğer asset'lere (Balance, RuleSet, Days, Expenses, NamePool) dokunma. Headlines asset'ini doldurmak istersen önce A'ya haber ver.
   - (EEE, 00:15) A ile konuşuldu, Headlines.asset EEE tarafından dolduruldu: 20 manşet, `ICERIK_TASLAK.md` ile aynı. Eski "{count} can kaybı" kullanımı kaldırıldı.
-- [x] (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
+- [x] (A, 00:45: Game.unity'ye bağlandı, 6 müteahhit; rol mantığı Core'da) (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
 - **Selim sorusunun cevabı:** `IsHonest = false`, `BribeRange = 0-0` **doğru**, öyle bırak. Kural: `BribeRange` 0-0 = asla rüşvet teklif etmez. Core müteahhidin rolünü bu alanlardan çıkaracak, sen başka alan doldurmayacaksın:
   - Uygun proje → `IsHonest = true` (Rıfat, Sevim)
   - Rüşvetli proje → dürüst değil + `BribeRange` > 0 (Kemal, Nuri; kabadayı günleri açıksa Rüstem)
@@ -186,7 +186,8 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 
 **Onur (C / Akış) için:**
 - ⚠️ **Öncelik (A, 00:30) — `ebe816d` sonrası, gazete oyunda hâlâ görünmüyor.** Sebep: Flow kodu push'landı ama prefab'lar hiç üretilmedi (repoda `Prefabs/Flow` yok) ve kod Unity'de derlenmedi. GameManager Game.unity'de gazete ekranı bulamıyor → mavi yedek arayüz çıkıyor. Sırayla:
-  - [ ] 1. Pull → Unity (6000.6.4f1) → Console'da Flow derleme hatası olmadığını doğrula.
+  - [ ] 1. Pull → Unity (6000.6.4f1) → Console'da Flow derleme hatası olmadığını doğrula. (A, 00:45: A'nın makinesinde Flow hatasız ve uyarısız derlendi.)
+  - ⚠️ **`.meta` dosyaları:** `ebe816d` Flow script'lerini `.meta`'sız push'ladı. Prefab'lar script'lere GUID ile bağlanır: Flow `Scripts/Flow/**/*.meta` dosyalarını prefab'larla **aynı commit'te sen** push'la. Başka kimse Flow `.meta`'sı commit'lemeyecek (A commit'lemedi), yoksa prefab'larda "Missing Script" olur.
   - [ ] 2. Menü **CivilJam > Flow > 1 - Build Flow Prefabs** ve **2 - Build MainMenu Scene** çalıştır. Prefab'lar (`Prefabs/Flow/*.prefab` + `.meta`) ve `MainMenu.unity` + Build Settings değişikliğini **sen** commit'le/push'la (prefab'ları başka kimse üretmeyecek; iki kişi üretirse GUID çakışır).
   - [ ] 3. Sandbox_Flow'da (menü 3) gazete/gün özeti/ödeme/son ekranını dene.
   - [ ] 4. Haber ver → A prefab'ları Game.unity'ye ekler (Install Screens). Game.unity'yi kendin açıp KAYDETME.

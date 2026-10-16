@@ -31,7 +31,10 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] GameSession (saf C#, IGameActions) + GameManager (MonoBehaviour, faz sırası)
 - [x] Game.unity + IMGUI yedek arayüz (ekranı olmayan fazlar için) + Data asset'leri (Editor menüsüyle)
 - [x] EditMode testleri (7/7 geçti): Strength >= 1 asla yıkılmaz, afet kapsamı, olasılık, üretici, çift ödeme
-- [ ] Unity Editor'de Game.unity'yi elle oynayıp kontrol et
+- [x] Unity Editor'de Game.unity'yi elle oynayıp kontrol et (Ahmet, 00:30: gün döngüsü, gazete verisi, dürüst bina, save.json ✅)
+- [x] Müteahhit rolleri: uygun → dürüst, rüşvetli → `ClientSO.OffersBribes`, diğer uygunsuz → rüşvet vermeyen (Selim); kabadayı sadece AllowThugs günleri. Tarık'ın 6 ClientSO'su Game.unity'ye bağlandı (`CoreSetupBuilder.LinkData`). Testler 10/10.
+- [ ] (C'ye bağlı) Flow prefab'larını Game.unity'ye ekle — Onur prefab'ları + Flow .meta'larını push'layınca `InstallScreens`.
+- **Faz 1 (A kısmı) KAPANDI — 2026-10-17 00:45.** Not: Oğuzhan'ın 00:07 "yeni kural modeli" önerisi Core'un büyük kısmını değiştirir; Ahmet'in onayı bekleniyor.
 - [x] B ve C'ye haber ver: memory.md → "Ekibe notlar (A / Ahmet'ten)"
 
 ### Faz 2 — Ekonomi ve hile (Cts 08 → 14)

@@ -146,6 +146,68 @@ namespace CivilJam.Core.Tests
             }
         }
 
+        static ClientSO Client(string id, bool honest, bool thug, int bribeMin, int bribeMax)
+        {
+            var c = ScriptableObject.CreateInstance<ClientSO>();
+            c.Id = id; c.IsHonest = honest; c.IsThug = thug; c.BribeRange = new Vector2Int(bribeMin, bribeMax);
+            return c;
+        }
+
+        [Test]
+        public void Clients_MatchProjectRole()
+        {
+            // Tarık'ın 6 müteahhidinin aynısı (Data/Clients)
+            var clients = new List<ClientSO>
+            {
+                Client("rifat", true, false, 0, 0), Client("sevim", true, false, 0, 0),
+                Client("kemal", false, false, 800, 1500), Client("nuri", false, false, 1000, 2000),
+                Client("selim", false, false, 0, 0), Client("rustem", false, true, 1500, 2500)
+            };
+            var byId = new Dictionary<string, ClientSO>();
+            foreach (var c in clients) byId[c.Id] = c;
+
+            _config.ProjectsPerDay = 6;
+            _config.NonCompliantRatio = 0.5f;
+            _config.AllowBribes = true;
+            _config.AllowFakeDocuments = true;
+
+            foreach (bool thugs in new[] { false, true })
+            {
+                _config.AllowThugs = thugs;
+                bool sawRustem = false;
+                for (int seed = 0; seed < 200; seed++)
+                {
+                    foreach (var p in ProjectGenerator.Generate(1, _config, _rules, _balance, null, clients, new System.Random(seed)))
+                    {
+                        Assert.IsFalse(string.IsNullOrEmpty(p.ClientId), "Her projeye bir müteahhit atanmalı");
+                        var c = byId[p.ClientId];
+
+                        if (p.IsCompliant) Assert.IsTrue(c.IsHonest, $"Uygun proje dürüst ustadan gelmeli ({c.Id})");
+                        else Assert.IsFalse(c.IsHonest, $"Uygunsuz proje dürüst ustadan gelmemeli ({c.Id})");
+
+                        if (p.OffersBribe)
+                        {
+                            Assert.IsTrue(c.OffersBribes, $"Rüşvetli proje rüşvet vermeyen müteahhide düştü ({c.Id})");
+                            Assert.Greater(p.BribeAmount, 0, "0 TL zarf olmamalı");
+                        }
+                        else if (!p.IsCompliant)
+                        {
+                            Assert.IsFalse(c.OffersBribes, $"Rüşvetçi müteahhit rüşvetsiz proje getirdi ({c.Id})");
+                        }
+
+                        if (c.IsThug)
+                        {
+                            Assert.IsTrue(thugs, "Kabadayı, kabadayı günü değilken geldi");
+                            sawRustem = true;
+                        }
+                    }
+                }
+                if (thugs) Assert.IsTrue(sawRustem, "Kabadayı günlerinde Rüstem en az bir kez gelmeli");
+            }
+
+            foreach (var c in clients) UnityEngine.Object.DestroyImmediate(c);
+        }
+
         [Test]
         public void Stamps_AreReadableText_AndWrongStampMismatchesLab()
         {

@@ -15,7 +15,16 @@ namespace CivilJam.Core.Tests
         {
             EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
 
-            Assert.IsNotNull(Object.FindAnyObjectByType<GameManager>(FindObjectsInactive.Include), "GameManager yok");
+            var gm = Object.FindAnyObjectByType<GameManager>(FindObjectsInactive.Include);
+            Assert.IsNotNull(gm, "GameManager yok");
+            var so = new UnityEditor.SerializedObject(gm);
+            foreach (var list in new[] { "dayConfigs", "expenses", "clients" })
+            {
+                var prop = so.FindProperty(list);
+                Assert.Greater(prop.arraySize, 0, $"GameManager.{list} boş");
+                for (int i = 0; i < prop.arraySize; i++)
+                    Assert.IsNotNull(prop.GetArrayElementAtIndex(i).objectReferenceValue, $"GameManager.{list}[{i}] kayıp referans");
+            }
             Assert.IsNotNull(Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>(FindObjectsInactive.Include), "EventSystem yok");
 
             var phases = new HashSet<GamePhase>();

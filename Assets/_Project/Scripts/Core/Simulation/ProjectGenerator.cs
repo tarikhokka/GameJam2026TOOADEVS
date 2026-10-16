@@ -85,7 +85,7 @@ namespace CivilJam.Core
             }
 
             // Müşteri
-            var client = PickClient(clients, compliant, bribe, rng);
+            var client = PickClient(clients, compliant, bribe, config.AllowThugs, rng);
             if (client != null) p.ClientId = client.Id;
 
             if (bribe)
@@ -99,16 +99,25 @@ namespace CivilJam.Core
             return p;
         }
 
-        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, bool compliant, bool bribe, Random rng)
+        /// <summary>
+        /// Müteahhidin rolü ClientSO alanlarından çıkar:
+        ///  - Uygun proje      → IsHonest (Rıfat, Sevim)
+        ///  - Rüşvetli proje   → OffersBribes (Kemal, Nuri; kabadayı günlerinde Rüstem)
+        ///  - Diğer uygunsuz   → dürüst değil + rüşvet vermez (Selim: sahte belge / düz uygunsuz)
+        /// Kabadayılar sadece DayConfig.AllowThugs günlerinde gelir. Uygun müteahhit yoksa null (yanlış rol atanmaz).
+        /// </summary>
+        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, bool compliant, bool bribe, bool allowThugs, Random rng)
         {
             if (clients == null || clients.Count == 0) return null;
             var pool = new List<ClientSO>();
             foreach (var c in clients)
             {
-                if (compliant && !bribe && c.IsHonest) pool.Add(c);
-                else if (!compliant && !c.IsHonest) pool.Add(c);
+                if (c == null || (c.IsThug && !allowThugs)) continue;
+                if (compliant) { if (c.IsHonest) pool.Add(c); }
+                else if (bribe) { if (c.OffersBribes) pool.Add(c); }
+                else if (!c.IsHonest && !c.OffersBribes) pool.Add(c);
             }
-            return rng.Pick(pool.Count > 0 ? pool : new List<ClientSO>(clients));
+            return pool.Count > 0 ? rng.Pick(pool) : null;
         }
 
         static void CreateDocuments(ProjectData p, int day, bool fake, NamePoolSO names, Random rng)

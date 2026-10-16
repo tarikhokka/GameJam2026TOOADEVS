@@ -13,11 +13,12 @@
 
 ## 2. Kesinleşen oyun kararları
 - Level sistemi kaldırıldı; oyun gün sistemiyle ilerleyecek. Hâlâ plan aşamasındayız; aşağıdaki yeni akış kodda uygulanmış kabul edilmez.
-- Planlanan akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Quake/Result, yoksa DaySummary) → her gün ödeme (günlük giderler) → gün sonu Save → (NextDay | Ending).
+- Planlanan akış: DayIntro → Desk → Construction → afet kontrolü → (afet varsa Result/gazete, yoksa DaySummary) → her gün ödeme (günlük giderler) → gün sonu Save → (NextDay | Ending).
 - Her gün sonunda afet olasılığı vardır. Afet olmazsa bir sonraki gün olasılık artar; afet olunca olasılık sıfırlanır. Başlangıç oranı, artış ve üst sınır henüz kararlaştırılmadı (öneri: AHMET.md).
 - Afet, son afetten bu yana (iki afet arasında) oyuncunun onayladığı binaları değerlendirir; önceki afetleri atlatmış binalar tekrar değerlendirilmez.
 - Afetsiz günün sonunda gazete gösterilmez. Afet olunca gazete/sonuçta şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü/yaralı sayısı, yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi.
 - Eski level başına proje sayıları geçersizdir. Toplam gün sayısı, günlük proje sayıları ve içerik açılma günleri henüz belirlenmedi. Konut, sahte belgeler, fabrika/yangın içerik hedefleri; sel ve okul/hastane ek kapsamdır.
+- Deprem ayrı bir sahne/animasyon olarak gösterilmez; oyuncu depremi ve sonuçlarını gazeteden öğrenir (Quake ekranı yok, deprem/yıkılma sesi yok).
 - Deprem şiddeti oyuncuya gösterilmez. Bina sadece 2 durumlu: ayakta / yıkık.
 - Yıkılma kuralı (EarthquakeSimulator):
   - Strength = min(Actual/Required).
@@ -100,7 +101,7 @@
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 21:30):** Veri sözleşmesi gün sistemi adlarıyla push'landı (asmdef, runtime tipler, IGameScreen, IGameActions, SO sınıfları, EarthquakeSimulator). Unity'de hatasız derlendi. GameManager henüz yok.
 - **Desk (B):** v0 Unity'de test edildi (Sandbox_Desk: onay, red, zarf, ek test, mesai bitişi çalışıyor) ve push'landı. Henüz kendi modelleri + sahte veriyle; sırada Core tiplerine geçiş (IGameScreen + IGameActions).
-- **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: kaşe/kağıt/deprem/yıkılma sesleri, ClientSO metin taslakları.
+- **Art/Audio (EEE, 22:30):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). `sfx_click.ogg` (Kenney, CC0) eklendi. Sırada: `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (B'nin 9. adımı bekliyor), ClientSO metin taslakları.
 - **Sırada:** Desk→Core adapter (B+A); ProjectGenerator v0, afet olasılığı güncellemesi, GameManager, Game.unity, SO asset'leri; ardından EconomyCalculator.
 - **Bilinen sorunlar:** —
 
@@ -149,6 +150,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:00 (UTC+3) | Afetsiz gün gazete yok; afette yıkım durumu, ölen isimleri, ölü/yaralı sayısı, oyuncu sorumluluğu gösterilir | Temanın ağırlığı sonuç ekranında; Core'da BuildingOutcome genişletilecek |
 | 2026-10-16 22:30 (UTC+3) | Görsel/ses önce placeholder; final aynı dosya adıyla üzerine yazılır. Sprite Mode Single, PPU 100, ses `.ogg` | .meta/GUID korunur, B/C prefab referansları bozulmaz |
 | 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
+| 2026-10-16 22:45 (UTC+3) | Deprem sahne olarak gösterilmez, gazeteden öğrenilir; Quake ekranı ve deprem/yıkılma sesleri kaldırıldı | Takım kararı (EEE iletti); hassasiyet + kapsam. GameManager akışı ve QuakeResult verisi etkilenmez, sadece ekran yok |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

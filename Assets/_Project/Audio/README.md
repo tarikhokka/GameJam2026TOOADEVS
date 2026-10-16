@@ -14,8 +14,6 @@ Bu klasöre sadece EEE yazar.
 | `sfx_paper.ogg` | Desk, belge açma | - |
 | `sfx_stamp.ogg` | Desk, onay/red | - |
 | `sfx_click.ogg` | Tüm butonlar | P |
-| `sfx_quake_rumble.ogg` | Quake | - |
-| `sfx_collapse.ogg` | Quake, yıkım | - |
 | `sfx_glass_break.ogg` | Kabadayı olayı | - |
 | `mus_office_ambient.ogg` | Desk | - |
 | `mus_menu.ogg` | MainMenu | - |

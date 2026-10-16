@@ -17,9 +17,9 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `stamp_approve.png` | Desk | B | P |
 | `stamp_reject.png` | Desk | B | P |
 | `signature.png` | Desk | B | P |
-| `bld_house_standing.png` | Construction/Quake | C | P |
-| `bld_house_collapsed.png` | Quake/Result | C | P |
-| `city_bg.png` | Construction/Quake | C | P |
+| `bld_house_standing.png` | Construction/Result | C | P |
+| `bld_house_collapsed.png` | Result (gazete) | C | P |
+| `city_bg.png` | Construction | C | P |
 | `newspaper_bg.png` | Result | C | P |
 | `daysummary_bg.png` | DaySummary | C | P |
 | `payment_bg.png` | Günlük ödeme | C | P |

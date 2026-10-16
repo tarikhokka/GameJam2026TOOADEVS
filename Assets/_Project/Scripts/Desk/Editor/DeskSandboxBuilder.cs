@@ -16,6 +16,7 @@ namespace CivilJam.Desk.Editor
         private const string PrefabPath = PrefabFolder + "/DeskScreen.prefab";
         private const string SceneFolder = "Assets/_Project/Scenes";
         private const string ScenePath = SceneFolder + "/Sandbox_Desk.unity";
+        private const string AudioFolder = "Assets/_Project/Audio";
 
         private static readonly Color DeskColor = new Color(0.36f, 0.27f, 0.21f);
         private static readonly Color HudColor = new Color(0.12f, 0.11f, 0.1f, 0.92f);
@@ -57,6 +58,7 @@ namespace CivilJam.Desk.Editor
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = Color.black;
             cameraGo.transform.position = new Vector3(0, 0, -10);
+            cameraGo.AddComponent<AudioListener>();
 
             var canvasGo = new GameObject("Canvas", typeof(RectTransform));
             var canvas = canvasGo.AddComponent<Canvas>();
@@ -111,6 +113,7 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "queue", BuildQueue(root));
             Wire(screen, "documentView", BuildDocument(root));
             Wire(screen, "actionPanel", BuildActions(root));
+            Wire(screen, "deskAudio", BuildAudio(root));
 
             EnsureFolder(PrefabFolder);
             var prefab = PrefabUtility.SaveAsPrefabAsset(root.gameObject, PrefabPath);
@@ -119,6 +122,43 @@ namespace CivilJam.Desk.Editor
         }
 
         // ---------- Bölümler ----------
+
+        // Sesler EEE'nin Audio klasöründen ada göre bulunur (uzantıya güvenilmez, bkz. Audio/README.md).
+        private static DeskAudio BuildAudio(Transform parent)
+        {
+            var go = new GameObject("Audio");
+            go.transform.SetParent(parent, false);
+            var audio = go.AddComponent<DeskAudio>();
+
+            var sfx = new GameObject("SfxSource").AddComponent<AudioSource>();
+            sfx.transform.SetParent(go.transform, false);
+            sfx.playOnAwake = false;
+
+            var music = new GameObject("MusicSource").AddComponent<AudioSource>();
+            music.transform.SetParent(go.transform, false);
+            music.playOnAwake = false;
+            music.loop = true;
+
+            Wire(audio, "sfxSource", sfx);
+            Wire(audio, "musicSource", music);
+            Wire(audio, "click", FindClip("sfx_click"));
+            Wire(audio, "paper", FindClip("sfx_paper"));
+            Wire(audio, "stamp", FindClip("sfx_stamp"));
+            Wire(audio, "officeMusic", FindClip("mus_office_ambient"));
+            return audio;
+        }
+
+        private static AudioClip FindClip(string name)
+        {
+            foreach (var guid in AssetDatabase.FindAssets($"{name} t:AudioClip", new[] { AudioFolder }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (System.IO.Path.GetFileNameWithoutExtension(path) == name)
+                    return AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+            }
+            Debug.LogWarning($"[Desk] Ses bulunamadı: {AudioFolder}/{name}. Prefab sessiz kurulacak.");
+            return null;
+        }
 
         private static DeskHud BuildHud(Transform parent)
         {
@@ -230,6 +270,19 @@ namespace CivilJam.Desk.Editor
             Stretch(stampLabel.rectTransform).offsetMin = new Vector2(10, 6);
             stampLabel.rectTransform.offsetMax = new Vector2(-10, -6);
 
+            // Karar kaşesi (ONAYLANDI / REDDEDİLDİ): kağıdın ortasında, en üstte, karar verilince görünür.
+            var decision = NewRect("DecisionStamp", paper);
+            decision.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            decision.anchorMin = decision.anchorMax = decision.pivot = new Vector2(0.5f, 0.5f);
+            decision.sizeDelta = new Vector2(640, 170);
+            decision.anchoredPosition = new Vector2(0, -60);
+            decision.localRotation = Quaternion.Euler(0, 0, -8);
+            var decisionImage = AddImage(decision, new Color(StampRed.r, StampRed.g, StampRed.b, 0.12f));
+            decisionImage.raycastTarget = false;
+            var decisionLabel = NewText("Label", decision, "ONAYLANDI", 96, StampRed, TextAlignmentOptions.Center, FontStyles.Bold);
+            Stretch(decisionLabel.rectTransform);
+            decision.gameObject.SetActive(false);
+
             var empty = NewText("EmptyState", area, "Soldan bir dosya seç.", 36, LightText, TextAlignmentOptions.Center);
             Stretch(empty.rectTransform);
 
@@ -245,6 +298,9 @@ namespace CivilJam.Desk.Editor
             Wire(view, "paramHeader", header);
             Wire(view, "paramContainer", list);
             Wire(view, "paramRowTemplate", rowView);
+            Wire(view, "decisionStamp", decision);
+            Wire(view, "decisionStampImage", decisionImage);
+            Wire(view, "decisionStampText", decisionLabel);
             return view;
         }
 

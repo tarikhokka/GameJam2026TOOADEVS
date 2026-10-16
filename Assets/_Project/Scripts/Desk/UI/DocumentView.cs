@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using CivilJam.Core;
@@ -31,16 +32,35 @@ namespace CivilJam.Desk
         [SerializeField] private Transform paramContainer;
         [SerializeField] private ParamRowView paramRowTemplate;
 
+        [Header("Karar kaşesi")]
+        [SerializeField] private RectTransform decisionStamp;
+        [SerializeField] private Image decisionStampImage;
+        [SerializeField] private TMP_Text decisionStampText;
+        [SerializeField] private Color approvedStampColor = new Color(0.18f, 0.5f, 0.22f);
+        [SerializeField] private Color rejectedStampColor = new Color(0.72f, 0.14f, 0.12f);
+        [SerializeField] private float stampPunchScale = 1.8f;
+        [SerializeField] private float stampPunchDuration = 0.18f;
+
         public event Action<int> TabSelected;
 
         private readonly List<Button> tabs = new List<Button>();
         private readonly List<ParamRowView> rows = new List<ParamRowView>();
+        private bool stampAnimating;
 
         public void ShowEmpty()
         {
             UiPool.Resize(tabs, tabTemplate, tabsContainer, 0);
             paperRoot.SetActive(false);
             emptyState.SetActive(true);
+            if (decisionStamp != null) decisionStamp.gameObject.SetActive(false);
+        }
+
+        // Karar anında kaşe büyük başlar ve "pat" diye yerine oturur.
+        public void AnimateDecisionStamp()
+        {
+            if (decisionStamp == null || !decisionStamp.gameObject.activeInHierarchy) return;
+            StopAllCoroutines();
+            StartCoroutine(StampPunch());
         }
 
         public void Show(GameContext context, ProjectData project, int documentIndex)
@@ -69,6 +89,46 @@ namespace CivilJam.Desk
                 var (name, unit) = DeskFormat.Param(context.Rules, project.BuildingType, param.Type);
                 rows[i].Bind(name, unit, param);
             }
+
+            BindDecisionStamp(project);
+        }
+
+        // Karar verilmiş dosyada kaşe kalıcı olarak kağıdın üstünde durur.
+        private void BindDecisionStamp(ProjectData project)
+        {
+            if (decisionStamp == null) return;
+
+            bool decided = project.Verdict != ProjectVerdict.Pending;
+            decisionStamp.gameObject.SetActive(decided);
+            if (!decided) return;
+
+            bool approved = project.Verdict == ProjectVerdict.Approved;
+            var color = approved ? approvedStampColor : rejectedStampColor;
+            decisionStampText.text = approved ? "ONAYLANDI" : "REDDEDİLDİ";
+            decisionStampText.color = color;
+            decisionStampImage.color = new Color(color.r, color.g, color.b, 0.12f);
+            if (!stampAnimating) decisionStamp.localScale = Vector3.one;
+        }
+
+        // Ekran animasyon ortasında kapanırsa kaşe büyük kalmasın.
+        private void OnDisable()
+        {
+            stampAnimating = false;
+            if (decisionStamp != null) decisionStamp.localScale = Vector3.one;
+        }
+
+        private IEnumerator StampPunch()
+        {
+            stampAnimating = true;
+            for (float t = 0f; t < stampPunchDuration; t += Time.unscaledDeltaTime)
+            {
+                float k = t / stampPunchDuration;
+                float eased = 1f - (1f - k) * (1f - k); // ease-out
+                decisionStamp.localScale = Vector3.one * Mathf.Lerp(stampPunchScale, 1f, eased);
+                yield return null;
+            }
+            decisionStamp.localScale = Vector3.one;
+            stampAnimating = false;
         }
 
         private void BindTabs(ProjectData project, int selectedIndex)

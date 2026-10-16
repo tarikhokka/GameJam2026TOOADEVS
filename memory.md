@@ -68,7 +68,8 @@
 - `Assets/_Project/Scripts/Desk/` (B) — Core tiplerini doğrudan kullanır (ProjectData, GameContext, IGameActions).
   - `CivilJam.Desk.asmdef` — referans: CivilJam.Core, TMP, uGUI.
   - `UI/DeskScreen.cs` — IGameScreen (Phase = Desk). Show(GameContext); kararlar context.Actions ile; "Mesaiyi bitir" → Completed.
-  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView, ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
+  - `UI/DeskAudio.cs` — masa sesleri: tık, kağıt, kaşe + ofis müziği (döngü, %25); klipler prefab'da referansla bağlı.
+  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView (karar kaşesi animasyonu dahil), ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
   - `Sandbox/FakeGameActions.cs` — sadece sandbox için sahte IGameActions.
   - `Sandbox/SandboxDeskContext.cs` — sahte gün: 3 proje (dürüst, rüşvetçi, sahte belgeli), 3 müşteri, RuleSet.
   - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar.
@@ -110,7 +111,7 @@
 ### Durum
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
-- **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı.
+- **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı. (23:50) Sesler (sfx_click/paper/stamp, mus_office_ambient) ve ONAYLANDI/REDDEDİLDİ karar kaşesi animasyonu eklendi.
 - **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
 - **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —

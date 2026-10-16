@@ -38,7 +38,7 @@ Desk parayı değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları sa
 - [ ] Adım 6: Bedava ipuçlarını okunur yapma (kaşe/imza görseli, iki belgeyi karşılaştırma kolaylığı).
 - [ ] Adım 7: Sahte belgeler + kabadayı olayının masadaki kısmı.
 - [ ] Adım 8: Fabrika / yangın parametreleri (yeni satır tipleri).
-- [ ] Adım 9: His katmanı: kaşe animasyonu, kağıt kayma, `sfx_paper`, `sfx_stamp`, `sfx_click`, `mus_office_ambient` tetikleri.
+- [x] Adım 9: His katmanı: karar kaşesi animasyonu + `sfx_paper`, `sfx_stamp`, `sfx_click`, `mus_office_ambient` tetikleri. (Kağıt kayma animasyonu yapılmadı; gerekirse cila adımında.)
 - [ ] Adım 10: Placeholder → final görsellerin prefab'a takılması.
 - [ ] Adım 11: Denge, metinler, hassasiyet kontrolü (kurgusal isimler, ton), hata temizliği. Pazar 12:00 freeze.
 
@@ -71,3 +71,4 @@ Desk parayı değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları sa
 - 2026-10-16 ~22:30: Desk Core'a geçti (eski modeller silindi; FakeGameActions + SandboxDeskContext). A'nın Faz 1'indeki Weekly→Daily ad değişikliğine uyarlandı (ApprovedToday, ApprovalQuota). Unity'de test edildi. memory.md'deki "Ekibe notlar" maddeleri [x] yapıldı. Sırada commit + push ve A'ya haber.
 - 2026-10-16 ~23:10: A DeskScreen'i Game.unity'ye ekledi (`3a0d58d`). A'nın cevapları: kaşe metin olarak kalır (lab kaşesi "<LAB ADI> · AKREDİTE"; ipucu = kaşe/başlık lab adı uyuşmazlığı, farklı mühendis imzası); kota kaldırıldı. Desk'ten ApprovalQuota çıkarıldı, kaşe auto-size, sandbox verisi ProjectGenerator kurallarına uyduruldu. Sandbox_Desk ve Game.unity'de test edildi.
 - 2026-10-16 ~23:30: A TMP Essentials'ı repoya ekledi (`701cb5e`). Yerel kopya yedeğe alınıp kaldırıldı, pull yapıldı; Unity'de sorunsuz. Kaşe/imza ipucunun kalıp kalmayacağı A'nın kararını bekliyor (kalkarsa sadece sandbox verisi değişir).
+- 2026-10-16 ~23:50: Kaşe/imza ipuçları kalıyor (Tarık 23:32). Adım 9: sesler + karar kaşesi animasyonu (karar sonrası 0.6 sn bekleme, çift tıklama engelli). Müzik masa kapanınca hemen durur (obje pasifleştiği için fade-out yok). Sandbox ve Game.unity'de test edildi. Sırada Adım 6 (ipuçlarını okunur yapma), sonra Adım 10 (görseller).

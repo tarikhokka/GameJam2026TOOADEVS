@@ -31,12 +31,12 @@
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
 - Eski level tekrar kuralı kaldırıldı; başarısız gün sonrası devam/tekrar davranışı henüz kesinleşmedi.
 - Giderler her gün ödenecek (haftalık ödeme kaldırıldı). Kalemler: kira, kredi taksiti, ek test, sigorta, kabadayı cam tamiri. Ek testin anında tahsil edilmesi ve sigortanın kapsam başlangıcı henüz netleştirilmeli. Ödenmeyen giderlerin sonucu henüz cevaplanmadı (önceki plan: borç birikir, limit aşılırsa ofis kapanır / orta son).
-- Kota: eski level kotasının günlük/haftalık karşılığı ve eksik kalmasının sonucu henüz belirlenmedi.
+- Kota YOK (karar, 22:40). "Her şeyi reddet" stratejisine karşı baskıyı günlük giderler kurar (onay ücreti gelmezse gider ödenemez). Bunun çalışması için ödenmeyen giderin sonucu yeterince ağır olmalı; o sonuç henüz kararlaştırılmadı.
 - Save/Load: kayıt gün sonunda yapılacak; ay sonu kaydı kaldırıldı. Tek slot JSON / persistentDataPath yaklaşımı korunuyor. GameState gün, para, borç ve afet olasılığı gibi devam için gereken durumu kapsamalı; kesin kayıt şeması A ile netleştirilecek. Gün içi manuel kayıt kararı yok.
 - Sonlar:
   - İyi: gün sistemindeki kesin bitiş koşulu henüz belirlenecek (eski koşul son level yıkımsızdı).
   - Kötü: mahkeme/hapis, kürsüde kurgusal isimler. Rüşvetli yıkımın doğrudan son mu yoksa JailRisk üzerinden mi işleyeceği netleştirilmeli.
-  - Orta: borçtan ofis kapanışı; kota kaynaklı sonun koşulu açık.
+  - Orta: borçtan ofis kapanışı (koşul, ödenmeyen gider kararına bağlı). Kota sonu yok.
 - Yıkım nedeni kartları elle yazılmaz; sonuç ekranı FailedParams / Actual / Required değerlerinden otomatik üretilir (şablon cümle).
 - Sadece Türkçe. Jüri demosu için gizli gün atlama kısayolu sonra eklenecek.
 
@@ -124,7 +124,13 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [x] `DeskScreen` → `CivilJam.Core.IGameScreen` uygulasın: `Phase => GamePhase.Desk`, `Show(GameContext ctx)`, `Hide()`, `event Action Completed` (parametresiz; mesai bitince bir kez tetikle).
 - [x] Projeleri `ctx.TodayProjects`'ten oku (Desk modelleri yerine ya da adapter ile). Parametrelerde `Reported` göster; `Tested` ise `Actual` da göster. `Documents[0]` = başvuru, `Documents[1]` = lab raporu (parsel/tarih/lab/kaşe/imza tutarsızlıkları bedava ipucu). Rüşvet: `OffersBribe`, `BribeAmount`. Yönetmelik kitapçığı: `ctx.Rules`. Ek test ücreti: `ctx.Balance.ExtraTestCost`.
 - [x] Kararları sadece `ctx.Actions` ile gönder: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` (bool döner). Para/kota hesabını Desk yapmaz; HUD için `ctx.StateChanged`'e abone ol, `ctx.State.Money` oku.
-- [ ] Bitince haber ver: DeskScreen prefab'ını `Game.unity`'ye A ekler (Game.unity'yi sadece A kaydeder).
+- [x] Bitince haber ver: DeskScreen prefab'ını `Game.unity`'ye A ekler (Game.unity'yi sadece A kaydeder).
+
+**Oğuzhan'a cevaplar (A, 22:40) — `b614831` Desk entegrasyonu için:**
+- DeskScreen `Game.unity`'ye eklendi (Canvas 1920×1080 Match 0.5 + EventSystem / Input System UI Input Module). Kurulum aracı: menü CivilJam > Core > Install Screens Into Game Scene. Sahne testi (`GameSceneTests`) geçiyor; Game.unity'de Desk fazı artık senin ekranınla açılır.
+- **Kaşe (StampId):** görsele eşlenmeyecek, metin olarak kalıyor; sen bir şey değiştirme. Core'da hata vardı: `StampId` `"STAMP_OK"/"STAMP_FAKE"` geliyordu ve masada sahte belgeyi açık ediyordu. Düzeltildi: başvuru kaşesi `"BELEDİYE · İMAR MÜDÜRLÜĞÜ"`, lab kaşesi `"<LAB ADI> · AKREDİTE"`. Sahte belge ipucu (WrongStamp): kaşedeki lab adı raporun başlığındaki `LabName` ile uyuşmaz. WrongSignature artık lab raporunu farklı bir mühendisin imzalaması (başvurudaki `SignatureName` ile karşılaştırılabilir).
+- **Kota:** kota kuralı KALDIRILDI (karar). Masada kota uyarısı gösterme.
+- [ ] `DeskHud` ve `DeskSandboxBootstrap`'tan `Balance.ApprovalQuota` kullanımını kaldır. İstersen yerine cezasız bilgi olarak "Bugün onaylanan: `ctx.State.ApprovedToday`" göster. Kaldırınca haber ver; A `BalanceSO.ApprovalQuota`'yı siler.
 
 **Onur (C / Akış) için:**
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)
@@ -137,9 +143,9 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
 - Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.
-- Başarısız gün, kota, sonlar ve JailRisk kurallarının gün sistemine uyarlanması.
+- Başarısız gün, sonlar ve JailRisk kurallarının gün sistemine uyarlanması.
 - Save sonrası yüklemenin sonraki sabaha dönmesi, son ekranında kayıt ve kayıt şemasının kesinleştirilmesi.
-- Kota, hapis ve ofis kapanışı aynı anda tetiklenirse son önceliği.
+- Hapis ve ofis kapanışı aynı anda tetiklenirse son önceliği.
 
 ## 7. Karar günlüğü
 Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:00 notu da haftalık ödemeyi kaldırır.
@@ -174,6 +180,8 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
 | 2026-10-16 22:45 (UTC+3) | Deprem sahne olarak gösterilmez, gazeteden öğrenilir; Quake ekranı ve deprem/yıkılma sesleri kaldırıldı | Takım kararı (EEE iletti); hassasiyet + kapsam. GameManager akışı ve QuakeResult verisi etkilenmez, sadece ekran yok |
 | 2026-10-16 22:15 (UTC+3) | Afet olasılığı taban %50, tavan %100; afet günü sadece gazete, afetsiz gün sadece gün özeti | Ahmet kararı; Core'da uygulandı (`GamePhase.Quake` silindi) |
+| 2026-10-16 22:40 (UTC+3) | Kota kuralı yok; baskıyı günlük giderler kurar | Ahmet kararı (seçenek A). Ödenmeyen giderin sonucu sonra kararlaştırılacak; ağır olmalı |
+| 2026-10-16 22:40 (UTC+3) | Belge kaşesi (StampId) görsel değil okunabilir metin; sahte kaşe = başlıktaki lab adıyla uyuşmayan kaşe | Görsel iş yükü yok; ipucu okuyarak yakalanır, veri gerçek/sahte bilgisini sızdırmaz |
 | 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
 
 ## Güncelleme kuralı

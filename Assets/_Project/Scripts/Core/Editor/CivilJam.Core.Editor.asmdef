@@ -2,7 +2,9 @@
     "name": "CivilJam.Core.Editor",
     "rootNamespace": "CivilJam.Core.Editor",
     "references": [
-        "CivilJam.Core"
+        "CivilJam.Core",
+        "UnityEngine.UI",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"

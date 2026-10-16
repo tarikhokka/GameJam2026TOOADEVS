@@ -62,13 +62,13 @@ Ahmet tarafından 2026-10-16 22:00 civarı cevaplandı.
 
 Ek kararlar (Ahmet, 22:10): deprem animasyonu/sahnesi yok; sadece gazete (afet günü) veya gün özeti (afetsiz gün) gösterilir. Afet olasılığı tabanı **%50**, tavanı **%100**.
 
-Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek test parası anında düşülür. Değerler `BalanceSO`'da.
+Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek test parası anında düşülür. Kota yok (karar, 22:40). Değerler `BalanceSO`'da.
 
 ### GEÇİCİ kurallar (kararlar netleşene kadar kodda böyle; tek yerde değişir)
 - Ödenmeyen zorunlu gider borca eklenir (`ExpenseCalculator.Apply`). Ofis kapanışı yok.
 - Sonlar (`GameSession.EvaluateEnding`): hapis → Kötü; son güne ulaşınca → İyi. Orta sonlar (ofis/kota) yok.
 - Kayıt: günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün DayIntro'sunu açar. Son ekranında kayıt silinmiyor.
-- Kota (`BalanceSO.ApprovalQuota`) henüz hiçbir yerde kontrol edilmiyor.
+- Kota yok (karar). `BalanceSO.ApprovalQuota` sadece Desk HUD'u derlensin diye duruyor; silinecek.
 
 ## B ve C için Core kullanım rehberi
 - Ekran = sahnede bir MonoBehaviour + `IGameScreen`. `Phase` hangi fazda gösterileceğini söyler; GameManager sahnedeki ekranları kendisi bulur. Bir faz için ekran yoksa IMGUI yedek arayüz çıkar.
@@ -97,6 +97,8 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
   - Üretilenler: `Assets/_Project/Data/` (Balance, RuleSet, NamePool, Headlines, Days/Day01-03-05-08, Expenses/Rent-Loan-Insurance), `Assets/_Project/Scenes/Game.unity`, `EditorBuildSettings`'e Game.unity eklendi.
   - Commit'lenmeyenler: `.vsconfig`, `ProjectSettings/SceneTemplateSettings.json` (Unity kendiliğinden üretti).
 - 22:20 — `memory.md`'ye "Ekibe notlar (A / Ahmet'ten)" bölümü: Oğuzhan ve Onur için yapılacaklar listesi (ajanları her oturumda okur).
+- 22:50 — Kota kaldırıldı (karar A). Kaşe düzeltmesi: `StampId` artık okunabilir metin (`STAMP_OK/FAKE` sızıntısı giderildi); WrongStamp = kaşedeki lab adı başlıkla uyuşmaz; WrongSignature = lab raporunu farklı mühendis imzalar. DeskScreen (`b614831`) Game.unity'ye eklendi (`CoreSetupBuilder.InstallScreens`, Canvas + EventSystem). Testler 9/9. `BalanceSO.ApprovalQuota` Desk kullandığı için şimdilik duruyor (Oğuzhan kaldırınca silinecek).
+  - Commit'lenmeyen: `ProjectSettings/ProjectVersion.txt` (Unity 6000.6.5f1 ile açılınca yükseltilmişti, geri alındı; ekip sürümü 6000.6.4f1).
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.

@@ -116,15 +116,16 @@ namespace CivilJam.Core
             string parcel = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}";
             string date = $"{rng.RangeInclusive(1, 28):00}.{rng.RangeInclusive(1, 9):00}.2026";
             string engineer = rng.Pick(names != null ? names.EngineerNames : null, "Müh. A. Yılmaz");
-            string stamp = "STAMP_OK";
+            string labName = rng.Pick(names != null ? names.LabNames : null, "Merkez Yapı Lab.");
 
+            // StampId = kaşenin üstünde okunan metin (Desk doğrudan gösterir). İçinde gerçek/sahte bilgisi OLMAZ.
             var application = new DocumentData
             {
                 Kind = DocumentKind.Application,
                 Title = "Yapı Ruhsatı Başvurusu",
                 ParcelNo = parcel,
                 Date = date,
-                StampId = stamp,
+                StampId = MunicipalityStamp,
                 SignatureName = engineer
             };
             var lab = new DocumentData
@@ -133,36 +134,62 @@ namespace CivilJam.Core
                 Title = "Laboratuvar Raporu",
                 ParcelNo = parcel,
                 Date = date,
-                LabName = rng.Pick(names != null ? names.LabNames : null, "Merkez Yapı Lab."),
-                StampId = stamp,
+                LabName = labName,
+                StampId = LabStamp(labName),
                 SignatureName = engineer
             };
 
             if (fake)
             {
-                // 1-2 bedava ipucu: lab raporu başvuruyla tutarsız
+                // 1-2 bedava ipucu: lab raporu başvuruyla ya da kendi başlığıyla tutarsız
                 var clueTypes = new List<ClueType>((ClueType[])Enum.GetValues(typeof(ClueType)));
                 rng.Shuffle(clueTypes);
                 int clueCount = rng.RangeInclusive(1, 2);
-                for (int i = 0; i < clueCount; i++) ApplyClue(lab, clueTypes[i], rng);
+                for (int i = 0; i < clueCount; i++) ApplyClue(lab, clueTypes[i], names, rng);
             }
 
             p.Documents.Add(application);
             p.Documents.Add(lab);
         }
 
-        static void ApplyClue(DocumentData doc, ClueType clue, Random rng)
+        const string MunicipalityStamp = "BELEDİYE · İMAR MÜDÜRLÜĞÜ";
+
+        static string LabStamp(string labName) => $"{UpperTr(labName)} · AKREDİTE";
+
+        static void ApplyClue(DocumentData doc, ClueType clue, NamePoolSO names, Random rng)
         {
             switch (clue)
             {
-                case ClueType.ParcelMismatch: doc.ParcelNo = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}"; break;
-                case ClueType.DateMismatch: doc.Date = $"{rng.RangeInclusive(1, 28):00}.{rng.RangeInclusive(10, 12):00}.2026"; break;
-                case ClueType.UnknownLab: doc.LabName = "Hızlı Sonuç Lab. Ltd."; break;
-                case ClueType.WrongStamp: doc.StampId = "STAMP_FAKE"; break;
-                case ClueType.WrongSignature: doc.SignatureName += "."; break; // Desk: imza görseli farklı gösterilmeli
+                case ClueType.ParcelMismatch:
+                    doc.ParcelNo = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}";
+                    break;
+                case ClueType.DateMismatch:
+                    doc.Date = $"{rng.RangeInclusive(1, 28):00}.{rng.RangeInclusive(10, 12):00}.2026";
+                    break;
+                case ClueType.UnknownLab:
+                    // Başlık bilinmeyen lab; kaşe hâlâ eski lab adını taşır → başlık/kaşe uyuşmaz
+                    doc.LabName = "Hızlı Sonuç Lab. Ltd.";
+                    break;
+                case ClueType.WrongStamp:
+                    // Kaşe başka bir laboratuvarın → başlık/kaşe uyuşmaz
+                    doc.StampId = LabStamp(PickOther(names != null ? names.LabNames : null, doc.LabName, "Kale Test Lab.", rng));
+                    break;
+                case ClueType.WrongSignature:
+                    // Lab raporunu başvurudakinden farklı bir mühendis imzalamış
+                    doc.SignatureName = PickOther(names != null ? names.EngineerNames : null, doc.SignatureName, "Müh. K. Durmaz", rng);
+                    break;
             }
             doc.Clues.Add(clue);
         }
+
+        static string PickOther(List<string> pool, string current, string fallback, Random rng)
+        {
+            var others = pool == null ? new List<string>() : pool.FindAll(s => s != current);
+            return others.Count > 0 ? rng.Pick(others) : fallback;
+        }
+
+        /// <summary>Kültürden bağımsız Türkçe büyük harf (i → İ, ı → I).</summary>
+        static string UpperTr(string s) => s.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant();
 
         static string MakeAddress(NamePoolSO names, Random rng)
         {

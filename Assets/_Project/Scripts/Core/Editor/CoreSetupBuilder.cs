@@ -107,6 +107,77 @@ namespace CivilJam.Core.Editor
             Debug.Log("[CoreSetup] Game.unity oluşturuldu: " + ScenePath);
         }
 
+        const string DeskScreenPrefab = "Assets/_Project/Prefabs/Desk/DeskScreen.prefab";
+
+        [MenuItem("CivilJam/Core/Install Screens Into Game Scene")]
+        public static void InstallScreens()
+        {
+            InstallScreenPrefabs(DeskScreenPrefab);
+        }
+
+        /// <summary>
+        /// Game.unity'ye ekran prefab'larını Canvas altına ekler. Canvas (1920x1080, Match 0.5) ve
+        /// EventSystem (Input System UI modülü) yoksa kurar. Aynı prefab zaten varsa tekrar eklemez.
+        /// </summary>
+        public static void InstallScreenPrefabs(params string[] prefabPaths)
+        {
+            var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            var canvas = EnsureCanvas();
+            EnsureEventSystem();
+
+            foreach (var path in prefabPaths)
+            {
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (prefab == null)
+                {
+                    Debug.LogError("[CoreSetup] Prefab bulunamadı: " + path);
+                    continue;
+                }
+
+                bool exists = false;
+                foreach (Transform child in canvas.transform)
+                    if (PrefabUtility.GetCorrespondingObjectFromSource(child.gameObject) == prefab) exists = true;
+                if (exists)
+                {
+                    Debug.Log("[CoreSetup] Zaten sahnede: " + path);
+                    continue;
+                }
+
+                var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, canvas.transform);
+                if (instance.GetComponent<IGameScreen>() == null)
+                    Debug.LogWarning("[CoreSetup] Prefab kökünde IGameScreen yok: " + path);
+                Debug.Log("[CoreSetup] Eklendi: " + path);
+            }
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
+
+        static Canvas EnsureCanvas()
+        {
+            var existing = Object.FindAnyObjectByType<Canvas>();
+            if (existing != null) return existing;
+
+            var go = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas),
+                typeof(UnityEngine.UI.CanvasScaler), typeof(UnityEngine.UI.GraphicRaycaster));
+            var canvas = go.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            var scaler = go.GetComponent<UnityEngine.UI.CanvasScaler>();
+            scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+            return canvas;
+        }
+
+        static void EnsureEventSystem()
+        {
+            if (Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>() != null) return;
+            new GameObject("EventSystem", typeof(UnityEngine.EventSystems.EventSystem),
+                typeof(UnityEngine.InputSystem.UI.InputSystemUIInputModule));
+        }
+
         // ---------- yardımcılar ----------
 
         static ParamRule Rule(BuildingType b, ParamType p, string name, string unit, float required) =>

@@ -147,6 +147,36 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void Stamps_AreReadableText_AndWrongStampMismatchesLab()
+        {
+            _config.ProjectsPerDay = 10;
+            _config.NonCompliantRatio = 1f;
+            _config.AllowFakeDocuments = true;
+
+            bool sawWrongStamp = false;
+            for (int seed = 0; seed < 50; seed++)
+            {
+                foreach (var p in ProjectGenerator.Generate(1, _config, _rules, _balance, null, null, new System.Random(seed)))
+                {
+                    foreach (var d in p.Documents)
+                    {
+                        Assert.IsFalse(string.IsNullOrEmpty(d.StampId));
+                        StringAssert.DoesNotContain("STAMP", d.StampId, "Kaşe metni gerçek/sahte bilgisini sızdırmamalı");
+                        StringAssert.DoesNotContain("FAKE", d.StampId);
+                    }
+
+                    var lab = p.Documents[1];
+                    if (lab.Clues.Contains(ClueType.WrongStamp) && !lab.Clues.Contains(ClueType.UnknownLab))
+                    {
+                        sawWrongStamp = true;
+                        StringAssert.DoesNotStartWith(lab.LabName.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant(), lab.StampId);
+                    }
+                }
+            }
+            Assert.IsTrue(sawWrongStamp, "Test en az bir WrongStamp örneği görmeli");
+        }
+
+        [Test]
         public void Session_FullDayLoop_DoesNotDoublePay()
         {
             var expense = ScriptableObject.CreateInstance<ExpenseSO>();

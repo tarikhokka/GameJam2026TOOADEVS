@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CivilJam.Core
 {
@@ -26,8 +27,14 @@ namespace CivilJam.Core
         [SerializeField] int fixedSeed;
 
         [Header("Debug")]
-        [Tooltip("Ekranı olmayan fazlar için IMGUI yedek arayüzü")]
+        [Tooltip("Ekranı olmayan fazlar için IMGUI yedek arayüzü. Sadece Editor'de ve Development Build'de çalışır; " +
+                 "gerçek build'de ekranı olmayan faz otomatik geçilir.")]
         [SerializeField] bool fallbackGui = true;
+
+        [Tooltip("Jüri demosu için gizli tuşlar: F9 = son güne atla, F10 = bu gece afet kesin")]
+        [SerializeField] bool demoKeys = true;
+
+        bool UseFallback => fallbackGui && (Application.isEditor || Debug.isDebugBuild);
 
         readonly Dictionary<GamePhase, IGameScreen> _screens = new Dictionary<GamePhase, IGameScreen>();
         GameSession _session;
@@ -96,6 +103,7 @@ namespace CivilJam.Core
                 case GamePhase.DayIntro: _session.BeginDay(); break;
                 case GamePhase.DailyExpenses: _session.PrepareExpenses(); break;
                 case GamePhase.Save: _session.AdvanceDayAndSave(); break;
+                case GamePhase.Ending: SaveSystem.Delete(); break; // Bitmiş oyun "Devam Et" ile açılmasın
             }
 
             _waiting = true;
@@ -105,7 +113,7 @@ namespace CivilJam.Core
                 _current.Completed += OnScreenCompleted;
                 _current.Show(Context);
             }
-            else if (!fallbackGui)
+            else if (!UseFallback)
             {
                 Complete(); // Ekran yok, yedek kapalı → fazı atla
             }
@@ -144,14 +152,36 @@ namespace CivilJam.Core
                     Enter(GamePhase.DayIntro);
                     break;
                 case GamePhase.Ending:
-                    // MainMenu'ye dönüş C'nin son ekranında; son ekranında kayıt davranışı henüz kararlaştırılmadı.
+                    // MainMenu'ye dönüş C'nin son ekranında. Kayıt Ending'e girerken silindi.
                     break;
+            }
+        }
+
+        void Update()
+        {
+            if (!demoKeys || Context == null || Context.State == null) return;
+            var kb = Keyboard.current;
+            if (kb == null) return;
+
+            // F9: son güne atla (bu günün sonunda son kuralları değerlendirilir)
+            if (kb.f9Key.wasPressedThisFrame && Context.Phase != GamePhase.Ending)
+            {
+                Context.State.Day = Mathf.Max(Context.State.Day, Context.Balance.TotalDays);
+                Context.NotifyStateChanged();
+                Debug.Log($"[Demo] Son güne atlandı: {Context.State.Day}");
+            }
+            // F10: bu gece afet kesin
+            if (kb.f10Key.wasPressedThisFrame)
+            {
+                Context.State.DisasterChance = 1f;
+                Context.NotifyStateChanged();
+                Debug.Log("[Demo] Bu gece afet kesin");
             }
         }
 
         void OnGUI()
         {
-            if (fallbackGui && _current == null && _waiting && Context != null)
+            if (UseFallback && _current == null && _waiting && Context != null)
                 FallbackGui.Draw(this);
         }
     }

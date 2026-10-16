@@ -148,7 +148,12 @@ namespace CivilJam.Flow
             var sb = new StringBuilder();
             sb.AppendLine("<b>GÜNÜN ÖZETİ</b>");
 
-            if (quake.CollapsedCount == 0)
+            if (quake.Outcomes.Count == 0)
+            {
+                // (A, Core) Son afetten beri onaylanan bina yoksa "incelenen yapılar" demeyelim
+                sb.AppendLine("Şehirde sarsıntı hissedildi. Son depremden bu yana imzaladığın bir bina yoktu.");
+            }
+            else if (quake.CollapsedCount == 0)
             {
                 sb.AppendLine("Şehirde sarsıntı hissedildi. İncelenen yapıların hepsi ayakta kaldı.");
             }
@@ -189,7 +194,8 @@ namespace CivilJam.Flow
 
             if (!o.Collapsed)
             {
-                sb.AppendLine("Ayakta kaldı.");
+                // (A, Core) Karar: ayakta kalan binada da oyuncunun imzası/sorumluluğu yazılır
+                sb.AppendLine(string.IsNullOrEmpty(o.ResponsibilityText) ? "Ayakta kaldı." : o.ResponsibilityText);
                 return sb.ToString();
             }
 

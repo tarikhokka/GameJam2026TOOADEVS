@@ -66,9 +66,9 @@ namespace CivilJam.Core
     public enum EndingType
     {
         None,
-        Good,          // Hedef güne yıkımsız/hapissiz ulaştı
-        Bad,           // Mahkeme / hapis
-        MiddleClosed,  // Borçtan ofis kapandı
-        MiddleQuota    // Kota tutmadı
+        Good,            // Son güne ulaştı, hiç bina yıkılmadı, hapis yok, ofis açık
+        Bad,             // Mahkeme / hapis
+        MiddleClosed,    // Borç limiti aşıldı, ofis kapandı
+        MiddleCollapsed  // Son güne ulaştı ama imzalı bina(lar) yıkıldı; hapis çıkmadı
     }
 }

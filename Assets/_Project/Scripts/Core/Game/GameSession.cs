@@ -95,13 +95,18 @@ namespace CivilJam.Core
         }
 
         /// <summary>
-        /// GEÇİCİ son kuralları (öncelik henüz kararlaştırılmadı): Hapis → Kötü; son gün tamam → İyi.
-        /// Ofis kapanışı / kota sonları kararlar netleşince eklenecek.
+        /// Son kuralları (karar 2026-10-17). Günlük ödemeden sonra çağrılır; öncelik en ağırdan hafife:
+        ///  1. Hapis zarı tuttu                         → Bad
+        ///  2. Borç DebtLimit'i aştı                    → MiddleClosed (ofis kapandı; her gün kontrol edilir)
+        ///  3. Son gün bitti, en az bir bina yıkıldı     → MiddleCollapsed
+        ///  4. Son gün bitti, hiç bina yıkılmadı         → Good
         /// </summary>
         public EndingType EvaluateEnding()
         {
             if (State.Jailed) State.Ending = EndingType.Bad;
-            else if (State.Day >= Balance.TotalDays) State.Ending = EndingType.Good;
+            else if (State.Debt > Balance.DebtLimit) State.Ending = EndingType.MiddleClosed;
+            else if (State.Day >= Balance.TotalDays)
+                State.Ending = State.TotalCollapses > 0 ? EndingType.MiddleCollapsed : EndingType.Good;
             return State.Ending;
         }
 

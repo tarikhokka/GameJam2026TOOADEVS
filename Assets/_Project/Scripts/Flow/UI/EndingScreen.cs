@@ -95,10 +95,10 @@ namespace CivilJam.Flow
                     body = "Borçlar ofisin kapısına dayandı. Mühürlenen kapının ardında kalan imzalar artık başkalarının sorumluluğunda.";
                     image = closedImage;
                     break;
-                case EndingType.MiddleQuota:
-                    title = "Yetersiz Kaldın";
-                    body = "Beklenen hedefe ulaşılamadı. Masan başkasına devredildi.";
-                    image = closedImage;
+                case EndingType.MiddleCollapsed: // (A, Core: MiddleQuota yerine; kota kaldırıldı)
+                    title = "Enkazın Gölgesi";
+                    body = "Mahkeme kapına gelmedi. Ama imzanı taşıyan bir bina artık yok ve o binada yaşayanların yokluğu her sabah masanda.";
+                    image = badImage;
                     break;
                 default:
                     title = "Son";

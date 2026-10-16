@@ -7,14 +7,14 @@ namespace CivilJam.Core
     public class BalanceSO : ScriptableObject
     {
         [Header("Takvim")]
-        public int TotalDays = 14;
+        public int TotalDays = 10;
 
         [Header("Para")]
-        public int StartMoney = 5000;
-        public int DebtLimit = 5000;      // Ofis kapanışı kuralı henüz kararlaştırılmadı
+        public int StartMoney = 2500;
+        public int DebtLimit = 2000;      // Borç bunu aşarsa ofis kapanır (Orta son)
         public int ExtraTestCost = 300;   // Anında düşülür
         public int WindowRepairCost = 200;
-        public Vector2Int ApprovalFeeRange = new Vector2Int(600, 1000);
+        public Vector2Int ApprovalFeeRange = new Vector2Int(400, 700);
 
         [Header("Afet olasılığı")]
         [Range(0f, 1f)] public float DisasterChanceStart = 0.50f;     // Taban (karar)

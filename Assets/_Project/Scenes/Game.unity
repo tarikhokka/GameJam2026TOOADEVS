@@ -946,7 +946,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 82d355cf96ce58a4e940be6894d2e6e2, type: 2}
   - {fileID: 11400000, guid: eb452530aa682e84fa783e5a1e1f1a0e, type: 2}
   expenses:
-  - {fileID: 11400000, guid: 0daf62edf427f0445936ff7ef1e8fcae, type: 2}
   - {fileID: 11400000, guid: 10abe719db8258a49acefc7dc0b53f37, type: 2}
   - {fileID: 11400000, guid: 13c6b72750a8baa4b8f280ca7d26716f, type: 2}
   clients:
@@ -956,9 +955,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 68374f8f16278f54884b13099af4d8aa, type: 2}
   - {fileID: 11400000, guid: 1e275900219e7b644962afc063102a4b, type: 2}
   - {fileID: 11400000, guid: 4aea4b1369f9b8d4bb24830d6ff7f75b, type: 2}
-  endings: []
+  endings:
+  - {fileID: 11400000, guid: 973addf757de2bc4997dac535e004421, type: 2}
+  - {fileID: 11400000, guid: aeb542fbfc10e284b98895dfb89d55fe, type: 2}
+  - {fileID: 11400000, guid: 1df6624b311e9594f912f5759ecc856b, type: 2}
+  - {fileID: 11400000, guid: 5e9cf3a4449b48548a2a57e9d6cb152e, type: 2}
   fixedSeed: 0
   fallbackGui: 1
+  demoKeys: 1
 --- !u!4 &1904832667
 Transform:
   m_ObjectHideFlags: 0

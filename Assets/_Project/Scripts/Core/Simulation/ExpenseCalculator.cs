@@ -3,11 +3,16 @@ using System.Collections.Generic;
 namespace CivilJam.Core
 {
     /// <summary>
-    /// Günlük giderler (v0). Faz 2'de EconomyCalculator'a genişleyecek.
-    /// Ödenmeyen giderin sonucu henüz kararlaştırılmadı; GEÇİCİ: zorunlu kalem ödenmezse borca eklenir.
+    /// Günlük giderler.
+    /// Kural (karar 2026-10-17): kasada yetmeyen gider ödenemez; zorunluysa borca yazılır.
+    /// Borç BalanceSO.DebtLimit'i aşarsa ofis kapanır (GameSession.EvaluateEnding → MiddleClosed).
+    /// Borç varsa isteğe bağlı "Borç ödemesi" kalemi eklenir; kasa çeşitli kalemleri sırayla karşılar.
     /// </summary>
     public static class ExpenseCalculator
     {
+        public const string DebtPaymentId = "debt_payment";
+        public const string WindowRepairId = "window_repair";
+
         public static DailyExpenseResult Build(GameState state, IReadOnlyList<ExpenseSO> expenses, BalanceSO balance)
         {
             var result = new DailyExpenseResult
@@ -27,8 +32,7 @@ namespace CivilJam.Core
                         ExpenseId = e.Id,
                         DisplayName = e.DisplayName,
                         Amount = e.Amount,
-                        Mandatory = e.Mandatory,
-                        Paid = e.Mandatory // Varsayılan: zorunlular işaretli, oyuncu kaldırabilir
+                        Mandatory = e.Mandatory
                     });
                 }
             }
@@ -37,26 +41,72 @@ namespace CivilJam.Core
             {
                 result.Lines.Add(new ExpenseLine
                 {
-                    ExpenseId = "window_repair",
+                    ExpenseId = WindowRepairId,
                     DisplayName = $"Cam tamiri x{state.WindowRepairsToday}",
                     Amount = balance.WindowRepairCost * state.WindowRepairsToday,
-                    Mandatory = true,
-                    Paid = true
+                    Mandatory = true
                 });
+            }
+
+            if (state.Debt > 0)
+            {
+                result.Lines.Add(new ExpenseLine
+                {
+                    ExpenseId = DebtPaymentId,
+                    DisplayName = "Borç ödemesi",
+                    Amount = state.Debt,
+                    Mandatory = false
+                });
+            }
+
+            // Varsayılan seçim: zorunlu kalemler, kasa yettiği sürece işaretli.
+            int budget = state.Money;
+            foreach (var l in result.Lines)
+            {
+                l.Paid = l.Mandatory && l.Amount <= budget;
+                if (l.Paid) budget -= l.Amount;
             }
 
             return result;
         }
 
-        /// <summary>Oyuncu seçimini uygular. Bir kez çalışır (Applied).</summary>
+        /// <summary>
+        /// Oyuncu seçimini uygular. Bir kez çalışır (Applied).
+        /// Seçili kalem kasa yetmiyorsa ödenmez (Paid = false olur). Ödenmeyen zorunlu kalem borca yazılır.
+        /// Kasa hiçbir zaman eksiye düşmez.
+        /// </summary>
         public static void Apply(GameState state, DailyExpenseResult result)
         {
             if (result == null || result.Applied) return;
 
-            foreach (var line in result.Lines)
+            // Önce zorunlular, sonra isteğe bağlılar (borç ödemesi en sonda kalanla yapılır).
+            foreach (bool mandatoryPass in new[] { true, false })
             {
-                if (line.Paid) state.Money -= line.Amount;
-                else if (line.Mandatory) state.Debt += line.Amount; // GEÇİCİ kural
+                foreach (var line in result.Lines)
+                {
+                    if (line.Mandatory != mandatoryPass) continue;
+
+                    if (line.ExpenseId == DebtPaymentId)
+                    {
+                        // Borç kısmen de ödenebilir: kasada ne kaldıysa.
+                        int pay = line.Paid ? System.Math.Min(System.Math.Min(line.Amount, state.Money), state.Debt) : 0;
+                        state.Money -= pay;
+                        state.Debt -= pay;
+                        line.Amount = pay;
+                        line.Paid = pay > 0;
+                        continue;
+                    }
+
+                    if (line.Paid && line.Amount <= state.Money)
+                    {
+                        state.Money -= line.Amount;
+                    }
+                    else
+                    {
+                        line.Paid = false;
+                        if (line.Mandatory) state.Debt += line.Amount;
+                    }
+                }
             }
 
             result.MoneyAfter = state.Money;

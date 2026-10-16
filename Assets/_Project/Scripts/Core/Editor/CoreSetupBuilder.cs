@@ -48,7 +48,7 @@ namespace CivilJam.Core.Editor
 
             GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Rent.asset", e => { e.Id = "rent"; e.DisplayName = "Ofis kirası"; e.Amount = 400; e.Mandatory = true; });
             GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Loan.asset", e => { e.Id = "loan"; e.DisplayName = "Kredi taksiti"; e.Amount = 300; e.Mandatory = true; });
-            GetOrCreate<ExpenseSO>(DataDir + "/Expenses/Insurance.asset", e => { e.Id = "insurance"; e.DisplayName = "Mesleki sigorta"; e.Amount = 150; e.Mandatory = false; });
+            // Sigorta kapsam dışı (karar 2026-10-17): etkisi olmayan kalem oyuncuyu yanıltıyordu.
 
             GetOrCreate<NamePoolSO>(DataDir + "/NamePool.asset", n =>
             {
@@ -71,9 +71,53 @@ namespace CivilJam.Core.Editor
                 h.BribedCollapse = new List<string> { "Yıkılan binanın onayında usulsüzlük şüphesi" };
             });
 
+            // Sonlar: metinler EEE'nin ICERIK_TASLAK.md'sinden. Var olan asset'in üzerine yazılmaz (EEE düzenleyebilir).
+            Directory.CreateDirectory(DataDir + "/Endings");
+            GetOrCreate<EndingSO>(DataDir + "/Endings/Good.asset", e => Ending(e, EndingType.Good, "Ayakta Kalanlar", "ending_good.png",
+                "Ofisinin kapısını son kez kilitledin.\n\n" +
+                "Masandan geçen her projeyi okudun. Eksik demiri, sahte raporu, masaya bırakılan zarfı geri çevirdin. Kimi gün kirayı zor ödedin, kimi gün kapında bir kabadayı bekledi.\n\n" +
+                "Ama yer sarsıldığında, imzanı taşıyan binaların hepsi ayaktaydı. İçlerinde uyuyan çocuklar ertesi sabah okula gitti.\n\n" +
+                "Gazeteler ayakta kalan binalar için manşet atmaz. Kimse adını bilmeyecek. Ama o binalarda yaşayan herkes, farkında olmadan, sana bir sabah borçlu.\n\n" +
+                "Deprem doğanın işidir. Binanın ayakta kalması ise bizim."));
+            GetOrCreate<EndingSO>(DataDir + "/Endings/Bad.asset", e => Ending(e, EndingType.Bad, "Hüküm", "ending_bad.png",
+                "Mahkeme salonu kalabalık. Ön sıralarda, yıkılan binada yakınlarını kaybedenler oturuyor. Ellerinde fotoğraflar var.\n\n" +
+                "Hâkim isimleri tek tek okuyor. Her isimde salon biraz daha sessizleşiyor.\n\n" +
+                "Savcı bir dosya kaldırıyor: ruhsat, laboratuvar raporu ve en altta senin imzan.\n\n" +
+                "\"Bu belgeleri incelediniz mi?\"\n\n" +
+                "Cevap veremiyorsun. Zarftaki para çoktan harcandı. O binada yaşayanlar ise geri gelmeyecek.\n\n" +
+                "Bir imza birkaç saniye sürer. Sonuçları bir ömür."));
+            GetOrCreate<EndingSO>(DataDir + "/Endings/MiddleClosed.asset", e => Ending(e, EndingType.MiddleClosed, "Kapanan Kapı", "ending_closed.png",
+                "Kira yine ödenemedi. Bankadan son uyarı geldi. Bu sabah ofisinin kapısına bir kilit asıldı.\n\n" +
+                "Masadaki dosyaları kutuya koydun. Kaşeni, kalemini, yarım kalmış bir laboratuvar raporunu.\n\n" +
+                "Bu şehirde dürüst kalmanın bir bedeli var. Bazen o bedel ayın sonunu getirememek.\n\n" +
+                "İmzanı taşıyan binalar şehirde duruyor. Hangisinin bir sonraki depremde ayakta kalacağını artık sen değil, zaman gösterecek.\n\n" +
+                "Işığı kapattın."));
+            // TASLAK (A): EEE son metni yazana kadar. Ton: ciddi, suçlamasız, depremzedeler olumsuz gösterilmez.
+            GetOrCreate<EndingSO>(DataDir + "/Endings/MiddleCollapsed.asset", e => Ending(e, EndingType.MiddleCollapsed, "Enkazın Gölgesi", "ending_bad.png",
+                "Kimse kapını çalmadı. Soruşturma dosyası kapandı, adın gazetelerde geçmedi.\n\n" +
+                "Ama imzanı taşıyan binalardan biri artık yok. Yerinde boş bir arsa ve her sabah önünden geçtiğin bir çit var.\n\n" +
+                "O gün masandan geçen dosyayı hâlâ hatırlıyorsun. Bir satırı daha dikkatli okusaydın ne değişirdi, bilmiyorsun.\n\n" +
+                "Mahkeme seni yargılamadı. Bu soruyu artık her gün kendin soruyorsun."));
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[CoreSetup] Data asset'leri hazır: " + DataDir);
+        }
+
+        static void Ending(EndingSO e, EndingType type, string title, string image, string body)
+        {
+            e.Type = type;
+            e.Title = title;
+            e.Body = body;
+            e.Image = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/" + image);
+        }
+
+        /// <summary>Hepsi bir arada: eksik asset'leri üret, Game.unity'ye veriyi bağla, ekranları kur. Batchmode için.</summary>
+        public static void SetupAll()
+        {
+            CreateDataAssets();
+            LinkData();
+            InstallScreens();
         }
 
         [MenuItem("CivilJam/Core/Build Game Scene")]

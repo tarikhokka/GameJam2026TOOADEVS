@@ -29,7 +29,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Diğer
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
-| Unity 2D proje şablonu (Welcome klasörü, URP ayarları) | `Assets/Welcome`, `Assets/Settings` | Unity Hub şablonu | Unity Companion License | Tarık | 2026-10-16 |
+| Unity 2D proje şablonu (URP ayarları; Welcome klasörü ve SampleScene 17 Ekim'de kaldırıldı) | `Assets/Settings` | Unity Hub şablonu | Unity Companion License | Tarık | 2026-10-16 |
 | TextMesh Pro Essential Resources (LiberationSans SDF font, shader'lar, TMP Settings) | `Assets/TextMesh Pro` (tüm TMP yazıları) | Unity uGUI paketi (com.unity.ugui) içinden import | Unity Companion License; LiberationSans: SIL OFL 1.1 | Ahmet İlman | 2026-10-16 |
 
 ## Yapay zekâ kullanımı
@@ -40,10 +40,11 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması; son metinlerinin kod koşullarıyla tutarlılık düzeltmesi ve EndingSO asset'leri; oyun içi Emeği Geçenler metni | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset`, `Assets/_Project/Data/Endings/*.asset` | Tarık | 2026-10-16 |
 | Claude Code (Anthropic) | Core veri sözleşmesi kodu, deprem simülatörü, A rolü çalışma planı | `Assets/_Project/Scripts/Core/**`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
 | Claude Code (Anthropic) | Core Faz 1: proje üretici, afet sistemi, oyun oturumu/yöneticisi, kayıt, debug arayüzü, testler, veri asset ve Game sahnesi kurulum aracı; kurgusal isim listeleri | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `Assets/_Project/Scenes/Game.unity`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
+| Claude Code (Anthropic) | Proje analizi ve yol haritası; borç/son kuralları, kayıt silme, demo tuşları, son ekranı asset'leri (metinler EEE'nin; MiddleCollapsed taslak metni), README taslağı, build ayarları ve şablon temizliği | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `README.md`, `memory.md`, `AHMET.md`, `Flow/UI/EndingScreen.cs` ve `ResultScreen.cs` (küçük düzeltme) | Ahmet İlman | 2026-10-17 |
 | ChatGPT / Codex (OpenAI) | Gün sistemi, haftalık gider ve gün sonu kayıt kararlarıyla ortak hafızanın güncellenmesi; Onur için C rolü çalışma planı | `memory.md`, `ONUR.md`, `CREDITS_AND_AI.md` | Onur Kabadayılar | 2026-10-16 |
 | Claude (Anthropic) | Masa ekranı kodu: UI script'leri, Core'a bağlantı (IGameScreen/IGameActions), sahte gün verisi ve sandbox IGameActions, prefab/sahne kurulum aracı; B iş planı | `Assets/_Project/Scripts/Desk/**`, `OGUZHAN.md` | Oğuzhan | 2026-10-16 |
 | Claude (Anthropic) | Intro hikaye ekranı (daktilo efekti, sayfa geçişi) ve intro metinleri | `Assets/Scripts/Intro/IntroSequence.cs` | Oğuzhan | 2026-10-16 |
-| Claude (Anthropic) | Yapı Denetim Formu ve Denetçi El Kitabı tasarım görselleri ve kural tablosu (öneri; Ahmet onaylamadı, 2026-10-17 00:50'de repodan kaldırıldı — `62165c0` geçmişte duruyor) | `Docs/Tasarim/*.png` (kaldırıldı), `memory.md` | Oğuzhan | 2026-10-17 |
+| Claude (Anthropic) | Yapı Denetim Formu ve Denetçi El Kitabı tasarım görselleri ve kural tablosu (öneri; Ahmet onaylamadı, 2026-10-17 `61353fd` ile repodan kaldırıldı — `62165c0` geçmişte duruyor) | `Docs/Tasarim/*.png` (kaldırıldı), `memory.md` | Oğuzhan | 2026-10-17 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde Lit 2D (URP) deneme sahnesi oluşturma ve kayıt doğrulama; durum notları | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde Canvas kurulumu, 1920×1080 ölçekleme ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | ChatGPT / Codex (OpenAI) | Unity arayüzünde ResultScreen panelini oluşturma, tam ekran yerleşim ve kayıt doğrulama | `Assets/_Project/Scenes/Sandbox_Flow.unity`, `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |

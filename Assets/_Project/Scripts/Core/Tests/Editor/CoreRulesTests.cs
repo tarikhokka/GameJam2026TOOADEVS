@@ -146,6 +146,103 @@ namespace CivilJam.Core.Tests
             }
         }
 
+        static ExpenseSO Expense(string id, int amount, bool mandatory)
+        {
+            var e = ScriptableObject.CreateInstance<ExpenseSO>();
+            e.Id = id; e.DisplayName = id; e.Amount = amount; e.Mandatory = mandatory;
+            return e;
+        }
+
+        [Test]
+        public void Expenses_NeverMakeMoneyNegative_UnpaidMandatoryBecomesDebt()
+        {
+            var rent = Expense("rent", 400, true);
+            var loan = Expense("loan", 300, true);
+            var state = new GameState { Day = 1, Money = 500 };
+
+            var r = ExpenseCalculator.Build(state, new[] { rent, loan }, _balance);
+            Assert.IsTrue(r.Lines[0].Paid, "Kira kasadan karşılanabilir, işaretli gelmeli");
+            Assert.IsFalse(r.Lines[1].Paid, "Kasa yetmeyen zorunlu kalem işaretsiz gelmeli");
+
+            r.Lines[1].Paid = true; // oyuncu zorla işaretlese bile
+            ExpenseCalculator.Apply(state, r);
+            Assert.AreEqual(100, state.Money);
+            Assert.AreEqual(300, state.Debt);
+            Assert.GreaterOrEqual(state.Money, 0);
+
+            // Ertesi gün borç kısmen ödenebilir
+            state.Money = 1000;
+            var r2 = ExpenseCalculator.Build(state, new ExpenseSO[0], _balance);
+            var debtLine = r2.Lines.Find(l => l.ExpenseId == ExpenseCalculator.DebtPaymentId);
+            Assert.IsNotNull(debtLine);
+            debtLine.Paid = true;
+            ExpenseCalculator.Apply(state, r2);
+            Assert.AreEqual(0, state.Debt);
+            Assert.AreEqual(700, state.Money);
+
+            UnityEngine.Object.DestroyImmediate(rent);
+            UnityEngine.Object.DestroyImmediate(loan);
+        }
+
+        [Test]
+        public void Endings_FollowPriority()
+        {
+            var ctx = new GameContext { Balance = _balance, Rules = _rules };
+            var session = new GameSession(ctx, new[] { _config }, new ExpenseSO[0]);
+            _balance.TotalDays = 10;
+            _balance.DebtLimit = 2000;
+
+            session.NewGame(1);
+            ctx.State.Day = 3;
+            Assert.AreEqual(EndingType.None, session.EvaluateEnding(), "Gün ortasında son yok");
+
+            ctx.State.Day = 10;
+            Assert.AreEqual(EndingType.Good, session.EvaluateEnding(), "Yıkımsız son gün → İyi");
+
+            session.NewGame(1); ctx.State.Day = 10; ctx.State.TotalCollapses = 1;
+            Assert.AreEqual(EndingType.MiddleCollapsed, session.EvaluateEnding(), "Yıkım var, hapis yok → Orta (yıkım)");
+
+            session.NewGame(1); ctx.State.Day = 4; ctx.State.Debt = 2100;
+            Assert.AreEqual(EndingType.MiddleClosed, session.EvaluateEnding(), "Borç limiti aşıldı → ofis kapandı (gün ortasında da)");
+
+            session.NewGame(1); ctx.State.Day = 10; ctx.State.Debt = 2100; ctx.State.Jailed = true; ctx.State.TotalCollapses = 2;
+            Assert.AreEqual(EndingType.Bad, session.EvaluateEnding(), "Hapis her şeyden önce gelir");
+        }
+
+        [Test]
+        public void RejectEverything_LosesOfficeOnDaySeven()
+        {
+            // Data/Balance.asset ve Expenses ile aynı değerler (karar 2026-10-17)
+            _balance.StartMoney = 2500; _balance.DebtLimit = 2000; _balance.TotalDays = 10;
+            var rent = Expense("rent", 400, true);
+            var loan = Expense("loan", 300, true);
+            _config.ProjectsPerDay = 3;
+
+            var ctx = new GameContext { Balance = _balance, Rules = _rules };
+            var session = new GameSession(ctx, new[] { _config }, new[] { rent, loan });
+            session.NewGame(7);
+
+            EndingType ending = EndingType.None;
+            while (ending == EndingType.None && ctx.State.Day <= 20)
+            {
+                session.BeginDay();
+                session.FinishDesk();          // karar verilmeyenler reddedilir
+                session.RunDisasterCheck();
+                session.PrepareExpenses();
+                session.FinishExpenses();
+                Assert.GreaterOrEqual(ctx.State.Money, 0, "Kasa eksiye düşmemeli");
+                ending = session.EvaluateEnding();
+                if (ending == EndingType.None) ctx.State.Day++;
+            }
+
+            Assert.AreEqual(EndingType.MiddleClosed, ending, "Her şeyi reddeden oyuncu ofisini kaybetmeli");
+            // 2.500 TL: 3 gün tam ödenir, 4. gün kira ödenir + kredi borca, 5-6-7. gün borç 2.400 > 2.000
+            Assert.AreEqual(7, ctx.State.Day);
+
+            UnityEngine.Object.DestroyImmediate(rent);
+            UnityEngine.Object.DestroyImmediate(loan);
+        }
+
         static ClientSO Client(string id, bool honest, bool thug, int bribeMin, int bribeMax)
         {
             var c = ScriptableObject.CreateInstance<ClientSO>();

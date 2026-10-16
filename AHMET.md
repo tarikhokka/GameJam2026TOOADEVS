@@ -33,23 +33,31 @@ Bu dosya Ahmet'in görev ve oturum takibi içindir. Ortak proje kararları `memo
 - [x] EditMode testleri (7/7 geçti): Strength >= 1 asla yıkılmaz, afet kapsamı, olasılık, üretici, çift ödeme
 - [x] Unity Editor'de Game.unity'yi elle oynayıp kontrol et (Ahmet, 00:30: gün döngüsü, gazete verisi, dürüst bina, save.json ✅)
 - [x] Müteahhit rolleri: uygun → dürüst, rüşvetli → `ClientSO.OffersBribes`, diğer uygunsuz → rüşvet vermeyen (Selim); kabadayı sadece AllowThugs günleri. Tarık'ın 6 ClientSO'su Game.unity'ye bağlandı (`CoreSetupBuilder.LinkData`). Testler 10/10.
-- [x] Flow prefab'ları (Onur `0716dc9`) Game.unity'ye eklendi (`InstallScreens`: Desk + Result + DaySummary + DailyExpenses + Ending); sahne testi 5 fazı kontrol ediyor. Testler 10/10. (01:10)
-- **Faz 1 KAPANDI — 2026-10-17 01:10** (A kısmı 00:45, Flow entegrasyonu 01:10). Not: Oğuzhan'ın 00:07 "yeni kural modeli" önerisi Ahmet tarafından REDDEDİLDİ (00:50): `62165c0` revert edildi, Tarık'ın `4f33750` model uyarlamaları geri alındı (credits + stil notu korundu). Mevcut Core sözleşmesi geçerli.
+- [x] Flow prefab'ları (Onur `0716dc9`) Game.unity'ye eklendi (`InstallScreens`: Desk + Result + DaySummary + DailyExpenses + Ending); sahne testi 5 fazı kontrol ediyor. Testler 10/10. (`0bebf9b`)
+- **Faz 1 KAPANDI — 17 Ekim, `a7a733c`** (A kısmı `5097e93`, Flow entegrasyonu `0bebf9b`). Not: Oğuzhan'ın 00:07 "yeni kural modeli" önerisi Ahmet tarafından REDDEDİLDİ (`61353fd`): `62165c0` revert edildi, Tarık'ın `4f33750` model uyarlamaları geri alındı (credits + stil notu korundu). Mevcut Core sözleşmesi geçerli.
 - [x] B ve C'ye haber ver: memory.md → "Ekibe notlar (A / Ahmet'ten)"
 
-### Faz 2 — Ekonomi ve hile (Cts 08 → 14)
-- [ ] EconomyCalculator: günlük giderler, borç, ofis kapanışı
-- [ ] Rüşvet + sahte belge (bedava ipucu + ücretli ek test), JailRisk
-- [ ] Kota kontrolü
+### Analiz sonrası düzeltmeler (17 Ekim gece) — A kısmı
+Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.000), İyi = hiç yıkım yok, 10 gün, fabrika ve sigorta kapsam dışı.
+- [x] **K1** Kasa eksiye düşmez; yetmeyen zorunlu gider borca; borç > `DebtLimit` → `MiddleClosed`; "Borç ödemesi" kalemi (kısmen ödenebilir). Test: her şeyi reddeden oyuncu 7. gün ofisi kaybeder.
+- [x] **K2** Son öncelikleri: Bad > MiddleClosed > MiddleCollapsed (yeni) > Good. `EndingType.MiddleQuota` kaldırıldı.
+- [x] **K3** İlk Windows build (`Builds/Imza/Imza.exe`, 111 MB, açılış testi temiz) + `README.md` taslağı.
+- [x] **K4** Build'de yedek arayüz kapalı; ekranı olmayan faz otomatik geçilir (Editor ve Development Build'de mavi kutu durur).
+- [x] **Y2** 4 EndingSO (`Data/Endings`): Tarık'ın 3 metni + MiddleCollapsed taslağı. Game.unity'ye bağlı.
+- [x] **Y3** Son ekranına girince kayıt silinir.
+- [x] **Y5** Fabrika kapalı (Day08). **Y6** Başlangıç 2.500, onay ücreti 400-700. **O5** Sigorta kaldırıldı.
+- [x] **O3** Gazetede ayakta kalan binaya sorumluluk satırı (Onur'un dosyası, memory.md'de not). **O7** F9/F10 demo tuşları. **O8** Ürün adı "Imza", şirket "TOOADEVS".
+- [x] **D1** SampleScene, Welcome ve eğitim paketi kaldırıldı. **D2** ölü alanlar. **D3** `.gitignore`. **O2** yanlış saatler commit hash'iyle değiştirildi.
+- [ ] Ekibe kalanlar (memory.md "Analiz sonrası işler"): Y1 öğretici + lab listesi + intro (B), Y4 Esc menüsü (C), K4 ara ekranları (C), O4 kabadayı kartı (B), O6 görsel/ses (EEE), README son hali (EEE).
 
-### Faz 3 — İçerik mantığı (Cts 14 → 20)
-- [ ] Fabrika/yangın; yıkım nedeni şablon cümleleri (manşet seçimi Flow'da yapıldı — ResultScreen, Tarık'ın Headlines.asset'i)
-- [ ] EndingResolver (İyi / Kötü / Orta); Save/Load JSON
-- [ ] Gizli gün atlama kısayolu
+### Faz 3 — İçerik ve his (Cts 14 → 20)
+- [ ] Denge turu: 5 oyun stili (dürüst, rüşvetçi, her şeyi reddeden, dikkatsiz, karışık); JailRisk sayıları.
+- [ ] Vakit kalırsa: yangın ayrı afet. Yeni asset'leri bağla (`CivilJam > Core > Link Data`).
+- [ ] 20:00 ikinci build.
 
-### Faz 4-5 — MVP, denge, build (Cts 20 → Paz 12 freeze)
-- [ ] Baştan sona oynanış, 3 son erişilebilir; denge BalanceSO'dan
-- [ ] Windows build (Game.unity sahibi olarak)
+### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
+- [ ] Baştan sona oynanış, 4 son erişilebilir (F9/F10 ile de).
+- [ ] Paz 12:00 freeze → final build, ZIP, video, README, yükleme.
 
 ## Onur'un sorularına cevaplar (ONUR.md "A'ya soracağım açık noktalar")
 Ahmet tarafından 2026-10-16 22:00 civarı cevaplandı.
@@ -58,28 +66,29 @@ Ahmet tarafından 2026-10-16 22:00 civarı cevaplandı.
 |---|---|---|---|
 | 1 | Afet sonucu hangi binaları içeriyor? | İki afet arasında oyuncunun onayladığı binalar: son afetten bu yana onaylananlar. Daha önceki afetleri atlatmış binalar tekrar değerlendirilmez. | ✅ Karar |
 | 2 | Gazete / gün özetinde ne gösterilecek? | Afetsiz günün sonunda gazete **gösterilmez**. Afet olunca şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü ve yaralı sayısı, binanın yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi. | ✅ Karar |
-| 3 | Ödeme günü ve ödenmeyen giderlerin sonucu? | **ÖNEMLİ:** ödeme haftalık değil **günlük** olacak. Ödenmeyen giderlerin sonucu henüz cevaplanmadı. | ✅ Günlük ödeme / ❓ ödenmeyen gider |
+| 3 | Ödeme günü ve ödenmeyen giderlerin sonucu? | Ödeme **günlük**. Yetmeyen zorunlu gider borca yazılır; borç 2.000 TL'yi aşarsa ofis kapanır (Orta son). | ✅ Karar (17 Ekim) |
 | 4 | Afet olunca olasılık sıfırlanıyor mu? | Evet. | ✅ Karar |
-| 5 | Gün sonu yüklemesi / son ekranında kayıt? | Şimdilik cevaplanmadı. | ❓ Açık |
-| 6 | Kota, hapis ve ofis kapanışı aynı anda tetiklenirse öncelik? | Şimdilik cevaplanmadı. | ❓ Açık |
+| 5 | Gün sonu yüklemesi / son ekranında kayıt? | Yükleme yeni günün başını açar; son ekranına girince kayıt silinir. | ✅ Karar (17 Ekim) |
+| 6 | Kota, hapis ve ofis kapanışı aynı anda tetiklenirse öncelik? | Kota yok. Öncelik: Hapis > Ofis kapandı > Yıkım > İyi. | ✅ Karar (17 Ekim) |
 
 Ek kararlar (Ahmet, 22:10): deprem animasyonu/sahnesi yok; sadece gazete (afet günü) veya gün özeti (afetsiz gün) gösterilir. Afet olasılığı tabanı **%50**, tavanı **%100**.
 
-Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek test parası anında düşülür. Kota yok (karar, 22:40). Değerler `BalanceSO`'da.
+Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. Hâlâ öneri: afetsiz gün +%10 artış. Değerler `BalanceSO`'da.
 
-### GEÇİCİ kurallar (kararlar netleşene kadar kodda böyle; tek yerde değişir)
-- Ödenmeyen zorunlu gider borca eklenir (`ExpenseCalculator.Apply`). Ofis kapanışı yok.
-- Sonlar (`GameSession.EvaluateEnding`): hapis → Kötü; son güne ulaşınca → İyi. Orta sonlar (ofis/kota) yok.
-- Kayıt: günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün DayIntro'sunu açar. Son ekranında kayıt silinmiyor.
-- Kota yok (karar). `BalanceSO.ApprovalQuota` silindi (23:20).
+### Kurallar kodda nerede (geçici kural kalmadı)
+- Giderler ve borç: `ExpenseCalculator` (Build / Apply).
+- Sonlar ve öncelik: `GameSession.EvaluateEnding`.
+- Kayıt: `GameManager.Enter` (Save fazında gün +1 ve kayıt, Ending fazında silme).
+- Sayılar: `Data/Balance.asset`.
 
 ## B ve C için Core kullanım rehberi
-- Ekran = sahnede bir MonoBehaviour + `IGameScreen`. `Phase` hangi fazda gösterileceğini söyler; GameManager sahnedeki ekranları kendisi bulur. Bir faz için ekran yoksa IMGUI yedek arayüz çıkar.
+- Ekran = sahnede bir MonoBehaviour + `IGameScreen`. `Phase` hangi fazda gösterileceğini söyler; GameManager sahnedeki ekranları kendisi bulur. Bir faz için ekran yoksa Editor'de IMGUI yedek arayüz çıkar, gerçek build'de faz atlanır.
 - `Show(GameContext ctx)` içinde okunacaklar:
   - Desk: `ctx.TodayProjects` (Params: `Reported` göster, `Tested` ise `Actual` da; `Documents[0]` başvuru, `Documents[1]` lab raporu; `OffersBribe`/`BribeAmount`), `ctx.Rules` (yönetmelik kitapçığı), `ctx.Balance.ExtraTestCost`.
   - Result (gazete): `ctx.LastQuake.Outcomes` → `BuildingName`, `Collapsed`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`, `WasBribed`, `FailedParams`; toplamlar `TotalDeaths` / `TotalInjured`; `Jailed`.
   - DaySummary: `ctx.State` (Day, Money, Debt, DisasterChance), `ctx.TodayProjects` kararları.
-  - DailyExpenses: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid).
+  - DailyExpenses: `ctx.PendingExpenses.Lines` (DisplayName, Amount, Mandatory, Paid). Borç varsa `ExpenseId == "debt_payment"` kalemi gelir. Core kasa yetmeyen kalemi ödemez; ekrandaki "ödeme sonrası kasa" sadece önizleme.
+  - Ending: `ctx.State.Ending` (Good / Bad / MiddleClosed / MiddleCollapsed) + `ctx.Endings` (EndingSO).
 - Yazma sadece `ctx.Actions`: `Approve(id, acceptBribe)`, `Reject(id)`, `BuyExtraTest(id)` → bool, `SetExpensePaid(expenseId, paid)`. Aynı projeye ikinci karar etkisizdir.
 - HUD: `ctx.StateChanged` olayına abone ol.
 - MainMenu "Devam Et": `GameLaunch.ContinueFromSave = true;` sonra Game sahnesini yükle. Kayıt var mı: `SaveSystem.HasSave`.
@@ -90,6 +99,8 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 | 2026-10-16 21:20 | İlk sözleşme (gün sistemi adlarıyla) | B, C |
 | 2026-10-16 22:00 | PLANLI: günlük ödeme yeniden adlandırması, afet kapsamı, BuildingOutcome kayıp verisi | B, C |
 | 2026-10-16 22:15 | UYGULANDI: `WeeklyExpenseResult` → `DailyExpenseResult`; `GameContext.PendingWeekly` → `PendingExpenses`; `IsPaymentDay`/`Week`/`BalanceSO.DaysPerWeek` silindi; `GamePhase.Quake` silindi, `WeeklyExpenses` → `DailyExpenses`; `GameState`: `LastDisasterDay`, `ApprovedToday`, `WindowRepairsToday`, `TotalDeaths`, `TotalInjured`, `Jailed`; `BuildingOutcome`: `Address`, `DayApproved`, `Residents`, `Deaths`, `Injured`, `VictimNames`, `ResponsibilityText`; `QuakeResult.TotalDeaths/TotalInjured/ChanceBefore`; yeni `NamePoolSO`, `GameContext.Names`, `GameLaunch`, `SaveSystem`, `GameSession`, `GameManager` | B, C |
+| `5097e93` | `ClientSO.OffersBribes` (dürüst değil + BribeRange > 0) | EEE, B |
+| 17 Ekim analiz | `EndingType.MiddleQuota` → `MiddleCollapsed`; `ExpenseCalculator.DebtPaymentId` / `WindowRepairId`; `GameManager.demoKeys` (F9/F10); `BalanceSO` varsayılanları (10 gün, 2.500, 2.000, 400-700) | C (EndingScreen güncellendi), B |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).
@@ -103,11 +114,12 @@ Hâlâ öneri (onay bekliyor): afetsiz gün +%10 artış; toplam 14 gün; ek tes
 - 22:50 — Kota kaldırıldı (karar A). Kaşe düzeltmesi: `StampId` artık okunabilir metin (`STAMP_OK/FAKE` sızıntısı giderildi); WrongStamp = kaşedeki lab adı başlıkla uyuşmaz; WrongSignature = lab raporunu farklı mühendis imzalar. DeskScreen (`b614831`) Game.unity'ye eklendi (`CoreSetupBuilder.InstallScreens`, Canvas + EventSystem). Testler 9/9. `BalanceSO.ApprovalQuota` Desk kullandığı için şimdilik duruyor (Oğuzhan kaldırınca silinecek).
   - Commit'lenmeyen: `ProjectSettings/ProjectVersion.txt` (Unity 6000.6.5f1 ile açılınca yükseltilmişti, geri alındı; ekip sürümü 6000.6.4f1).
 - 23:20 — TMP Essential Resources import edilip commit'lendi (`Assets/TextMesh Pro`, masa yazıları için gerekliydi; CREDITS'e eklendi). Oğuzhan HUD'dan kotayı kaldırdı → `BalanceSO.ApprovalQuota` silindi.
-- 00:30 — Ahmet'in Unity testi: gün döngüsü, gazete verisi, dürüst bina kuralı ve save.json doğrulandı. Sorun: Flow (Onur, `ebe816d`) prefab'ları üretilmemiş → Game.unity'de gazete yok, mavi yedek arayüz. Kararlar: Flow prefab'larını Onur üretip push'layacak (A sonra Game.unity'ye ekler); DayIntro/Construction/Save ekranları Onur'a verildi. Not: memory.md → Onur maddeleri.
-- 01:10 — Flow ekranları Game.unity'de; `LinkData` artık `Data/Endings/` EndingSO'larını da bağlar (Tarık'a not). memory.md temizlendi: Durum yeniden yazıldı (Bilinen sorunlar: EndingSO yok, Unity 6.5 uyarısı, Game.unity'yi Editor'den kaydetmeme), eski entegrasyon bölümü silindi, Onur listesi tek öncelikli listeye indi, dosya haritası tamamlandı.
+- (`0916894` öncesi) Ahmet'in Unity testi: gün döngüsü, gazete verisi, dürüst bina kuralı ve save.json doğrulandı. Sorun: Flow (Onur, `ebe816d`) prefab'ları üretilmemiş → Game.unity'de gazete yok, mavi yedek arayüz. Kararlar: Flow prefab'larını Onur üretip push'layacak (A sonra Game.unity'ye ekler); DayIntro/Construction/Save ekranları Onur'a verildi. Not: memory.md → Onur maddeleri.
+- `0bebf9b` / `a7a733c` — Flow ekranları Game.unity'de; `LinkData` artık `Data/Endings/` EndingSO'larını da bağlar (Tarık'a not). memory.md temizlendi: Durum yeniden yazıldı (Bilinen sorunlar: EndingSO yok, Unity 6.5 uyarısı, Game.unity'yi Editor'den kaydetmeme), eski entegrasyon bölümü silindi, Onur listesi tek öncelikli listeye indi, dosya haritası tamamlandı.
   - Pull'u engelleyen Unity oto-değişiklikleri stash'lendi (`Game.unity`'de DeskScreen anchor'larını 0'layan kayıt dahil). Game.unity'yi Editor'den kaydetme.
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.
 - 2026-10-16 22:00 (UTC+3): Onur'un 6 sorusundan 4'ü cevaplandı (5 ve 6 açık; ödenmeyen gider sonucu açık). Ödeme günlüğe çekildi. Faz 1'e henüz başlanmadı.
 - 2026-10-16 22:15 (UTC+3): Faz 1 kodu tamam, derleme uyarısız, 7/7 test geçti. Game.unity yedek arayüzle baştan sona oynanabilir durumda (Editor'de elle henüz denenmedi). Sırada: elle oynanış kontrolü, Desk'in Core'a bağlanması (B), Flow ekranları (C).
+- 17 Ekim gece (analiz sonrası): Kritik grup (K1-K4) ve Core'a düşen yüksek/orta/düşük maddeler kapatıldı; ilk Windows build alındı; testler 13/13. Ekibe kalanlar memory.md "Analiz sonrası işler"de.

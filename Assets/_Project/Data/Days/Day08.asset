@@ -18,6 +18,6 @@ MonoBehaviour:
   AllowBribes: 1
   AllowFakeDocuments: 1
   AllowThugs: 1
-  AllowFactories: 1
+  AllowFactories: 0
   IntensityMin: 0.5
   IntensityMax: 0.9

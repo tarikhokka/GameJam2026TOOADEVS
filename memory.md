@@ -17,7 +17,7 @@
 - Her gün sonunda afet olasılığı vardır. Taban %50, tavan %100 (karar). Afet olmazsa sonraki gün olasılık artar (öneri +%10); afet olunca tabana (%50) döner.
 - Afet, son afetten bu yana (iki afet arasında) oyuncunun onayladığı binaları değerlendirir; önceki afetleri atlatmış binalar tekrar değerlendirilmez.
 - Afetsiz günün sonunda gazete gösterilmez. Afet olunca gazete/sonuçta şimdilik: her binanın yıkılıp yıkılmadığı, ölenlerin isimleri, ölü/yaralı sayısı, yıkılmasından ya da ayakta kalmasından oyuncunun sorumlu olduğu bilgisi.
-- Eski level başına proje sayıları geçersizdir. Toplam gün sayısı, günlük proje sayıları ve içerik açılma günleri henüz belirlenmedi. Konut, sahte belgeler, fabrika/yangın içerik hedefleri; sel ve okul/hastane ek kapsamdır.
+- Oyun **10 gün** (karar 17 Ekim). İçerik açılışları `Data/Days`: 1. gün konut, 3. gün rüşvet, 5. gün sahte belge + kabadayı. **Fabrika/yangın kapsam dışı** (karar 17 Ekim; Day08 `AllowFactories = 0`), vakit kalırsa yangın ayrı afet olarak dönebilir. Sel ve okul/hastane kapsam dışı.
 - Deprem ayrı bir sahne/animasyon olarak gösterilmez; oyuncu depremi ve sonuçlarını gazeteden öğrenir (Quake ekranı yok, deprem/yıkılma sesi yok).
 - Deprem şiddeti oyuncuya gösterilmez. Bina sadece 2 durumlu: ayakta / yıkık.
 - Yıkılma kuralı (EarthquakeSimulator):
@@ -31,15 +31,17 @@
   - Önceki denge: yıkılan bina +0.15, rüşvetle onaylanan yıkılan bina +0.25. Eski temiz level -0.05 kuralının gün sistemindeki karşılığı açık; afetsiz günün riski azaltacağı varsayılmamalı.
   - İlk yıkımda bile hapis olasılığı var. Tüm sayılar BalanceSO'da.
 - Eski level tekrar kuralı kaldırıldı; başarısız gün sonrası devam/tekrar davranışı henüz kesinleşmedi.
-- Giderler her gün ödenecek (haftalık ödeme kaldırıldı). Kalemler: kira, kredi taksiti, ek test, sigorta, kabadayı cam tamiri. Ek testin anında tahsil edilmesi ve sigortanın kapsam başlangıcı henüz netleştirilmeli. Ödenmeyen giderlerin sonucu henüz cevaplanmadı (önceki plan: borç birikir, limit aşılırsa ofis kapanır / orta son).
-- Kota YOK (karar, 22:40). "Her şeyi reddet" stratejisine karşı baskıyı günlük giderler kurar (onay ücreti gelmezse gider ödenemez). Bunun çalışması için ödenmeyen giderin sonucu yeterince ağır olmalı; o sonuç henüz kararlaştırılmadı.
-- Save/Load: kayıt gün sonunda yapılacak; ay sonu kaydı kaldırıldı. Tek slot JSON / persistentDataPath yaklaşımı korunuyor. GameState gün, para, borç ve afet olasılığı gibi devam için gereken durumu kapsamalı; kesin kayıt şeması A ile netleştirilecek. Gün içi manuel kayıt kararı yok.
-- Sonlar:
-  - İyi: gün sistemindeki kesin bitiş koşulu henüz belirlenecek (eski koşul son level yıkımsızdı).
-  - Kötü: mahkeme/hapis, kürsüde kurgusal isimler. Rüşvetli yıkımın doğrudan son mu yoksa JailRisk üzerinden mi işleyeceği netleştirilmeli.
-  - Orta: borçtan ofis kapanışı (koşul, ödenmeyen gider kararına bağlı). Kota sonu yok.
+- Giderler her gün ödenir: kira 400 + kredi 300 (zorunlu), kabadayı cam tamiri (olursa). Ek test gider değildir, anında kasadan düşer. **Sigorta kapsam dışı** (karar 17 Ekim, etkisi yoktu).
+- **Borç kuralı (karar 17 Ekim):** kasada yetmeyen gider ödenemez, zorunluysa borca yazılır; kasa asla eksiye düşmez. Borç varsa isteğe bağlı "Borç ödemesi" kalemi çıkar (kısmen ödenebilir). **Borç 2.000 TL'yi aşarsa ofis kapanır → Orta son.** Başlangıç parası 2.500 TL, onay ücreti 400-700 TL. Her şeyi reddeden oyuncu 7. gün ofisini kaybeder (testli).
+- Kota YOK (karar, 22:40). "Her şeyi reddet" stratejisine karşı baskıyı günlük giderler ve borç kuralı kurar.
+- Save/Load: tek slot JSON (`persistentDataPath/save.json`), sadece `GameState`. Günlük ödemeden sonra gün +1 yapılıp kaydedilir; "Devam Et" yeni günün başını açar. **Son ekranına girince kayıt silinir** (bitmiş oyun devam ettirilemez). Gün içi manuel kayıt yok.
+- **Sonlar (karar 17 Ekim)** — günlük ödemeden sonra değerlendirilir, öncelik en ağırdan:
+  1. **Kötü** (`Bad`, "Hüküm"): yıkım sonrası hapis zarı tuttu (JailRisk üzerinden).
+  2. **Orta / ofis kapandı** (`MiddleClosed`, "Kapanan Kapı"): borç 2.000 TL'yi aştı. Herhangi bir günde olabilir.
+  3. **Orta / yıkım** (`MiddleCollapsed`, "Enkazın Gölgesi"): 10. gün bitti, en az bir imzalı bina yıkıldı, hapis çıkmadı. Metin TASLAK (A yazdı), EEE son halini yazacak.
+  4. **İyi** (`Good`, "Ayakta Kalanlar"): 10. gün bitti ve **hiç bina yıkılmadı**.
 - Yıkım nedeni kartları elle yazılmaz; sonuç ekranı FailedParams / Actual / Required değerlerinden otomatik üretilir (şablon cümle).
-- Sadece Türkçe. Jüri demosu için gizli gün atlama kısayolu sonra eklenecek.
+- Sadece Türkçe. **Jüri demosu gizli tuşları** (Game sahnesi): **F9** = son güne atla, **F10** = bu gece afet kesin.
 
 ## 3. Mimari
 - Tek `Game` sahnesi + ekranlar prefab. Diğer sahneler: MainMenu, Sandbox_Desk, Sandbox_Flow.
@@ -63,7 +65,8 @@
 - `Game/` — GameSession (saf C# mantık + IGameActions), GameManager (MonoBehaviour, faz sırası), FallbackGui (geçici IMGUI), SaveSystem (tek slot JSON), GameLaunch (MainMenu "Devam Et" bayrağı).
 - `Editor/CoreSetupBuilder.cs` — menü CivilJam > Core: Create Missing Data Assets / Build Game Scene (var olanın üzerine yazmaz) / **Install Screens Into Game Scene** (Desk + 4 Flow prefab'ı Canvas altına) / **Link Data Into Game Scene** (Days, Expenses, Clients listelerini Data'dan doldurur; EEE yeni asset ekleyince çalıştırılır).
 - `Tests/Editor/` — `CoreRulesTests` (yıkılma kuralı, afet kapsamı/olasılığı, üretici, kaşe metni, müteahhit rolleri, çift ödeme) + `GameSceneTests` (Game.unity: GameManager, EventSystem, veri listeleri, 5 fazın ekranı). Test Runner > EditMode; 10/10.
-- `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool, Headlines (EEE: 20 manşet), Days/DayXX (FromDay 1/3/5/8), Expenses/, Clients/ (EEE).
+- `Assets/_Project/Data/` (A, içerik EEE ile) — Balance, RuleSet, NamePool (LabNames = akredite laboratuvarlar), Headlines (EEE: 20 manşet), Days/DayXX (FromDay 1/3/5/8; 8'de fabrika kapalı), Expenses/ (Rent, Loan), Clients/ (EEE), Endings/ (Good, Bad, MiddleClosed, MiddleCollapsed).
+- `README.md` — jüri için kurulum, kontroller, nasıl oynanır, ekip (taslak A, son hali EEE).
 - `Assets/_Project/Scenes/Game.unity` (sadece A; Editor'den KAYDETMEYİN, değişiklikler CoreSetupBuilder ile) — GameManager (veri + 6 müteahhit bağlı), Canvas altında DeskScreen + ResultScreen + DaySummaryScreen + DailyExpensesScreen + EndingScreen, EventSystem (Input System UI). Build Settings'te.
 - Flow asmdef'i C oluşturur; Desk ve Flow referansı sadece `CivilJam.Core`. Ayrıntı ve Core önerileri: `AHMET.md`.
 - `Assets/_Project/Scripts/Desk/` (B) — Core tiplerini doğrudan kullanır (ProjectData, GameContext, IGameActions).
@@ -113,28 +116,52 @@
 - Cts gece - Paz sabah: denge + cila
 - Paz 12:00: freeze. Paz 15-16:30: yükleme. 16:30-18:00: tampon.
 
-### Durum (güncelleme: A, 2026-10-17 01:10)
+### Durum (güncelleme: A, `a7a733c`)
 - **Faz 1 KAPANDI.** Game.unity'de oyun MainMenu → masa → (gazete | gün özeti) → günlük ödeme → kayıt → sonraki gün → son ekranı akışıyla oynanıyor. Sadece DayIntro / Construction / Save fazları hâlâ mavi IMGUI yedek arayüzle (sahibi C).
-- **Core (A):** Gün döngüsü, ProjectGenerator (müteahhit rolleri dahil), DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri. Game.unity'de Desk + 4 Flow ekranı ve 6 müteahhit bağlı. EditMode 10/10, derleme uyarısız. Ahmet Unity'de elle test etti (gün döngüsü, gazete verisi, dürüst bina asla yıkılmaz, save.json). GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
+- **Core (A, analiz sonrası):** Borç kuralı + ofis kapanışı, 4 son ve öncelikleri, son ekranında kayıt silme, build'de yedek arayüz kapalı, F9/F10 demo tuşları, 10 gün / 2.500 TL / ücret 400-700, fabrika ve sigorta kapsam dışı, 4 EndingSO bağlı. EditMode 13/13. **İlk Windows build alındı** (`Builds/Imza/Imza.exe`, açılış testi temiz; `Builds/` git dışında). `README.md` taslağı repoda.
 - **Desk (B, 23:50):** Core tiplerini kullanıyor (IGameScreen, ctx.TodayProjects, ctx.Actions); kota yok (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; sesler ve ONAYLANDI/REDDEDİLDİ kaşe animasyonu.
-- **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A 01:10'da Game.unity'ye ekledi.
-- **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art ÖNERİ, Tarık henüz onaylamadı. (01:30) 3 EndingSO asset'i `Data/Endings/` altında; son metinleri kod koşullarıyla çelişmeyecek şekilde düzeltildi. Oyun içi Emeği Geçenler metnine ekip + yapay zekâ bilgisi eklendi (C: `MainMenuScreen.CreditsText` güncellenmeli).
-- **Sırada:**
-  - C: DayIntro / Construction / Save ekranları (mavi kutuların yerine).
-  - EEE: 3 EndingSO asset'i (`Data/Endings/`, metinler taslakta) → A Game.unity'ye bağlar.
-  - A: Faz 2 — ödenmeyen gider sonucu ve sonların kesin kuralları (karar bekliyor), ekonomi dengesi.
+- **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A `0bebf9b`'de Game.unity'ye ekledi.
+- **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: piksel art, toprak tonları.
+- **Sırada:** bkz. aşağıda "📌 Analiz sonrası işler" (kişi bazlı). Özet: C → Esc menüsü + ara ekranlar; B → öğretici/denetçi notu + lab listesi + intro kararı; EEE → MiddleCollapsed son metni, README son hali, final görsel/ses; A → denge turu, 20:00 ikinci build.
 - **Bilinen sorunlar:**
-  - EndingSO asset'i yok → son ekranı Onur'un yedek metnini gösteriyor (Tarık'ın son metinleri oyunda değil).
+  - Esc menüsü yok (README'de var, Onur yapacak).
+  - Oyuncuya kuralları anlatan öğretici yok (Oğuzhan + Tarık).
   - Unity'yi **6000.6.5f1 ile açmayın** (proje sürümünü yükseltiyor; ekip 6000.6.4f1). `ProjectVersion.txt` değişirse commit'lemeyin.
   - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
 
 ### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
-> ⚠️ **Oğuzhan — ÖNCE BUNU OKU (A, 2026-10-17 00:50):** `62165c0`'daki "yeni kural modeli" (Yapı Denetim Formu + Denetçi El Kitabı, tek ihlal = RED, ek test/lab raporu/sahte belge ipuçlarının kaldırılması, sel afeti) **Ahmet tarafından onaylanmadı**; notta yazan "Ahmet onayladı" yanlıştı. Commit geri alındı (`git revert`): memory.md eski kurallara döndü, `Docs/Tasarim/*.png` kaldırıldı (geçmişte duruyor).
+> ⚠️ **Oğuzhan — ÖNCE BUNU OKU (A, `61353fd`):** `62165c0`'daki "yeni kural modeli" (Yapı Denetim Formu + Denetçi El Kitabı, tek ihlal = RED, ek test/lab raporu/sahte belge ipuçlarının kaldırılması, sel afeti) **Ahmet tarafından onaylanmadı**; notta yazan "Ahmet onayladı" yanlıştı. Commit geri alındı (`git revert`): memory.md eski kurallara döndü, `Docs/Tasarim/*.png` kaldırıldı (geçmişte duruyor).
 > - Masa ekranını yeni forma göre değiştirmeye başladıysan **dur**; mevcut modelle devam et: başvuru + lab raporu, Reported/Actual, ücretli ek test, parsel/tarih/lab/kaşe/imza ipuçları, rüşvet zarfı. Core sözleşmesi değişmedi (`ctx.TodayProjects`, `ctx.Actions`).
 > - Oyunun kural modelini değiştiren öneriler için önce Ahmet'le konuş; "Ahmet onayladı" notunu sadece Ahmet (ya da onun açık onayıyla) yazar.
 > - Fikirlerden ileride yararlanmak istersek (ör. el kitabı, kaçak kat, yangın kuralları) Ahmet'le ayrıca konuşulur.
 >
-> ⚠️ **Tarık — (A, 00:55):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
+> ⚠️ **Tarık — (A, `cbd8587`):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
+
+### 📌 Analiz sonrası işler (A, 17 Ekim gece) — ÖNCE BUNU OKU
+Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet paylaşır). Kararlar §2'de. Kodlar: K = kritik, Y = yüksek, O = orta, D = düşük.
+
+**Başkasının dosyasına dokundum (kararlaştırıldığı gibi not):**
+- `Flow/UI/EndingScreen.cs` (Onur): `case EndingType.MiddleQuota` → `MiddleCollapsed` (enum değişti, yoksa derlenmezdi) + yedek metin. Başka satır yok.
+- `Flow/UI/ResultScreen.cs` (Onur): ayakta kalan binada `ResponsibilityText` gösteriliyor; kapsamda bina yokken ayrı cümle (O3). İki küçük blok, `(A, Core)` yorumlu.
+
+**Onur (C):**
+- [ ] **Y4 Esc menüsü:** her ekranda Esc → Devam / Ana menü / Çıkış. README "Esc menü açar" diyor; gelene kadar yalan.
+- [ ] **K4:** DayIntro / Construction / Save ekranları (önceki madde). Not: build'de artık mavi kutu çıkmıyor, ekranı olmayan faz atlanıyor; yani bunlar görsel kazanç, engel değil.
+- [ ] `EndingScreen` ve `ResultScreen` değişikliklerime göz at; istersen kendi üslubunla düzenle.
+- [ ] Kötü sonda "hâkim isimleri okuyor" anı: `ctx.State` yerine son afetin `VictimNames`'i gerekiyorsa A'ya söyle, Core'dan veririm.
+- [ ] D4: Emeği Geçenler'e takım ve AI satırı.
+
+**Oğuzhan (B):**
+- [ ] **Y1 öğretici:** masada sabit "Denetçi notu" paneli (değerleri min. değerle karşılaştır · iki belgede parsel/tarih/imza aynı olmalı · lab kaşesi raporun laboratuvarıyla aynı olmalı · şüphede ek test) + 1. gün kısa giriş.
+- [ ] **Y1 akredite lab listesi:** `ctx.Names.LabNames` = akredite laboratuvarlar. "Hızlı Sonuç Lab. Ltd." bu listede yok → oyuncu listeyle yakalar. Panelde göster.
+- [ ] **Y1 intro:** `Assets/Scripts/Intro/IntroSequence.cs` repoda yok ama CREDITS'te kayıtlı ve var olmayan "Office" sahnesini yüklüyor. Ya repoya al (Game sahnesine geçecek şekilde, A'ya haber ver) ya da CREDITS satırını sil.
+- [ ] O4: Rüstem reddedilince masada "camın kırıldı" kartı + `sfx_glass_break` (Tarık'tan).
+- [ ] O1: `OGUZHAN.md` "Mevcut durum" (kota satırı, "Sırada" eski).
+
+**Tarık (EEE):**
+- [ ] **Y2:** `Data/Endings/`: senin 3 asset'in (`3da4deb`) + A'nın `MiddleCollapsed.asset` ("Enkazın Gölgesi", Orta/yıkım sonu). **MiddleCollapsed'ın taslak metnini A yazdı** — son halini sen yaz (ton: suçlamasız, ciddi). Hepsi Game.unity'ye bağlı.
+- [ ] **K3:** `README.md` taslağı A'da hazır (kurulum, kontroller, nasıl oynanır, ekip). Son halini sen ver: soyadlar, oyun görseli, video bağlantısı.
+- [ ] O6: masa ve gazete görselleri final, müteahhit portreleri, `sfx_glass_break`, `mus_menu`, `mus_ending_sad`.
 
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
 
@@ -160,30 +187,27 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - [x] `Id` alanı taslaktaki gibi küçük harf: `rifat`, `sevim`, `kemal`, `nuri`, `selim`, `rustem` (Core müşteriyi bu Id ile bulur). Selamlamalar → `GreetingLines`, rüşvet repliklikleri → `BribeLines`, portre → `Portrait`.
 - [ ] `Data/` altındaki diğer asset'lere (Balance, RuleSet, Days, Expenses, NamePool) dokunma. Headlines asset'ini doldurmak istersen önce A'ya haber ver.
   - (EEE, 00:15) A ile konuşuldu, Headlines.asset EEE tarafından dolduruldu: 20 manşet, `ICERIK_TASLAK.md` ile aynı. Eski "{count} can kaybı" kullanımı kaldırıldı.
-- [x] (A, 00:45: Game.unity'ye bağlandı, 6 müteahhit; rol mantığı Core'da) (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
+- [x] (A, `5097e93`: Game.unity'ye bağlandı, 6 müteahhit; rol mantığı Core'da) (EEE, 00:00: 6 asset push'landı, A bağlayabilir) Bitince haber ver: asset'leri `Game.unity`'deki GameManager'ın Clients listesine **A** bağlar (sahne A'nın). Bağlanmadan oyunda görünmezler.
 - **Selim sorusunun cevabı:** `IsHonest = false`, `BribeRange = 0-0` **doğru**, öyle bırak. Kural: `BribeRange` 0-0 = asla rüşvet teklif etmez. Core müteahhidin rolünü bu alanlardan çıkaracak, sen başka alan doldurmayacaksın:
   - Uygun proje → `IsHonest = true` (Rıfat, Sevim)
   - Rüşvetli proje → dürüst değil + `BribeRange` > 0 (Kemal, Nuri; kabadayı günleri açıksa Rüstem)
   - Sahte belgeli proje → dürüst değil + `BribeRange` 0-0 (Selim)
   - Düz uygunsuz (ilk günler) → dürüst değil + rüşvet vermeyen
-  - ✅ (A, 00:45, `5097e93`) Core rol mantığı uygulandı ve testli: Selim'e zarf düşmez, Kemal/Nuri rüşvetsiz proje getirmez, Rüstem sadece kabadayı günlerinde.
+  - ✅ (A, `5097e93`) Core rol mantığı uygulandı ve testli: Selim'e zarf düşmez, Kemal/Nuri rüşvetsiz proje getirmez, Rüstem sadece kabadayı günlerinde.
 - Not (`{deaths}` ve Kötü sonda kayıp isimleri): şimdilik gerekmiyor; Core'da ayrıca konuşulacak.
 - [x] (EEE, 00:40) Headlines.asset 20 manşetle dolduruldu; eski "{count} can kaybı" kaldırıldı. A kontrol etti: tamam. Kural: `{count}` = yıkılan **bina** sayısı (sadece MultiCollapse), `{building}` = bina adı. Credits ekranı → Onur'a sorulacak (metin `CREDITS_AND_AI.md` sonunda).
-- [x] (EEE, 01:30: `Good`, `Bad`, `MiddleClosed` asset'leri push'landı, A "Link Data" ile bağlayabilir) **Son ekranları (A, 01:10):** Son ekranı şu an Onur'un yedek metnini gösteriyor; senin `ICERIK_TASLAK.md`'deki 3 son metnin oyunda değil. 3 EndingSO oluştur: sağ tık → Create → CivilJam → Ending, konum `Assets/_Project/Data/Endings/` (`Good.asset`, `Bad.asset`, `MiddleClosed.asset`). Alanlar: `Type` (Good / Bad / MiddleClosed), `Title`, `Body`, `Image` (`ending_good/bad/closed.png`). Haber ver → A "Link Data" ile Game.unity'ye bağlar.
+- [x] (EEE `3da4deb`: `Good`, `Bad`, `MiddleClosed` push'landı; A analiz commit'inde Game.unity'ye bağladı. `MiddleCollapsed` A'nın taslağı.) **Son ekranları.**
+  - ⚠️ (A) K2 kararıyla İyi son artık **sadece hiç bina yıkılmadıysa** geliyor. `3da4deb`'de İyi son metninden çıkardığın "imzanı taşıyan binaların hepsi ayaktaydı" cümlesi artık doğru; istersen geri koy. Kötü sondaki "rüşvet varsaymaz" düzeltmen hâlâ geçerli (hapis rüşvetsiz yıkımda da çıkabilir).
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
-- [x] (A, 01:10) Flow ekranları oyunda: prefab'lar Game.unity'ye eklendi (Install Screens). Tamamlananlar (A koddan doğruladı): Flow derlemesi, `.meta`'lar, prefab'lar + MainMenu + Build Settings, Sandbox_Flow, manşet `{count}`, Emeği Geçenler, ekranlar `IGameScreen` (Result / DaySummary / DailyExpenses / Ending), gazete `ctx.LastQuake` alanları, ödeme `SetExpensePaid`, MainMenu `SaveSystem.HasSave` + `GameLaunch.ContinueFromSave`. Game.unity'yi kendin açıp KAYDETME.
-- [ ] **Sıradaki iş (Ahmet kararı, 00:30): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (`FlowScreen` tabanı uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Prefab'ları üretip push'layınca haber ver → A Game.unity'ye ekler.
-- Bilgi: sonlar ve ödenmeyen gider kuralları GEÇİCİ (`AHMET.md`); son ekranı şimdilik `ctx.State.Ending` + `ctx.Endings` (EndingSO; henüz asset yok, yedek metnin kullanılıyor).
+- [x] (A, `0bebf9b`) Flow ekranları oyunda: prefab'lar Game.unity'ye eklendi (Install Screens). Tamamlananlar (A koddan doğruladı): Flow derlemesi, `.meta`'lar, prefab'lar + MainMenu + Build Settings, Sandbox_Flow, manşet `{count}`, Emeği Geçenler, ekranlar `IGameScreen` (Result / DaySummary / DailyExpenses / Ending), gazete `ctx.LastQuake` alanları, ödeme `SetExpensePaid`, MainMenu `SaveSystem.HasSave` + `GameLaunch.ContinueFromSave`. Game.unity'yi kendin açıp KAYDETME.
+- [ ] **Sıradaki iş (Ahmet kararı, `0916894`): sahibi olmayan fazlar senin.** Şu an mavi yedek arayüzle görünüyorlar: `GamePhase.DayIntro` (gün başı kartı: "3. GÜN", para/borç), `GamePhase.Construction` (inşaat geçişi; gazeteden önce kısa bir an), `GamePhase.Save` (gün sonu "kaydedildi" kısa geri bildirimi). Hepsi `IGameScreen` (`FlowScreen` tabanı uygun); ekranı olan faz için mavi kutu kendiliğinden kaybolur. Prefab'ları üretip push'layınca haber ver → A Game.unity'ye ekler.
+- Bilgi: son ve borç kuralları kesinleşti (§2). Son ekranı `ctx.State.Ending` (Good / Bad / MiddleClosed / **MiddleCollapsed**) + `ctx.Endings` (4 EndingSO bağlı). Borç varsa ödeme ekranına `debt_payment` kalemi gelir.
 
 ### Açık kararlar (öneriler kesinleşmiş değildir)
-- Toplam gün sayısı / günlük proje sayısı; 14 gün önerisi onaylanmadı.
 - Afet olasılığının günlük artış miktarı (taban %50, tavan %100 ve sıfırlama kararlaştı).
-- Ödenmeyen günlük giderlerin sonucu; ek test tahsilatı ve sigortanın kapsam dönemi.
-- Başarısız gün, sonlar ve JailRisk kurallarının gün sistemine uyarlanması.
-- Save sonrası yüklemenin sonraki sabaha dönmesi, son ekranında kayıt ve kayıt şemasının kesinleştirilmesi.
-- Hapis ve ofis kapanışı aynı anda tetiklenirse son önceliği.
+- JailRisk sayılarının (yıkım +0.15, rüşvetli yıkım +0.25) 10 günlük oyunda dengesi; denge turunda bakılacak.
 
 ## 7. Karar günlüğü
 Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:00 notu da haftalık ödemeyi kaldırır.
@@ -218,15 +242,19 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 2026-10-16 22:30 (UTC+3) | `weekly_bg.png` → `payment_bg.png` (günlük ödeme kararına uyum) | Henüz hiçbir sahne/prefab referans vermiyordu; GUID korundu |
 | 2026-10-16 22:45 (UTC+3) | Deprem sahne olarak gösterilmez, gazeteden öğrenilir; Quake ekranı ve deprem/yıkılma sesleri kaldırıldı | Takım kararı (EEE iletti); hassasiyet + kapsam. GameManager akışı ve QuakeResult verisi etkilenmez, sadece ekran yok |
 | 2026-10-16 22:15 (UTC+3) | Afet olasılığı taban %50, tavan %100; afet günü sadece gazete, afetsiz gün sadece gün özeti | Ahmet kararı; Core'da uygulandı (`GamePhase.Quake` silindi) |
-| 2026-10-17 00:50 (UTC+3) | "Yeni kural modeli" (`62165c0`, Yapı Denetim Formu) REDDEDİLDİ, commit geri alındı; mevcut model (Reported/Actual, ek test, sahte belge ipuçları) geçerli | Ahmet onay vermemişti; Core ve Desk'in yeniden yazılması gece yarısı riskli |
+| 2026-10-17 `61353fd` | "Yeni kural modeli" (`62165c0`, Yapı Denetim Formu) REDDEDİLDİ, commit geri alındı; mevcut model (Reported/Actual, ek test, sahte belge ipuçları) geçerli | Ahmet onay vermemişti; Core ve Desk'in yeniden yazılması gece yarısı riskli |
 | 2026-10-16 22:40 (UTC+3) | Kota kuralı yok; baskıyı günlük giderler kurar | Ahmet kararı (seçenek A). Ödenmeyen giderin sonucu sonra kararlaştırılacak; ağır olmalı |
 | 2026-10-16 22:40 (UTC+3) | Belge kaşesi (StampId) görsel değil okunabilir metin; sahte kaşe = başlıktaki lab adıyla uyuşmayan kaşe | Görsel iş yükü yok; ipucu okuyarak yakalanır, veri gerçek/sahte bilgisini sızdırmaz |
 | 2026-10-16 22:15 (UTC+3) | Ekranı olmayan faz için GameManager IMGUI yedek arayüzü gösterir | Desk/Flow beklenmeden Game.unity baştan sona oynanabilir; ekran eklendikçe kendiliğinden devre dışı |
 | 2026-10-16 23:15 (UTC+3) | Kaşe/imza ipucu kaldırıldı; sahte belge ipuçları: parsel, tarih, laboratuvar. Kaşe ve imza oyunda kalır, hep gerçek | `STAMP_FAKE` yazısı ipucunu doğrudan veriyordu, imzadaki nokta fark edilemiyordu; ek görsel yükü yok (EEE kararı) |
 | 2026-10-16 23:50 (UTC+3) | 23:15 kararı geri alındı: kaşe/imza ipuçları A'nın versiyonuyla kalır (lab adı uyuşmazlığı, farklı mühendis imzası). 5 ipucu | A'nın düzeltmesi iki sorunu da çözdü (açık STAMP_FAKE yazısı, görünmeyen nokta); görsel yükü yok (EEE kararı) |
-| 2026-10-17 00:30 (UTC+3) | (GERİ ALINDI 00:55 — kural modeli reddedildi) EEE içerikleri yeni kural modeline uyarlanmıştı: Selim "kurnaz", Sevim/Selim replikleri, manşet ve sonlarda afet-türünden bağımsız dil | Model Ahmet tarafından onaylanmadı; içerik mevcut modele (deprem, lab raporu, sahte belge) geri döndürüldü |
-| 2026-10-17 00:30 (UTC+3) | (ÖNERİ, KARAR DEĞİL) Görsel stil: piksel art, toprak tonları | Tarık açıkça onaylamadı; Claude referans görsellere bakarak yazmıştı. Karar Tarık'ta. Not: ilk referans olan `Docs/Tasarim` görselleri 00:50'de kaldırıldı (geçmişte `62165c0`) |
-| 2026-10-17 01:30 (UTC+3) | Son metinleri kod koşullarına uyduruldu: İyi son "binaların hepsi ayaktaydı" demez (İyi son şu an yıkım olsa da hapis yoksa geliyor); Kötü son rüşvet varsaymaz (rüşvetsiz yıkımla da hapis var); Orta son dürüstlük varsaymaz | Metin oyuncuya yanlış bir şey söylememeli. A'ya öneri: İyi son için "hiç yıkım yok" şartı + yıkımlı ama hapissiz durum için ayrı son (EEE yazar) |
+| 2026-10-17 `4f33750` | (GERİ ALINDI `cbd8587` — kural modeli reddedildi) EEE içerikleri yeni kural modeline uyarlanmıştı: Selim "kurnaz", Sevim/Selim replikleri, manşet ve sonlarda afet-türünden bağımsız dil | Model Ahmet tarafından onaylanmadı; içerik mevcut modele (deprem, lab raporu, sahte belge) geri döndürüldü |
+| 2026-10-17 `4f33750` | (ÖNERİ, KARAR DEĞİL) Görsel stil: piksel art, toprak tonları | Tarık açıkça onaylamadı; Claude referans görsellere bakarak yazmıştı. Karar Tarık'ta. Not: ilk referans olan `Docs/Tasarim` görselleri `61353fd` ile kaldırıldı (geçmişte `62165c0`) |
+| 2026-10-17 `3da4deb` | Son metinleri kod koşullarına uyduruldu: İyi son "binaların hepsi ayaktaydı" demez (İyi son şu an yıkım olsa da hapis yoksa geliyor); Kötü son rüşvet varsaymaz (rüşvetsiz yıkımla da hapis var); Orta son dürüstlük varsaymaz | Metin oyuncuya yanlış bir şey söylememeli. A'ya öneri: İyi son için "hiç yıkım yok" şartı + yıkımlı ama hapissiz durum için ayrı son (EEE yazar) |
+| 17 Ekim (analiz sonrası) | Borç kuralı: kasa eksiye düşmez, yetmeyen zorunlu gider borca; borç > 2.000 TL → ofis kapanır (Orta son). Başlangıç 2.500 TL, onay ücreti 400-700 | Ahmet kararı (K1). "Her şeyi reddet" stratejisi artık 7. gün ofisi kapatıyor |
+| 17 Ekim (analiz sonrası) | Sonlar ve öncelik: Kötü (hapis) > Orta/ofis kapandı > Orta/yıkım (yeni `MiddleCollapsed`) > İyi (hiç yıkım yok) | Ahmet kararı (K2). İyi son metni "binaların hepsi ayaktaydı" ile tutarlı |
+| 17 Ekim (analiz sonrası) | Oyun 10 gün; fabrika/yangın ve sigorta kapsam dışı | Ahmet kararı. Jüri süresi; yarım kalmış yangın kuralı ve etkisiz sigorta oyuncuyu yanıltıyordu |
+| 17 Ekim (analiz sonrası) | Son ekranına girince kayıt silinir; build'de ekranı olmayan faz otomatik geçilir (mavi kutu sadece Editor/Development Build); F9/F10 demo tuşları | A (Y3, K4, O7) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

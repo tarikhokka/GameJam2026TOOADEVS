@@ -55,6 +55,14 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [ ] Vakit kalırsa: yangın ayrı afet. Yeni asset'leri bağla (`CivilJam > Core > Link Data`).
 - [ ] 20:00 ikinci build.
 
+### Oynanış testi işleri (Ahmet oynadı, 17 Ekim) — ayrıntı memory.md "🎮 Oynanış testi"
+- [ ] Ç5 isim çeşitliliği (tekrar yok + ad kalıpları) — bu gece
+- [ ] Ç2 uygunsuz proje karışımı (sahte belge 3. günden, her gün rüşvetsiz kötü proje, rüşvetçi + sahte belge) — bu gece
+- [ ] Ç3 gevşek müteahhit rolleri — bu gece
+- [ ] Ç1 bölge + kat kuralları, 8 parametre, harfli değerler, el kitabı verisi; gazete yıkım nedeni; simülasyon — Cumartesi
+- [ ] Ç4 müteahhit geçmişi, tepki seçimi, hediye kuralı, Nuri zarf artışı — Cumartesi akşam
+- [ ] Onur'un DayIntro / Construction ekranlarını (`8c05324`) Game.unity'ye ekle
+
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
 - [ ] Baştan sona oynanış, 4 son erişilebilir (F9/F10 ile de).
 - [ ] Paz 12:00 freeze → final build, ZIP, video, README, yükleme.

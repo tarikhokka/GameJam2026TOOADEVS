@@ -142,6 +142,51 @@
 >
 > ⚠️ **Tarık — (A, `cbd8587`):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
 
+### 🎮 Oynanış testi → yeni işler (Ahmet oynadı, 17 Ekim gece) — ÖNCE BUNU OKU
+Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler aşağıda. **Hepsi onaylı (Ahmet), sırayla yapılacak.** Kodlar: Ç1-Ç5.
+
+**Şikayetler ve kök nedenleri (A koddan doğruladı)**
+1. Müteahhitlerin karakteri hissedilmiyor → karardan sonra hiçbir tepki yok, geçmişi hatırlamıyorlar. Üstelik **isim türü ele veriyor**: Rıfat/Sevim hep uygun, Kemal/Nuri/Rüstem hep rüşvetli, Selim hep sahte belgeli; oyuncu belgeye bakmadan isimden karar verebiliyor.
+2. Sahte belge "hiç denk gelmiyor" → sadece 5. günden sonra geliyor (oyun başına ~7,5) ve değerleri yönetmeliği geçtiği için temiz görünüyor; tek ipucu künyedeki küçük uyuşmazlık.
+3. Sadece rüşvetçinin belgesi sorunlu → 3-4. günlerde uygunsuz projelerin **hepsi** rüşvetli; rüşvetsiz ama kötü proje sadece 1-2. günlerde var. Oyuncu "zarf varsa kötü, yoksa iyi" kuralını öğreniyor.
+4. Karşılaştırma çok kolay → lab raporunda her değerin yanında "min. X" yazıyor; parsel/tarih uyuşmazlığı da başvurudaki değer yanına soluk yazılarak gösteriliyor.
+5. İsimler tekrar ediyor → oyun başına ~47 proje, 12 bina adı (her ad ~4 kez); Rıfat ve Sevim oyunda ~13'er kez geliyor.
+6. Parametreler az ve sabit → 4 parametre, gerekli değer her projede aynı; ezberlenince el kitabına gerek kalmıyor.
+
+**Çözümler ve sahipleri**
+
+**Ç1 — El kitabı ve bağlama göre kurallar (şikayet 4, 6). Ana iş, Cumartesi.**
+- Gerekli değer artık projenin **deprem bölgesi** (1-4, mahalleden) ve **kat grubu** (1-4 kat / 5+ kat) ile değişir.
+- **8 parametre** (her projede 5-6'sı; adlar taslak, EEE son halini verir): beton sınıfı (C20/C25/C30/C35, harfli), donatı oranı (%), donatı çapı (mm), kolon kesiti (cm²), zemin taşıma gücü (kPa), zemin sınıfı (ZA–ZE, harfli), deprem dayanım katsayısı, kat yüksekliği (m).
+- **Masada "min." değeri yazmaz.** Oyuncu: adres → el kitabı s.1 "Mahalle → bölge" tablosu → ilgili bölge sayfası → kat grubu satırı → değer. (Papers, Please araması.)
+- Ek test kalır; test sonucu da **renkli gösterilmez** (yeşil/kırmızı cevabı verirdi), oyuncu yine el kitabıyla karşılaştırır.
+- A: kural modeli + üretici + gazetedeki yıkım nedeni + simülasyon. **B:** sayfalı "Denetçi El Kitabı" ekranı (sayfa çevirme; masada her zaman açılabilir), lab raporundan "min." ve renkleri, künyeden yan yana başvuru değerini kaldırmak. **EEE:** el kitabı metinleri (giriş, bölüm başlıkları, parametre açıklamaları), mahalle adları (~16), parametre adları/birimleri.
+- Referans: Oğuzhan'ın reddedilen önerisindeki el kitabı görseli git geçmişinde (`62165c0`, `Docs/Tasarim/denetci_el_kitabi.png`); kural modeli değil, sadece görünüm için kullanılabilir.
+
+**Ç2 — Uygunsuz proje karışımı (şikayet 2, 3). A, bu gece.**
+- Sahte belge 3. günden başlar. Rüşvetsiz ama bir değeri yetersiz proje **her gün** gelir (Ç1 ile ancak el kitabıyla fark edilir). Bazı rüşvetçiler sahte belge de getirir.
+- B: künyede yan yana başvuru değerini kaldır (oyuncu sekmeler arasında gidip gelsin).
+
+**Ç3 — Gevşek roller (şikayet 1'in kökü). A + EEE.**
+- Dürüst usta çoğunlukla uygun ama %15-20 ihtimalle dikkatsizlikten bir değeri eksik getirir; rüşvetçi bazen temiz proje getirir ve zarf vermez; Selim çoğunlukla (her zaman değil) sahte belge. İsim tek başına türü ele vermez.
+- EEE: müteahhit sayısını 6'dan **10-12**'ye çıkar (yeni ClientSO'lar, aynı alanlar).
+
+**Ç4 — Tepkiler ve hafıza (şikayet 1). A + EEE + B, Cumartesi akşam. Derinlik: metin + birkaç etki.**
+- Her karardan sonra müteahhit tepki verir: onay → teşekkür; red → söylenme/kavga; zarf geri çevrilince; tekrar gelince ("Geçen sefer reddettiniz hocam…").
+- Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür; dürüst usta onaydan sonra **hediye** bırakabilir (kabul = küçük para + küçük hapis riski artışı; etik ikilem).
+- A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları (aşağıdaki alanlar). **B:** karar sonrası konuşma balonu + hediye kabul/ret butonu.
+
+**Ç5 — İsim çeşitliliği (şikayet 5). A + EEE, bu gece.**
+- A: bir oyunda aynı bina adı iki kez çıkmaz; ad kalıpları: "… Apartmanı", "… Sitesi B Blok", "… Konutları", "… Evleri".
+- EEE: `NamePool.BuildingNames` ~30 ada çıksın (12 var).
+
+**Core sözleşme taslağı (B ve EEE beklemeden başlayabilsin; kesin adlar A'nın commit'inde, `AHMET.md` "Sözleşme değişiklikleri"ne yazılır)**
+- `RuleSetSO`: `Zones` (mahalle → bölge listesi), `ParamRule` yeni alanlar: `Zone` (1-4), `MinFloors`/`MaxFloors`, `Labels` (harfli parametreler için sıra: C20, C25…), el kitabı metni için `HandbookIntro` ve parametre başına `Description`.
+- `ProjectData`: `Neighborhood`, `Zone` (gizli; oyuncu el kitabından bulur), `Floors` (var).
+- `ParamEntry.Required` **kalır ama masada gösterilmez**; harfli değerler `DeskFormat` ile etikete çevrilir.
+- `ClientSO` yeni replik listeleri: `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines`, `GiftLines`; alanlar: `GiftAmount`, `BribeRaiseOnReject`.
+- `ProjectData.ReactionText` (karardan sonra Core doldurur, masa gösterir), `ProjectData.GiftAmount` + `IGameActions.AcceptGift(id)`.
+
 ### 📌 Analiz sonrası işler (A, 17 Ekim gece) — ÖNCE BUNU OKU
 Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet paylaşır). Kararlar §2'de. Kodlar: K = kritik, Y = yüksek, O = orta, D = düşük.
 
@@ -264,6 +309,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim (analiz sonrası) | Oyun 10 gün; fabrika/yangın ve sigorta kapsam dışı | Ahmet kararı. Jüri süresi; yarım kalmış yangın kuralı ve etkisiz sigorta oyuncuyu yanıltıyordu |
 | 17 Ekim (analiz sonrası) | Son ekranına girince kayıt silinir; build'de ekranı olmayan faz otomatik geçilir (mavi kutu sadece Editor/Development Build); F9/F10 demo tuşları | A (Y3, K4, O7) |
 | 17 Ekim `2118715` sonrası | Denge (senaryo E): ücret 300-500, kira 600, deprem %20 +%15/gün | Ahmet kararı, simülasyonla seçildi: dikkatli oyuncuda para gerilimi, tek zarf yazı-tura, deprem her gece değil |
+| 17 Ekim oynanış testi | Ç1 el kitabı (bölge + kat + 8 parametre, masada "min." yok), Ç2 uygunsuz proje karışımı, Ç3 gevşek müteahhit rolleri, Ç4 tepkiler + birkaç etki (hediye, Nuri zarf artırır, Rüstem cam), Ç5 isim çeşitliliği | Ahmet oynadı: karşılaştırma çok kolay, isimden tür tahmin ediliyor, sahte belge hissedilmiyor, isimler tekrar ediyor. Sırası: Ç5+Ç2+Ç3 → Ç1 → Ç4 |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -23,7 +23,8 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 ## Nasıl oynanır
 
 - **Masa:** Her projede belgedeki değerleri yönetmelikteki en düşük değerle karşılaştır. Değeri yetmeyen bina güvenli değildir.
-- **Belgeleri karşılaştır:** Başvuru dosyası ile laboratuvar raporu aynı parseli, aynı tarihi, aynı mühendisin imzasını ve laboratuvarın kendi kaşesini taşımalı. Tutmayan bir ayrıntı sahte belge işaretidir.
+- **Belgeleri karşılaştır:** Başvuru dosyası ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporun başlığındaki laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
+- **El Kitabı:** Kuralları, yönetmelikteki alt sınırları ve akredite laboratuvarların listesini masadaki **El Kitabı** butonuyla istediğin an açabilirsin. İlk gün masaya oturduğunda kısa bir anlatım seni karşılar.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar.
 - **Zarf:** Bazı müteahhitler rüşvet teklif eder. Rüşvet teklif edilen her proje kurallara aykırıdır.
 - **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen ofisinin camı kırılabilir; tamiri sana kalır.

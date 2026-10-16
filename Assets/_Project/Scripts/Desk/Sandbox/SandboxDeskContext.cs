@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace CivilJam.Desk
 {
-    // Core'daki ProjectGenerator/GameManager gelene kadar Sandbox_Desk'i besleyen sahte gün.
+    // Sandbox_Desk'i besleyen sabit, sahte gün. Belge kuralları Core'daki ProjectGenerator ile aynıdır:
+    // iki belgeyi aynı mühendis imzalar, lab kaşesi "<LAB ADI> · AKREDİTE"; ipuçları bu düzeni bozar.
     // Üç tip: dürüst usta, rüşvetçi müteahhit, sahte belgeli proje. İsimler tamamen kurgusaldır.
     public static class SandboxDeskContext
     {
-        private const string GoodLab = "Betonya Yapı Malzemeleri Lab. (Akredite)";
-        private const string GoodStamp = "BYM-LAB · 0412";
+        private const string MunicipalityStamp = "BELEDİYE · İMAR MÜDÜRLÜĞÜ";
+        private const string GoodLab = "Betonya Yapı Lab.";
 
         public static GameContext Create()
         {
@@ -40,7 +41,7 @@ namespace CivilJam.Desk
 
         private static ProjectData HonestProject()
         {
-            const string parcel = "Ada 112 / Parsel 7";
+            const string parcel = "112/7", date = "09.10.2026", engineer = "Müh. S. Aydemir";
             return new ProjectData
             {
                 Id = "D1-P1",
@@ -58,15 +59,15 @@ namespace CivilJam.Desk
                 },
                 Documents =
                 {
-                    Application(parcel, "02.10.2026", "S. Aydemir (Mimar)"),
-                    LabReport(parcel, "09.10.2026", GoodLab, GoodStamp, "Dr. K. Uçar"),
+                    Application(parcel, date, engineer),
+                    LabReport(parcel, date, GoodLab, LabStamp(GoodLab), engineer),
                 },
             };
         }
 
         private static ProjectData BribeProject()
         {
-            const string parcel = "Ada 64 / Parsel 3";
+            const string parcel = "64/3", date = "06.10.2026", engineer = "Müh. O. Tezel";
             return new ProjectData
             {
                 Id = "D1-P2",
@@ -86,17 +87,18 @@ namespace CivilJam.Desk
                 },
                 Documents =
                 {
-                    Application(parcel, "01.10.2026", "O. Tezel (Mimar)"),
-                    LabReport(parcel, "06.10.2026", GoodLab, GoodStamp, "Dr. K. Uçar"),
+                    Application(parcel, date, engineer),
+                    LabReport(parcel, date, GoodLab, LabStamp(GoodLab), engineer),
                 },
             };
         }
 
         private static ProjectData FakeDocProject()
         {
-            // Bedava ipuçları: parsel numarası ters, tarih geçersiz, lab akredite değil, kaşe farklı.
-            var lab = LabReport("Ada 87 / Parsel 41", "31.09.2026", "Yıldız Yapı Laboratuvarı", "YYL · ONAY", "(okunaksız)");
-            lab.Clues.AddRange(new[] { ClueType.ParcelMismatch, ClueType.DateMismatch, ClueType.UnknownLab, ClueType.WrongStamp });
+            // Bedava ipuçları (Core'daki ApplyClue ile aynı): parsel ve tarih başvuruyla uyuşmaz,
+            // başlıktaki lab bilinmiyor ama kaşe hâlâ başka lab'ın, raporu başka mühendis imzalamış.
+            var lab = LabReport("87/41", "28.11.2026", "Hızlı Sonuç Lab. Ltd.", LabStamp(GoodLab), "Müh. K. Durmaz");
+            lab.Clues.AddRange(new[] { ClueType.ParcelMismatch, ClueType.DateMismatch, ClueType.UnknownLab, ClueType.WrongSignature });
 
             return new ProjectData
             {
@@ -115,7 +117,7 @@ namespace CivilJam.Desk
                 },
                 Documents =
                 {
-                    Application("Ada 87 / Parsel 14", "05.10.2026", "D. Karaca (Mimar)"),
+                    Application("87/14", "05.10.2026", "Müh. D. Karaca"),
                     lab,
                 },
             };
@@ -159,14 +161,17 @@ namespace CivilJam.Desk
             Title = "Yapı Ruhsatı Başvurusu",
             ParcelNo = parcel,
             Date = date,
-            StampId = "BELEDİYE · İMAR",
+            StampId = MunicipalityStamp,
             SignatureName = signature,
         };
+
+        private static string LabStamp(string labName) =>
+            $"{labName.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant()} · AKREDİTE";
 
         private static DocumentData LabReport(string parcel, string date, string lab, string stamp, string signature) => new DocumentData
         {
             Kind = DocumentKind.LabReport,
-            Title = "Malzeme Laboratuvar Raporu",
+            Title = "Laboratuvar Raporu",
             ParcelNo = parcel,
             Date = date,
             LabName = lab,

@@ -107,7 +107,7 @@
 ### Durum
 - **Plan durumu:** Gün sistemi tasarımı sürüyor.
 - **Core (A, 22:15):** Faz 1 dikey dilim: günlük ödeme / afet kapsamı / kayıp verisi sözleşmeye uygulandı (Weekly→Daily, Quake fazı kaldırıldı). ProjectGenerator, DisasterSystem, GameSession, GameManager, SaveSystem, Data asset'leri ve Game.unity hazır. Game.unity IMGUI yedek arayüzle baştan sona oynanabilir. Derleme uyarısız, EditMode 7/7. GEÇİCİ kurallar (ödenmeyen gider → borç, sonlar, kayıt anı): `AHMET.md`.
-- **Desk (B):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions; günlük kota adları). Sandbox_Desk'te sahte IGameActions ile test edildi. DeskScreen prefab'ı Game.unity'ye eklenmeye hazır (A ekler).
+- **Desk (B, 23:10):** Core tiplerine geçti (IGameScreen, Phase = Desk; ctx.TodayProjects + ctx.Actions). A Game.unity'ye ekledi; Game.unity'de gerçek GameSession ile test edildi. Kota kaldırıldı (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; Sandbox belge kuralları ProjectGenerator ile aynı.
 - **Art/Audio (EEE, 23:00):** 13 placeholder sprite push'landı (masa, belge, kaşeler, imza, bina ayakta/yıkık, şehir, gazete, gün özeti, günlük ödeme, menü, logo). Masa sesleri hazır: `sfx_click`, `sfx_stamp`, `sfx_paper`, `mus_office_ambient` (loop, Streaming). Ortam sesi CC BY 4.0 → oyunda bir credits ekranı gerekli; metni `CREDITS_AND_AI.md` sonunda hazır. Sırada: ClientSO metin taslakları, menü/son müzikleri.
 - **Sırada:** DeskScreen'in Game.unity'ye eklenmesi (A); Flow ekranları (C: Result, DaySummary, DailyExpenses); A: ekonomi/kota/sonlar (Faz 2).
 - **Bilinen sorunlar:** —
@@ -132,7 +132,8 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - DeskScreen `Game.unity`'ye eklendi (Canvas 1920×1080 Match 0.5 + EventSystem / Input System UI Input Module). Kurulum aracı: menü CivilJam > Core > Install Screens Into Game Scene. Sahne testi (`GameSceneTests`) geçiyor; Game.unity'de Desk fazı artık senin ekranınla açılır.
 - **Kaşe (StampId):** görsele eşlenmeyecek, metin olarak kalıyor; sen bir şey değiştirme. Core'da hata vardı: `StampId` `"STAMP_OK"/"STAMP_FAKE"` geliyordu ve masada sahte belgeyi açık ediyordu. Düzeltildi: başvuru kaşesi `"BELEDİYE · İMAR MÜDÜRLÜĞÜ"`, lab kaşesi `"<LAB ADI> · AKREDİTE"`. Sahte belge ipucu (WrongStamp): kaşedeki lab adı raporun başlığındaki `LabName` ile uyuşmaz. WrongSignature artık lab raporunu farklı bir mühendisin imzalaması (başvurudaki `SignatureName` ile karşılaştırılabilir).
 - **Kota:** kota kuralı KALDIRILDI (karar). Masada kota uyarısı gösterme.
-- [ ] `DeskHud` ve `DeskSandboxBootstrap`'tan `Balance.ApprovalQuota` kullanımını kaldır. İstersen yerine cezasız bilgi olarak "Bugün onaylanan: `ctx.State.ApprovedToday`" göster. Kaldırınca haber ver; A `BalanceSO.ApprovalQuota`'yı siler.
+- [x] `DeskHud` ve `DeskSandboxBootstrap`'tan `Balance.ApprovalQuota` kullanımını kaldır. İstersen yerine cezasız bilgi olarak "Bugün onaylanan: `ctx.State.ApprovedToday`" göster. Kaldırınca haber ver; A `BalanceSO.ApprovalQuota`'yı siler.
+  - (B, 23:10) Kaldırıldı; Desk artık `ApprovalQuota` kullanmıyor. HUD "Bugün onaylanan: N". A `BalanceSO.ApprovalQuota`'yı silebilir.
 
 **Onur (C / Akış) için:**
 - [ ] Ekranlar `IGameScreen` uygulasın; `Phase` değerleri: gazete `GamePhase.Result`, gün özeti `GamePhase.DaySummary`, günlük ödeme `GamePhase.DailyExpenses`, son `GamePhase.Ending`. (`Quake` ve `WeeklyExpenses` artık yok.)

@@ -27,7 +27,7 @@ namespace CivilJam.Desk
         {
             var state = context.State;
             var sb = new StringBuilder();
-            sb.AppendLine($"[Desk] Mesai bitti. Kasa {state.Money}, bugün onay {state.ApprovedToday}/{context.Balance.ApprovalQuota}, " +
+            sb.AppendLine($"[Desk] Mesai bitti. Kasa {state.Money}, bugün onaylanan {state.ApprovedToday}, " +
                           $"alınan zarf {state.TotalBribesTaken}");
             foreach (var p in context.TodayProjects)
                 sb.AppendLine($"  {p.Name}: {p.Verdict}{(p.BribeAccepted ? " +zarf" : "")}{(p.ExtraTestBought ? " +test" : "")}" +

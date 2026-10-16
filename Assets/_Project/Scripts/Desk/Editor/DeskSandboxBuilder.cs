@@ -217,13 +217,18 @@ namespace CivilJam.Desk.Editor
             var stamp = NewRect("Stamp", paper);
             stamp.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             stamp.anchorMin = stamp.anchorMax = stamp.pivot = Vector2.one;
-            stamp.sizeDelta = new Vector2(300, 110);
+            stamp.sizeDelta = new Vector2(360, 120);
             stamp.anchoredPosition = new Vector2(-50, -40);
             stamp.localRotation = Quaternion.Euler(0, 0, 10);
             AddImage(stamp, new Color(StampRed.r, StampRed.g, StampRed.b, 0.12f));
             var stampLabel = NewText("Label", stamp, "ONAYLIDIR\n<size=60%>Kaşe</size>", 34, StampRed,
                 TextAlignmentOptions.Center, FontStyles.Bold);
-            Stretch(stampLabel.rectTransform);
+            // Uzun lab adları ("<LAB ADI> · AKREDİTE") kutuya sığsın diye yazı otomatik küçülür.
+            stampLabel.enableAutoSizing = true;
+            stampLabel.fontSizeMin = 12;
+            stampLabel.fontSizeMax = 34;
+            Stretch(stampLabel.rectTransform).offsetMin = new Vector2(10, 6);
+            stampLabel.rectTransform.offsetMax = new Vector2(-10, -6);
 
             var empty = NewText("EmptyState", area, "Soldan bir dosya seç.", 36, LightText, TextAlignmentOptions.Center);
             Stretch(empty.rectTransform);

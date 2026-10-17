@@ -83,7 +83,7 @@ namespace CivilJam.Core
             var client = ctx.GetClient(p.ClientId);
             if (client == null) return;
             var rng = rngFor(p.Id + ":react");
-            bool refusedBribe = p.OffersBribe;
+            bool refusedBribe = p.OffersBribe && p.BribeRevealed; // teklif edilmemiş zarf geri çevrilemez
             var lines = refusedBribe && client.BribeRefusedLines != null && client.BribeRefusedLines.Count > 0
                 ? client.BribeRefusedLines : client.RejectLines;
             p.ReactionText = rng.Pick(lines, "");

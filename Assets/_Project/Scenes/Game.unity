@@ -1174,6 +1174,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a6d5a4293e1f4f91a314ca75459aa797, type: 2}
   - {fileID: 11400000, guid: 54db3a1fbe7549bda784785ab1720f91, type: 2}
   - {fileID: 11400000, guid: 76a240ceb7ec47559a0032ec513e2f1b, type: 2}
+  dialogue: {fileID: 11400000, guid: b1a2d0a9df856b447a81ecaa0f74818b, type: 2}
   fixedSeed: 0
   fallbackGui: 1
   demoKeys: 1

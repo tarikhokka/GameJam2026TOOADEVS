@@ -123,9 +123,12 @@ namespace CivilJam.Core.Tests
         public void RefusedBribe_HasOwnReaction_AndNextBribeGrows()
         {
             _session.BeginDay();
-            var p = _ctx.TodayProjects.Find(x => x.ClientId == "nuri" && x.OffersBribe);
+            var p = _ctx.TodayProjects.Find(x => x.ClientId == "nuri" && x.OffersBribe && x.Params.Exists(e => !e.ReportedPasses));
             Assume.That(p, Is.Not.Null);
             int first = p.BribeAmount;
+            // Zarf ilk uyuşmazlıktan sonra teklif edilir (memory.md "💬"); geri çevirmek için önce teklif edilmeli
+            var bad = p.Params.Find(e => !e.ReportedPasses).Type;
+            Assert.IsTrue(_ctx.Actions.Inspect(p.Id, InspectTarget.OfParam(InspectDoc.Form, bad), InspectTarget.OfParam(InspectDoc.Handbook, bad), 0).BribeOffered);
             _ctx.Actions.Reject(p.Id);
             Assert.AreEqual("Zarfımı geri mi çeviriyorsunuz?", p.ReactionText);
             Assert.AreEqual(1, ClientReactions.RecordOf(_ctx.State, "nuri").BribesRefused);

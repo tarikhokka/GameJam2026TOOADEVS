@@ -179,7 +179,12 @@ namespace CivilJam.Core.Editor
             FillList(so.FindProperty("endings"), endings);
             var gifts = AssetDatabase.IsValidFolder(DataDir + "/Gifts") ? FindAll<GiftSO>(DataDir + "/Gifts") : new List<GiftSO>();
             FillList(so.FindProperty("gifts"), gifts);
+            // Denetçi diyaloğu (memory.md "💬"): yoksa varsayılan şablonlarla oluşturulur; metinleri EEE düzeltir.
+            var dialogue = GetOrCreate<DialogueSO>(DataDir + "/Dialogue.asset", d =>
+                d.BribeReactions = new List<string> { "Bu zarf ne?", "Bunu masama neden bıraktınız?", "Ne demek istiyorsunuz?" });
+            so.FindProperty("dialogue").objectReferenceValue = dialogue;
             so.ApplyModifiedPropertiesWithoutUndo();
+            AssetDatabase.SaveAssets();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);

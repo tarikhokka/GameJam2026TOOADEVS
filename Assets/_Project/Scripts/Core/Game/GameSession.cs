@@ -157,7 +157,8 @@ namespace CivilJam.Core
             State.ApprovedToday++;
             State.TotalApproved++;
 
-            if (acceptBribe && p.OffersBribe)
+            // Zarf sadece teklif edildiyse alınabilir (ilk uyuşmazlıktan sonra); yoksa zarfsız onay.
+            if (acceptBribe && p.OffersBribe && p.BribeRevealed)
             {
                 p.BribeAccepted = true;
                 State.Money += p.BribeAmount;
@@ -180,6 +181,15 @@ namespace CivilJam.Core
                 State.WindowRepairsToday++;
             ClientReactions.OnRejected(Context, p, RngFor);
             Context.NotifyStateChanged();
+        }
+
+        public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup)
+        {
+            var p = Context.GetTodayProject(projectId);
+            var outcome = InspectionDialogue.Run(Context, p, a, b, handbookFloorGroup,
+                RngFor((projectId ?? "") + ":inspect:" + (p != null ? p.InspectedMismatches.Count : 0)));
+            if (outcome.BribeOffered) Context.NotifyStateChanged();
+            return outcome;
         }
 
         public bool AcceptGift(string projectId)

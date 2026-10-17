@@ -89,7 +89,11 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
 ### 💬 YENİ ÖZELLİK — Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra (Ahmet kararı, 17 Ekim ~19:20) — ÖNCE BUNU OKU
-> ✅ **Onaylandı, iş başladı.** Herkes kendi satırına bu nottaki adlarla başlayabilir. Core adları kesin; Core push'lanana kadar masa ve içerik tarafı bu adlara göre hazırlanır, bağlantı Core gelince yapılır. A, Core'u push'layınca burada "✅ Core hazır" yazar.
+> ✅ **CORE HAZIR (A, push'landı).** `ctx.Actions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, `ClientSO.MismatchLines` / `BribeCloseLines`, `Data/Dialogue.asset` (`DialogueSO`: denetçi şablonları + rüşvete tepki havuzu, Game.unity'ye bağlı). Teklif edilmemiş zarf alınamaz, geri çevrilmiş de sayılmaz. EditMode 46/46. Denge: tek zarf %50 İyi / %39 Enkazın Gölgesi / %11 hapis, her zarfı alan %89 hapis (öncekiyle aynı bant). **Başkasının dosyasına dokundum:** `Desk/Sandbox/FakeGameActions.cs` (Oğuzhan) ve `Flow/Sandbox/FlowSandboxBootstrap.cs` (Onur) → `Inspect` eklendi (yoksa derlenmezdi); Desk sandbox'ı gerçek diyalog kuralını kullanır.
+>
+> **Kim kimi bekliyor:** Onur bağımsız (balon Core'a bağlı değil, istediği an push'lar). Oğuzhan artık Core'u beklemiyor; Onur'un balonunu takmak için onun push'unu bekler (önce Onur, sonra Oğuzhan tek commit). Tarık asset'lere şimdi girebilir. A en son Game.unity kontrolü + build.
+>
+> (eski not) **Onaylandı, iş başladı.** Herkes kendi satırına bu nottaki adlarla başlayabilir. Core adları kesin; Core push'lanana kadar masa ve içerik tarafı bu adlara göre hazırlanır, bağlantı Core gelince yapılır. A, Core'u push'layınca burada "✅ Core hazır" yazar.
 
 **Ne değişiyor:**
 1. **Zarf başta yok.** Rüşvetçi müteahhit gelir ve sadece selamlar; masada zarf ve formda "ZARFI AL VE ONAYLA" görünmez.

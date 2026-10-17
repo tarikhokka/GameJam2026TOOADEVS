@@ -124,6 +124,8 @@ namespace CivilJam.Flow
             public void Approve(string projectId, bool acceptBribe) { }
             public void Reject(string projectId) { }
             public bool AcceptGift(string projectId) => false; // (A, Core) Ç4 ile IGameActions'a eklendi
+            public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup) =>
+                new InspectOutcome { Result = new InspectResult { Verdict = InspectVerdict.Unrelated, Title = Inspection.TitleUnrelated, Detail = "" } }; // (A, Core) "💬" ile eklendi; Flow sandbox'ta masa yok
 
             public void SetExpensePaid(string expenseId, bool paid)
             {

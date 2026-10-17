@@ -20,7 +20,7 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 - [x] Build aracı `ReleaseBuilder` (`CivilJam > Core > Build Windows (Release)`); 17 Ekim akşam build'i temiz. Otomatik uçtan uca oynanış temiz; görsel eksikler memory.md §7'de.
 - [ ] Elle oynanış: 4 son (F9/F10), sahte belge, ek test, kabadayı, hediye.
 - [x] İnceleme modu Core'u (`78a847c`) + Game.unity'de doğrulama + build.
-- [ ] **Şimdi: Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra** (memory.md "💬"): `IGameActions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, Approve/ret kuralları, `DialogueSO` + `Data/Dialogue.asset` + `GameContext.Dialogue`, `ClientSO.MismatchLines` / `BribeCloseLines`, LinkData, sandbox `Inspect` stub'ları, testler, denge simülasyonu.
+- [x] **Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra — Core** (46/46, denge raporu) (memory.md "💬"): `IGameActions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, Approve/ret kuralları, `DialogueSO` + `Data/Dialogue.asset` + `GameContext.Dialogue`, `ClientSO.MismatchLines` / `BribeCloseLines`, LinkData, sandbox `Inspect` stub'ları, testler, denge simülasyonu.
 - [ ] Paz 12:00 freeze → final build, ZIP, README kontrolü, video (Tarık ile), yükleme 15:00-16:30.
 
 ## B ve C için Core kullanım rehberi
@@ -44,6 +44,7 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 | Oynanış testi | `ProjectKind` + `ProjectData.Kind` (gizli); `GameState.UsedBuildingNames`; tepki/hediye alanları (`GreetingText`, `ReactionText`, `GiftId`, `GiftSO`, `ClientSO` replik listeleri, `OfficeGifts`, `AcceptGift`, `ClientHistory`) | B, C, EEE |
 | El Kitabı v2 | Bölge/mahalle kaldırıldı; `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`, `ParamRule.FloorsLabel/Labels/Description/IsLabeled`, `ParamEntry.Labeled` + `LabelStepPenalty` | B, EEE |
 | Belge tasarımı | `ParamRule.Section`, `ProjectData.FileNo`, `PeoplePerFloor`, `HeightMeters` | B |
+| Uyuşmazlık diyaloğu | YENİ: `IGameActions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine`, `DialogueSpeaker`, `InspectionDialogue.Run`, `ProjectData.BribeRevealed` / `InspectedMismatches`, `ClientSO.MismatchLines` / `BribeCloseLines`, `DialogueSO` + `GameContext.Dialogue`. DEĞİŞTİ: zarf sadece teklif edildiyse alınır / geri çevrilmiş sayılır | B, C, EEE |
 | İnceleme modu | YENİ: `InspectDoc`, `InspectField`, `InspectTarget` (`Of`, `OfParam`, `OfTest`), `InspectVerdict`, `InspectResult`, `Inspection.Check(ctx, project, a, b, kat grubu)` / `IsAvailable` / `NoFloorGroup`, `DocumentData.StampLabName`. DEĞİŞTİ: sahte kaşe akredite olmayan lab, sahte parsel hep farklı | B, C |
 | Yeni arayüz | `RuleSetSO.SectionsFor`; `Section` = BETON/DONATI/YAPI/ZEMİN; `ExpenseCalculator.Preview` + `DailyExpenseResult.PaidTotal/AddedToDebt/DebtPaid/Clone`; `GameContext.LastSave/RetrySave/LoadFailed/LoadError`, `SaveResult`, `GameSession.SaveNow`, `SaveSystem.Save(state, out error)` / `LastLoadError` | B, C, EEE |
 

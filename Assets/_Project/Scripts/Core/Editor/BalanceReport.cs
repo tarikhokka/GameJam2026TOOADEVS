@@ -20,14 +20,15 @@ namespace CivilJam.Core.Editor
         {
             ("Dikkatli (ipucu + değer, zarf yok)", ctx => Decide(ctx, p => Looks(p).ok && !p.OffersBribe, false)),
             ("Saf (sadece değer, zarf yok)",        ctx => Decide(ctx, p => Looks(p).valuesOk && !p.OffersBribe, false)),
-            ("Rüşvetçi (her şeyi onayla + zarf)",   ctx => Decide(ctx, p => true, true)),
+            ("Rüşvetçi (her şeyi onayla + zarf)",   ctx => { RevealBribes(ctx); Decide(ctx, p => true, true); }),
             ("Reddeci (her şeyi reddet)",           ctx => Decide(ctx, p => false, false)),
-            ("Karışık (dikkatli ama zarfı alır)",   ctx => Decide(ctx, p => Looks(p).ok || p.OffersBribe, true)),
+            ("Karışık (dikkatli ama zarfı alır)",   ctx => { RevealBribes(ctx); Decide(ctx, p => Looks(p).ok || p.BribeRevealed, true); }),
             ("Tek-zarf (dikkatli, sadece ilk zarfı alır)", ctx =>
             {
+                RevealBribes(ctx);
                 foreach (var p in ctx.TodayProjects)
                 {
-                    if (p.OffersBribe && ctx.State.TotalBribesTaken == 0) ctx.Actions.Approve(p.Id, true);
+                    if (p.BribeRevealed && ctx.State.TotalBribesTaken == 0) ctx.Actions.Approve(p.Id, true);
                     else if (Looks(p).ok && !p.OffersBribe) ctx.Actions.Approve(p.Id, false);
                     else ctx.Actions.Reject(p.Id);
                 }
@@ -40,6 +41,34 @@ namespace CivilJam.Core.Editor
             bool valuesOk = p.Params.TrueForAll(x => x.ReportedPasses);
             bool clue = p.Documents.Count > 1 && p.Documents[1].Clues.Count > 0;
             return (valuesOk, valuesOk && !clue);
+        }
+
+        /// <summary>
+        /// Zarf artık sadece uyuşmazlık bulununca teklif edilir (memory.md "💬"). Zarf alan oyuncu tipleri ek test almadan
+        /// incelemeyle bulunabilen uyuşmazlıkları arar (doğru kat grubuyla): değer ↔ El Kitabı, künye, lab / kaşe ↔ akredite listesi.
+        /// </summary>
+        static void RevealBribes(GameContext ctx)
+        {
+            foreach (var p in ctx.TodayProjects)
+            {
+                if (!p.OffersBribe) continue;
+                int group = p.Floors <= 3 ? 0 : p.Floors <= 6 ? 1 : 2;
+                var pairs = new List<(InspectTarget, InspectTarget)>
+                {
+                    (InspectTarget.Of(InspectDoc.Form, InspectField.Parcel), InspectTarget.Of(InspectDoc.Lab, InspectField.Parcel)),
+                    (InspectTarget.Of(InspectDoc.Form, InspectField.Date), InspectTarget.Of(InspectDoc.Lab, InspectField.Date)),
+                    (InspectTarget.Of(InspectDoc.Form, InspectField.Signature), InspectTarget.Of(InspectDoc.Lab, InspectField.Signature)),
+                    (InspectTarget.Of(InspectDoc.Lab, InspectField.LabName), InspectTarget.Of(InspectDoc.Handbook, InspectField.AccreditedLabs)),
+                    (InspectTarget.Of(InspectDoc.Lab, InspectField.LabStamp), InspectTarget.Of(InspectDoc.Handbook, InspectField.AccreditedLabs)),
+                };
+                foreach (var e in p.Params)
+                    pairs.Add((InspectTarget.OfParam(InspectDoc.Form, e.Type), InspectTarget.OfParam(InspectDoc.Handbook, e.Type)));
+                foreach (var (a, b) in pairs)
+                {
+                    if (p.BribeRevealed) break;
+                    ctx.Actions.Inspect(p.Id, a, b, group);
+                }
+            }
         }
 
         static void Decide(GameContext ctx, System.Predicate<ProjectData> approve, bool takeBribe)

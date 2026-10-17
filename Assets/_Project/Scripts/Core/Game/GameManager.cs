@@ -22,6 +22,7 @@ namespace CivilJam.Core
         [SerializeField] List<ClientSO> clients = new List<ClientSO>();
         [SerializeField] List<EndingSO> endings = new List<EndingSO>();
         [SerializeField] List<GiftSO> gifts = new List<GiftSO>();
+        [SerializeField] DialogueSO dialogue;
 
         [Header("Başlangıç")]
         [Tooltip("0 = rastgele seed")]
@@ -55,7 +56,8 @@ namespace CivilJam.Core
                 Headlines = headlines,
                 Clients = clients,
                 Endings = endings,
-                Gifts = gifts
+                Gifts = gifts,
+                Dialogue = dialogue
             };
             _session = new GameSession(context, dayConfigs, expenses);
             DiscoverScreens();

@@ -17,6 +17,7 @@ namespace CivilJam.Core
         public IReadOnlyList<ClientSO> Clients;
         public IReadOnlyList<EndingSO> Endings;
         public IReadOnlyList<GiftSO> Gifts;
+        public DialogueSO Dialogue;     // Denetçinin uyuşmazlık / rüşvet tepkisi cümleleri (boşsa Core varsayılanı)
         public IGameActions Actions;
 
         public GamePhase Phase;

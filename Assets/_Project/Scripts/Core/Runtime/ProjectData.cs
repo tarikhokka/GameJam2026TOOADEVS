@@ -28,6 +28,10 @@ namespace CivilJam.Core
         // Oyuncu kararı
         public ProjectVerdict Verdict = ProjectVerdict.Pending;
         public bool BribeAccepted;
+        /// <summary>Zarf teklif edildi mi (ilk uyuşmazlıktan sonra, memory.md "💬"). Masa zarfı ve "ZARFI AL" düğmesini sadece true iken gösterir.</summary>
+        public bool BribeRevealed;
+        /// <summary>Bu projede diyaloğu çıkmış uyuşmazlıklar (alan çifti anahtarı); aynısı tekrar konuşulmaz.</summary>
+        public List<string> InspectedMismatches = new List<string>();
         public bool ExtraTestBought;
         public int DayDecided;
 

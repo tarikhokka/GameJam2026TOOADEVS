@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 080ef96a0a6a929468ab3076ef62920a, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.DialogueSO
+  ParamBelowRule: "{param} {value} yaz\u0131yor; {group}l\u0131 binada en az {required} olmal\u0131."
+  TestBelowRule: "Ek testte {param} {value} \xE7\u0131kt\u0131; {group}l\u0131 binada en az {required} olmal\u0131."
+  ReportedVsTest: "Formda {param} {reported} yaz\u0131yor ama ek test {actual} g\xF6steriyor."
+  ParcelMismatch: "Formdaki parsel {form}, raporda {lab} yaz\u0131yor."
+  DateMismatch: Formun tarihi {form}, raporun tarihi {lab}.
+  SignatureMismatch: "Formu {form} imzalam\u0131\u015F, raporu {lab}."
+  LabNotAccredited: '{lab} akredite laboratuvarlar listesinde yok.'
+  StampNotAccredited: "Ka\u015Fedeki {lab} akredite listede yok."
+  BribeReactions:
+  - Bu zarf ne?
+  - "Bunu masama neden b\u0131rakt\u0131n\u0131z?"
+  - Ne demek istiyorsunuz?

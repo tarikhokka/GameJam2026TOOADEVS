@@ -30,6 +30,10 @@ namespace CivilJam.Desk
         }
 
         // (A, Core) IGameActions'a Ç4 ile eklendi; sandbox'ta hediyeyi ofis listesine yazar. memory.md'de not var.
+        // (A, Core) memory.md "💬": IGameActions'a eklendi; sandbox da gerçek diyalog kuralını kullanır.
+        public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup) =>
+            InspectionDialogue.Run(context, context.GetTodayProject(projectId), a, b, handbookFloorGroup, new System.Random());
+
         public bool AcceptGift(string projectId)
         {
             var project = context.GetTodayProject(projectId);

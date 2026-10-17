@@ -26,6 +26,12 @@ namespace CivilJam.Core
         [Tooltip("Daha önce geldiyse selamlama yerine; {last} = \"onaylamıştınız\" / \"reddetmiştiniz\" yerine geçer")]
         [TextArea] public List<string> ReturnLines = new List<string>();
 
+        [Header("Uyuşmazlık diyaloğu (memory.md \"💬\") — EEE yazar")]
+        [Tooltip("Denetçi bir uyuşmazlık söyleyince müteahhidin tek cümlelik cevabı (parametre adı geçmesin, genel kalsın)")]
+        [TextArea] public List<string> MismatchLines = new List<string>();
+        [Tooltip("Rüşvet teklifinden ve denetçinin tepkisinden sonra müteahhidin kapanış cümlesi (sadece rüşvetçiler)")]
+        [TextArea] public List<string> BribeCloseLines = new List<string>();
+
         [Header("Hediye (Ç4) — sadece kabul edilebilir, para/risk etkisi yok")]
         public GiftSO Gift;
         [Range(0f, 1f)] public float GiftChance = 0.3f;   // Onaylanan projesi başına

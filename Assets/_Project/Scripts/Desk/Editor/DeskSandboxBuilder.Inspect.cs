@@ -9,7 +9,7 @@ namespace CivilJam.Desk.Editor
     public static partial class DeskSandboxBuilder
     {
         private static readonly Color InspectLine = new Color(0.86f, 0.58f, 0.06f);
-        private static readonly Vector2 InspectButtonSize = new Vector2(184, 46); // EEE btn_wood 420x100 oranı
+        private static readonly Vector2 InspectButtonSize = new Vector2(256, 60); // EEE btn_menu 410x96 oranı
 
         private static InspectController BuildInspect(RectTransform root, RectTransform papers)
         {
@@ -38,12 +38,12 @@ namespace CivilJam.Desk.Editor
             Wire(resultView, "click", FindClip("sfx_click"));
             Wire(resultView, "stamp", FindClip("sfx_stamp"));
 
-            // İNCELE düğmesi: form ile lab raporunun arasında, masa kenarının üstünde (belgelerin hemen üstü).
+            // İNCELE düğmesi (EEE, 17 Ekim): ortada, lab raporunun hemen üstünde; ana menüdeki koyu tahta (göze çarpsın).
             var homes = DocHomes();
-            float gapX = 960f + homes.form + DocWidth("doc_form") * 0.5f + DocGap * 0.5f;
-            var buttonRect = TopLeft(NewRect("InspectButton", overlay), InspectButtonSize, gapX - InspectButtonSize.x * 0.5f,
-                DeskEdgeY - 10);
-            var buttonImage = SpriteImage(buttonRect, FindSprite("btn_wood"), new Color(0.45f, 0.3f, 0.18f));
+            float labX = 960f + homes.lab;
+            var buttonRect = TopLeft(NewRect("InspectButton", overlay), InspectButtonSize, labX - InspectButtonSize.x * 0.5f,
+                DeskEdgeY - 24);
+            var buttonImage = SpriteImage(buttonRect, FindSprite("btn_menu"), Color.white);
             buttonImage.raycastTarget = true;
             var button = buttonRect.gameObject.AddComponent<Button>();
             button.targetGraphic = buttonImage;
@@ -51,7 +51,7 @@ namespace CivilJam.Desk.Editor
             colors.highlightedColor = new Color(0.92f, 0.92f, 0.92f);
             colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);
             button.colors = colors;
-            var label = NewText("Label", buttonRect, "İNCELE", 22, LightText, TextAlignmentOptions.Center, FontStyles.Normal);
+            var label = NewText("Label", buttonRect, "İNCELE", 28, LightText, TextAlignmentOptions.Center, FontStyles.Normal);
             label.font = BoldFont;
             label.characterSpacing = 4;
             Stretch(label.rectTransform);

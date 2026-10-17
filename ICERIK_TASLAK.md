@@ -269,3 +269,56 @@ Her bölüm sekmesinin altında görünen kısa afet farkındalık cümlesi. Do�
 - **DONATI:** Depremde binanın kırılmadan esnemesini betonun içindeki demir sağlar. Nervürlü demir betona sıkı tutunur, düz demir kayabilir.
 - **YAPI:** Kolonlar binanın bütün yükünü zemine taşır. Kat arttıkça kolon kalınlaşmalı; kolon kesmek ya da taşıyıcı duvarı yıkmak binayı zayıflatır.
 - **ZEMİN:** Aynı bina yumuşak zeminde sert zemine göre daha çok sallanır. Temel zemine göre tasarlanır; zemin etüdü yapılmadan inşaata başlanmaz.
+
+## Uyuşmazlık diyaloğu (memory.md "💬") — EEE taslağı, 17 Ekim akşam
+Denetçi (oyuncu) uyuşmazlığı Core'un şablonuyla söyler; müteahhit tek cümleyle cevap verir. Müteahhit cümlelerinde parametre adı geçmez (her uyuşmazlığa uysun). Rüşvetçide ilk uyuşmazlıktan sonra: teklif (`BribeLines`) → denetçinin tepkisi (`BribeReactions`) → kapanış (`BribeCloseLines`) → zarf masaya gelir.
+
+### Müteahhit cevabı (`ClientSO.MismatchLines`, 3'er)
+- **Rıfat** (dürüst, özür diler):
+  - "Haklısınız hocam, gözümden kaçmış. Hemen düzeltirim."
+  - "Vay... Bunu ben de görmedim hocam. Kalfayla konuşacağım."
+  - "Yanlış yazılmış demek. Kusura bakmayın hocam, eksiği tamamlarım."
+- **Sevim** (dürüst, not alır):
+  - "Doğru söylüyorsunuz. Laboratuvarla hemen konuşuyorum."
+  - "Not aldım hocam. Bu benim hatam, düzelteceğim."
+  - "İyi ki baktınız. Bu haliyle ben de imzalamazdım."
+- **Kemal** (küçümser):
+  - "Hocam o ufak bir şey, kimse fark etmez."
+  - "Yazım hatası olmuştur hocam, takılmayalım."
+  - "Bir yolu vardır hocam, bunu büyütmeyelim."
+- **Nuri** (pohpohlar):
+  - "Hocam ne keskin gözünüz var, maşallah! Ama o kadar da önemli değil."
+  - "Aaa, ben de görmemiştim! Sizin gibisi yok hocam."
+  - "Olur öyle küçük şeyler hocam, gönlünüz geniş olsun."
+- **Selim** (kıvırır):
+  - "Kâğıtta öyle mi görünüyor? Bence bir okuma hatası var."
+  - "Laboratuvar karıştırmış olmalı hocam, bizim taraf temiz."
+  - "Ben öyle hatırlamıyorum. Belgeler doğru olmalı."
+- **Rüstem** (sertleşir):
+  - "Hocam bunu kurcalamasan iyi olur."
+  - "Benim projemde sorun olmaz. Bir daha bak istersen."
+  - "Hm. Bunu bulmak zorunda mıydın?"
+
+### Rüşvet kapanışı (`ClientSO.BribeCloseLines`, sadece rüşvetçiler, 3'er)
+- **Kemal:** "Hiç, ufak bir teşekkür. Düşünün hocam, acelesi yok." · "Bir çay parası hocam. Masada dursun, siz bilirsiniz." · "Ben bıraktım, karar sizin. Kimse bir şey demez."
+- **Nuri:** "Aile arasında bir hatıra hocam, ayıp olmasın." · "Kırmayın beni hocam, gönülden getirdim." · "Siz bir bakın, beğenmezseniz geri alırım. Ama beğenirsiniz!"
+- **Rüstem:** "Ne olduğunu biliyorsun hocam. Al ve imzala." · "Masada duruyor. Gerisi sana kalmış." · "Akıllı adam ne yapacağını bilir hocam."
+
+### Denetçinin rüşvete tepkisi (`Dialogue.asset` → `BribeReactions`, 4)
+Tarafsız: oyuncu zarfı alıp almayacağına sonra kendisi karar verir.
+- "Bu zarf ne?" · "Bunu masama neden bıraktınız?" · "Ne demek istiyorsunuz?" · "Bu da neyin nesi?"
+
+### Denetçi şablonları (`Dialogue.asset`)
+A'nın taslağı aynen kalır (yer tutucular Core'un, ton sade ve doğru).
+
+## Öğretici: İnceleme kartı — EEE taslağı, 17 Ekim akşam
+Mevcut 4 kartın ardına 5. kart. **Oğuzhan `TutorialView.cards`'a ekler** (Tarık dosyaya dokunmaz).
+- **Başlık:** "İncele ve karşılaştır"
+- **Metin:** "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, <b>UYUŞMAZLIK</b> ya da <b>ALAKASIZ</b> der.\n\nEl Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."
+
+İsteğe bağlı (Oğuzhan karar verir): 4. kartın ("İmza senin") ilk cümlesi yeni zarf kuralına göre
+- Eski: "Bazı müteahhitler masaya zarf bırakır. Karar senin."
+- Yeni: "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın."
+
+## İnceleme modu metinleri — README
+README'ye doğrudan yazıldı ("Nasıl oynanır" → **İncele**, **Ek test**, **Zarf**; "Kontroller" → İnceleme modu satırı).

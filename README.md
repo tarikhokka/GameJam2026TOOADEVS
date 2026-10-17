@@ -18,6 +18,7 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 | Eylem | Kontrol |
 |---|---|
 | Tüm etkileşimler | Fare (sol tık) |
+| İnceleme modu | **İNCELE** düğmesi, sonra iki alana tıkla; sağ tık seçimi iptal eder |
 | Menü | Esc |
 
 ## Nasıl oynanır
@@ -25,8 +26,9 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 - **Masa:** Müteahhitler sırayla karşına oturur. Önünde üç belge durur: **Yapı Denetim Formu**, **Laboratuvar Raporu** ve **Denetçi El Kitabı**. Kararını formdaki **ONAY** ya da **RED** ile verirsin.
 - **El Kitabı:** Formdan binanın kat adedini oku, El Kitabı'nın **Hızlı Bakış** sayfasında o kat grubunu seç. Beş değerin (beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü) hepsi yeşil bölgede olmalı; tek bir kırmızı, binanın güvenli olmadığı demektir. Sekmelerde parametrelerin açıklamaları ve akredite laboratuvarların listesi var. İlk gün kısa bir anlatım seni karşılar.
 - **Belgeleri karşılaştır:** Form ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporu yazan laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
-- **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar.
-- **Zarf:** Bazı müteahhitler rüşvet teklif eder. Rüşvet teklif edilen her proje kurallara aykırıdır.
+- **İncele:** **İNCELE** düğmesine bas, iki ayrı belgeden aynı bilgiye tıkla (ör. formdaki ve rapordaki parsel ya da formdaki bir değer ile El Kitabı'ndaki satırı). Oyun **SORUN YOK**, **UYUŞMAZLIK SAPTANDI** ya da **ALAKASIZ** der. El Kitabı'yla karşılaştırırken önce doğru kat grubunu seç. Uyuşmazlık bulursan müteahhide söylersin, o da cevap verir. İnceleme ücretsiz ve sınırsızdır; kararı yine sen verirsin.
+- **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar. Sahte belgede kâğıttaki beyan temiz görünür, gerçek değer ancak ek testte görünür.
+- **Zarf:** Rüşvetçi müteahhit, sen bir uyuşmazlık bulunca masaya zarf bırakır. Zarfı alıp onaylamak da reddetmek de senin kararın. Rüşvet teklif edilen her proje kurallara aykırıdır.
 - **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen ofisinin camı kırılabilir; tamiri sana kalır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.

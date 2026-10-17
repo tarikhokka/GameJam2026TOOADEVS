@@ -88,6 +88,50 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
+### 💬 YENİ ÖZELLİK — Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra (Ahmet kararı, 17 Ekim ~19:20) — ÖNCE BUNU OKU
+> ✅ **Onaylandı, iş başladı.** Herkes kendi satırına bu nottaki adlarla başlayabilir. Core adları kesin; Core push'lanana kadar masa ve içerik tarafı bu adlara göre hazırlanır, bağlantı Core gelince yapılır. A, Core'u push'layınca burada "✅ Core hazır" yazar.
+
+**Ne değişiyor:**
+1. **Zarf başta yok.** Rüşvetçi müteahhit gelir ve sadece selamlar; masada zarf ve formda "ZARFI AL VE ONAYLA" görünmez.
+2. **Uyuşmazlık diyaloğu:** oyuncu inceleme modunda bir **UYUŞMAZLIK** bulunca (kaşeden hemen sonra) kısa bir diyalog:
+   - **Denetçi (oyuncu):** yanlış bilgiyle ilgili tek cümle. Core gerçek veriden şablonla kurar, ör. "Kolon kalınlığı 33 cm; 4-6 katlı binada en az 35 cm olmalı." / "Formdaki parsel 561/8, raporda 123/4 yazıyor."
+   - **Müteahhit:** karakterine göre tek cümle (`ClientSO.MismatchLines`).
+3. **Rüşvet teklifi:** müteahhit rüşvetçiyse ve projede zarf varsa, **o projede bulunan ilk uyuşmazlıktan sonra** diyalog devam eder:
+   - müteahhit teklif eder (mevcut `BribeLines`);
+   - denetçi kısa tepki verir (ortak havuz);
+   - müteahhit kapanış cümlesi söyler (`ClientSO.BribeCloseLines`).
+
+   Ardından zarf masaya gelir ve "ZARFI AL VE ONAYLA" belirir.
+4. **Oyuncu hiç uyuşmazlık bulmazsa zarf hiç teklif edilmez.** Kötü projeyi zarfsız onaylayabilir (bina yine riskli, rüşvet riski eklenmez); reddederse "zarf geri çevrildi" repliği çıkmaz.
+5. **Tekrar:** diyalog her projede **farklı alanlar için birer kez** çıkar; aynı uyuşmazlığa tekrar tıklanınca sadece kaşe çıkar. Teklif sadece bir kez gelir. SORUN YOK ve ALAKASIZ'da diyalog yok.
+- Kapsam dışı: oyuncu cevap seçmez; diyaloğun oyuna başka bir etkisi yok. Nuri'nin zarf artırması, Rüstem'in camı ve hediyeler aynen kalır.
+
+**Core sözleşmesi (A yazıyor; adlar kesin, `CivilJam.Core`):**
+```
+IGameActions.Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup) → InspectOutcome
+class InspectOutcome {
+    InspectResult Result;           // kaşe için (SORUN YOK / UYUŞMAZLIK / ALAKASIZ), Inspection.Check ile aynı
+    List<DialogueLine> Lines;       // sırayla oynatılır; boşsa diyalog yok
+    bool BribeOffered;              // true: bu çağrıda zarf teklif edildi → zarf ve "ZARFI AL VE ONAYLA" şimdi görünür
+}
+class DialogueLine { DialogueSpeaker Speaker; string Text; }      // DialogueSpeaker { Inspector, Client }
+ProjectData.BribeRevealed (bool)    // zarf teklif edildi mi; masa zarfı ve düğmeyi SADECE bu true iken gösterir
+```
+- Kurallar Core'da: hangi uyuşmazlık için diyalog çıkacağı (farklı alan başına bir kez), ilk uyuşmazlıkta teklif, replik seçimi. `Approve(id, acceptBribe: true)` zarf teklif edilmemişse zarfsız onay sayılır. Ret sonrası "zarf geri çevrildi" repliği sadece teklif edildiyse.
+- `Inspection.Check` aynen kalır (saf, test için); masa artık **`ctx.Actions.Inspect`'i** çağırır.
+- Yeni veri: `ClientSO.MismatchLines`, `ClientSO.BribeCloseLines`; ortak denetçi metinleri `Data/Dialogue.asset` (`DialogueSO`: oyuncu cümle şablonları ve rüşvete tepki havuzu), `GameContext.Dialogue`. A oluşturur ve Game.unity'ye bağlar.
+
+**İş bölümü:**
+| Kim | İş | Süre |
+|---|---|---|
+| **A (Ahmet)** | Core: `Inspect` eylemi, `InspectOutcome` / `DialogueLine`, `BribeRevealed`, Approve/ret kuralları, `DialogueSO` + şablonlar (taslak), `ClientSO` yeni alanlar, Game.unity'ye bağlama, sandbox'lardaki sahte `IGameActions`'a `Inspect` eklemesi (not düşülür), testler, denge simülasyonu (zarf artık sadece uyuşmazlık bulan oyuncuya) | ~1 sa |
+| **Tarık** | Replikler: her müteahhide 3 `MismatchLines` (6 kişi; dürüstler özür/düzeltme, Selim kıvırır, Rüstem sertleşir; parametre adı geçmesin, genel kalsın); rüşvetçilere (Kemal, Nuri, Rüstem) 2-3 `BribeCloseLines`; denetçinin rüşvete tepki havuzu 3-4 cümle; istersen denetçi şablonlarının tonu (yer tutucular kalmalı). **Önce `ICERIK_TASLAK.md`'ye** ("Uyuşmazlık diyaloğu" başlığı) yaz; A Core'u push'layınca asset'lere sen gir (`Data/Clients/*.asset`, `Data/Dialogue.asset`, Inspector). Sonra README "Zarf" maddesi ve öğretici metni | ~1 sa, Core'la paralel |
+| **Oğuzhan (masa)** | Selamlamaya rüşvet repliği ekleme (`DeskScreen` ~314) **kaldırılır**. Zarf (`DeskPropsView`) ve "ZARFI AL VE ONAYLA" (`FormView`) `project.BribeRevealed && pending` iken görünür. İnceleme sonucu `ctx.Actions.Inspect`'ten gelir: önce kaşe, sonra `Lines` sırayla; denetçi satırı Onur'un balonuyla, müteahhit satırı mevcut balonla, harf harf yazı ve yazı sesiyle. Diyalog sürerken inceleme ve karar düğmeleri kilitli; balona tıklamak satırı tamamlar / geçer. `BribeOffered` ise diyalog bitince zarf yaylanarak gelir. Yeni müteahhitte diyalog sıfırlanır | ~2 sa |
+| **Onur** | Denetçi (oyuncu) konuşma balonu bileşeni: yeni dosya `Assets/_Project/Scripts/Desk/UI/InspectorBubbleView.cs` (inceleme kaşesindeki gibi Desk klasöründe). API `Show(string text)`, `Hide()`, `bool IsTyping`, `CompleteTyping()`. Müteahhit balonundan ayrışan görünüm: masa tarafında, belgelerin üst kenarına yakın, "DENETÇİ" etiketi, krem kağıt + koyu mürekkep, Fira Sans; harf harf yazı 40 harf/sn + yazı sesi (`sfx_typing`), müteahhit balonuyla aynı his. Bağlantı notu yaz; Oğuzhan bağlar | ~45 dk |
+| **A** | Hepsi gelince Game.unity'de ekran görüntülü oynanış (dürüst usta uyuşmazlığı, rüşvetçinin teklifi, zarf alma, uyuşmazlık bulmadan onay) + build | ~45 dk |
+
+**Sıra:** A (Core) → Tarık asset'lere girer. Oğuzhan ve Onur hemen başlar; Oğuzhan Core gelince bağlar, Onur'un balonu gelince takar. **Bitti ölçütü:** Game.unity'de dört senaryo doğru + EditMode testleri + build. Hedef ~22:30.
+
 ### 🔎 YENİ ÖZELLİK — İnceleme modu (Papers, Please tarzı) — PLANLAMA AŞAMASI, KOD YAZILMAZ
 > ✅ **ONAYLANDI (Ahmet, 17 Ekim akşam): plan + Core düzeltmeleri (a) ve (b).** A Core'u yazıyor; Onur ve Oğuzhan'ın uygulama notu bu bölümün sonunda ("🛠️ Uygulama notu"). Core push'lanınca A memory.md'de haber verir.
 
@@ -301,6 +345,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
 | 17 Ekim akşam | İnceleme modu (Papers, Please tarzı) planlandı: iki ayrı belgeden iki alan → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ; eşik seçili kat grubundan (yanlış grup = ALAKASIZ), künye dahil, kaşe akredite listeyle, İncele modu, bedelsiz; A Core, Oğuzhan masa, Onur mesaj. **Uygulama Ahmet onayından sonra** | Ahmet + Onur fikri; Ahmet kararları. Olasılıklar değişmez |
 | 17 Ekim akşam | İnceleme modu ONAYLANDI + Core düzeltmeleri: (a) başka lab kaşesi ipucunda kaşeye akredite olmayan lab adı, (b) sahte parsel gerçeğiyle asla aynı değil. Onur'un mesaj bileşeni Desk klasöründe (asmdef kuralı) | Ahmet |
+| 17 Ekim ~19:20 | Rüşvet uyuşmazlıktan sonra: zarf başta yok; ilk UYUŞMAZLIK'tan sonra denetçi ve müteahhit birer cümle konuşur, rüşvetçi o anda teklif eder (teklif + denetçi tepkisi + kapanış); uyuşmazlık bulunmazsa zarf hiç teklif edilmez; diyalog farklı alan başına bir kez; denetçi cümlesi Core şablonundan; replikleri Tarık yazar | Ahmet kararı. Rüşvet "yakalanan müteahhidin hamlesi" olur; tema ve Papers, Please hissi |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 

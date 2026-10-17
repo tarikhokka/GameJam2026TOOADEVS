@@ -19,6 +19,8 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 - [x] Parametre sırası = El Kitabı sekme sırası (ProjectGenerator, test `GeneratedParams_FollowHandbookTabOrder`). Testler 31/31.
 - [x] Build aracı `ReleaseBuilder` (`CivilJam > Core > Build Windows (Release)`); 17 Ekim akşam build'i temiz. Otomatik uçtan uca oynanış temiz; görsel eksikler memory.md §7'de.
 - [ ] Elle oynanış: 4 son (F9/F10), sahte belge, ek test, kabadayı, hediye.
+- [x] İnceleme modu Core'u (`78a847c`) + Game.unity'de doğrulama + build.
+- [ ] **Şimdi: Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra** (memory.md "💬"): `IGameActions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, Approve/ret kuralları, `DialogueSO` + `Data/Dialogue.asset` + `GameContext.Dialogue`, `ClientSO.MismatchLines` / `BribeCloseLines`, LinkData, sandbox `Inspect` stub'ları, testler, denge simülasyonu.
 - [ ] Paz 12:00 freeze → final build, ZIP, README kontrolü, video (Tarık ile), yükleme 15:00-16:30.
 
 ## B ve C için Core kullanım rehberi

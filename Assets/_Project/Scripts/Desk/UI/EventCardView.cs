@@ -23,20 +23,22 @@ namespace CivilJam.Desk
             titleText.text = title;
             bodyText.text = body;
             onClosed = closed;
-            panelRoot.SetActive(true);
+            PopupMotion.On(panelRoot).Show(); // kart yaylanarak gelir
         }
 
-        // Sessiz kapatma (masa kapanırken); geri çağrı çalışmaz.
+        // Sessiz kapatma (masa kapanırken); geri çağrı çalışmaz, animasyonsuz.
         public void Close()
         {
             onClosed = null;
-            panelRoot.SetActive(false);
+            PopupMotion.On(panelRoot).HideInstant();
         }
 
+        // "Tamam": kart kısa ve hızlanarak kapanır; sıradaki müteahhit beklemeden gelmeye başlar (girdi engellenmez).
         private void Dismiss()
         {
             var callback = onClosed;
-            Close();
+            onClosed = null;
+            PopupMotion.On(panelRoot).Hide();
             callback?.Invoke();
         }
     }

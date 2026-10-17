@@ -59,6 +59,8 @@ namespace CivilJam.Desk
                 Address = "Çınar Sokak No: 4",
                 ClientId = "hilmi",
                 BuildingType = BuildingType.Residential,
+                FileNo = "2026-0412",
+                PeoplePerFloor = 12,
                 Floors = 5, // 4-6 kat: kolon 35, temel 2,0, C25, B500, Sert kil → hepsi geçer
                 Fee = 600,
                 Params =
@@ -87,6 +89,8 @@ namespace CivilJam.Desk
                 Address = "Köprü Caddesi No: 18",
                 ClientId = "cevdet",
                 BuildingType = BuildingType.Residential,
+                FileNo = "2026-0377",
+                PeoplePerFloor = 20,
                 Floors = 8, // 7+ kat: beyanda bile beton C25 (C30 gerekli) ve demir B500 (B500S gerekli)
                 Fee = 900,
                 OffersBribe = true,
@@ -121,6 +125,8 @@ namespace CivilJam.Desk
                 Address = "Sahil Yolu No: 2",
                 ClientId = "nurettin",
                 BuildingType = BuildingType.Residential,
+                FileNo = "2026-0451",
+                PeoplePerFloor = 14,
                 Floors = 6, // 4-6 kat: beyan temiz, ek test beton/kolon/demir/zeminde eksik çıkarır
                 Fee = 700,
                 Params =
@@ -150,6 +156,8 @@ namespace CivilJam.Desk
                 Address = "Demirci Sokak No: 11",
                 ClientId = "rustem",
                 BuildingType = BuildingType.Residential,
+                FileNo = "2026-0398",
+                PeoplePerFloor = 10,
                 Floors = 4, // 4-6 kat: beton C20 (C25 gerekli) ve kolon 30 cm (35 gerekli)
                 Fee = 500,
                 OffersBribe = true,
@@ -216,6 +224,8 @@ namespace CivilJam.Desk
             MinFloors = minFloors,
             MaxFloors = maxFloors,
             Labels = labels != null ? new List<string>(labels) : new List<string>(),
+            // El Kitabı v2 bölümleri (RuleSet.asset ile aynı): temel ve zemin "B · ZEMİN", diğerleri "A · YAPI".
+            Section = type == ParamType.FoundationDepth || type == ParamType.SoilType ? "B · ZEMİN" : "A · YAPI",
         };
 
         private static ClientSO Client(string id, string name, bool honest, string[] greetings, string[] bribes = null,
@@ -241,7 +251,7 @@ namespace CivilJam.Desk
         private static DocumentData Application(string parcel, string date, string signature) => new DocumentData
         {
             Kind = DocumentKind.Application,
-            Title = "Yapı Ruhsatı Başvurusu",
+            Title = "Yapı Denetim Formu",
             ParcelNo = parcel,
             Date = date,
             StampId = MunicipalityStamp,

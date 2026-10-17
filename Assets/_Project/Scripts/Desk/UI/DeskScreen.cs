@@ -1,29 +1,35 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using CivilJam.Core;
 using UnityEngine;
 
 namespace CivilJam.Desk
 {
     // Masa ekranı. GameContext'ten okur, oyuncu kararlarını sadece context.Actions ile Core'a iletir.
-    // Akış: müteahhit gelip karşıdaki koltuğa oturur (selamlama balonu), masada LAB RAPORU kitabı belirir →
-    // oyuncu kitaba tıklayınca dosya ortada açılır → karar → kaşe → dosya kapanır, tepki balonu → sıradaki gelir.
-    // Oyuncu "Mesaiyi bitir"e basınca Completed bir kez tetiklenir.
+    // Akış: müteahhit gelip karşıdaki koltuğa oturur (selamlama balonu); masada ortada YAPI DENETİM FORMU klasörü, solda
+    // LAB RAPORU kitabı belirir, sağda EL KİTABI hep durur. Her biri kendi kağıt penceresini açar (Papers, Please gibi yan yana):
+    // formda ONAY / RED (ve zarf), lab raporunda ek test. Karar → kaşe forma basılır → form kaşeli klasör olarak müteahhide
+    // gider, lab raporu kitabına döner → tepki balonu → sıradaki gelir. Oyuncu "Mesaiyi bitir"e basınca Completed bir kez tetiklenir.
     public class DeskScreen : MonoBehaviour, IGameScreen
     {
+        // Pencere yerleşimi (1920x1080 tuval): soldan sağa form, lab, el kitabı; açık olanlar yan yana ortalanır.
+        private const float SheetWidth = 680f, SheetGap = 20f, SheetY = -40f, ThreeOpenScale = 0.9f;
+
         [SerializeField] private DeskHud hud;
         [SerializeField] private ClientSceneView scene;
         [SerializeField] private DeskPropsView props;
-        [SerializeField] private DossierView dossier;
-        [SerializeField] private DocumentView documentView;
-        [SerializeField] private ActionPanel actionPanel;
+        [SerializeField] private PaperWindow formWindow;
+        [SerializeField] private FormView formView;
+        [SerializeField] private PaperWindow labWindow;
+        [SerializeField] private LabReportView labView;
         [SerializeField] private DeskAudio deskAudio;
         [SerializeField] private RulebookView rulebook;
         [SerializeField] private TutorialView tutorial;
         [SerializeField] private EventCardView eventCard;
         [SerializeField] private FolderHandoffView handoff; // karar sonrası kaşeli klasör müteahhide gider
 
-        [Tooltip("Karar kaşesi basıldıktan sonra dosya kapanmadan önce beklenen süre (sn)")]
+        [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
         [Tooltip("Müteahhidin tepki balonu varsa sıradakine geçmeden önce bu kadar beklenir (sn)")]
         [SerializeField] private float reactionHold = 1.5f;
@@ -33,47 +39,59 @@ namespace CivilJam.Desk
 
         private GameContext context;
         private string selectedId;
-        private int selectedDocIndex;
         private bool completed;
         private bool stamping; // karar sonrası sıra (kaşe, tepki, olay kartı) sürerken yeni girdi alınmaz
 
+        private PaperWindow RulebookWindow => rulebook != null ? rulebook.Window : null;
+
         private void Awake()
         {
-            documentView.TabSelected += i =>
-            {
-                if (stamping) return;
-                PlayPaper();
-                selectedDocIndex = i;
-                Redraw();
-            };
+            formView.ApproveClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: false));
+            formView.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
+            formView.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
+            labView.ExtraTestClicked += BuyExtraTest;
 
-            actionPanel.ExtraTestClicked += BuyExtraTest;
-            actionPanel.ApproveClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: false));
-            actionPanel.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
-            actionPanel.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
-
-            props.LabBookClicked += OpenDossier;
+            props.FormClicked += () => ToggleWindow(formWindow);
+            props.LabBookClicked += () => ToggleWindow(labWindow);
             props.FinishClicked += Finish;
-            dossier.CloseClicked += CloseDossier;
-            dossier.OpenChanged += ArrangeSheets;
 
-            if (rulebook != null)
+            foreach (var window in Windows())
             {
-                rulebook.Toggled += PlayPaper;
-                rulebook.OpenChanged += ArrangeSheets;
-                if (rulebook.Sheet != null) rulebook.Sheet.Dropped += PlayPaper;
+                var w = window;
+                w.OpenChanged += () => { if (w.IsOpen) ArrangeSheets(); };
+                if (w.Sheet != null) w.Sheet.Dropped += PlayPaper; // kağıt masaya bırakılınca
             }
-            if (dossier.Sheet != null) dossier.Sheet.Dropped += PlayPaper; // kağıt masaya bırakılınca
+            formWindow.CloseClicked += () => CloseWindow(formWindow);
+            labWindow.CloseClicked += () => CloseWindow(labWindow);
+
+            if (rulebook != null) rulebook.Toggled += PlayPaper;
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
         }
 
-        // Dosya ve El Kitabı ikisi de açıksa yan yana: dosya küçülüp sola, kitap sağa (karşılaştırma için kapatmak gerekmez).
-        // Dosya kapanınca kitap sağda kalır (ortaya dönüp müteahhidin önüne geçmesin); tek başına açılırsa ortada açılır.
+        private IEnumerable<PaperWindow> Windows()
+        {
+            yield return formWindow;
+            yield return labWindow;
+            if (RulebookWindow != null) yield return RulebookWindow;
+        }
+
+        // Bir pencere açılınca açık olanlar soldan sağa (form, lab, el kitabı) yan yana dizilir; üçü açıksa biraz küçülür.
+        // Kapanınca diğerleri yerinde kalır (karardan sonra el kitabı müteahhidin önüne kaymasın).
         private void ArrangeSheets()
         {
-            bool sideBySide = dossier.IsOpen && rulebook != null && rulebook.IsOpen;
-            dossier.SetCompact(sideBySide);
-            if (sideBySide) rulebook.Dock();
+            var open = new List<PaperWindow>();
+            foreach (var w in Windows()) if (w.IsOpen) open.Add(w);
+            if (open.Count == 0) return;
+
+            float scale = open.Count >= 3 ? ThreeOpenScale : 1f;
+            float width = SheetWidth * scale;
+            float total = open.Count * width + (open.Count - 1) * SheetGap;
+            float x = -total * 0.5f + width * 0.5f;
+            foreach (var w in open)
+            {
+                w.SetHome(new Vector2(x, SheetY), scale);
+                x += width + SheetGap;
+            }
         }
 
         public void Show(GameContext gameContext)
@@ -87,7 +105,8 @@ namespace CivilJam.Desk
             gameObject.SetActive(true);
             if (rulebook != null) rulebook.Bind(context);
             if (deskAudio != null) deskAudio.StartMusic();
-            dossier.Close(instant: true);
+            formWindow.Close(instant: true);
+            labWindow.Close(instant: true);
             scene.Clear();
             Select(FirstPendingId());
             if (tutorial != null && context.State.Day == 1) tutorial.Open();
@@ -98,7 +117,8 @@ namespace CivilJam.Desk
             Unsubscribe();
             StopAllCoroutines();
             stamping = false;
-            dossier.Close(instant: true);
+            formWindow.Close(instant: true);
+            labWindow.Close(instant: true);
             if (rulebook != null) rulebook.Close(instant: true);
             if (tutorial != null) tutorial.Close();
             if (eventCard != null) eventCard.Close();
@@ -116,24 +136,29 @@ namespace CivilJam.Desk
         private void Select(string projectId)
         {
             selectedId = projectId;
-            selectedDocIndex = 0;
             Redraw();
         }
 
-        private void OpenDossier()
+        // Masadaki form klasörü / LAB RAPORU: sadece bekleyen dosyada ve karar sırası sürmüyorken açılır.
+        private void ToggleWindow(PaperWindow window)
         {
+            if (window.IsOpen)
+            {
+                CloseWindow(window);
+                return;
+            }
             var project = selectedId != null ? context.GetTodayProject(selectedId) : null;
             if (stamping || project == null || project.Verdict != ProjectVerdict.Pending) return;
             PlayPaper();
-            dossier.Open();
             Redraw();
+            window.Open();
         }
 
-        private void CloseDossier()
+        private void CloseWindow(PaperWindow window)
         {
-            if (stamping || !dossier.IsOpen) return;
+            if (stamping || !window.IsOpen) return;
             PlayPaper();
-            dossier.Close();
+            window.Close();
         }
 
         private void BuyExtraTest()
@@ -144,8 +169,8 @@ namespace CivilJam.Desk
             Redraw();
         }
 
-        // Karar kaşesi açık dosyaya basılır; sonra dosya kapanır, müteahhit tepki verir, sıradaki gelir.
-        // Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) sıradakinden önce olay kartı gösterilir.
+        // Karar kaşesi forma basılır; sonra form kaşeli klasör olarak müteahhide gider, lab raporu kitabına döner,
+        // müteahhit tepki verir, sıradaki gelir. Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı.
         private void Decide(Action decision)
         {
             if (stamping) return;
@@ -156,7 +181,7 @@ namespace CivilJam.Desk
 
             decision();
             Redraw();
-            documentView.AnimateDecisionStamp();
+            formView.AnimateDecisionStamp();
             if (deskAudio != null) deskAudio.PlayStamp();
 
             bool windowBroken = context.State.WindowRepairsToday > repairsBefore;
@@ -166,13 +191,14 @@ namespace CivilJam.Desk
         private IEnumerator AfterDecision(ProjectData project, bool windowBroken)
         {
             yield return new WaitForSeconds(stampDelay);
+            labWindow.Close();
             if (project != null)
             {
-                dossier.HandToClient(handoff, project.Verdict == ProjectVerdict.Approved, project.Name);
+                formWindow.HandTo(handoff, project.Verdict == ProjectVerdict.Approved, project.Name);
                 if (handoff != null) PlayPaper();
                 while (handoff != null && handoff.Playing) yield return null; // müteahhit klasörü alınca konuşur
             }
-            else dossier.Close();
+            else formWindow.Close();
 
             // Tepki: Core karardan sonra doldurur (ClientReactions); boşsa beklemeden geçilir.
             if (project != null && !string.IsNullOrEmpty(project.ReactionText))
@@ -258,18 +284,16 @@ namespace CivilJam.Desk
             var project = selectedId != null ? context.GetTodayProject(selectedId) : null;
             if (project == null)
             {
-                scene.Clear();
+                scene.Leave(); // son müteahhit sola çıkar, koltuk boş kalır
                 props.ShowEmpty(AllDecided());
-                documentView.ShowEmpty();
-                actionPanel.ShowEmpty();
                 return;
             }
 
             var client = context.GetClient(project.ClientId);
             scene.Seat(project.Id, client, Greeting(project, client));
             props.Show(project, client);
-            documentView.Show(context, project, selectedDocIndex);
-            actionPanel.Show(project, client, CanBuyExtraTest(project),
+            formView.Show(context, project);
+            labView.Show(context, project, CanBuyExtraTest(project),
                 context.Balance != null ? context.Balance.ExtraTestCost : 0);
         }
     }

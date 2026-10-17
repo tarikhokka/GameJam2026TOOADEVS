@@ -32,6 +32,7 @@ namespace CivilJam.Desk
         [SerializeField] private float foldDuration = 0.16f;
         [SerializeField] private float windUpDuration = 0.12f;
         [SerializeField] private float travelDuration = 0.55f;
+        [SerializeField] private float catchDuration = 0.14f;
         [SerializeField] private float sinkDuration = 0.25f;
         [SerializeField] private float arcHeight = 220f;
 
@@ -65,16 +66,12 @@ namespace CivilJam.Desk
             Vector2 start = parent.InverseTransformPoint(sheetRect.position);
             float startScale = sheetRect.lossyScale.y / parent.lossyScale.y;
 
-            // 1) Açık dosya kart gibi kapanır.
-            for (float t = 0; t < foldDuration; t += Time.unscaledDeltaTime)
-            {
-                sheet.FoldX = 1f - EaseIn(t / foldDuration);
-                yield return null;
-            }
+            // 1) Açık dosya kart gibi kapanır: hızlanarak (kapak kapanır gibi).
+            yield return Tween(foldDuration, k => sheet.FoldX = 1f - DeskMotion.EaseIn(k));
             sheetHidden?.Invoke();
             sheet.FoldX = 1f;
 
-            // 2) Aynı yerde kaşeli kapalı klasör açılır.
+            // 2) Aynı yerde kaşeli kapalı klasör açılır: kapanmanın devamı, hafif yaylanarak oturur.
             var color = approved ? approvedColor : rejectedColor;
             titleText.text = title;
             stampText.text = approved ? "ONAYLANDI" : "REDDEDİLDİ";
@@ -83,50 +80,51 @@ namespace CivilJam.Desk
             folder.gameObject.SetActive(true);
             folder.localRotation = Quaternion.identity;
             folder.anchoredPosition = start;
-            for (float t = 0; t < foldDuration; t += Time.unscaledDeltaTime)
-            {
-                folder.localScale = new Vector3(startScale * EaseOut(t / foldDuration), startScale, 1);
-                yield return null;
-            }
-            folder.localScale = Vector3.one * startScale;
+            yield return Tween(foldDuration * 1.4f, k =>
+                folder.localScale = new Vector3(startScale * DeskMotion.EaseOutBack(k, 1.4f), startScale, 1));
 
             // 3) Hafif geri çekilme (itmeden önce).
             Vector2 wound = start + new Vector2(0, -25);
-            for (float t = 0; t < windUpDuration; t += Time.unscaledDeltaTime)
+            yield return Tween(windUpDuration, k =>
             {
-                float k = EaseOut(t / windUpDuration);
-                folder.anchoredPosition = Vector2.Lerp(start, wound, k);
-                folder.localScale = Vector3.one * startScale * Mathf.Lerp(1f, 1.03f, k);
-                yield return null;
-            }
+                float e = DeskMotion.EaseInOut(k);
+                folder.anchoredPosition = Vector2.Lerp(start, wound, e);
+                folder.localScale = Vector3.one * startScale * Mathf.Lerp(1f, 1.03f, e);
+            });
 
             // 4) Yay çizerek ellere: yavaş başlar, hızlanır, yumuşak durur; küçülür, hafif döner.
             Vector2 control = (wound + handsPosition) * 0.5f + new Vector2(0, arcHeight);
             float lifted = startScale * 1.03f;
-            for (float t = 0; t < travelDuration; t += Time.unscaledDeltaTime)
+            yield return Tween(travelDuration, k =>
             {
-                float u = t / travelDuration;
-                float k = EaseInOut(u);
-                folder.anchoredPosition = Bezier(wound, control, handsPosition, k);
-                folder.localScale = Vector3.one * Mathf.Lerp(lifted, handsScale, k);
-                folder.localRotation = Quaternion.Euler(0, 0, -8f * Mathf.Sin(u * Mathf.PI));
-                yield return null;
-            }
-            folder.anchoredPosition = handsPosition;
-            folder.localScale = Vector3.one * handsScale;
-            folder.localRotation = Quaternion.identity;
+                float e = DeskMotion.EaseInOut(k);
+                folder.anchoredPosition = Bezier(wound, control, handsPosition, e);
+                folder.localScale = Vector3.one * Mathf.Lerp(lifted, handsScale, e);
+                folder.localRotation = Quaternion.Euler(0, 0, -8f * Mathf.Sin(k * Mathf.PI));
+            });
 
-            // 5) Müteahhit alır: klasör masanın arkasındaki katmana geçip kenarın arkasına iner.
+            // 5) Müteahhit yakalar: kısa bir sıkma (büyüyüp yerine oturur) — "aldı" anı.
+            yield return Tween(catchDuration, k =>
+                folder.localScale = Vector3.one * handsScale * (1f + 0.08f * Mathf.Sin(k * Mathf.PI)));
+
+            // 6) Klasör masanın arkasındaki katmana geçip kenarın arkasına hızlanarak iner.
             folder.SetParent(behindLayer, false);
             Vector2 sunk = handsPosition + new Vector2(0, -sinkDistance);
-            for (float t = 0; t < sinkDuration; t += Time.unscaledDeltaTime)
-            {
-                folder.anchoredPosition = Vector2.Lerp(handsPosition, sunk, EaseIn(t / sinkDuration));
-                yield return null;
-            }
+            yield return Tween(sinkDuration, k => folder.anchoredPosition = Vector2.Lerp(handsPosition, sunk, DeskMotion.EaseIn(k)));
 
             folder.gameObject.SetActive(false);
             Playing = false;
+        }
+
+        // Süreli adım: her karede 0→1 ilerleme verir; son karede tam 1 uygulanır (adımlar arası sıçrama olmaz).
+        private static IEnumerator Tween(float duration, Action<float> step)
+        {
+            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            {
+                step(t / duration);
+                yield return null;
+            }
+            step(1f);
         }
 
         private static Vector2 Bezier(Vector2 a, Vector2 b, Vector2 c, float t)
@@ -134,9 +132,5 @@ namespace CivilJam.Desk
             float u = 1f - t;
             return u * u * a + 2f * u * t * b + t * t * c;
         }
-
-        private static float EaseIn(float t) => t * t;
-        private static float EaseOut(float t) => 1f - (1f - t) * (1f - t);
-        private static float EaseInOut(float t) => t * t * (3f - 2f * t);
     }
 }

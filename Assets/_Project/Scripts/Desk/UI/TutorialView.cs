@@ -21,13 +21,14 @@ namespace CivilJam.Desk
         {
             new Card("İmar Müdürlüğü'ne hoş geldin",
                 "Müteahhitler sırayla gelip karşına oturacak. Senin imzan olmadan hiçbir bina yükselmez.\n\n" +
-                "Dosyayı açmak için masadaki mavi <b>LAB RAPORU</b> kitabına tıkla; okuyup onayla ya da reddet."),
+                "Müteahhit masaya ortadaki <b>YAPI DENETİM FORMU</b>'nu ve soldaki mavi <b>LAB RAPORU</b>'nu bırakır. " +
+                "Tıklayınca açılırlar; kağıtları sürükleyip yan yana koyabilirsin. Kararı formdaki <b>ONAY / RED</b> kutularıyla verirsin."),
             new Card("Değerleri kontrol et",
-                "Her dosyada iki belge var: <b>Başvuru</b> ve <b>Laboratuvar Raporu</b>.\n\n" +
-                "Rapordaki beyan edilen her değer yönetmelikteki alt sınırı karşılamalı. Karşılamıyorsa bina yönetmeliğe aykırıdır."),
+                "Formdaki kat sayısına bak, sağdaki yeşil <b>EL KİTABI</b>'nda o kat grubunun en düşük değerlerini bul.\n\n" +
+                "Beyan edilen her değer bu sınırı karşılamalı. Tek bir değer bile eksikse bina reddedilir."),
             new Card("Belgeler sahte olabilir",
-                "Parsel, tarih ve imza iki belgede aynı olmalı. Kaşedeki laboratuvar, raporun başlığındakiyle aynı olmalı ve akredite listede bulunmalı.\n\n" +
-                "Beyana güvenmiyorsan ücretli <b>ek test</b> iste: gerçek değerleri gösterir."),
+                "Parsel, tarih ve imza formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar, raporun başlığındakiyle aynı olmalı ve akredite listede bulunmalı.\n\n" +
+                "Beyana güvenmiyorsan lab raporundan ücretli <b>ek test</b> iste: gerçek değerleri gösterir."),
             new Card("İmza senin",
                 "Bazı müteahhitler dosyanın arasına zarf koyar. Karar senin.\n\n" +
                 "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan masadaki yeşil <b>EL KİTABI</b>'na bak."),
@@ -47,16 +48,17 @@ namespace CivilJam.Desk
         {
             if (cards == null || cards.Length == 0) return;
             page = 0;
-            panelRoot.SetActive(true);
             Draw();
+            PopupMotion.On(panelRoot).Show(); // kart yaylanarak gelir
         }
 
-        // Sessiz kapatma (masa kapanırken).
-        public void Close() => panelRoot.SetActive(false);
+        // Sessiz kapatma (masa kapanırken): animasyonsuz.
+        public void Close() => PopupMotion.On(panelRoot).HideInstant();
 
+        // Oyuncu kapattı: kart kısa ve hızlanarak kapanır.
         private void Finish()
         {
-            Close();
+            PopupMotion.On(panelRoot).Hide();
             PageChanged?.Invoke();
         }
 

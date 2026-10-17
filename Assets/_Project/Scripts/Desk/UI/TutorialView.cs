@@ -28,7 +28,7 @@ namespace CivilJam.Desk
                 "Önündeki üç belgeyi soldan sağa karşılaştır: <b>YAPI DENETİM FORMU</b>, <b>LABORATUVAR RAPORU</b> ve " +
                 "<b>DENETÇİ EL KİTABI</b>. Kararı formdaki <b>ONAY / RED</b> düğmeleriyle verirsin."),
             new Card("Değerleri kontrol et",
-                "Formdaki <b>KAT ADEDİ</b>'ni oku, El Kitabı'nın <b>HIZLI BAKIŞ</b> sayfasında kat grubunu seç.\n\n" +
+                "Formdaki <b>KAT ADEDİ</b>'ne bak: El Kitabı'nın <b>HIZLI BAKIŞ</b> sayfası doğru kat grubunu kendisi gösterir.\n\n" +
                 "Beyan edilen her değer yeşil alanda olmalı. Tek bir kırmızı bile varsa bina reddedilir."),
             new Card("Belgeler sahte olabilir",
                 "Parsel, tarih ve müellif imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
@@ -40,7 +40,7 @@ namespace CivilJam.Desk
             new Card("İncele ve karşılaştır", // EEE metni (ICERIK_TASLAK.md "Öğretici: İnceleme kartı")
                 "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, " +
                 "<b>UYUŞMAZLIK SAPTANDI</b> ya da <b>ALAKASIZ</b> der.\n\n" +
-                "El Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."),
+                "Bir uyuşmazlık bulursan müteahhide söylersin. İnceleme ücretsizdir; kararı yine sen verirsin."),
         };
 
         // (EEE, 17 Ekim) Geri düğmesi (Atla'nın kopyası, ilk kartta gizli) ve kartları istenince yeniden açan

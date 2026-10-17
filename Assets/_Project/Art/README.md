@@ -59,7 +59,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `doc_form.png` | Yapı Denetim Formu: klasörlü, ataçlı boş kağıt (1065x1307 şeffaf); yazılar kodla | B | F |
 | `doc_lab.png` | Laboratuvar Raporu: boş kağıt destesi (1057x1295) | B | F |
 | `doc_handbook.png` | Denetçi El Kitabı: solda spiralli boş defter (1093x1279) | B | F |
-| `tab_beton/donati/yapi/zemin.png` | El Kitabı sekmeleri (120x300; sol kenar defterin altına girer, yazı dikey) | B | F |
+| `tab_beton/donati/yapi/zemin.png` | **Artık kullanılmıyor** (poliş K3: BETON/DONATI/YAPI/ZEMİN sekmeleri kalktı). Silinmedi, prefab'da bağlı. Eskiden: El Kitabı sekmeleri (120x300) | B | — |
 | `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü ve akış ekranı düğmesi (poliş T1, 520x120: koyu ahşap kahve, ince damar, ikonsuz; ONAY/RED/EK TEST ailesi; yazı kodla). Eskisi menu_bg'deki tahtadan kesilmişti | C | F |

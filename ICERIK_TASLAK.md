@@ -314,7 +314,7 @@ A'nın taslağı aynen kalır (yer tutucular Core'un, ton sade ve doğru).
 ## Öğretici: İnceleme kartı — EEE taslağı, 17 Ekim akşam
 Mevcut 4 kartın ardına 5. kart. **Oğuzhan `TutorialView.cards`'a ekler** (Tarık dosyaya dokunmaz).
 - **Başlık:** "İncele ve karşılaştır"
-- **Metin:** "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, <b>UYUŞMAZLIK</b> ya da <b>ALAKASIZ</b> der.\n\nEl Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."
+- **Metin:** "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, <b>UYUŞMAZLIK SAPTANDI</b> ya da <b>ALAKASIZ</b> der.\n\nBir uyuşmazlık bulursan müteahhide söylersin. İnceleme ücretsizdir; kararı yine sen verirsin." *(poliş T2, 18 Ekim: kat grubu artık kendiliğinden seçildiği için "doğru kat grubunu seçmeyi unutma" çıktı. 2. kart da: "Formdaki KAT ADEDİ'ne bak: El Kitabı'nın HIZLI BAKIŞ sayfası doğru kat grubunu kendisi gösterir.")*
 
 İsteğe bağlı (Oğuzhan karar verir): 4. kartın ("İmza senin") ilk cümlesi yeni zarf kuralına göre
 - Eski: "Bazı müteahhitler masaya zarf bırakır. Karar senin."

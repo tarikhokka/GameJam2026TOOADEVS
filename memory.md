@@ -296,7 +296,11 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - `SettingsMenuTests` ve `PauseMenuTests` geçmeli. Push, "C2 ✅ hash" yaz.
 
 #### Tarık (EEE) — T1, T2
-- [ ] **T1 Görseller (madde 3, 4; Onur ve Oğuzhan bunu bekliyor, önce bunu yap):**
+- [x] **T1 ✅ `f8842b5`** — Hepsi `Art/`'ta, Sprite (Single), yazısız (kod basar). Notlar:
+  - `btn_inspect` 420x120 (koyu kömür, solda büyüteç → yazı x ≈ 120-410), `btn_help` 420x100 (hardal, solda "?" → yazı x ≈ 100-410), `btn_menu` 520x120 (koyu ahşap, ikonsuz; **oran 4,33**, eskisi 4,27 — İNCELE/NASIL OYNANIR/akış düğmeleri B2/C2'ye kadar bunu kullanıyor, sorun değil).
+  - `menu_bg`: çizili 3 yuva silindi (x 745-1160, y 540-865 bölgesi şehirle dolduruldu; yakından aynalama izi var, düğme sütunu o bölgeye gelince örtülür). Logo, güneş, vinçler ve `MenuAmbience` katmanları aynı yerde. **Onur:** C2'de düğmeleri bu bölgeye (yaklaşık x 0,39-0,60, y 0,20-0,50) dizersen iz görünmez.
+  - Üst bar: `hud_bar` 1920x**88** (76 px ahşap pano + alt 12 px yumuşak gölge; 80 px bar için alta yasla ya da 88 kullan), `hud_tag` 256x72 krem kağıt **9-slice, Sprite Border 24** (ayarlı), ikonlar 64x64 `hud_icon_day` (takvim), `hud_icon_money` (banknot + madeni para), `hud_icon_count` (klasör).
+- ~~T1 Görseller (madde 3, 4; Onur ve Oğuzhan bunu bekliyor, önce bunu yap):~~ (yapıldı, yukarıda)
   - **Hepsi için ortak kurallar:**
     - el çizimi 2D cartoon, kalın kahve kontur, sıcak palet;
     - ONAY (`btn_approve`), RED (`btn_reject`) ve EK TEST (`btn_test`) ile **aynı aile**: aynı kontur kalınlığı, köşe yuvarlaklığı, gölge ve kağıt dokusu;

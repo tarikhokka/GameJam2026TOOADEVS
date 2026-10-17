@@ -61,6 +61,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
+| `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; şu an kullanılmıyor ("Mesaiyi bitir" kaldırıldı), ileride masa düğmeleri için | B | F |
 
 Yazı tipleri `Assets/_Project/Fonts/`: başlık **Paytone One**, metin **Fira Sans** (Regular/Bold), TMP asset'leri `* SDF.asset` (Türkçe set önceden yüklü, Static).
 

@@ -254,6 +254,12 @@ namespace CivilJam.Desk
             client.IsThug = thug;
             client.GreetingLines = new List<string>(greetings);
             client.BribeLines = bribes != null ? new List<string>(bribes) : new List<string>();
+            // Uyuşmazlık diyaloğu (Core InspectionDialogue): sandbox deneme replikleri; oyundakileri EEE yazar (Data/Clients).
+            client.MismatchLines = new List<string>
+            {
+                honest ? "Haklısınız hocam, gözden kaçmış. Hemen düzelttiririm." : "Hocam o kadar da önemli bir şey değil bence.",
+            };
+            client.BribeCloseLines = new List<string> { "Ben bunu masaya bırakıyorum. Siz bilirsiniz." };
             return client;
         }
 

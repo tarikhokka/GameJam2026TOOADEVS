@@ -29,6 +29,7 @@ namespace CivilJam.Desk
         [SerializeField] private GiftOfferView giftOffer;   // onaydan sonra hediye kartı (sadece "Kabul et")
         [SerializeField] private OfficeGiftsView officeGifts; // kabul edilen hediyeler masada
         [SerializeField] private InspectController inspect; // İnceleme modu: İNCELE düğmesi, tıklanabilir alanlar, çizgi
+        [SerializeField] private DeskDialogue dialogue;     // uyuşmazlık diyaloğu (denetçi ↔ müteahhit), sürerken masa kilitli
 
         [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -54,6 +55,8 @@ namespace CivilJam.Desk
         private bool endingShift;
         private ShiftEndOverlay shiftOverlay;
 
+        private bool holdEnvelope; // inceleme diyaloğu bitene kadar teklif edilen zarf masaya düşmez
+
 
         private void Awake()
         {
@@ -63,6 +66,7 @@ namespace CivilJam.Desk
             labView.ExtraTestClicked += BuyExtraTest;
 
             props.FinishClicked += Finish;
+            props.EnvelopeRevealed += PlayPaper; // zarf masaya düştü
 
             if (rulebook != null) rulebook.Toggled += PlayPaper;
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
@@ -72,10 +76,9 @@ namespace CivilJam.Desk
                 inspect.ModeChanged += OnInspectMode;
                 inspect.Clicked += PlayClick;
                 // Karar Core'da: bugünkü dosya + El Kitabı'nda oyuncunun seçtiği kat grubu (yanlış grup = ALAKASIZ).
-                inspect.Checker = (a, b) => Inspection.Check(context,
-                    selectedId != null ? context.GetTodayProject(selectedId) : null, a, b,
-                    rulebook != null ? rulebook.SelectedFloorGroup : Inspection.NoFloorGroup);
+                inspect.Checker = Inspect;
                 // Sonuç sesi (uyuşmazlık = kaşe, diğerleri = tık) Onur'un InspectResultView'unda.
+                inspect.Compared += OnInspected;
             }
         }
 
@@ -106,6 +109,7 @@ namespace CivilJam.Desk
             stamping = false;
             endingShift = false;
             if (shiftOverlay != null) shiftOverlay.Hide();
+            holdEnvelope = false;
 
             gameObject.SetActive(true);
             if (rulebook != null)
@@ -126,6 +130,7 @@ namespace CivilJam.Desk
         public void Hide()
         {
             Unsubscribe();
+            if (dialogue != null) dialogue.Stop();
             if (inspect != null) inspect.SetMode(false);
             StopAllCoroutines();
             stamping = false;
@@ -151,6 +156,8 @@ namespace CivilJam.Desk
         {
             selectedId = projectId;
             if (inspect != null) inspect.SetMode(false); // yeni müteahhit: inceleme modu kapanır, seçim temizlenir
+            if (dialogue != null) dialogue.Stop(); // yeni müteahhit: diyalog sıfırlanır
+            holdEnvelope = false;
             if (rulebook != null) rulebook.ResetFloorGroup(); // yeni müteahhit: kat grubunu oyuncu yeniden seçer (Ahmet kararı)
             Redraw();
         }
@@ -305,17 +312,46 @@ namespace CivilJam.Desk
             context.TodayProjects.TrueForAll(p => p.Verdict != ProjectVerdict.Pending);
 
         // Core'un seçtiği selamlama (tekrar gelen müteahhitte "geçen sefer..."); yoksa müteahhidin replik listesinden.
-        // Zarf varsa rüşvet repliği de balonda söylenir.
-        private static string Greeting(ProjectData project, ClientSO client)
-        {
-            string greeting = !string.IsNullOrEmpty(project.GreetingText)
+        // Rüşvet selamlamada söylenmez (Ahmet kararı 17 Ekim ~19:20): sadece ilk uyuşmazlıktan sonra diyalogda teklif edilir.
+        private static string Greeting(ProjectData project, ClientSO client) =>
+            !string.IsNullOrEmpty(project.GreetingText)
                 ? project.GreetingText
                 : DeskFormat.PickLine(client?.GreetingLines, project.Id);
-            if (!project.OffersBribe) return greeting;
 
-            string bribe = DeskFormat.PickLine(client?.BribeLines, project.Id);
-            if (string.IsNullOrEmpty(bribe)) return greeting;
-            return string.IsNullOrEmpty(greeting) ? bribe : $"{greeting}\n{bribe}";
+        // Zarf ve "ZARFI AL VE ONAYLA": Core teklif ettiyse (BribeRevealed), dosya bekliyorsa ve diyalog bittiyse.
+        // holdEnvelope: Inspect teklif edince Core ekranı hemen yeniden çizdirir; zarf diyalogdan önce düşmesin diye bekletilir.
+        private bool BribeVisible(ProjectData project) =>
+            project.Verdict == ProjectVerdict.Pending && project.BribeRevealed
+            && !holdEnvelope && (dialogue == null || !dialogue.IsPlaying);
+
+        // İncelemenin kararı ve diyaloğu Core'da (memory.md "💬"): kaşe + sırayla satırlar + bu çağrıda teklif edildi mi.
+        private InspectOutcome Inspect(InspectTarget a, InspectTarget b)
+        {
+            holdEnvelope = true;
+            return context.Actions.Inspect(selectedId, a, b,
+                rulebook != null ? rulebook.SelectedFloorGroup : Inspection.NoFloorGroup);
+        }
+
+        // Kaşe gösterildi. Satır varsa (uyuşmazlık, bu alan çifti ilk kez) diyalog; teklif olduysa diyalog bitince zarf düşer.
+        private void OnInspected(InspectOutcome outcome)
+        {
+            var lines = new List<DeskDialogue.Line>();
+            if (outcome != null)
+                foreach (var line in outcome.Lines)
+                    lines.Add(new DeskDialogue.Line(line.Speaker == DialogueSpeaker.Inspector, line.Text));
+
+            if (lines.Count == 0 || dialogue == null)
+            {
+                ReleaseEnvelope();
+                return;
+            }
+            dialogue.Play(lines, ReleaseEnvelope);
+        }
+
+        private void ReleaseEnvelope()
+        {
+            holdEnvelope = false;
+            Redraw();
         }
 
         private bool CanBuyExtraTest(ProjectData project) =>
@@ -343,8 +379,9 @@ namespace CivilJam.Desk
 
             var client = context.GetClient(project.ClientId);
             scene.Seat(project.Id, client, Greeting(project, client));
-            props.Show(project, client);
-            formView.Show(context, project);
+            bool bribeVisible = BribeVisible(project);
+            props.Show(project, client, bribeVisible);
+            formView.Show(context, project, bribeVisible);
             labView.Show(context, project, CanBuyExtraTest(project),
                 context.Balance != null ? context.Balance.ExtraTestCost : 0);
             SyncDocuments(project);

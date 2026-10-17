@@ -11,6 +11,7 @@ namespace CivilJam.Desk
         [SerializeField] private DeskScreen screen;
         [SerializeField] private Sprite[] portraits; // sahte müşterilere verilir (EEE'nin portrait_*.png'leri)
         [SerializeField] private RuleSetSO rules;    // Data/RuleSet.asset (oyundaki yönetmelik); boşsa sahte 3 kural
+        [SerializeField] private DialogueSO dialogue; // Data/Dialogue.asset (EEE): denetçinin uyuşmazlık cümleleri; boşsa Core varsayılanı
         [SerializeField] private GiftSO[] gifts;     // Data/Gifts (EEE); dürüst usta onaylanınca birini verir
 
         private readonly List<string> officeGifts = new List<string>(); // kabul edilen hediyeler sandbox günleri boyunca kalır
@@ -28,6 +29,7 @@ namespace CivilJam.Desk
         private void StartDay()
         {
             context = SandboxDeskContext.Create(portraits, rules, gifts, officeGifts);
+            context.Dialogue = dialogue;
             context.State.Day = ++day;
             screen.Show(context);
         }

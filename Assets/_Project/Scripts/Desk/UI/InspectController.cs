@@ -11,7 +11,7 @@ namespace CivilJam.Desk
     // Mod açıkken belgeler sürüklenmez, karar düğmeleri pasif (DeskScreen); tıklanabilir alanlar (InspectSpot) vurgulanır.
     // 1. tıklama alanı seçer (aynı alana tekrar = seçimi kaldırır), 2. tıklama iki alanı karşılaştırır: aralarına çizgi çekilir,
     // ortasında sonuç görünür, resultHold sn sonra (ya da tıklayınca) temizlenir; mod açık kalır. Sağ tık ya da boş masaya
-    // tıklamak seçimi temizler (Esc'e dokunulmaz: Onur'un menüsü). Arayüz kural bilmez: karar Core'dan gelir (Checker = Inspection.Check, DeskScreen verir).
+    // tıklamak seçimi temizler (Esc'e dokunulmaz: Onur'un menüsü). Arayüz kural bilmez: karar Core'dan gelir (Checker = ctx.Actions.Inspect, DeskScreen verir).
     // DeskScreen kökünde durur: alanlar onu GetComponentInParent ile bulur.
     public class InspectController : MonoBehaviour
     {
@@ -31,9 +31,10 @@ namespace CivilJam.Desk
         public bool IsOn { get; private set; }
         public event Action<bool> ModeChanged;
         public event Action Clicked; // alan seçildi / karşılaştırıldı (ses için)
+        public event Action<InspectOutcome> Compared; // kaşe gösterildi (DeskScreen diyalog satırlarını oynatır)
 
-        // İki alanın karşılaştırması (DeskScreen: Inspection.Check + bugünkü proje + El Kitabı'nda seçili kat grubu).
-        public Func<InspectTarget, InspectTarget, InspectResult> Checker { get; set; }
+        // İki alanın karşılaştırması (DeskScreen: ctx.Actions.Inspect + bugünkü proje + El Kitabı'nda seçili kat grubu).
+        public Func<InspectTarget, InspectTarget, InspectOutcome> Checker { get; set; }
 
         private readonly List<InspectSpot> spots = new List<InspectSpot>();
         private InspectSpot first, second;
@@ -108,13 +109,15 @@ namespace CivilJam.Desk
 
         private void Compare(InspectSpot a, InspectSpot b)
         {
-            var result = Checker != null ? Checker(a.Target, b.Target) : null;
+            var outcome = Checker != null ? Checker(a.Target, b.Target) : null;
+            var result = outcome != null ? outcome.Result : null;
             if (result == null) result = new InspectResult { Verdict = InspectVerdict.Unrelated, Title = Inspection.TitleUnrelated, Detail = "" };
             showing = true;
             shownAt = Time.unscaledTime;
             line.gameObject.SetActive(true);
             DrawLine(0f);
             if (resultView != null) resultView.Show(result, (Local(a) + Local(b)) * 0.5f); // çizginin ortası (katmanın merkezine göre)
+            Compared?.Invoke(outcome);
         }
 
         private void Update()

@@ -47,7 +47,7 @@ namespace CivilJam.Desk
         private CanvasGroup balloonGroup;
 
         // Balona (ya da sahnedeki başka tıklanabilir bir şeye) tıklanınca yazı anında tamamlanır.
-        public void OnPointerClick(PointerEventData eventData) => FinishTyping();
+        public void OnPointerClick(PointerEventData eventData) => CompleteTyping();
 
         // Aynı proje için tekrar çağrılırsa bir şey yapmaz (her Redraw'da çağrılabilir).
         // Koltukta biri varsa önce o sola çıkar, sonra yenisi sağdan gelir (sıra akışı tek yönde).
@@ -153,8 +153,8 @@ namespace CivilJam.Desk
             typing = null;
         }
 
-        // Tıklama: metnin tamamı hemen görünür.
-        private void FinishTyping()
+        // Tıklama (ya da diyalogda masaya tıklama, DeskDialogue): metnin tamamı hemen görünür.
+        public void CompleteTyping()
         {
             if (typing == null) return;
             StopTyping();

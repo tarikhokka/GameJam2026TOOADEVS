@@ -19,6 +19,7 @@ namespace CivilJam.Desk.Editor
         private const string AudioFolder = "Assets/_Project/Audio";
         private const string ArtFolder = "Assets/_Project/Art";
         private const string RuleSetPath = "Assets/_Project/Data/RuleSet.asset";
+        private const string DialoguePath = "Assets/_Project/Data/Dialogue.asset";
         private const string GiftsFolder = "Assets/_Project/Data/Gifts";
 
         // Oda yerleşimi (yeni hedef arayüz, 1920x1080 px, yukarıdan): office_bg 0-540; portre PortraitSize kare (EEE: portrait_* 1000x1000),
@@ -94,6 +95,7 @@ namespace CivilJam.Desk.Editor
             Wire(bootstrap, "screen", screenGo.GetComponent<DeskScreen>());
             WirePortraits(bootstrap);
             Wire(bootstrap, "rules", AssetDatabase.LoadMainAssetAtPath(RuleSetPath)); // el kitabı oyundakiyle aynı olsun
+            Wire(bootstrap, "dialogue", AssetDatabase.LoadMainAssetAtPath(DialoguePath)); // denetçi cümleleri oyundakiyle aynı
             WireGifts(bootstrap);
 
             EnsureFolder(SceneFolder);
@@ -153,7 +155,8 @@ namespace CivilJam.Desk.Editor
             AddImage(Stretch(NewRect("Background", root)), DeskColor); // 16:9 dışı ekranlarda odanın kenarları
 
             // Çizim sırası: sahne (oda, müteahhit, masa, masadaki eşyalar) → üst bar → kağıt pencereler → kartlar.
-            Wire(screen, "scene", BuildScene(root, out var room));
+            var sceneView = BuildScene(root, out var room);
+            Wire(screen, "scene", sceneView);
             Wire(screen, "hud", BuildHud(root, out var clientTag));
             Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook, out var officeGifts));
             Wire(screen, "officeGifts", officeGifts);
@@ -167,6 +170,7 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "labView", labView);
             Wire(screen, "rulebook", BuildRulebook(papers, handbookBook));
             Wire(screen, "inspect", BuildInspect(root, papers)); // İnceleme modu: düğme, çizgi katmanı (belgelerin üstünde)
+            Wire(screen, "dialogue", BuildDialogue(root, sceneView)); // uyuşmazlık diyaloğu: tıklama katmanı + denetçi balonu
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "giftOffer", BuildGiftOffer(root));

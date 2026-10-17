@@ -74,7 +74,8 @@ namespace CivilJam.Desk
 
         public void AnimateDecisionStamp() => decisionStamp.Animate();
 
-        public void Show(GameContext ctx, ProjectData project)
+        // bribeVisible: "ZARFI AL VE ONAYLA" görünsün mü (DeskScreen: zarf teklif edildi ve diyalog bitti).
+        public void Show(GameContext ctx, ProjectData project, bool bribeVisible)
         {
             var doc = project.Documents.Count > 0 ? project.Documents[0] : null;
             var client = ctx.GetClient(project.ClientId);
@@ -123,7 +124,7 @@ namespace CivilJam.Desk
 
             pending = project.Verdict == ProjectVerdict.Pending;
             ApplyButtons();
-            bribeRoot.SetActive(pending && project.OffersBribe);
+            bribeRoot.SetActive(pending && bribeVisible);
             if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict);
         }

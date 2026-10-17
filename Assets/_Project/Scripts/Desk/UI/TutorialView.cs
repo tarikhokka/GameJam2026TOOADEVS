@@ -34,8 +34,12 @@ namespace CivilJam.Desk
                 "Parsel, tarih ve müellif imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar, raporun başındakiyle aynı olmalı ve El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
                 "Beyana güvenmiyorsan lab raporundan ücretli <b>EK TEST</b> iste: gerçek değerleri gösterir."),
             new Card("İmza senin",
-                "Bazı müteahhitler masaya zarf bırakır. Karar senin.\n\n" +
+                "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın.\n\n" +
                 "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan sağdaki <b>EL KİTABI</b>'na bak."),
+            new Card("İncele ve karşılaştır", // EEE metni (ICERIK_TASLAK.md "Öğretici: İnceleme kartı")
+                "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, " +
+                "<b>UYUŞMAZLIK</b> ya da <b>ALAKASIZ</b> der.\n\n" +
+                "El Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."),
         };
 
         public event Action PageChanged;

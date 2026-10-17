@@ -149,6 +149,33 @@
 >
 > ⚠️ **Tarık — (A, `cbd8587`):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
 
+### 🎨 Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı (Ahmet kararı, 17 Ekim öğleden sonra) — ÖNCE BUNU OKU
+Ahmet iki görsel tasarım verdi: `Docs/Tasarim/yapi_denetim_formu_GORUNUM.html` ve `Docs/Tasarim/denetci_el_kitabi_GORUNUM.html`.
+- **Karar: GÖRÜNÜM tasarımdan, İÇERİK El Kitabı v2'den.** Tasarımlardaki örnek içerik (YANGIN, SEL, kaçak kat, DSİ, sabit "en az 30 cm", tek tip nervürlü demir) **kullanılmaz**; bunlar reddedilen eski modelin içeriği. Dosyaların başında bu not var.
+- **Belgeler: Form + lab raporu.** "Yapı Ruhsatı Başvurusu"nun yerine **Yapı Denetim Formu** gelir (Core'da `Documents[0].Title` artık bu). **Lab raporu ayrı belge olarak kalır**: sahte belge ipuçları (iki belge arasında parsel/tarih/kaşe/imza/lab uyuşmazlığı) ve ek test aynen çalışır.
+
+**Tasarım → Core alanları (A ekledi, push'landı)**
+| Formdaki yer | Core |
+|---|---|
+| Sekme "DOSYA · 2026-0417" | `project.FileNo` |
+| Sağ üst tarih | `project.Documents[0].Date` |
+| Adres / Kullanım / Kat sayısı | `Address` / `DeskFormat.BuildingName(BuildingType)` / `Floors` |
+| Yükseklik | `project.HeightMeters` (kat × 3 m) → "24,00 M" |
+| Kat başı kişi | `project.PeoplePerFloor` |
+| Yapım yılı | **Kullanma** → yerine "Başvuru tarihi" (`Documents[0].Date`) ya da boş bırak |
+| Bölüm kutuları (A / B) ve başlıkları | `rule.Section` → "A · YAPI", "B · ZEMİN" (aynı bölümdekileri birlikte göster) |
+| Bölümdeki satırlar | `project.Params` → ad `ctx.Rules.DisplayNameOf(p.Type)`, değer `ctx.Rules.FormatValue(p.Type, p.Reported)` |
+| ONAY / RED kutuları | Mevcut karar akışı (`ctx.Actions.Approve / Reject`), kaşe animasyonu kutuya |
+
+**El kitabı → Core:** başlık "DENETÇİ EL KİTABI", alt satır "Formdaki değerleri bu kurallarla karşılaştır." Bölümler `rule.Section`; kural satırı numarası (1.1, 1.2, 2.1...) masada üretilir; satır metni örneği: **"Kolon kalınlığı en az: 1-3 kat 30 cm · 4-6 kat 35 cm · 7+ kat 40 cm"** (`rule.FloorsLabel` + `FormatValue(Param, Required)`); istersen altında `Description`. Demir satırına "B220 (düz) hiçbir binada kabul edilmez." "GENEL KURAL: Tek bir kurala uymayan bina REDDEDİLİR." kutusu aynen. Akredite laboratuvarlar sayfası kalır.
+
+- **Oğuzhan (B):**
+  - [ ] Yapı Denetim Formu'nu tasarıma göre kur (başvuru sekmesinin yerine), yukarıdaki alan eşlemesiyle.
+  - [ ] Lab raporunu aynı görsel dile uydur (ayrı belge; renk/kâğıt farkı olabilir).
+  - [ ] El kitabını tasarıma göre kur (bölüm kutuları, numaralı kurallar, kat grubu değerleri tek satırda, GENEL KURAL kutusu).
+- **Tarık (EEE):**
+  - [ ] ⚠️ **Yazı tipi / tarz:** tasarımlar **Pixelify Sans** + **VT323** (Google Fonts, ikisi de SIL OFL) kullanıyor; bu sabahki "piksel art yok, düz çizgi film" kararınla çelişiyor. Ahmet'in kararı tasarımın görünümünü almak → bu iki fontu **TMP font asset** olarak ekle (`CREDITS_AND_AI.md` → Font, OFL), Oğuzhan'a haber ver. Masa/portre görsellerinin bu fontlarla uyumuna bak; uyumsuzsa Ahmet'le konuş.
+
 ### 🎮 Oynanış testi → yeni işler (Ahmet oynadı, 17 Ekim gece) — ÖNCE BUNU OKU
 Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler aşağıda. **Hepsi onaylı (Ahmet), sırayla yapılacak.** Kodlar: Ç1-Ç5.
 
@@ -177,7 +204,7 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - Değerler "en az" kuralıdır (seçeneklilerde sırada sağdaki daha iyi). Gerekli değer **sadece kat sayısına** göre değişir; binalar 2-9 kat. Oyuncu: başvurudan kat sayısını okur → el kitabı tablosunda sütunu bulur → lab raporuyla karşılaştırır. Masada "min." yok.
 - Veri `RuleSet.asset`'te (15 kural); yeniden üretmek: `CivilJam > Core > Rebuild Handbook Rules` (EEE metinlerini korur). Açıklamalar ve `HandbookIntro` sade dille A taslağı; EEE düzeltebilir.
 - Denge (simülasyon, 300 oyun/tip): dikkatli %100 İyi; tek zarf %49 İyi / %42 Enkazın Gölgesi / %9 hapis; her zarfı alan %85 hapis; reddeci 5. gün ofisi kaybeder. Seçenekli parametrede her eksik kademe dayanımı %25 düşürür (`ParamEntry.LabelStepPenalty`).
-- ⚠️ **Oğuzhan — derleme notu (A):** `a9932ac` (sayfalı el kitabın) ile `c4a9bd2` (v2, bölge kaldırıldı) aynı anda push'landı ve main birkaç dakika derlenmedi. A, Core'a **uyumluluk** için `RuleSetSO.Zones` (her zaman boş), `ZoneEntry` ve 4 parametreli `FindRule(tür, parametre, bölge, kat)` (bölgeyi yok sayar) ekledi → derleniyor. Senin kodun Zones boşken tek "Yönetmelik" tablosu gösteriyor, yani **v2 için zaten doğru çalışıyor**. Uygun bir anda `RulebookView`'dan bölge/mahalle kodunu (ZonesPage, ZoneCount döngüsü) kaldır ve `FindRule(type, param, floors)` kullan; haber verince A uyumluluk üyelerini siler.
+- ✅ (Oğuzhan `255b24e` bölge kodunu kaldırdı, A uyumluluk üyelerini sildi.) **Oğuzhan — derleme notu (A):** `a9932ac` (sayfalı el kitabın) ile `c4a9bd2` (v2, bölge kaldırıldı) aynı anda push'landı ve main birkaç dakika derlenmedi. A, Core'a **uyumluluk** için `RuleSetSO.Zones` (her zaman boş), `ZoneEntry` ve 4 parametreli `FindRule(tür, parametre, bölge, kat)` (bölgeyi yok sayar) ekledi → derleniyor. Senin kodun Zones boşken tek "Yönetmelik" tablosu gösteriyor, yani **v2 için zaten doğru çalışıyor**. Uygun bir anda `RulebookView`'dan bölge/mahalle kodunu (ZonesPage, ZoneCount döngüsü) kaldır ve `FindRule(type, param, floors)` kullan; haber verince A uyumluluk üyelerini siler.
 - **Oğuzhan (el kitabı ekranı):** en okunaklısı **tek tablo**: satırlar 5 parametre (`DisplayName`), sütunlar 3 kat grubu (`rule.FloorsLabel` → "1-3 kat", "4-6 kat", "7+ kat"), hücre `ctx.Rules.FormatValue(rule.Param, rule.Required)`; altında `Description`'lar. Sayfalı kitap gerekmiyorsa sayfa sayısı azalır (giriş + tablo + akredite lab'lar). Mahalle → bölge sayfası **artık yok**.
   - (B, 17 Ekim öğle) ✅ Yapıldı: `RulebookView`'dan bölge/mahalle kodu kaldırıldı (`Zones`, `ZoneEntry`, 4 parametreli `FindRule` artık kullanılmıyor; `FindRule(tür, parametre, kat)` + `FloorsLabel`). Kitap 3 sayfa: giriş → tek tablo + açıklamalar → akredite lab'lar. Sandbox projeleri v2'ye geçti. **Ahmet: uyumluluk üyelerini silebilirsin.**
 - **Tarık:** mahalle adı yazmana gerek yok (özellik kalktı). El kitabı metinleri (5 parametre açıklaması + giriş) sende kalabilir ya da A'nın taslağı kalır.
@@ -393,6 +420,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | Ç4 Core | Tepki/selamlama Core'da seçilir (ProjectData metinleri); hediye onayda GiftChance ile, oyunda bir kez; Nuri her retten sonra +250 TL zarf | A. Replik listesi boşsa metin boş |
 | 17 Ekim öğle | El kitabı v2: mahalle/bölge tamamen kaldırıldı; 5 parametre (kolon kalınlığı, temel derinliği, beton sınıfı, demir tipi, zemin türü), gerekli değer kat grubuna göre (1-3 / 4-6 / 7+) | Ahmet kararı: daha az ama daha anlaşılır ve keyifli parametre; tek tabloda arama. Denge simülasyonla korundu |
 | 17 Ekim öğle | Demir tipi kat grubuna göre 3 farklı tür (B420 / B500 / B500S); B220 düz hiçbir binada kabul edilmez; gerçek sınıf kodları | Ahmet kararı: tek tip demir parametreyi anlamsızlaştırıyordu. Denge korundu (tek zarf %45/%45/%10) |
+| 17 Ekim öğleden sonra | Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı görünümü (Docs/Tasarim), içerik v2; başvuru → Yapı Denetim Formu, lab raporu ayrı kalır | Ahmet kararı. Tasarımın örnek içeriği (yangın/sel/kaçak kat) reddedilmiş modelden; kullanılmaz |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

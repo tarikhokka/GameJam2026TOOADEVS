@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  GÖRÜNÜM REFERANSI (Ahmet, 17 Ekim). SADECE GÖRÜNÜM: çerçeve, renkler, yazı tipleri, satır düzeni, ONAY/RED kutuları.
+  İÇERİK BURADAN ALINMAZ. İçerik El Kitabı v2'dir (memory.md → "Ç1 — El kitabı v2"):
+    - Bölümler: "A · YAPI" (kolon kalınlığı, beton sınıfı, demir tipi) ve "B · ZEMİN" (temel derinliği, zemin türü) → ParamRule.Section
+    - YANGIN, SEL, kaçak kat, DSİ YOK (kapsam dışı / reddedildi).
+    - Künye: Dosya no (ProjectData.FileNo), tarih (Documents[0].Date), adres, kullanım, kat sayısı, yükseklik (HeightMeters),
+      kat başı kişi (PeoplePerFloor). "Yapım yılı" yerine "Başvuru tarihi".
+    - Değerler: Params[].Reported, ctx.Rules.FormatValue ile. Lab raporu AYRI belge olarak kalır (ipuçları + ek test).
+-->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yapı Denetim Formu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=VT323&display=swap">
+<style>
+body{margin:0;background:#6f6658;display:flex;justify-content:center}
+.v{font-family:'VT323',monospace}
+.row{display:flex;align-items:baseline;gap:6px;font-size:14px}
+.row .dots{flex-grow:1;border-bottom:2px dotted #3b2f22}
+.row .v{font-size:23px;white-space:nowrap}
+.info .row{font-size:13px}.info .row .v{font-size:21px}
+.sec{display:flex;flex-direction:column;gap:4px}
+.sh{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.box{width:28px;height:28px;border:3px solid #3b2f22;display:flex;align-items:center;justify-content:center;font-weight:700;box-sizing:border-box}
+.st{font-weight:700;font-size:17px;letter-spacing:2px}
+.dec{flex:1;height:70px;border:3px dashed #3b2f22;display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:3px}
+@media print{body{background:#fff}}
+</style>
+</head>
+<body>
+<div style="width:640px;height:1100px;box-sizing:border-box;padding:36px;background:#6f6658;font-family:'Pixelify Sans',monospace;color:#3b2f22;display:flex;flex-direction:column">
+<div style="display:flex"><div style="background:#d8b878;padding:10px 18px;font-size:15px;font-weight:700;border:3px solid #3b2f22;border-bottom:none">DOSYA · 2026-0417</div></div>
+<div style="flex-grow:1;background:#d8b878;border:3px solid #3b2f22;padding:22px;display:flex">
+<div style="flex-grow:1;background:#f1ead8;border:3px solid #3b2f22;box-shadow:6px 6px 0 #a88a4e;padding:24px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #3b2f22;padding-bottom:10px">
+<div style="display:flex;flex-direction:column"><span style="font-size:12px;letter-spacing:2px">AFET KONTROL BÜROSU</span><span style="font-size:28px;font-weight:700;line-height:1">YAPI DENETİM FORMU</span></div>
+<span class="v" style="font-size:22px">16.10.2026</span>
+</div>
+<div class="info" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 20px">
+<div class="row"><span>Adres</span><span class="dots"></span><span class="v">DERE SK. 12</span></div>
+<div class="row"><span>Kullanım</span><span class="dots"></span><span class="v">KONUT</span></div>
+<div class="row"><span>Yapım yılı</span><span class="dots"></span><span class="v">2009</span></div>
+<div class="row"><span>Kat sayısı</span><span class="dots"></span><span class="v">8</span></div>
+<div class="row"><span>Yükseklik</span><span class="dots"></span><span class="v">24,00 M</span></div>
+<div class="row"><span>Kat başı kişi</span><span class="dots"></span><span class="v">40</span></div>
+</div>
+<div class="sec"><div class="sh"><span class="box">A</span><span class="st">DEPREM</span></div>
+<div class="row"><span>Kolon kalınlığı</span><span class="dots"></span><span class="v">25 CM</span></div>
+<div class="row"><span>Beton sınıfı</span><span class="dots"></span><span class="v">C20</span></div>
+<div class="row"><span>Demir tipi</span><span class="dots"></span><span class="v">NERVÜRLÜ</span></div>
+<div class="row"><span>Projedeki kat sayısı</span><span class="dots"></span><span class="v">7</span></div>
+</div>
+<div class="sec"><div class="sh"><span class="box">B</span><span class="st">YANGIN</span></div>
+<div class="row"><span>Yangın merdiveni</span><span class="dots"></span><span class="v">BİNA DIŞINDA</span></div>
+<div class="row"><span>Yangın tüpü</span><span class="dots"></span><span class="v">HER KATTA</span></div>
+<div class="row"><span>Kat başı çıkış</span><span class="dots"></span><span class="v">1</span></div>
+</div>
+<div class="sec"><div class="sh"><span class="box">C</span><span class="st">SEL</span></div>
+<div class="row"><span>Dere yatağı içinde</span><span class="dots"></span><span class="v">HAYIR</span></div>
+<div class="row"><span>DSİ izni</span><span class="dots"></span><span class="v">VAR</span></div>
+<div class="row"><span>Taşkın bölgesi</span><span class="dots"></span><span class="v">İÇİNDE</span></div>
+<div class="row"><span>Bodrumda ev</span><span class="dots"></span><span class="v">VAR</span></div>
+</div>
+<div style="margin-top:auto;display:flex;gap:14px"><div class="dec">ONAY</div><div class="dec">RED</div></div>
+</div>
+</div>
+</div>
+</body>
+</html>

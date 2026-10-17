@@ -10,6 +10,8 @@ namespace CivilJam.Core
         public string Id;
         public string Name;          // Ör. "Papatya Apartmanı"
         public string Address;       // Görsel bilgi; oyun kuralını etkilemez (mahalle/bölge kaldırıldı)
+        public string FileNo;        // Yapı Denetim Formu dosya no, ör. "2026-0417" (görsel)
+        public int PeoplePerFloor;   // Formdaki "Kat başı kişi" (görsel)
         public string ClientId;      // ClientSO.Id
         public BuildingType BuildingType;
         public int Floors;
@@ -49,6 +51,9 @@ namespace CivilJam.Core
                 return min;
             }
         }
+
+        /// <summary>Formdaki "Yükseklik": kat başına 3 m.</summary>
+        public float HeightMeters => Floors * 3f;
 
         /// <summary>Gerçekte yönetmeliğe uygun mu (gizli gerçek).</summary>
         public bool IsCompliant => Strength >= 1f;

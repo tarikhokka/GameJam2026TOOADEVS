@@ -85,6 +85,10 @@ namespace CivilJam.Core.Tests
                     Assert.That(p.Floors, Is.InRange(2, 9));
                     Assert.AreEqual(5, p.Params.Count, "Her projede 5 parametre");
                     StringAssert.DoesNotContain("Mah.", p.Address, "Mahalle kaldırıldı");
+                    Assert.AreEqual("Yapı Denetim Formu", p.Documents[0].Title, "Başvuru belgesi artık Yapı Denetim Formu");
+                    StringAssert.StartsWith("2026-", p.FileNo);
+                    Assert.That(p.PeoplePerFloor, Is.InRange(8, 24));
+                    Assert.AreEqual(p.Floors * 3f, p.HeightMeters, 1e-4f);
 
                     foreach (var x in p.Params)
                     {
@@ -134,6 +138,15 @@ namespace CivilJam.Core.Tests
                 rebar.Add(r.Required);
             }
             Assert.AreEqual(3, rebar.Count, "Demir tipi: kat grubuna göre 3 farklı tür");
+
+            // Tasarım (Yapı Denetim Formu / El Kitabı): her kural bir bölümde, iki bölüm
+            var sections = new HashSet<string>();
+            foreach (var r in real.RulesFor(BuildingType.Residential))
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(r.Section), $"{r.Param}: bölüm boş");
+                sections.Add(r.Section);
+            }
+            CollectionAssert.AreEquivalent(new[] { "A · YAPI", "B · ZEMİN" }, sections);
             Assert.IsFalse(string.IsNullOrEmpty(real.HandbookIntro));
         }
     }

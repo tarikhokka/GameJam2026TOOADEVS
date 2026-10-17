@@ -21,6 +21,7 @@ MonoBehaviour:
     Required: 35
     MinFloors: 0
     MaxFloors: 0
+    Section: 
     Labels: []
     Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
@@ -31,6 +32,7 @@ MonoBehaviour:
     Required: 1.2
     MinFloors: 0
     MaxFloors: 0
+    Section: 
     Labels: []
     Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
@@ -41,6 +43,7 @@ MonoBehaviour:
     Required: 200
     MinFloors: 0
     MaxFloors: 0
+    Section: 
     Labels: []
     Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
@@ -51,6 +54,7 @@ MonoBehaviour:
     Required: 1.5
     MinFloors: 0
     MaxFloors: 0
+    Section: 
     Labels: []
     Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
@@ -61,6 +65,7 @@ MonoBehaviour:
     Required: 30
     MinFloors: 1
     MaxFloors: 3
+    Section: "A \xB7 YAPI"
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -71,6 +76,7 @@ MonoBehaviour:
     Required: 35
     MinFloors: 4
     MaxFloors: 6
+    Section: "A \xB7 YAPI"
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -81,6 +87,7 @@ MonoBehaviour:
     Required: 40
     MinFloors: 7
     MaxFloors: 0
+    Section: "A \xB7 YAPI"
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -91,6 +98,7 @@ MonoBehaviour:
     Required: 1.5
     MinFloors: 1
     MaxFloors: 3
+    Section: "B \xB7 ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -101,6 +109,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
+    Section: "B \xB7 ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -111,6 +120,7 @@ MonoBehaviour:
     Required: 2.5
     MinFloors: 7
     MaxFloors: 0
+    Section: "B \xB7 ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -121,6 +131,7 @@ MonoBehaviour:
     Required: 1
     MinFloors: 1
     MaxFloors: 3
+    Section: "A \xB7 YAPI"
     Labels:
     - C16
     - C20
@@ -136,6 +147,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
+    Section: "A \xB7 YAPI"
     Labels:
     - C16
     - C20
@@ -151,6 +163,7 @@ MonoBehaviour:
     Required: 3
     MinFloors: 7
     MaxFloors: 0
+    Section: "A \xB7 YAPI"
     Labels:
     - C16
     - C20
@@ -166,6 +179,7 @@ MonoBehaviour:
     Required: 1
     MinFloors: 1
     MaxFloors: 3
+    Section: "A \xB7 YAPI"
     Labels:
     - "B220 (d\xFCz)"
     - B420
@@ -180,6 +194,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
+    Section: "A \xB7 YAPI"
     Labels:
     - "B220 (d\xFCz)"
     - B420
@@ -194,6 +209,7 @@ MonoBehaviour:
     Required: 3
     MinFloors: 7
     MaxFloors: 0
+    Section: "A \xB7 YAPI"
     Labels:
     - "B220 (d\xFCz)"
     - B420
@@ -208,6 +224,7 @@ MonoBehaviour:
     Required: 1
     MinFloors: 1
     MaxFloors: 3
+    Section: "B \xB7 ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"
@@ -222,6 +239,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
+    Section: "B \xB7 ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"
@@ -236,6 +254,7 @@ MonoBehaviour:
     Required: 3
     MinFloors: 7
     MaxFloors: 0
+    Section: "B \xB7 ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"

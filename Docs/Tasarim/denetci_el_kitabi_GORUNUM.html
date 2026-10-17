@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+  GÖRÜNÜM REFERANSI (Ahmet, 17 Ekim). SADECE GÖRÜNÜM: çerçeve, renkler, yazı tipleri, numaralı kural satırları, "GENEL KURAL" kutusu.
+  İÇERİK BURADAN ALINMAZ. İçerik El Kitabı v2'dir (memory.md → "Ç1 — El kitabı v2"):
+    - Bölümler ParamRule.Section'dan: "A · YAPI" (kolon kalınlığı, beton sınıfı, demir tipi), "B · ZEMİN" (temel derinliği, zemin türü).
+    - Değerler SABİT DEĞİL, kat grubuna göre: her kural satırında üç değer, ör.
+      "1.1 Kolon kalınlığı: 1-3 kat 30 cm · 4-6 kat 35 cm · 7+ kat 40 cm" (rule.FloorsLabel + ctx.Rules.FormatValue).
+    - Demir: B220 (düz) hiçbir binada kabul edilmez; B420 / B500 / B500S kat grubuna göre.
+    - YANGIN, SEL, kaçak kat, DSİ YOK. "GENEL KURAL: Tek bir kurala uymayan bina REDDEDİLİR." kalır.
+-->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Denetçi El Kitabı</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=VT323&display=swap">
+<style>
+body{margin:0;background:#6f6658;display:flex;justify-content:center}
+.v{font-family:'VT323',monospace}
+.sec{display:flex;flex-direction:column;gap:8px}
+.sh{display:flex;align-items:center;gap:8px}
+.box{width:28px;height:28px;border:3px solid #3b2f22;display:flex;align-items:center;justify-content:center;font-weight:700;box-sizing:border-box}
+.st{font-weight:700;font-size:17px;letter-spacing:2px}
+.rule{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:baseline}
+.rule .n{font-family:'VT323',monospace;font-size:22px}
+.rule .t{font-family:'VT323',monospace;font-size:23px;line-height:1.05}
+@media print{body{background:#fff}}
+</style>
+</head>
+<body>
+<div style="width:640px;height:1100px;box-sizing:border-box;padding:36px;background:#6f6658;font-family:'Pixelify Sans',monospace;color:#3b2f22;display:flex;flex-direction:column">
+<div style="display:flex"><div style="background:#b9c4a6;padding:10px 18px;font-size:15px;font-weight:700;border:3px solid #3b2f22;border-bottom:none">EL KİTABI · BASKI 3</div></div>
+<div style="flex-grow:1;background:#b9c4a6;border:3px solid #3b2f22;padding:22px;display:flex">
+<div style="flex-grow:1;background:#f1ead8;border:3px solid #3b2f22;box-shadow:6px 6px 0 #8a9776;padding:24px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;border-bottom:3px solid #3b2f22;padding-bottom:10px">
+<span style="font-size:12px;letter-spacing:2px">AFET KONTROL BÜROSU</span>
+<span style="font-size:28px;font-weight:700;line-height:1">DENETÇİ EL KİTABI</span>
+<span class="v" style="font-size:21px">Formdaki değerleri bu kurallarla karşılaştır.</span>
+</div>
+<div class="sec"><div class="sh"><span class="box">A</span><span class="st">DEPREM</span></div>
+<div class="rule"><span class="n">1.1</span><span class="t">Kolonlar en az 30 CM kalınlığında olmalı.</span></div>
+<div class="rule"><span class="n">1.2</span><span class="t">Beton en az C25 olmalı. C20, C16 gibi değerler kabul edilmez.</span></div>
+<div class="rule"><span class="n">1.3</span><span class="t">Demir NERVÜRLÜ (tırtıklı) olmalı. Düz demir kabul edilmez.</span></div>
+<div class="rule"><span class="n">1.4</span><span class="t">Binadaki kat sayısı projedekiyle aynı olmalı. Fazla kat = kaçak kat.</span></div>
+</div>
+<div class="sec"><div class="sh"><span class="box">B</span><span class="st">YANGIN</span></div>
+<div class="rule"><span class="n">2.1</span><span class="t">Bina 21,5 M’den yüksekse yangın merdiveni binanın İÇİNDE olmalı.</span></div>
+<div class="rule"><span class="n">2.2</span><span class="t">Her katta yangın tüpü olmalı.</span></div>
+<div class="rule"><span class="n">2.3</span><span class="t">Bir katta 50’den fazla kişi varsa en az 2 çıkış olmalı.</span></div>
+</div>
+<div class="sec"><div class="sh"><span class="box">C</span><span class="st">SEL</span></div>
+<div class="rule"><span class="n">3.1</span><span class="t">Dere yatağının içine bina yapılamaz.</span></div>
+<div class="rule"><span class="n">3.2</span><span class="t">Dereye yakın binaların DSİ izni olmalı.</span></div>
+<div class="rule"><span class="n">3.3</span><span class="t">Taşkın bölgesindeki binaların bodrumunda ev olamaz.</span></div>
+</div>
+<div style="margin-top:auto;border:3px solid #3b2f22;padding:12px 16px;display:flex;flex-direction:column;gap:2px">
+<span style="font-weight:700;font-size:15px;letter-spacing:2px">GENEL KURAL</span>
+<span class="v" style="font-size:23px">Tek bir kurala uymayan bina REDDEDİLİR.</span>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

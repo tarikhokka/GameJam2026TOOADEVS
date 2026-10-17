@@ -115,6 +115,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | Ç1 mantığı | `ParamEntry.Labeled` (harfli parametre; değer = etiket sırası); `ProjectGenerator` artık `RuleSetSO.Zones` ve `RulesFor(tür, bölge, kat)` kullanıyor | B (`FormatValue` ile göster) |
 | Ç4 mantığı | `ClientRecord` + `GameState.ClientHistory`; `ClientReactions.RecordOf(state, id)` (okuma) | B ("tekrar geldi" göstergesi isterse) |
 | El kitabı v2 | KALDIRILDI: `RuleSetSO.Zones`/`ZoneEntry`/`ZoneOf`, `ParamRule.Zone`, `ProjectData.Neighborhood`/`Zone`. DEĞİŞTİ: `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`. YENİ: `ParamRule.FloorsLabel`, `ParamType` ColumnThickness/FoundationDepth/RebarType/SoilType, `ParamEntry.LabelStepPenalty` | B (el kitabı tablosu), EEE (metinler) |
+| Belge tasarımı | YENİ: `ParamRule.Section`, `ProjectData.FileNo`, `PeoplePerFloor`, `HeightMeters`; `Documents[0].Title` = "Yapı Denetim Formu". KALDIRILDI: geçici uyumluluk (`RuleSetSO.Zones`, `ZoneEntry`, 4 parametreli `FindRule`; Oğuzhan `255b24e`'de kendi tarafını temizledi) | B, EEE |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

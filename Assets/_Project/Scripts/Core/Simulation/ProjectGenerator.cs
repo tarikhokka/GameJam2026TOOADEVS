@@ -70,6 +70,8 @@ namespace CivilJam.Core
                 Name = MakeBuildingName(type, names, rng, usedNames),
                 Address = MakeAddress(names, rng),
                 Floors = floors,
+                FileNo = $"2026-{rng.RangeInclusive(100, 999):0000}",
+                PeoplePerFloor = rng.RangeInclusive(8, 24),
                 Fee = rng.RangeInclusive(balance.ApprovalFeeRange.x, balance.ApprovalFeeRange.y)
             };
 
@@ -184,7 +186,7 @@ namespace CivilJam.Core
             var application = new DocumentData
             {
                 Kind = DocumentKind.Application,
-                Title = "Yapı Ruhsatı Başvurusu",
+                Title = "Yapı Denetim Formu",
                 ParcelNo = parcel,
                 Date = date,
                 StampId = MunicipalityStamp,

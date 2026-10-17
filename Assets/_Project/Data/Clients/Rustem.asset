@@ -19,27 +19,46 @@ MonoBehaviour:
   IsThug: 1
   BribeRange: {x: 1500, y: 2500}
   GreetingLines:
-  - "Hocam selam\xFCnaleyk\xFCm. Ben uzatmay\u0131 sevmem."
-  - "Projeyi getirdim. Siz de onaylayacaks\u0131n\u0131z, de\u011Fil mi hocam?"
-  - "Bu mahallede herkes beni tan\u0131r hocam. Siz de tan\u0131y\u0131n istedim."
+  - "Hocam selamünaleyküm. Ben uzatmayı sevmem."
+  - "Projeyi getirdim. Siz de onaylayacaksınız, değil mi hocam?"
+  - "Bu mahallede herkes beni tanır hocam. Siz de tanıyın istedim."
+  - "Benim proje hazır hocam. Zaten bir sorun yok."
+  - "Bu işleri fazla uzatmayalım hocam, herkesin zamanı kıymetli."
+  - "Şunu halledelim hocam, sonrası kolay."
+  - "Ofisin camları güzelmiş hocam. Temiz tutuyorsun."
+  - "Oturayım hocam. Çay gelir mi?"
   BribeLines:
-  - "Al hocam bunu. Ofisinizin camlar\u0131 \xE7ok g\xFCzel bu arada... K\u0131r\u0131lsa yaz\u0131k olur."
-  - "\u0130mza atars\u0131n, zarf\u0131 al\u0131rs\u0131n. Atmazsan... neyse, sen atars\u0131n."
-  - "Ben iyilikten anlar\u0131m hocam. K\xF6t\xFCl\xFCkten de anlar\u0131m."
+  - "Al hocam bunu. Ofisinizin camları çok güzel bu arada... Kırılsa yazık olur."
+  - "İmza atarsın, zarfı alırsın. Atmazsan... neyse, sen atarsın."
+  - "Ben iyilikten anlarım hocam. Kötülükten de anlarım."
+  - "Bunu masaya bırakıyorum hocam. Ne demek istediğimi anladın."
+  - "Zarf da burada, ben de buradayım hocam. Karar senin."
   ApproveLines:
-  - "G\xF6rd\xFCn m\xFC hocam, ne g\xFCzel anla\u015Ft\u0131k."
-  - "Ak\u0131ll\u0131 adams\u0131n hocam. Camlar\u0131n da sa\u011Flam kal\u0131r."
-  - "Bu iyili\u011Fi unutmam hocam."
+  - "Gördün mü hocam, ne güzel anlaştık."
+  - "Akıllı adamsın hocam. Camların da sağlam kalır."
+  - "Bu iyiliği unutmam hocam."
+  - "Anlaştık hocam. Böyle devam edelim."
+  - "İyi iş hocam. Bunu duyan herkes memnun olur."
+  - "Gördün mü, ne kolaymış."
   RejectLines:
-  - "Yanl\u0131\u015F yapt\u0131n hocam. \xC7ok yanl\u0131\u015F yapt\u0131n."
-  - "Bu mahallede b\xF6yle i\u015F olmaz hocam... G\xF6r\xFCrs\xFCn."
-  - "Peki hocam. Ak\u015Fama ofisin camlar\u0131na bir bak."
+  - "Yanlış yaptın hocam. Çok yanlış yaptın."
+  - "Bu mahallede böyle iş olmaz hocam... Görürsün."
+  - "Peki hocam. Akşama ofisin camlarına bir bak."
+  - "Sen bilirsin hocam. Ben de bildiğimi yaparım."
+  - "Bu iş burada bitmez hocam."
+  - "Hm. Akşam geç saate kadar çalışıyor musun hocam?"
   BribeRefusedLines:
-  - "Zarf\u0131m\u0131 geri mi itiyorsun? Bunu unutmam hocam."
-  - Sen bilirsin. Ben kibarca teklif ettim.
+  - "Zarfımı geri mi itiyorsun? Bunu unutmam hocam."
+  - "Sen bilirsin. Ben kibarca teklif ettim."
+  - "Zarfı geri verdin, projeyi de geri verdin. İki hata hocam."
+  - "Ben sana iyilik teklif ettim hocam. Sen istemedin."
+  - "Peki hocam. Görüşürüz."
   ReturnLines:
-  - "Yine ben hocam. Ge\xE7en sefer {last}; bunu ikimiz de hat\u0131rl\u0131yoruz."
-  - "Hocam, ge\xE7en sefer {last}. Bug\xFCn nas\u0131l bitece\u011Fi sana ba\u011Fl\u0131."
+  - "Yine ben hocam. Geçen sefer {last}; bunu ikimiz de hatırlıyoruz."
+  - "Hocam, geçen sefer {last}. Bugün nasıl biteceği sana bağlı."
+  - "Hocam yine geldim. Geçen sefer {last}, unutmadım."
+  - "Selam hocam. Geçen sefer {last}. Bugün daha iyi anlaşırız."
+  - "Ben yine buradayım hocam. Geçen sefer {last}; camlar hâlâ yerinde mi?"
   Gift: {fileID: 11400000, guid: a6d5a4293e1f4f91a314ca75459aa797, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

@@ -19,28 +19,46 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 800, y: 1500}
   GreetingLines:
-  - "Hocam selamlar! K\u0131sa kesece\u011Fim, sizin de vaktiniz k\u0131ymetli."
-  - "Evraklar tamam hocam, ufak tefek \u015Feylere tak\u0131lmayal\u0131m."
-  - "Benim i\u015Fler hep h\u0131zl\u0131 hocam, ad\u0131m \xFCst\xFCnde."
+  - "Hocam selamlar! Kısa keseceğim, sizin de vaktiniz kıymetli."
+  - "Evraklar tamam hocam, ufak tefek şeylere takılmayalım."
+  - "Benim işler hep hızlı hocam, adım üstünde."
+  - "Bir yolunu buluruz hocam, her işin bir yolu vardır."
+  - "Zaman çok kıymetli hocam, ben buradan başka şantiyeye geçeceğim."
+  - "Hocam kısa keselim, siz bakın, ben gerisini hallederim."
+  - "Merhaba hocam! Arabayı kapının önüne bıraktım, hızlıca bakarsak sevinirim."
+  - "Evrak dediğin iki dakikalık iş hocam, değil mi?"
   BribeLines:
-  - "Bu zarf\u0131 masada unuttum galiba... Sizde kals\u0131n, bir dahakine al\u0131r\u0131m."
-  - "Hocam bu i\u015Fler uzat\u0131lmaz. Kestirmeden gidelim, ikimiz de kazanal\u0131m."
-  - "\xC7ay paras\u0131 diyelim hocam. Biraz kalabal\u0131k bir \xE7ay."
+  - "Bu zarfı masada unuttum galiba... Sizde kalsın, bir dahakine alırım."
+  - "Hocam bu işler uzatılmaz. Kestirmeden gidelim, ikimiz de kazanalım."
+  - "Çay parası diyelim hocam. Biraz kalabalık bir çay."
+  - "Bir çay parası olsun hocam. Siz de üzülmeyin, ben de sizi uğraştırmayayım."
+  - "Bunu açmanıza gerek yok hocam. Sadece bir teşekkür."
   ApproveLines:
-  - "\u0130\u015Fte bu hocam! K\u0131sa ve net, tam benim sevdi\u011Fim gibi."
-  - "Hay\u0131rl\u0131 olsun hocam. Temeli yar\u0131n sabah at\u0131yoruz."
-  - "G\xF6r\xFCyor musunuz, uzatmad\u0131k, herkes kazand\u0131."
+  - "İşte bu hocam! Kısa ve net, tam benim sevdiğim gibi."
+  - "Hayırlı olsun hocam. Temeli yarın sabah atıyoruz."
+  - "Görüyor musunuz, uzatmadık, herkes kazandı."
+  - "Bak işte! Beş dakikada bitti, kimse üzülmedi."
+  - "Hocam eyvallah. Ben kaçtım, şantiye bekliyor."
+  - "Hızlı hocamsınız, hızlı! Böyle çalışalım."
   RejectLines:
-  - "Hocam bu kadar uzatmaya ne gerek vard\u0131?"
-  - "Peki peki... Bu \u015Fehirde ba\u015Fka kap\u0131 da var."
-  - Vaktimi yediniz hocam, vaktimi.
+  - "Hocam bu kadar uzatmaya ne gerek vardı?"
+  - "Peki peki... Bu şehirde başka kapı da var."
+  - "Vaktimi yediniz hocam, vaktimi."
+  - "Hocam bir yolu vardı ama... Neyse."
+  - "Bu kadar kâğıt için bu kadar uğraş... Peki hocam."
+  - "Tamam, tamam. Başka gün başka hava."
   BribeRefusedLines:
-  - "Zarf\u0131 geri mi veriyorsunuz? Hocam, kimse bu kadar kitab\u0131na uygun \xE7al\u0131\u015Fm\u0131yor."
-  - "Ay\u0131p oluyor ama hocam... Ben iyilik yapay\u0131m dedim."
-  - "Siz bilirsiniz. Ama bu zarf ba\u015Fka masada kalmaz."
+  - "Zarfı geri mi veriyorsunuz? Hocam, kimse bu kadar kitabına uygun çalışmıyor."
+  - "Ayıp oluyor ama hocam... Ben iyilik yapayım dedim."
+  - "Siz bilirsiniz. Ama bu zarf başka masada kalmaz."
+  - "Hocam bu devirde kim geri çevirir? Siz bilirsiniz."
+  - "Zarfı cebime geri koyuyorum ama aklım sizde kaldı hocam."
   ReturnLines:
-  - "Hocam ben yine geldim, kestirmeden. Ge\xE7en sefer {last}, bu sefer de uzatmayal\u0131m."
-  - "Hat\u0131rlad\u0131n\u0131z m\u0131 beni? Ge\xE7en sefer {last}. Bug\xFCn daha h\u0131zl\u0131 bitiririz."
+  - "Hocam ben yine geldim, kestirmeden. Geçen sefer {last}, bu sefer de uzatmayalım."
+  - "Hatırladınız mı beni? Geçen sefer {last}. Bugün daha hızlı bitiririz."
+  - "Hocam ben geldim, kısa keseceğim. Geçen sefer {last}, bugün işimiz kolay."
+  - "Yine ben, Kemal! Geçen sefer {last}; bu sefer bir yolunu buluruz."
+  - "Hocam selam! Geçen sefer {last}. Vaktimiz az, hemen başlayalım."
   Gift: {fileID: 11400000, guid: 2625afaccdec48598bdf547861471986, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

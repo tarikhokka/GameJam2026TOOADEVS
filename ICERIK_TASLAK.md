@@ -7,6 +7,8 @@ Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
 
 ## Müteahhitler (ClientSO)
 
+> **17 Ekim akşam (EEE):** replikler genişletildi (selamlama 8, rüşvet 5, onay 6, ret 6, zarf geri 5, tekrar geliş 5; karakter sayfalarındaki cümleler de eklendi). **Güncel liste `Data/Clients/*.asset`'te**; aşağısı ilk taslaktır.
+
 ### 1. Rıfat Usta — dürüst usta
 - Id: `rifat` · IsHonest: ✅ · IsThug: ❌ · BribeRange: 0-0
 - Selamlama:

@@ -19,22 +19,36 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "Merhaba hocam. Laboratuvar raporlar\u0131 ekte, numuneleri de kendim teslim ettim."
-  - "Biraz pahal\u0131ya \xE7\u0131kt\u0131 ama i\xE7im rahat. Siz yine de inceleyin."
-  - "Bu sefer okul yolunun \xFCst\xFCnde hocam, ona g\xF6re sa\u011Flam yapt\u0131k."
+  - "Merhaba hocam. Laboratuvar raporları ekte, numuneleri de kendim teslim ettim."
+  - "Biraz pahalıya çıktı ama içim rahat. Siz yine de inceleyin."
+  - "Bu sefer okul yolunun üstünde hocam, ona göre sağlam yaptık."
+  - "Bu projenin zemin etütlerini bizzat takip ettim hocam."
+  - "Laboratuvar sonuçlarını da getirdim hocam, hepsini kontrol ettirdim."
+  - "Maliyeti biraz yüksek oldu ama binayı sağlam yapmak her zaman daha doğru."
+  - "Eksik bir evrak varsa söyleyin hocam, hemen tamamlarım."
+  - "Günaydın hocam! Bu sefer bir oyun parkının yanındayız, ona göre çalıştık."
   BribeLines: []
   ApproveLines:
-  - "Te\u015Fekk\xFCrler hocam. Raporlar\u0131n hepsini saklad\u0131m, ne zaman isterseniz bakar\u0131z."
-  - "\u0130\xE7im rahat hocam. \xC7ocuklar o sokaktan g\xFCvenle ge\xE7ecek."
-  - "Sa\u011F olun. Bu i\u015Fi sizin gibi yapan pek kalmad\u0131."
+  - "Teşekkürler hocam. Raporların hepsini sakladım, ne zaman isterseniz bakarız."
+  - "İçim rahat hocam. Çocuklar o sokaktan güvenle geçecek."
+  - "Sağ olun. Bu işi sizin gibi yapan pek kalmadı."
+  - "Harika! Şantiyeye hemen haber veriyorum."
+  - "Teşekkürler hocam. Temel atma töreninde sizi de görmek isterim."
+  - "Kurallara uyunca iş ne kadar rahat ilerliyor, değil mi hocam?"
   RejectLines:
-  - "Anl\u0131yorum hocam. Laboratuvarla tekrar konu\u015Fur, eksi\u011Fi kapat\u0131r\u0131m."
-  - "Bir yerde hata yapm\u0131\u015F\u0131m demek. \u0130yi ki yakalad\u0131n\u0131z."
-  - "Peki hocam. Pahal\u0131ya patlayacak ama do\u011Frusu bu."
+  - "Anlıyorum hocam. Laboratuvarla tekrar konuşur, eksiği kapatırım."
+  - "Bir yerde hata yapmışım demek. İyi ki yakaladınız."
+  - "Peki hocam. Pahalıya patlayacak ama doğrusu bu."
+  - "Haklısınız, bu benim de gözümden kaçmış. Hemen düzeltiyorum."
+  - "Not aldım hocam. Bir dahaki dosya kusursuz olacak."
+  - "Tamam hocam, tekrar ölçtüreceğim. Sağlam olsun da geç olsun."
   BribeRefusedLines: []
   ReturnLines:
-  - "Merhaba yine hocam. Ge\xE7en sefer {last}; bu dosyada her sat\u0131r\u0131 iki kez kontrol ettim."
-  - "Hocam, ge\xE7en sefer {last}. Bu sefer de numuneleri kendim teslim ettim."
+  - "Merhaba yine hocam. Geçen sefer {last}; bu dosyada her satırı iki kez kontrol ettim."
+  - "Hocam, geçen sefer {last}. Bu sefer de numuneleri kendim teslim ettim."
+  - "Yine ben hocam! Geçen sefer {last}; bu dosyada notlarınızı da dikkate aldım."
+  - "Hocam merhaba, geçen sefer {last}. Bu projeyi de baştan sona kendim takip ettim."
+  - "Merhaba hocam! Geçen sefer {last}. Bugün de her şey kurallara uygun olsun istiyorum."
   Gift: {fileID: 11400000, guid: 76a240ceb7ec47559a0032ec513e2f1b, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

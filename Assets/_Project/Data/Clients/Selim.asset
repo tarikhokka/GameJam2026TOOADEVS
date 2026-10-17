@@ -19,22 +19,36 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "\u0130yi g\xFCnler hocam. B\xFCt\xFCn evraklar eksiksiz, laboratuvar raporu da taze."
-  - "Ka\u015Fesi de imzas\u0131 da yerinde hocam, buyurun inceleyin."
-  - "Ek teste gerek yok hocam, raporlar her \u015Feyi s\xF6yl\xFCyor zaten."
+  - "İyi günler hocam. Bütün evraklar eksiksiz, laboratuvar raporu da taze."
+  - "Kaşesi de imzası da yerinde hocam, buyurun inceleyin."
+  - "Ek teste gerek yok hocam, raporlar her şeyi söylüyor zaten."
+  - "Merak etmeyin hocam, her şey tam. Testlere gerek yok."
+  - "Zaten hepsini düşündük hocam. Bu projede sıkıntı çıkmaz, emin olun."
+  - "Bakın, burada her şey var: hesaplar, raporlar, imzalar. Eksik bir şey olamaz."
+  - "Siz hiç merak etmeyin hocam, biz bu işleri iyi biliriz."
+  - "Güzel bir gün, değil mi hocam? Dosya da gün gibi temiz."
   BribeLines: []
   ApproveLines:
-  - "Te\u015Fekk\xFCrler hocam. Evrak dedi\u011Fin b\xF6yle olur."
-  - "Bilirdim. Ka\u015Fesi, imzas\u0131, hepsi yerinde."
-  - "\u0130yi \xE7al\u0131\u015Fmalar hocam. Ar\u015Fivinize d\xFCzg\xFCn bir dosya daha katt\u0131k."
+  - "Teşekkürler hocam. Evrak dediğin böyle olur."
+  - "Bilirdim. Kaşesi, imzası, hepsi yerinde."
+  - "İyi çalışmalar hocam. Arşivinize düzgün bir dosya daha kattık."
+  - "Söylemiştim hocam, her şey tam."
+  - "Sizinle çalışmak keyif hocam. Kâğıttan anlıyorsunuz."
+  - "Mükemmel. Bir sonraki dosyayı da aynı özenle getiririm."
   RejectLines:
-  - "Hangi belgede sorun g\xF6rd\xFCn\xFCz hocam? Ben g\xF6remedim."
-  - "\u0130lgin\xE7... Laboratuvara bir daha soraca\u011F\u0131m."
-  - "Peki hocam. K\xE2\u011F\u0131tlar tamamd\u0131 ama siz bilirsiniz."
+  - "Hangi belgede sorun gördünüz hocam? Ben göremedim."
+  - "İlginç... Laboratuvara bir daha soracağım."
+  - "Peki hocam. Kâğıtlar tamamdı ama siz bilirsiniz."
+  - "Hocam imzaları kendim kontrol etmiştim ama... Peki."
+  - "Laboratuvar bir şeyi karıştırmış olmalı. Ben ilgilenirim."
+  - "Garip... Kâğıtlar hiç yalan söylemez ama siz bilirsiniz hocam."
   BribeRefusedLines: []
   ReturnLines:
-  - "\u0130yi g\xFCnler hocam. Ge\xE7en sefer {last}; bu dosya ondan da d\xFCzg\xFCn."
-  - "Yine ben hocam. Ge\xE7en sefer {last}. Evraklar her zamanki gibi eksiksiz."
+  - "İyi günler hocam. Geçen sefer {last}; bu dosya ondan da düzgün."
+  - "Yine ben hocam. Geçen sefer {last}. Evraklar her zamanki gibi eksiksiz."
+  - "Hocam iyi günler. Geçen sefer {last}; bu dosyada kaşeler de imzalar da yerinde."
+  - "Yine ben, Selim. Geçen sefer {last}. Bugün testlere gerek kalmayacak."
+  - "Merhaba hocam! Geçen sefer {last}, ama bu sefer her şey kâğıt üstünde kusursuz."
   Gift: {fileID: 11400000, guid: 54db3a1fbe7549bda784785ab1720f91, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

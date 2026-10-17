@@ -19,22 +19,36 @@ MonoBehaviour:
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "Kolay gelsin hocam. Demirini de betonunu da kendim kontrol ettim, siz de bak\u0131n, i\xE7iniz rahat etsin."
-  - "Hocam acele yok. Eksik g\xF6r\xFCrseniz s\xF6yleyin, d\xFCzeltir gelirim."
-  - "Otuz y\u0131ld\u0131r bu i\u015Fi yapar\u0131m hocam. Yapt\u0131\u011F\u0131m binada kendi torunum oturuyor."
+  - "Kolay gelsin hocam. Demirini de betonunu da kendim kontrol ettim, siz de bakın, içiniz rahat etsin."
+  - "Hocam acele yok. Eksik görürseniz söyleyin, düzeltir gelirim."
+  - "Otuz yıldır bu işi yaparım hocam. Yaptığım binada kendi torunum oturuyor."
+  - "Eksik bir şey görürseniz söyleyin hocam, ben tamamlarım."
+  - "Ben bu işi torunlarım da oturacakmış gibi yaparım hocam."
+  - "Şimdi bakıyorum, bazıları nereden kısarım derdinde. Bende öyle iş yok hocam."
+  - "Sabah şantiyeden geldim hocam, üstümün tozuna bakmayın."
+  - "Hocam çayınızı içerken bir göz atın, acelem yok."
   BribeLines: []
   ApproveLines:
-  - "Allah raz\u0131 olsun hocam. Temeline kendim bakt\u0131m, g\xF6n\xFCl rahatl\u0131\u011F\u0131yla y\xFCkselir."
-  - "Sa\u011F olun hocam. Bitince \xE7aya beklerim, bir de siz g\xF6r\xFCn."
-  - "Eksiksiz \xE7\u0131kmas\u0131na sevindim hocam. Usta i\u015Fi b\xF6yle olur."
+  - "Allah razı olsun hocam. Temeline kendim baktım, gönül rahatlığıyla yükselir."
+  - "Sağ olun hocam. Bitince çaya beklerim, bir de siz görün."
+  - "Eksiksiz çıkmasına sevindim hocam. Usta işi böyle olur."
+  - "Eyvallah hocam. Yarın sabah ilk harcı ben karacağım."
+  - "Sağ olun hocam. Bu bina benden de uzun yaşar inşallah."
+  - "Teşekkürler hocam. Kalfalara söyleyeyim, işe başlasınlar."
   RejectLines:
-  - "Hakl\u0131s\u0131n\u0131z hocam, g\xF6z\xFCmden ka\xE7m\u0131\u015F. D\xFCzeltip yeniden getiririm."
-  - "Otuz y\u0131lda pek ba\u015F\u0131ma gelmezdi... Peki hocam, eksi\u011Fi tamamlar\u0131m."
-  - "K\u0131zamam size hocam. Siz bakmasan\u0131z kim bakacak?"
+  - "Haklısınız hocam, gözümden kaçmış. Düzeltip yeniden getiririm."
+  - "Otuz yılda pek başıma gelmezdi... Peki hocam, eksiği tamamlarım."
+  - "Kızamam size hocam. Siz bakmasanız kim bakacak?"
+  - "Peki hocam. Yaşlandık galiba, göz eskisi gibi değil."
+  - "Doğru yaptınız hocam. Yarım iş binaya yakışmaz."
+  - "Üzüldüm ama haklısınız hocam. Eksikle bina yükselmez."
   BribeRefusedLines: []
   ReturnLines:
-  - "Yine ben geldim hocam. Ge\xE7en sefer projemi {last}; bunu daha da dikkatli haz\u0131rlad\u0131m."
-  - "Hocam hat\u0131rlars\u0131n\u0131z, ge\xE7en sefer {last}. Bu dosyay\u0131 da ayn\u0131 titizlikle getirdim."
+  - "Yine ben geldim hocam. Geçen sefer projemi {last}; bunu daha da dikkatli hazırladım."
+  - "Hocam hatırlarsınız, geçen sefer {last}. Bu dosyayı da aynı titizlikle getirdim."
+  - "Hocam merhaba. Geçen sefer {last}, unutmadım. Bu sefer daha da özenli çalıştım."
+  - "Yine ben, Rıfat. Geçen sefer {last}; bu dosyaya iki kere baktım."
+  - "Hocam, geçen sefer {last}. Ustalık bitmez, her seferinde bir şey öğreniyorum."
   Gift: {fileID: 11400000, guid: 6de7d4c48d4443e58f8c4e3ce8579fa8, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

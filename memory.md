@@ -231,7 +231,7 @@ static class Inspection
 **İş listesi:**
 - [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
 - [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama. — (B) Adım 1 yapıldı: İNCELE düğmesi (form ile lab arası, `btn_wood`), mod kilidi (sürükleme + ONAY/RED/ZARF/EK TEST), vurgu/seçim/çizgi, sağ tık ve boş masa iptali, sıfırlama (`InspectController`, `InspectSpot`, `InspectCatcher`). Sonuç şimdilik geçici kart; sıradaki: tüm alanlar + Core bağlantısı.
-- [ ] Onur: `InspectResultView` (görünüm + ses).
+- [x] Onur: `InspectResultView` (görünüm + ses). Üç kaşe, Core `Show/Hide`, Inspector ses/font bağlantıları hazır; ayrı kopyada 4/4 PlayMode testi ve Unity render kontrolü geçti. Oğuzhan'ın prefab/etkileşim bağlantısı bekliyor. Rehber: `Docs/Onur/InspectResultView_baglanti.md`.
 - [ ] Tarık: 1. gün öğretici kartı metni + README satırı (ayrıntı §7 "Tarık (EEE)" ilk madde).
 
 **Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
@@ -251,6 +251,7 @@ static class Inspection
 - [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi gösteriliyor (imza ipucu böyle çalışıyor: sahtede farklı mühendis). Oyuncu için mantıklı olsun: formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
 
 **Onur (C):**
+- (İnceleme modu) Ahmet'in görevlendirmesiyle yeni `Desk/UI/InspectResultView.cs` + `.meta` yazıldı; başka Desk script/prefab'ı değiştirilmedi. Bileşen kendini kurar; builder'ın bağlayacağı alanlar ve koordinat/sayaç sözleşmesi `Docs/Onur/InspectResultView_baglanti.md` içinde.
 - [ ] 🔴 **Jam kuralı:** `Docs/Tasarim/hedef_arayuz.png`'yi hangi araçla ürettiğini `CREDITS_AND_AI.md` → "Yapay zekâ kullanımı" tablosuna yaz.
 - [ ] Ödeme ekranı yanlış rakam gösterebiliyor (`DailyExpensesScreen.UpdateTotals` kasadan basit çıkarma yapıyor). Core hazır: seçim her değiştiğinde `var pv = ExpenseCalculator.Preview(Context.State, Context.PendingExpenses);` → `pv.MoneyAfter`, `pv.DebtAfter`, `pv.PaidTotal`, `pv.AddedToDebt` (borca yazılacak zorunlu gider), `pv.DebtPaid`, kalem bazında `pv.Lines[i].Paid`.
 - [ ] Kayıt ekranı (`SaveScreen`, Tarık yazdı, Flow'da) her zaman "Kaydedildi" diyor. Core hazır: `Context.LastSave` (`Ok`, `Day`, `Error`); `Ok` false ise "Kayıt yapılamadı" + "Tekrar dene" (`Context.RetrySave()`, günü artırmaz) + "Kaydetmeden devam".

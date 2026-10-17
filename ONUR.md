@@ -3,6 +3,7 @@
 Bu dosya Onur’un görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
+- (17 Ekim, Core `78a847c` sonrası) İnceleme sonucu kaşesi `Scripts/Desk/UI/InspectResultView.cs` hazır: gerçek Core sonucu, üç renk, animasyon, ses alanları, güvenli Show/Hide. 4/4 ayrı PlayMode + mevcut 39/39 EditMode testi ve Unity görsel kontrolü geçti. Oğuzhan'ın prefab/etkileşim bağlantısı bekliyor; rehber `Docs/Onur/InspectResultView_baglanti.md`.
 - (A, 17 Ekim ~17:30 temizledi; eski hâli `f14d2ed`.) Flow ekranlarının hepsi Game.unity'de: gün başı, inşaat, gazete, gün özeti, günlük ödeme, kayıt (Tarık yazdı), son; ana menü (Tarık yeni görsele uyarladı), hikâye intro'su, Esc menüsü. Yeni hedef arayüz referansı (`Docs/Tasarim/hedef_arayuz.png`) Onur'un.
 - Açık işler: memory.md §7 "Onur (C)" — `hedef_arayuz.png` için CREDITS satırı (jam kuralı), ödeme ekranında `ExpenseCalculator.Preview`, kayıt ekranında `ctx.LastSave` + `RetrySave`, müzikler (`mus_menu`, `mus_ending_sad`) bağlı değil.
 

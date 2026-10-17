@@ -150,6 +150,15 @@
   - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
 
 ### 🧭 YENİ HEDEF ARAYÜZ (Ahmet kararı, 17 Ekim ~15:00) — HERKES EN ÖNCE BUNU OKUSUN
+> ⏸️ **DURDUR (Ahmet kararı, 17 Ekim 16:10): yeni hedef arayüz bitene kadar YENİ İŞ BAŞLATILMAZ.**
+>
+> Sıra: Onur görselleri üretir → Tarık oyuna uygun hale getirir → Oğuzhan yeni masayı kurar → Ahmet Game.unity'de kontrol eder ve build alır.
+>
+> Bu sırada:
+> - Değişecek ekranlara (masa, belgeler, el kitabı) ayrı tasarım, özellik ya da cila eklenmez. Ajanlar da önermez.
+> - Sadece kendi zincir halkanı yap. Bozuk bir şey görürsen düzeltme, Ahmet'e haber ver.
+> - Bilgi: El kitabı "Hızlı Bakış" sayfası (`RulebookView` + `HandbookUi`) yeni düzende sağdaki belgenin içine aynen taşınır; sadece dışındaki pencere değişir.
+
 Referans görsel: **`Docs/Tasarim/hedef_arayuz.png`** (Onur hazırladı). Oyunun bitmiş hali bu yönde olacak; **birebir kopya şart değil, yön bu.** Eski "eğimli masa + masada yatan kitaplar + açılan kağıt pencereler" tasarımı **kalktı**.
 
 **Ekran düzeni (1920x1080):**
@@ -602,6 +611,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim ~15:30 | Yeni müteahhit eklenmeyecek, 6 kalır; karaktere özel ses yok (sadece harf harf yazı sesi). Yazı tipleri: başlık Paytone One, metin Fira Sans (ikisi de OFL) | Tarık kararı. Lilita One'da ğ/ş/İ yok, Türkçe başlıklar bozuluyordu; Lilita sadece logoda (görsel içinde) kalır |
 | 17 Ekim akşamüstü | El kitabı bölümleri = sekmeler (BETON / DONATI / YAPI / ZEMİN, `SectionsFor`); ödeme önizlemesi `ExpenseCalculator.Preview`; kayıt sonucu `ctx.LastSave` + `ctx.RetrySave()` (günü artırmaz), `ctx.LoadFailed` | A. Yeni arayüz ve Onur'un YOL_HARITASI 2-3 ihtiyaçları; sözleşmeye sadece ekleme, testler 30/30 |
 | 17 Ekim akşam | El kitabı ilk sekmesi "Hızlı Bakış" (`Docs/Tasarim/el_kitabi_hizli_bakis.html`): oyuncu kat grubunu seçer, 5 parametre kırmızı/yeşil çip ve cetvel olarak boyanır; numaralı kural satırları kalkar | Ahmet kararı: eski ilk sayfa kullanıcı dostu değildi. Grup otomatik seçilmez (zorluk korunur); kurallar aynı |
+| 17 Ekim 16:10 | Yeni hedef arayüz bitene kadar yeni iş başlatılmaz; sıra Onur (görsel) → Tarık → Oğuzhan → Ahmet (Game.unity + build) | Ahmet kararı: tasarım komple değişirken eski ekranlara yapılan iş boşa gidiyordu |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

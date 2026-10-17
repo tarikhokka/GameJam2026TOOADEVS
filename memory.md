@@ -100,7 +100,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor.
 - [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.
-- [ ] Kurum adı tutarlılığı (Tarık ile): öğretici "Ulusal Yapı Denetim Kurumu", El Kitabı "Afet Kontrol Bürosu", kaşe "Betonya Belediyesi". Tek bir kurgusal ad seçilsin (Tarık karar verir, Oğuzhan metinleri eşitler).
+- [x] ~~Kurum adı tutarlılığı~~ **Değişiklik yok (Tarık kararı, 17 Ekim ~18:15):** bunlar bilerek ayrı kurumlar. "Ulusal Yapı Denetim Kurumu" = oyuncunun çalıştığı ve son onayı veren yer; "Afet Kontrol Bürosu" = El Kitabı'nı yayımlayan kurum; "Betonya Belediyesi" = imar kaşesi. Metinler eşitlenmez.
 - [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi gösteriliyor (imza ipucu böyle çalışıyor: sahtede farklı mühendis). Oyuncu için mantıklı olsun: formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
 
 **Onur (C):**
@@ -115,8 +115,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
 
 **Tarık (EEE):**
-- [ ] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş).
-- [ ] Kurum adı kararı (yukarıda, Oğuzhan maddesi).
+- [x] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş). — (EEE, 17 Ekim ~18:15) Yazıldı: `ICERIK_TASLAK.md` → "El Kitabı sekme notları". **Oğuzhan:** Inspector'dan aynen koy.
+- [x] Kurum adı kararı: değişiklik yok, üç ayrı kurum (Oğuzhan maddesine bak).
 - [ ] `README.md`: A "Nasıl oynanır"ı yeni arayüze göre güncelledi; son hali, oyun ekran görüntüsü ve video bağlantısı (Pazar).
 - [ ] Pazar: 1 dakikalık video (A ile senaryo).
 

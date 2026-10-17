@@ -259,3 +259,11 @@ Esas kaynak: `Data/Endings/*.asset`. Bu dosya taslak/arşivdir; düzeltme önce 
   > O gün masandan geçen dosyayı hâlâ hatırlıyorsun. Bir satırı daha dikkatli okusaydın ne değişirdi, bilmiyorsun.
   >
   > Mahkeme seni yargılamadı. Bu soruyu artık her gün kendin soruyorsun.
+
+## El Kitabı sekme notları (RulebookView.sectionNotes) — EEE taslağı, 17 Ekim akşam
+Her bölüm sekmesinin altında görünen kısa afet farkındalık cümlesi. Doğru, sade, korkutmayan; oyuncuya "neden bu kural var" dedirtsin. Oğuzhan Inspector'dan `sectionNotes`'a aynen koyar.
+
+- **BETON:** Betonun sınıfı ne kadar yük taşıyabileceğini gösterir. Şantiyede betona su katmak işi kolaylaştırır ama betonu zayıflatır.
+- **DONATI:** Depremde binanın kırılmadan esnemesini betonun içindeki demir sağlar. Nervürlü demir betona sıkı tutunur, düz demir kayabilir.
+- **YAPI:** Kolonlar binanın bütün yükünü zemine taşır. Kat arttıkça kolon kalınlaşmalı; kolon kesmek ya da taşıyıcı duvarı yıkmak binayı zayıflatır.
+- **ZEMİN:** Aynı bina yumuşak zeminde sert zemine göre daha çok sallanır. Temel zemine göre tasarlanır; zemin etüdü yapılmadan inşaata başlanmaz.

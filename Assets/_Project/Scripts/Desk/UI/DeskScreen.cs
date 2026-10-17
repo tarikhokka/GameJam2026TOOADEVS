@@ -222,18 +222,48 @@ namespace CivilJam.Desk
 
             if (windowBroken && eventCard != null)
             {
-                if (deskAudio != null) deskAudio.PlayGlassBreak();
                 var client = context.GetClient(project.ClientId);
                 string name = client != null ? client.DisplayName : "Müteahhit";
                 int cost = context.Balance != null ? context.Balance.WindowRepairCost : 0;
-                eventCard.Open("Camın kırıldı!",
-                    $"{name} kararını beğenmedi. Biraz sonra ofisinin camına bir taş geldi.\n\n" +
-                    $"Cam tamiri: <b>{DeskFormat.Money(cost)}</b>. Bugünün giderlerine eklendi.",
+                var damage = PickThugDamage();
+                if (deskAudio != null)
+                {
+                    if (damage.Sound == 1) deskAudio.PlayGlassBreak();
+                    else if (damage.Sound == 2) deskAudio.PlayStamp(); // ahşap darbe
+                }
+                eventCard.Open(damage.Title,
+                    string.Format(damage.Body, name) + "\n\n" +
+                    $"Tamir: <b>{DeskFormat.Money(cost)}</b>. Bugünün giderlerine eklendi.",
                     AdvanceToNext);
                 yield break;
             }
 
             AdvanceToNext();
+        }
+
+        // (EEE, 17 Ekim) Kabadayı (Rüstem) reddedilince her seferinde cam kırılmaz: 4 olaydan biri, bir öncekinden farklı.
+        // Core'da para aynı (WindowRepairCost, gider satırı "Hasar tamiri"); sadece olay ve ses değişir. {0} = müteahhidin adı.
+        // Sound: 0 sessiz, 1 cam kırılması, 2 ahşap darbe.
+        private struct ThugDamage { public string Title, Body; public int Sound; }
+        private static readonly ThugDamage[] ThugDamages =
+        {
+            new ThugDamage { Title = "Camın kırıldı!", Sound = 1,
+                Body = "{0} kararını beğenmedi. Biraz sonra ofisinin camına bir taş geldi." },
+            new ThugDamage { Title = "Masan kırıldı!", Sound = 2,
+                Body = "{0} kalkarken masana öyle bir tekme attı ki bir ayağı çatladı. Masa artık sallanıyor." },
+            new ThugDamage { Title = "Kapının kilidi kırıldı!", Sound = 2,
+                Body = "{0} çıkarken kapıyı öyle bir çarptı ki kilit yerinden fırladı." },
+            new ThugDamage { Title = "Arabanın lastikleri!", Sound = 0,
+                Body = "Akşam otoparka indiğinde arabanın dört lastiğinin de indirildiğini gördün. Kimin yaptığını tahmin etmek zor değil: {0}." },
+        };
+        private int lastThugDamage = -1;
+
+        private ThugDamage PickThugDamage()
+        {
+            int i = UnityEngine.Random.Range(0, ThugDamages.Length - (lastThugDamage >= 0 ? 1 : 0));
+            if (lastThugDamage >= 0 && i >= lastThugDamage) i++; // bir öncekiyle aynı olmasın
+            lastThugDamage = i;
+            return ThugDamages[i];
         }
 
         private void AdvanceToNext()
@@ -340,12 +370,21 @@ namespace CivilJam.Desk
                 foreach (var line in outcome.Lines)
                     lines.Add(new DeskDialogue.Line(line.Speaker == DialogueSpeaker.Inspector, line.Text));
 
+            // (EEE) Zarf teklif edildiyse diyalog bitince inceleme modu kendiliğinden kapanır: modda ONAY / RED / ZARF
+            // pasif olduğu için oyuncu zarfa tıklayamıyordu.
+            bool bribeOffered = outcome != null && outcome.BribeOffered;
+            System.Action done = () =>
+            {
+                if (bribeOffered && inspect != null) inspect.SetMode(false);
+                ReleaseEnvelope();
+            };
+
             if (lines.Count == 0 || dialogue == null)
             {
-                ReleaseEnvelope();
+                done();
                 return;
             }
-            dialogue.Play(lines, ReleaseEnvelope);
+            dialogue.Play(lines, done);
         }
 
         private void ReleaseEnvelope()

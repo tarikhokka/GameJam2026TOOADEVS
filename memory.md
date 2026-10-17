@@ -132,6 +132,9 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - `BalanceSO.TotalDays = 7`; F9 son güne (7) atlar.
 
 **İş bölümü:**
+> **Onur'un güncellemesi:** Bu 7 günlük yapı iş paketinde Tarık yer almayacak; aşağıdaki Onur + Tarık portre görevi ve Tarık'ın ClientSO / ortak replik / README / CREDITS görevlerini Onur üstleniyor. Onur, ekibin bu iş bölümünden haberdar olduğunu belirtti. Teslim planı: `Docs/Onur/YediGun_icerik_yol_haritasi.md`. Bu not yeni bir Core/ekonomi kararı değildir.
+> **İçerik hazır (Onur):** Son gönderilen 10 ChatGPT görseli `portrait_g01`–`g10` olarak 1000×1000 şeffaf PNG'ye hazırlandı. 1. ve 4. ikililer Onur'un açık tercihiyle birlikte gelen tek müşteridir (10 ClientSO, 10 ziyaret). `Generic01`–`Generic10` sprite'lara bağlı; ortak havuzlarda 42 replik, README 7 gün, Art README/CREDITS güncel. İzole Unity 6000.6.4f1 kopyasında 54/54 EditMode (52 mevcut + 2 geçici içerik kontrolü); gerçek kadroyla 300 program ve kayıt roundtrip'i geçti. **A:** Game.unity için Link Data + final kontrol/build. **B:** iki ikili dahil masa kadrajı. Kaynaklar, eşleme ve önizleme `Docs/Onur/YediGun_icerik_yol_haritasi.md` içinde.
+
 | Kim | İş | Süre |
 |---|---|---|
 | **A** | **1. adım (hemen):** `IsGeneric`, ortak havuz alanları, `GenericBribeRange`, havuza düşme kuralı; push. **2. adım:** 7 günlük program kurucu, tam 14 / 14, gün kuralları, `Data/Days` (7 gün), `TotalDays` 7, testler, Game.unity bağlantısı (Link Data yeni müteahhitleri de bağlar), denge raporu | ~2 sa |

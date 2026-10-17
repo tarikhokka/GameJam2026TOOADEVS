@@ -95,6 +95,10 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Ahmet’in günlük ödeme ve afet kapsamı kararlarını inceleme; ortak hafıza ve C planını güncelleme | `memory.md`, `ONUR.md` | Onur Kabadayılar | 2026-10-16 |
 | Gemini / Antigravity (Google) | Gazete sonuç ekranı arka plan şablonu ("ŞEHİR POSTASI") görsel üretimi | `Assets/_Project/Art/newspaper_bg.png` | Onur Kabadayılar | 2026-10-16 |
 | Claude Code (Anthropic) | Flow kodu: gazete, gün özeti, günlük ödeme, son ve ana menü ekranları, Flow sandbox ve prefab/sahne kurulum aracı | `Assets/_Project/Scripts/Flow/**` | Onur Kabadayılar | 2026-10-16 |
+| ChatGPT / Codex (OpenAI) | 7 günlük yapı için Core ve görev analizi, Onur'un devraldığı içerik işlerinin teslim planı | `Docs/Onur/YediGun_icerik_yol_haritasi.md`, `ONUR.md`, `memory.md` | Onur Kabadayılar | 2026-10-17 |
+| ChatGPT / Codex (OpenAI) | Yeni müşteriler için yedi ortak replik havuzuna 42 cümle; README'nin 7 günlük yapıya uyarlanması ve ikili görsellerin tek müşteri olarak eşlenme planı | `Assets/_Project/Data/Dialogue.asset`, `README.md`, `Docs/Onur/YediGun_icerik_yol_haritasi.md`, `ONUR.md`, `memory.md` | Onur Kabadayılar | 2026-10-17 |
+| ChatGPT (OpenAI) | On yeni müşteri görselinin üretimi; Onur'un sağladığı son set, iki görselde birlikte gelen iki kişi bulunur | `Assets/_Project/Art/portrait_g01.png` … `portrait_g10.png` | Onur Kabadayılar | 2026-10-17 |
+| ChatGPT / Codex (OpenAI) | Sağlanan on JPEG'in beyaz arka planını ve saç aralarındaki boşlukları temizleyen, 1000×1000 şeffaf portre hazırlayan yerel script; on Generic ClientSO, kurgusal isimler, sprite/GUID bağlantıları ve içerik doğrulaması | `Docs/Onur/prepare_generic_portraits.py`, `Generic_portrait_manifest.json`, `Generic_portraits_onizleme.png`, `Assets/_Project/Art/portrait_g*.png` ve `.meta`, `Assets/_Project/Data/Clients/Generic*.asset` ve `.meta` | Onur Kabadayılar | 2026-10-17 |
 
 ## Oyun içi "Emeği Geçenler" metni
 CC BY (atıf zorunlu) asset'ler oyunun credits ekranında da görünmeli. Yeni asset eklenince bu blok da güncellenir; credits ekranı bu metni aynen kullanır.

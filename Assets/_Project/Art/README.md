@@ -2,6 +2,8 @@
 
 Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 
+7 günlük yeni yapı paketinde Onur, Tarık'ın portre ve içerik görevlerini devraldı (Onur'un bildirimine göre ekip biliyor). Yeni `portrait_g01.png` … `portrait_g10.png`: Onur'un sağladığı ChatGPT çizimleri; yerel script ile arka plan temizlendi ve 1000×1000 şeffaf PNG'ye yerleştirildi. g01 ve g04'teki ikililer birlikte gelen tek müşteridir. Eşleme ve önizleme: `Docs/Onur/YediGun_icerik_yol_haritasi.md`. Eski portrelerin GUID'leri değiştirilmedi.
+
 ## Kurallar
 - **Tarz: el çizimi 2D cartoon** — kalın koyu kahve kontur, yumuşak cel gölge, sıcak palet; Gemini/ChatGPT ile ortak tarz prompt'uyla üretilir. Müteahhit önden, masanın karşısında oturur; yürüme animasyonu yok. Beyaz arka planlı üretilen görsellerin arka planı script ile silinir.
 - **Stil (karar 02:20): hazır asset, piksel art yok.** Yeniden dağıtılabilir lisanslı (tercihen CC0) asset'ler; mümkünse tek kaynak/tek stil ailesinden. Her asset eklendiği anda `CREDITS_AND_AI.md`'ye yazılır; CC BY ise oyun içi Emeği Geçenler metnine de.

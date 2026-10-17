@@ -33,11 +33,11 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.
 
-Oyun 10 gün sürer. Dört farklı son var; hangisini göreceğin, attığın imzalara bağlı.
+Oyun 7 gün sürer. Dört farklı son var; hangisini göreceğin, attığın imzalara bağlı.
 
 ## Jüri için kısayollar
 
-10 günü baştan sona oynamadan bütün sonları görebilmeniz için oyun sırasında:
+7 günü baştan sona oynamadan bütün sonları görebilmeniz için oyun sırasında:
 
 | Tuş | Etkisi |
 |---|---|

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "g01",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27.jpeg",
+    "source_sha256": "fe6d170fca00e04fbe335379f7208a9eed995b169d71113c4eda24ec89ed3de4",
+    "output": "Assets/_Project/Art/portrait_g01.png",
+    "output_sha256": "72250d3fe406cea23f8b414c5cb4083261ab3663373cfcbf9772adb6d9a37002",
+    "group_customer": true
+  },
+  {
+    "id": "g02",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (1).jpeg",
+    "source_sha256": "75ce58ef700dabe62dfe3cab084e1b4cd72f708a1988f6b8ec0764f04bb0e352",
+    "output": "Assets/_Project/Art/portrait_g02.png",
+    "output_sha256": "83a46c04e87ad1013c32f8f6cbd0ea09f93b8c189aab841d666111356d1f1e40",
+    "group_customer": false
+  },
+  {
+    "id": "g03",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (2).jpeg",
+    "source_sha256": "51d638fe76ec1da323f64a488c5df2ba5ee98236a02dc2e132bb439b74728cf9",
+    "output": "Assets/_Project/Art/portrait_g03.png",
+    "output_sha256": "bdce4c0ee78b7190ada00261889da0075eea3d1c7fc3c0c7ee1c1c313629de75",
+    "group_customer": false
+  },
+  {
+    "id": "g04",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (3).jpeg",
+    "source_sha256": "444e85eaa9b29c4894f4d2d3828a6c9685a838f1d6f26517252386032f3ad7ad",
+    "output": "Assets/_Project/Art/portrait_g04.png",
+    "output_sha256": "0f5fa56c58977dc488453ae854497160ad9857c59a450bb5884c59e6d637dc23",
+    "group_customer": true
+  },
+  {
+    "id": "g05",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (4).jpeg",
+    "source_sha256": "431a2d6468e1c1200dbaff4223434ffe69c35c9d6ca9893ea34472d86bb58718",
+    "output": "Assets/_Project/Art/portrait_g05.png",
+    "output_sha256": "1b88d8c6d78285e0db574fcc0b4c7af879b7f633a52b82a92c3307aa0a8310fd",
+    "group_customer": false
+  },
+  {
+    "id": "g06",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (5).jpeg",
+    "source_sha256": "edf93dca5f2c800139968ddeb6a1996a7ca2a5cc7a7a1791b9b3a915d4200ad2",
+    "output": "Assets/_Project/Art/portrait_g06.png",
+    "output_sha256": "d50533de60934caa4347969877cf01ac6231635f66342e3fb1dd2202d96df1d0",
+    "group_customer": false
+  },
+  {
+    "id": "g07",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (6).jpeg",
+    "source_sha256": "1fc58701d8938c2a4b1a7bc01f9517f3b15579959e2678ac02f6882b44a1beb1",
+    "output": "Assets/_Project/Art/portrait_g07.png",
+    "output_sha256": "9b375eba3b30b4bd10cb6a284beaf13fa469b2672f36e776fe65426284717675",
+    "group_customer": false
+  },
+  {
+    "id": "g08",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (7).jpeg",
+    "source_sha256": "7872e85bcaa29a1143d372e678e201a6b6556e694c308ae57fe8e7db996452e7",
+    "output": "Assets/_Project/Art/portrait_g08.png",
+    "output_sha256": "a38ed9f81d0aa2739a5ff82fb4aa7e38cdccca25be2ae665599c6f14bdce63f2",
+    "group_customer": false
+  },
+  {
+    "id": "g09",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (8).jpeg",
+    "source_sha256": "460d288319df31a85726ecbe98821c1f8d370ba8f20b0fcb35788da905df1900",
+    "output": "Assets/_Project/Art/portrait_g09.png",
+    "output_sha256": "2e66ab2a40c76e464dc13de9d900d30e621dd565fdf4f5e632a515e4126a80fa",
+    "group_customer": false
+  },
+  {
+    "id": "g10",
+    "source": "WhatsApp Image 2026-10-17 at 23.16.27 (9).jpeg",
+    "source_sha256": "88e6f5d9ccbe54de9b05d40d340218c1c021b2df8f535bba77d0a74097780a8a",
+    "output": "Assets/_Project/Art/portrait_g10.png",
+    "output_sha256": "7b5264a1632a105fc1804b27b286ef3363422e08f7f8a1d0540f2a24d4c1ecf0",
+    "group_customer": false
+  }
+]

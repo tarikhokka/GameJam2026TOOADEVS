@@ -91,7 +91,9 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 **A (Ahmet):**
 - [x] (A, yapıldı, testli) Core: projelerdeki parametre sırası El Kitabı sekme sırasıyla aynı olsun (beton, demir, kolon, temel, zemin). Şu an form/lab "beton, kolon, temel, demir, zemin" sırasında, El Kitabı farklı → oyuncu satır eşleştirirken şaşırıyor.
-- [ ] Windows build + baştan sona oynanış (F9/F10 ile 4 son), bulunan hataları sahiplerine yaz.
+- [x] Windows build aracı: `CivilJam > Core > Build Windows (Release)` → `Builds/Imza/Imza.exe` (148 MB; ZIP'e `Imza_BackUpThisFolder_ButDontShipItWithYourGame` klasörü KONMAZ). 17 Ekim akşam build'i hatasız açıldı.
+- [x] Baştan sona otomatik oynanış (PlayMode, ekran görüntüleriyle): menü → gün başı → masa → inşaat → gazete → ödeme → kayıt → son (İyi) akışı hatasız; borç kuralı doğru çalışıyor. Bulunanlar aşağıda sahiplerinde.
+- [ ] Elle oynanış (Ahmet): 4 sonun hepsi (F9/F10), sahte belge ve ek test, kabadayı, hediye.
 - [ ] Teslim: final build, ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
@@ -107,6 +109,9 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Kayıt ekranı (`SaveScreen`, Tarık yazdı, Flow'da) her zaman "Kaydedildi" diyor. Core hazır: `Context.LastSave` (`Ok`, `Day`, `Error`); `Ok` false ise "Kayıt yapılamadı" + "Tekrar dene" (`Context.RetrySave()`, günü artırmaz) + "Kaydetmeden devam".
 - [ ] Müzikler oyunda çalmıyor: `mus_menu` (ana menü) ve `mus_ending_sad` (Kötü + iki Orta son) hiçbir sahne/prefab/koda bağlı değil.
 - [ ] (İsteğe bağlı) Gün başında `Context.LoadFailed` ise "Kayıt okunamadı, yeni oyun başladı." yaz.
+- [ ] Akış ekranları yeni görsel dile uymuyor: gün başı, inşaat, ödeme, kayıt ve son ekranlarında eski varsayılan font ve düz beyaz/siyah düğmeler; gün başı arka planı hâlâ eski ofis (`dayintro_bg`, eski desk_bg'den). Paytone One / Fira Sans ve masadaki kağıt/ahşap diline yaklaştır (Tarık gerekirse arka planı yeni ofisten üretir).
+- [ ] Son ekranı: uzun metin parlak arka plan görselinin üstünde beyaz yazı, zor okunuyor (özellikle İyi son). Metnin arkasına yarı saydam koyu panel.
+- [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
 
 **Tarık (EEE):**
 - [ ] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş).

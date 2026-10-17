@@ -17,7 +17,8 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 - [x] Yeni hedef arayüz için Core: el kitabı sekmeleri (`SectionsFor`), ödeme önizlemesi, kayıt sonucu + tekrar deneme. Testler 30/30.
 - [x] Oğuzhan'ın yeni masası (`f14d2ed`) Game.unity'de oynatılarak kontrol edildi (PlayMode ekran görüntüleri).
 - [x] Parametre sırası = El Kitabı sekme sırası (ProjectGenerator, test `GeneratedParams_FollowHandbookTabOrder`). Testler 31/31.
-- [ ] Windows build + baştan sona oynanış (4 son, F9/F10); hataları memory.md §7'ye.
+- [x] Build aracı `ReleaseBuilder` (`CivilJam > Core > Build Windows (Release)`); 17 Ekim akşam build'i temiz. Otomatik uçtan uca oynanış temiz; görsel eksikler memory.md §7'de.
+- [ ] Elle oynanış: 4 son (F9/F10), sahte belge, ek test, kabadayı, hediye.
 - [ ] Paz 12:00 freeze → final build, ZIP, README kontrolü, video (Tarık ile), yükleme 15:00-16:30.
 
 ## B ve C için Core kullanım rehberi

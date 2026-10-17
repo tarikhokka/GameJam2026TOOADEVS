@@ -24,6 +24,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `bld_house_collapsed.png` | Result (gazete) | C | P |
 | `city_bg.png` | Construction | C | P |
 | `newspaper_bg.png` | Result | C | F |
+| `dayintro_bg.png` | DayIntro (gün başı): desk_bg sabah hali, hafif bulanık ve loş, ortadaki beyaz yazı okunsun diye. DayIntroScreen.prefab kök Image sprite'ına bağlı | C | F |
 | `daysummary_bg.png` | DaySummary (desk_bg'nin gece hali: mavi ton + lamba ışığı) | C | F |
 | `payment_bg.png` | Günlük ödeme (desk_bg bulanık ve loş) | C | F |
 | `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |

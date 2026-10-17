@@ -53,6 +53,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Gün özeti, ödeme ve 4 son görselini ChatGPT ofis görselinden (desk_bg) renk/ışık/bulanıklık ile türeten script | `Assets/_Project/Art/daysummary_bg.png`, `payment_bg.png`, `ending_good.png`, `ending_bad.png`, `ending_closed.png`, `ending_collapsed.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | 6 ofis hediyesi görselini çizen script (konturlu, iki tonlu) ve hediye kayıtları (GiftSO: isim, not) | `Assets/_Project/Art/gift_*.png`, `Assets/_Project/Data/Gifts/*.asset` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Harf harf yazı sesini (kısa "bip") sentezleyen script — hazır ses kullanılmadı | `Assets/_Project/Audio/sfx_typing.wav` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | Gün başı arka planını (dayintro_bg) ChatGPT ofis görselinden türeten script; ana menü Emeği Geçenler panelinin iki sütunlu yeniden düzeni ve güncel metni (MainMenuScreen.cs, Onur'un dosyası, ekip onayıyla) | `Assets/_Project/Art/dayintro_bg.png`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Scripts/Flow/UI/MainMenuScreen.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT masa görselini arka/ön katmana (desk_bg / desk_front) ayıran, kitapların ve portrelerin beyaz arka planını (saç aralarındaki boşluklar dahil) silen script | `Assets/_Project/Art/desk_*.png`, `book_*.png`, `portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (KULLANILMIYOR) Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Masa arka planı ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
@@ -93,9 +94,11 @@ Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
 Menü müziği: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
 Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
+Yazı sesi: ekip tarafından üretildi
 
 GÖRSELLER
-Müteahhit karakterleri ve masa ekranı görselleri: yapay zekâ (ChatGPT) ile üretildi
+Müteahhit karakterleri ve ofis: yapay zekâ (ChatGPT)
+Gazete şablonu: yapay zekâ (Gemini)
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1
@@ -105,4 +108,4 @@ YAPAY ZEKÂ
 Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları
 (Claude, ChatGPT/Codex, Gemini) kullanıldı. Ayrıntılı liste: CREDITS_AND_AI.md
 ```
-Not: Bu blok değişince `MainMenuScreen.cs` içindeki `CreditsText` de güncellenmeli (C).
+Not: Bu blok değişince `MainMenuScreen.cs` içindeki `CreditsLeft` / `CreditsRight` da güncellenmeli (oyunda iki sütun: sol = İMZA, EKİP, YAPAY ZEKÂ; sağ = SESLER VE MÜZİKLER, GÖRSELLER, YAZI TİPLERİ).

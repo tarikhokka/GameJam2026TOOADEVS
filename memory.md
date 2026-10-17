@@ -31,7 +31,7 @@
 
 **Müteahhitler (`Data/Clients`, 16):** 6 ana karakter: Rıfat ve Sevim dürüst (çoğunlukla uygun, bazen dikkatsiz; asla zarf/sahte belge yok); Kemal ve Nuri rüşvetçi (bazen temiz gelir); Selim çoğunlukla sahte belgeci (zarf vermez; 1-2. gün gelirse dikkatsiz proje); Rüstem kabadayı (4. günden; reddedilince 4 olaydan biri: cam, masa, kapı kilidi ya da araba lastikleri — art arda aynısı olmaz; gider "Hasar tamiri"). 10 kişiliksiz karakter (`Generic01-10`, `IsGeneric`; uygun, dikkatsiz, zarflı ya da sahte belgeli gelebilir; zarf `BalanceSO.GenericBribeRange`); kendi replik listesi boşsa `Data/Dialogue.asset` ortak havuzu kullanılır. Core selamlama (`GreetingText`; tekrar gelende "geçen sefer…") ve tepki (`ReactionText`) seçer. Nuri her retten sonra zarfı +250 TL büyütür. **Hediye:** sadece dürüst ustalar, onayda bazen, oyunda bir kez; sadece kabul edilir, ofiste kalıcı görünür, para/risk etkisi yok.
 
-**İnceleme modu (`Inspection.Check`, masadan `ctx.Actions.Inspect`):** oyuncu İNCELE ile iki **ayrı** belgeden iki alan seçer → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ. Ücretsiz, sınırsız; kararı yine oyuncu verir. El Kitabı eşiği oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır (seçilmemiş ya da binaya ait olmayan grup → ALAKASIZ). ⚠️ **Poliş turunda değişiyor (K1, §7):** eşik her zaman binanın kendi kat grubundan; yanlış grup durumu kalkar. Tabloda olmayan her çift ve aynı belgeden iki alan → ALAKASIZ.
+**İnceleme modu (`Inspection.Check`, masadan `ctx.Actions.Inspect`):** oyuncu İNCELE ile iki **ayrı** belgeden iki alan seçer → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ. Ücretsiz, sınırsız; kararı yine oyuncu verir. El Kitabı eşiği her zaman **binanın kendi kat grubundan** alınır (`Inspection.FloorGroupOf`; masanın gönderdiği grup yok sayılır, poliş K1). Tabloda olmayan her çift ve aynı belgeden iki alan → ALAKASIZ.
 
 | # | 1. alan | 2. alan | Uyuşmazlık ne zaman |
 |---|---|---|---|
@@ -70,11 +70,20 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - **Masa (Desk, B):** üst yarı ofis (`office_bg`) + müteahhit portresi + konuşma balonu (harf harf yazı + yazı sesi); masa kenarı (`desk_edge`) ve yüzeyi (`desk_surface`). Masada üç belge düz ve yan yana (sürüklenebilir):
   - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, mühendis, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED.
   - **Laboratuvar Raporu** (`doc_lab`): laboratuvar, rapor tarihi, proje, ada/parsel, Parametre | Beyan | Ek test, karar vermeyen değerlendirme cümlesi, yetkili imzası, lab kaşesi + kaşedeki lab adı, EK TEST.
-  - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN · LAB. Hızlı Bakış'ta oyuncu kat grubunu **kendisi seçer** (otomatik seçilmez, yeni müteahhitte sıfırlanır) ⚠️ **Poliş turunda değişiyor (§7):** kat grubu otomatik, bölüm sekmeleri ve RED kutusu kalkıyor; 5 parametre kırmızı/yeşil çip ya da cetvel olarak boyanır. Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
-  - **İNCELE** düğmesi (lab raporunun üstünde, Tarık'ın yeri): mod açıkken belgeler sürüklenmez, karar düğmeleri pasif; alanlar sarı çerçeve alır; iki alan arasına çizgi + Onur'un sonuç kaşesi (`InspectResultView`). Sağ tık ya da boş masa seçimi temizler.
+  - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: **HIZLI BAKIŞ · LAB** (BETON / DONATI / YAPI / ZEMİN poliş turunda kalktı).
+    - Hızlı Bakış'ta kat grubu formdaki kat adedinden **kendiliğinden seçili** gelir (`RulebookView.ShowProject`). 1-3 / 4-6 / 7+ düğmeleri sadece gösterge: seçili olan koyu, diğerleri soluk.
+    - 5 parametre büyük kırmızı/yeşil çip ya da cetvel olarak boyanır; alttaki RED kutusu yok.
+    - LAB: belge kontrolü maddeleri + akredite laboratuvar listesi.
+    - Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
+  - **İNCELE** düğmesi (`btn_inspect`, büyüteç ikonlu, lab raporunun üstünde):
+    - mod açıkken tıklanabilir alanlar, ONAY / RED, İNCELE ve diyalog balonları dışındaki her yer hafif kararır (`InspectDim`, `InspectLift`);
+    - belgeler sürüklenmez;
+    - ONAY / RED basılabilir: mod kapanır, karar verilir. EK TEST ve zarf pasif;
+    - iki alan arasına çizgi + Onur'un sonuç kaşesi (`InspectResultView`). Sağ tık ya da boş masa seçimi temizler.
+  - **Üst bar** (`DeskHeaderView`, Onur; 80 px): ahşap şerit üstünde kağıt etiketler, takvim ikonlu Gün, müteahhit · proje, kasa ikonlu Kasa (borç kırmızı), klasör ikonlu Onaylanan · Bekleyen. **NASIL OYNANIR** (`btn_help`, "?" ikonlu) ofisin sağ üstünde.
   - **Diyalog** (`DeskDialogue`): denetçi satırı solda Onur'un balonunda (`InspectorBubbleView`), müteahhit satırı kendi balonunda; sürerken masa kilitli, tıklama satırı tamamlar / geçer.
   - Zarf diyalogdan sonra masaya düşer, tıklanınca açılır (`BribeEnvelopeView`); kabul edilen hediyeler masa kenarında. 1. gün 5 öğretici kart (Geri düğmesi; masadaki "NASIL OYNANIR" yeniden açar); kabadayı olayı kartı; son müteahhitten sonra mesai zili + "MESAİ BİTTİ".
-- **Akış ekranları (Flow, C):** gün başı (DayIntro), inşaat (Construction), gazete (Result), gün özeti (DaySummary), günlük ödeme (DailyExpenses), kayıt (Save), son (Ending), hareketli ana menü (MainMenu: Yeni Oyun / Devam Et / Emeği Geçenler / Çıkış), hikâye intro'su, Esc menüsü (her sahnede kendiliğinden kurulur; Ayarlar: ana ses + tam ekran).
+- **Akış ekranları (Flow, C):** gün başı (DayIntro), inşaat (Construction), gazete (Result), gün özeti (DaySummary), günlük ödeme (DailyExpenses), kayıt (Save), son (Ending), hareketli ana menü (MainMenu: Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış, yeni `btn_menu` ahşap düğmeler ortada bir sütunda), hikâye intro'su, Esc menüsü (her sahnede kendiliğinden kurulur; Ayarlar: ana ses + tam ekran).
 - **Görsel dil:** el çizimi 2D cartoon (kalın kahve kontur, sıcak palet), görseller ChatGPT ile üretilip Claude script'leriyle hazırlandı. Yazı tipleri Paytone One (başlık) + Fira Sans (metin), ikisi de OFL, TMP asset'leri `Assets/_Project/Fonts/` (Static).
 
 ## 4. Mimari ve dosya haritası
@@ -263,6 +272,18 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 > - **Build + ZIP herkesin işi bittikten sonra alınır.** Şu an açık tek iş:
 >   - [ ] **Tarık:** 3. öğretici kart (`TutorialView.cs` ~34) "müellif imzası" → "mühendis imzası" (Oğuzhan'ın `9be7aec` notu). Bitince burada `[x]` + hash.
 > - Faz 3 kuralı: A hata bulursa sahibine burada yazar, sahibi sadece o hatayı düzeltir. **Yeni özellik yok.** Kod push'u en geç 11:00, 12:00 freeze.
+>   - [ ] **Tarık — jüri menüsü (J tuşu) — Ahmet istisna olarak onayladı (03:00), build'den ÖNCE:**
+>     - **Kapsam:** dört son, rüşvet, hediye ve kabadayı sahnelerine atlama; 1. gün kılavuz kapanınca "J'ye bas" ipucu.
+>     - **Dokunulan dosyalar:** Core'da `GameManager.JuryJump` ve `GameSession.JuryPrepareDesk`; `TutorialView`'da 1 satır.
+>     - **Sıra:** müellif düzeltmesi ayrı küçük push → jüri menüsü ayrı push.
+>     - **Şartlar:**
+>       - Core'daki kısım sadece bu iki fonksiyon olur; normal akışa, kayda ve sonlara dokunmaz.
+>       - Jüri sıçraması kayıt dosyasını bozmaz: atlanan sondan sonra Devam Et gerçek oyunu açar ya da hiç görünmez.
+>       - `TutorialView`'da Oğuzhan'ın değişikliği pull'la birleştirilir; push'tan önce Unity'de derle ve test et (EditMode 55/55, PlayMode).
+>       - İpucu kısa ve ikincil durur.
+>       - README "Kontroller"e J satırı eklenir.
+>     - **A'nın işi:** Core farkını inceler, testleri ve 7 günlük otomatik oynanışı yeniden koşar, sonra **tek** build + ZIP alır.
+>     - Bitince burada `[x]` + hash.
 > **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K `d2dddb9` ile birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
 
 **Faz 3 (08:30 → 11:00) — A:**
@@ -497,6 +518,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 | 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
+| 18 Ekim ~03:00 | Faz 3'te istisna: Tarık'ın jüri menüsü (J: dört son, rüşvet, hediye, kabadayı) build'den önce alınır; Core'a sadece iki fonksiyon, normal akış ve kayıt değişmez, A inceler | Ahmet kararı (jüri bütün içeriği 7 gün oynamadan görsün; tek build) |
 | 18 Ekim 02:16 | Kapı 1 → 2 açıldı: Faz 1'in 6 işi ✅ (A1 `fb60575`, A2 `93686f0`, B1 `822495c`, C1 `1b47ce6`, T1 `f8842b5`, T2 `1dd7870`); birleşik kod testli (EditMode 55/55, PlayMode 4/4) | Ahmet onayı, A kontrol etti |
 | 18 Ekim ~02:15 | Poliş turu kapı kuralı: Faz 1'in 6 işi (A1, A2, B1, C1, T1, T2) hepsi ✅ olmadan kimse Faz 2'ye geçmez; Faz 2 bitmeden Faz 3 yok. Kapıyı A açar (§7 Faz durumu tablosu). Yedek plan (görsel gelmezse eskiyle bağla) kalktı, T1 geldi | Ahmet kararı |
 

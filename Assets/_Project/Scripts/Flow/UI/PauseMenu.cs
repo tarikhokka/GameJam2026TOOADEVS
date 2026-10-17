@@ -100,6 +100,7 @@ namespace CivilJam.Flow
             _mainItems.Add(_quit.gameObject);
             BuildSettings(root);
             ApplySavedVolume();
+            FixFullscreenResolution();
             _panel.SetActive(false);
         }
 
@@ -182,7 +183,16 @@ namespace CivilJam.Flow
         void ToggleFullscreen()
         {
             bool target = !CurrentFullscreen();
-            Screen.fullScreen = target;
+            // Sadece Screen.fullScreen değiştirmek eski (küçük) çözünürlüğü tam ekrana gererdi → bulanık görüntü.
+            // Tam ekran: ekranın gerçek çözünürlüğü; pencere: ekranın %80'i, 16:9.
+            int sw = Display.main.systemWidth, sh = Display.main.systemHeight;
+            if (target) Screen.SetResolution(sw, sh, FullScreenMode.FullScreenWindow);
+            else
+            {
+                int w = Mathf.RoundToInt(sw * 0.8f), h = Mathf.RoundToInt(w * 9f / 16f);
+                if (h > sh * 0.85f) { h = Mathf.RoundToInt(sh * 0.8f); w = Mathf.RoundToInt(h * 16f / 9f); }
+                Screen.SetResolution(w, h, FullScreenMode.Windowed);
+            }
             _pendingFullscreen = target ? 1 : 0; // Unity değişikliği bir sonraki karede uygular; etiket hemen yeni hali göstersin
             RefreshSettings();
         }
@@ -196,6 +206,14 @@ namespace CivilJam.Flow
             _volumeValue.text = $"%{Mathf.RoundToInt(AudioListener.volume * 100f)}";
             bool full = CurrentFullscreen();
             _fullscreenLabel.text = full ? "Tam ekran: Açık" : "Tam ekran: Kapalı";
+        }
+
+        // Açılışta tam ekransa ama çözünürlük ekranınkinden düşükse (eski kayıtlı ayar), gerçek çözünürlüğe çek: bulanıklık olmasın.
+        static void FixFullscreenResolution()
+        {
+            if (Application.isEditor || Screen.fullScreenMode == FullScreenMode.Windowed) return;
+            int sw = Display.main.systemWidth, sh = Display.main.systemHeight;
+            if (Screen.width < sw || Screen.height < sh) Screen.SetResolution(sw, sh, Screen.fullScreenMode);
         }
 
         static void ApplySavedVolume()

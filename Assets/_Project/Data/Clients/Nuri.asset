@@ -41,6 +41,6 @@ MonoBehaviour:
   ReturnLines:
   - "Hocaaam! Ge\xE7en sefer {last} ama ben size hi\xE7 k\xFCsmedim."
   - "Yine ben, g\xF6z nurunuz! Ge\xE7en sefer {last}; bu sefer g\xF6nl\xFCn\xFCz\xFC ho\u015F edece\u011Fim."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: e06d46fc42ac45adb4ffde12026447ae, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 250

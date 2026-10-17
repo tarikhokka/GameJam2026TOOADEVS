@@ -41,6 +41,6 @@ MonoBehaviour:
   ReturnLines:
   - "Hocam ben yine geldim, kestirmeden. Ge\xE7en sefer {last}, bu sefer de uzatmayal\u0131m."
   - "Hat\u0131rlad\u0131n\u0131z m\u0131 beni? Ge\xE7en sefer {last}. Bug\xFCn daha h\u0131zl\u0131 bitiririz."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: 2625afaccdec48598bdf547861471986, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

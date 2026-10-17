@@ -35,6 +35,6 @@ MonoBehaviour:
   ReturnLines:
   - "Yine ben geldim hocam. Ge\xE7en sefer projemi {last}; bunu daha da dikkatli haz\u0131rlad\u0131m."
   - "Hocam hat\u0131rlars\u0131n\u0131z, ge\xE7en sefer {last}. Bu dosyay\u0131 da ayn\u0131 titizlikle getirdim."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: 6de7d4c48d4443e58f8c4e3ce8579fa8, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

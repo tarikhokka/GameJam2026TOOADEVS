@@ -35,6 +35,6 @@ MonoBehaviour:
   ReturnLines:
   - "Merhaba yine hocam. Ge\xE7en sefer {last}; bu dosyada her sat\u0131r\u0131 iki kez kontrol ettim."
   - "Hocam, ge\xE7en sefer {last}. Bu sefer de numuneleri kendim teslim ettim."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: 76a240ceb7ec47559a0032ec513e2f1b, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

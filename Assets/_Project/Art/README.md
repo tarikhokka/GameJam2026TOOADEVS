@@ -24,15 +24,17 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `bld_house_collapsed.png` | Result (gazete) | C | P |
 | `city_bg.png` | Construction | C | P |
 | `newspaper_bg.png` | Result | C | F |
-| `daysummary_bg.png` | DaySummary | C | P |
-| `payment_bg.png` | Günlük ödeme | C | P |
+| `daysummary_bg.png` | DaySummary (desk_bg'nin gece hali: mavi ton + lamba ışığı) | C | F |
+| `payment_bg.png` | Günlük ödeme (desk_bg bulanık ve loş) | C | F |
 | `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
-| `ending_good.png` | Ending (İyi) | C | P |
-| `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
-| `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
+| `ending_good.png` | Ending İyi "Ayakta Kalanlar" (desk_bg, altın sabah ışığı) | C | F |
+| `ending_bad.png` | Ending Kötü "Hüküm" (desk_bg, soğuk mavi, karanlık köşeler) | C | F |
+| `ending_closed.png` | Ending Orta "Kapanan Kapı" (desk_bg, solmuş sepya) | C | F |
+| `ending_collapsed.png` | Ending Orta "Enkazın Gölgesi" (desk_bg, neredeyse renksiz gri; MiddleCollapsed.asset'e bağlı) | C | F |
+| `gift_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk: ofis hediyeleri (GiftSO.Sprite), 300x300 şeffaf, konturlu | B | F |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |
-| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT, 600x577 şeffaf; masada gölgeli ve hafif eğik durmalı), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
-| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT, 600x546 şeffaf; masada gölgeli ve hafif eğik durmalı), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT + perspektifle masaya yatırıldı, 640x330 şeffaf; gölge kodda), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT + perspektifle masaya yatırıldı, 640x330 şeffaf; gölge kodda), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

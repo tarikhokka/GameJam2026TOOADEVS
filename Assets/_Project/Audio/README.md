@@ -18,5 +18,6 @@ Bu klasöre sadece EEE yazar.
 | `mus_office_ambient.wav` | Desk (loop) | P |
 | `mus_menu.wav` | MainMenu (loop) | P |
 | `mus_ending_sad.mp3` | Kötü ve Orta sonlar (Hüküm, Enkazın Gölgesi, Kapanan Kapı) | P |
+| `sfx_typing.wav` | Konuşma balonu: harf harf yazı sesi (Among Us tarzı kısa bip; özgün, script ile üretildi). Karaktere özel ses yok | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

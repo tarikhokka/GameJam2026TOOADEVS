@@ -40,6 +40,6 @@ MonoBehaviour:
   ReturnLines:
   - "Yine ben hocam. Ge\xE7en sefer {last}; bunu ikimiz de hat\u0131rl\u0131yoruz."
   - "Hocam, ge\xE7en sefer {last}. Bug\xFCn nas\u0131l bitece\u011Fi sana ba\u011Fl\u0131."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: a6d5a4293e1f4f91a314ca75459aa797, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

@@ -35,6 +35,6 @@ MonoBehaviour:
   ReturnLines:
   - "\u0130yi g\xFCnler hocam. Ge\xE7en sefer {last}; bu dosya ondan da d\xFCzg\xFCn."
   - "Yine ben hocam. Ge\xE7en sefer {last}. Evraklar her zamanki gibi eksiksiz."
-  Gift: {fileID: 0}
+  Gift: {fileID: 11400000, guid: 54db3a1fbe7549bda784785ab1720f91, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

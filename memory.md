@@ -100,7 +100,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor.
 - [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.
-- [x] ~~Kurum adı tutarlılığı~~ **Değişiklik yok (Tarık kararı, 17 Ekim ~18:15):** bunlar bilerek ayrı kurumlar. "Ulusal Yapı Denetim Kurumu" = oyuncunun çalıştığı ve son onayı veren yer; "Afet Kontrol Bürosu" = El Kitabı'nı yayımlayan kurum; "Betonya Belediyesi" = imar kaşesi. Metinler eşitlenmez.
+- [x] ~~Kurum adı tutarlılığı~~ **Değişiklik yok (Tarık kararı, `54c580d`):** bunlar bilerek ayrı kurumlar. "Ulusal Yapı Denetim Kurumu" = oyuncunun çalıştığı ve son onayı veren yer; "Afet Kontrol Bürosu" = El Kitabı'nı yayımlayan kurum; "Betonya Belediyesi" = imar kaşesi. Metinler eşitlenmez.
 - [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi gösteriliyor (imza ipucu böyle çalışıyor: sahtede farklı mühendis). Oyuncu için mantıklı olsun: formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
 
 **Onur (C):**
@@ -115,7 +115,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
 
 **Tarık (EEE):**
-- [x] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş). — (EEE, 17 Ekim ~18:15) Yazıldı: `ICERIK_TASLAK.md` → "El Kitabı sekme notları". **Oğuzhan:** Inspector'dan aynen koy.
+- [x] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş). — (EEE, `54c580d`) Yazıldı: `ICERIK_TASLAK.md` → "El Kitabı sekme notları". **Oğuzhan:** Inspector'dan aynen koy.
 - [x] Kurum adı kararı: değişiklik yok, üç ayrı kurum (Oğuzhan maddesine bak).
 - [ ] `README.md`: A "Nasıl oynanır"ı yeni arayüze göre güncelledi; son hali, oyun ekran görüntüsü ve video bağlantısı (Pazar).
 - [ ] Pazar: 1 dakikalık video (A ile senaryo).
@@ -138,7 +138,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 17 Ekim | El Kitabı sekmeleri BETON / DONATI / YAPI / ZEMİN; ilk sekme "Hızlı Bakış" (oyuncu kat grubunu seçer, otomatik değil) | Ahmet: eski sayfa kullanıcı dostu değildi; zorluk korunur |
 | 17 Ekim | Ödeme önizlemesi ve kayıt sonucu Core'dan (`ExpenseCalculator.Preview`, `ctx.LastSave`, `ctx.RetrySave`) | Onur'un ihtiyacı; ekran ikinci ekonomi hesabı yazmasın |
 | 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
-| 17 Ekim ~18:30 | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A bilgilendirilsin |
+| 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

@@ -11,7 +11,7 @@ namespace CivilJam.Desk
     // Yapı Denetim Formu (Documents[0]), yeni hedef arayüz (Onur'un referansı, EEE görselleri; içerik El Kitabı v2):
     // başlık (proje no, tarih), PROJE BİLGİLERİ ("etiket : değer" satırları + kat sayısına göre bina resmi), TEKNİK BİLGİLER
     // tablosu (beyan edilen değerler), belediye kaşesi, ONAY / RED düğmeleri (EEE görselleri) ve varsa zarf.
-    // Tutarsızlıkları işaretlemez: oyuncu Lab Raporu ve El Kitabı ile karşılaştırır (parsel, tarih, müellif imzası formda).
+    // Tutarsızlıkları işaretlemez: oyuncu Lab Raporu ve El Kitabı ile karşılaştırır (parsel, tarih, mühendis imzası formda).
     public class FormView : MonoBehaviour
     {
         private static readonly CultureInfo Tr = CultureInfo.GetCultureInfo("tr-TR");
@@ -93,7 +93,7 @@ namespace CivilJam.Desk
                 ("Yükseklik", $"{project.HeightMeters.ToString("0.00", Tr)} m"),
                 ("Kat başı kişi", project.PeoplePerFloor.ToString(Tr)),
                 ("Müteahhit", client != null ? client.DisplayName : ""),
-                ("Proje müellifi", doc != null ? doc.SignatureName : ""),
+                ("Mühendis", doc != null ? doc.SignatureName : ""), // lab raporunda aynı başlık: iki belgede aynı kişi imzalar (sahtede farklı); kısa: etiket sütunu 150 px
                 ("Onay ücreti", DeskFormat.Money(project.Fee)),
             });
 

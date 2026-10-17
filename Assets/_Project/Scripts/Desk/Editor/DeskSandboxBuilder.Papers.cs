@@ -160,7 +160,7 @@ namespace CivilJam.Desk.Editor
             var signer = NewRect("Signer", sign);
             VLayout(signer, 4, new RectOffset(0, 0, 0, 0));
             Layout(signer, prefW: 0, flexW: 1);
-            var who = NewText("Title", signer, "Laboratuvar Yetkilisi", 18, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+            var who = NewText("Title", signer, "Mühendis", 18, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
             who.font = BoldFont;
             var signature = NewText("Signature", signer, "İmza", 22, PaperInk, TextAlignmentOptions.MidlineLeft);
             signature.font = ValueFont;

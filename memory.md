@@ -42,7 +42,7 @@
 | 5 | Form: parametre X | Lab: beyan X | Değer farkı varsa |
 | 6 | Form: Ada/Parsel | Lab: Ada/Parsel | Parsel ipucu |
 | 7 | Form: Tarih | Lab: Rapor tarihi | Tarih ipucu |
-| 8 | Form: Proje müellifi | Lab: Laboratuvar yetkilisi | Farklı mühendis imzası |
+| 8 | Form: Mühendis | Lab: Mühendis (imza) | Farklı mühendis imzası |
 | 9 | Lab: Laboratuvar (başlık) | El Kitabı: LAB listesi | Bilinmeyen laboratuvar |
 | 10 | Lab: kaşe | El Kitabı: LAB listesi | Başka (akredite olmayan) laboratuvarın kaşesi |
 
@@ -68,7 +68,7 @@ Denge (`CivilJam > Core > Balance Report`, gerçek 16 kişilik kadroyla, A `1717
 ## 3. Arayüz
 Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/Tasarim/el_kitabi_hizli_bakis.html`.
 - **Masa (Desk, B):** üst yarı ofis (`office_bg`) + müteahhit portresi + konuşma balonu (harf harf yazı + yazı sesi); masa kenarı (`desk_edge`) ve yüzeyi (`desk_surface`). Masada üç belge düz ve yan yana (sürüklenebilir):
-  - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, proje müellifi, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED.
+  - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, mühendis, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED.
   - **Laboratuvar Raporu** (`doc_lab`): laboratuvar, rapor tarihi, proje, ada/parsel, Parametre | Beyan | Ek test, karar vermeyen değerlendirme cümlesi, yetkili imzası, lab kaşesi + kaşedeki lab adı, EK TEST.
   - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN · LAB. Hızlı Bakış'ta oyuncu kat grubunu **kendisi seçer** (otomatik seçilmez, yeni müteahhitte sıfırlanır) ⚠️ **Poliş turunda değişiyor (§7):** kat grubu otomatik, bölüm sekmeleri ve RED kutusu kalkıyor; 5 parametre kırmızı/yeşil çip ya da cetvel olarak boyanır. Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
   - **İNCELE** düğmesi (lab raporunun üstünde, Tarık'ın yeri): mod açıkken belgeler sürüklenmez, karar düğmeleri pasif; alanlar sarı çerçeve alır; iki alan arasına çizgi + Onur'un sonuç kaşesi (`InspectResultView`). Sağ tık ya da boş masa seçimi temizler.
@@ -441,7 +441,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 **Oğuzhan (B):**
 - ~~El Kitabı sekme notları~~ → **iptal** (poliş K3: bölüm sekmeleri kalkıyor).
-- [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi (imza ipucu; inceleme 8. satır). Formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
+- [x] **(B) Yapıldı:** iki belgede de "Mühendis" (FormView + builder; "Sorumlu mühendis" form sütununa sığmıyordu). **Tarık:** 3. öğretici kartında "müellif imzası" → "mühendis imzası" (TutorialView metni senin; README zaten "aynı mühendisin imzası"). Eski madde: Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi (imza ipucu; inceleme 8. satır). Formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
 - ~~El Kitabı Hızlı Bakış alt yarı boş~~ → **A2'ye geçti** (poliş madde 5).
 - ~~Üst bar~~ → **B2 + C1 + T1'e geçti** (poliş madde 4).
 - Not: ikili portre `g04` (boydan çift) masada kafalar küçük kalıyor; sırıtırsa Onur görseli yakınlaştırır (kod değişikliği değil).

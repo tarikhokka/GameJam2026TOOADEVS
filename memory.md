@@ -166,21 +166,70 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | **T2** Metinler: öğretici kartlar, README, ICERIK_TASLAK, Art/README | Tarık | 1, 5, 6 | yok |
 | **A3** Entegrasyon: testler, otomatik 7 günlük oynanış, ekran görüntüleri, §2-§3, build + ZIP | A | hepsi | hepsi |
 
-**Fazlar ve senkron noktaları (hedef saatler):**
-- **Faz 0 (~01:50, A):** Bu plan push'lanır, herkes pull eder.
-- **Faz 1 (paralel; kimse kimseyi beklemez; hedef 05:00):**
-  - A1 → A2 (sırayla);
-  - B1, C1, T1, T2.
-- **Senkron noktaları:**
-  - **S1:** "T1 ✅" satırı gelince C2 ve B2'nin düğme kısmı başlar.
-  - **S2:** "C1 ✅" satırı gelince B2'nin üst bar kısmı başlar.
-  - B2 her durumda B1'den sonra gelir: ikisi de `DeskScreen.prefab`'ı builder'la kurar.
-- **Faz 2 (hedef 08:30):** B2, C2, C1'in kontrol kısmı.
-  - **Yedek plan:** T1 07:00'ye kadar gelmezse B2 ve C2 bugünkü görsellerle bağlanır (`DeskHeaderView` kodla çizilmiş hâliyle).
-  - Görseller sonradan **aynı dosya adıyla** gelir, kod değişmez.
-- **Faz 3 (08:30 → 11:00, A):** A3.
-  - 11:00-12:00 arası sadece hata düzeltilir.
-  - **12:00 freeze:** sonrasında kod push'u yok.
+**Fazlar ve bekleme kuralı (Ahmet kararı, 18 Ekim ~02:15) — HERKES OKUSUN**
+
+> ⛔ **KURAL: Faz 1'in 6 işinin hepsi ✅ olmadan kimse Faz 2'ye geçmez.** Kendi Faz 1 işini erken bitiren de Faz 2 işine başlamaz, kod yazmaz, prefab kurmaz. Faz 2 de bitmeden Faz 3 başlamaz.
+> Kapıyı aşağıdaki **Faz durumu** tablosu açar. Her oturum başında pull et ve bu tabloya bak.
+
+**Faz durumu** (işini bitiren kendi satırını günceller):
+| Faz | İş | Kim | Durum |
+|---|---|---|---|
+| 1 | A1 Core: kat grubu Core'da + madde 7 gerçek kadro testi | A | ⏳ |
+| 1 | A2 El Kitabı: otomatik kat grubu, RED kutusu, parametreler, sekmeler | A | ⏳ |
+| 1 | B1 İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | ⏳ |
+| 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ⏳ |
+| 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
+| 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
+| 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | 🔒 Faz 1 bekleniyor |
+| 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | 🔒 Faz 1 bekleniyor |
+| 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | 🔒 Faz 1 bekleniyor |
+| 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
+
+**Faz 0 (bitti, `d0c4e59`):** Plan push'landı.
+
+**Faz 1 (hedef 05:00) — herkes paralel, kimse kimseyi beklemez:**
+- A: A1, sonra A2 (A2, A1'in Core fonksiyonunu kullanır; ikisi de A'nın, sıralı).
+- Oğuzhan: B1. Kimseyi beklemez.
+- Onur: C1. Kimseyi beklemez; T1 görselleri hazır, doğrudan onları kullanabilir.
+- Tarık: T1 ✅ ve T2 ✅. Faz 1'i bitti.
+- Faz 1'de aynı dosyaya iki kişi dokunuyor: `DeskScreen.cs`. A2 tek bir satırı (`rulebook.ResetFloorGroup()`) değiştirir, B1 başka satırları. Bu bir bekleme değil: önce kim push'larsa, diğeri pull edince git kendisi birleştirir. Çakışma çıkarsa ikisini de tutup birleştir.
+- Faz 1'ini bitiren:
+  - Faz durumu tablosunda satırını ✅ ve hash yapar.
+  - Kapı açılana kadar sadece **bu turla ilgisi olmayan eski §7 maddelerine** (Önceki açık işler) ya da teslim hazırlığına (video, README görseli) bakabilir.
+  - Faz 2 dosyalarına dokunmaz: `MainMenuScreen.cs`, `DeskSandboxBuilder*.cs`, `DeskHud.cs`, `DeskPropsView.cs`, `DeskScreen.prefab`.
+- Gecikecek olan tahmini saatini tablodaki satırına yazar. **Faz 1 06:00'ya kadar bitmezse ne yapılacağına Ahmet karar verir.**
+
+**Kapı 1 → 2:** A1, A2, B1, C1, T1 ve T2'nin hepsi ✅ olduğunda A bu tabloda Faz 2 satırlarını "🟢 başla" yapar ve push'lar. Herkes bunu pull ile görür.
+
+**Faz 2 (hedef 08:30) — kapı açılınca:**
+- **Oğuzhan, B2.** İhtiyaç duyduğu her şey Faz 1'de geldi: kendi B1'i (aynı prefab), Tarık'ın görselleri (T1) ve Onur'un `DeskHeaderView`'u (C1). Başlamadan önce pull eder. B2, `DeskScreen.prefab`'ı builder'la kuran **tek** iştir.
+- **Onur, C2.** T1 görselleri hazır, kimseyi beklemez. B2 ile aynı anda yapılır; dosyaları ayrı (Flow ve Desk).
+- **Onur, C1-K.** B1 artık pull'da. Sandbox_Desk'te kendi sonuç kaşesinin ve denetçi balonunun karartmanın üstünde kaldığını kontrol eder.
+  - Sorun yoksa satırı ✅ yapar.
+  - Sorun varsa §7'de Oğuzhan'a yazar; düzeltme B2'nin içinde yapılır. **Bu, Faz 2'deki tek bekleme:** sorun çıkarsa Oğuzhan, B2'yi Onur'un notundan sonra bitirir.
+- Faz 2'de A ve Tarık:
+  - A, Faz 1'de gelen push'ları test eder ve sorunları ilgili kişiye yazar.
+  - Tarık, video ve README ekran görüntüsü planını hazırlar.
+  - Faz 2 dosyalarına dokunmazlar.
+
+**Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
+
+**Faz 3 (08:30 → 11:00) — A:**
+- A3: hepsini pull, EditMode + PlayMode testleri, otomatik 7 günlük oynanış, ekran görüntüleri (masa, inceleme modu, El Kitabı, üst bar, ana menü, Esc menüsü), §2-§3 ve README son kontrol, build + ZIP.
+- A hata bulursa sahibine §7'de yazar. Sahibi sadece o hatayı düzeltir, push'lar ve haber verir; A tekrar test eder. **Faz 3'te bekleme bu döngüdür.**
+- **Son kod push'u en geç 11:00.** 11:00-12:00 arası sadece A'nın istediği hata düzeltmeleri yapılır. **12:00 freeze:** sonrasında kod push'u yok.
+
+**Kim kimi bekliyor (özet):**
+| Bekleyen | Beklenen | Neden |
+|---|---|---|
+| Herkesin Faz 2 işi | Faz 1'in 6 işinin hepsi | Ahmet kuralı: Faz 1 bitmeden Faz 2 yok |
+| A2 | A1 | A2, A1'in Core fonksiyonunu kullanır (aynı kişi) |
+| B2 | B1, T1, C1 (hepsi Faz 1'de) | Aynı prefab; görseller; üst bar bileşeni |
+| C2 | T1 (Faz 1'de) | Yeni menü görselleri |
+| C1-K | B1 (Faz 1'de) | Karartma katmanı olmadan kontrol edilemez |
+| B2'nin bitişi | C1-K (sadece sorun çıkarsa) | Karartma sırası düzeltmesi B2'de yapılır |
+| A3 (Faz 3) | B2, C2, C1-K | Birleştirme ve build için herkesin işi |
+| Build + ZIP | A3'teki hata düzeltmeleri | Son build tek seferde, temiz koddan |
 
 **Dosya kilitleri** (bu turda dosyaya sadece yazılan kişi dokunur; başkasına bir şey lazımsa burada yazar):
 | Dosya | Kim | Not |
@@ -244,7 +293,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - `InspectCatcher` ve spot'lar ONAY / RED tıklamasını yutmamalı;
     - ONAY / RED tıklaması "boş masaya tıklandı, seçimi temizle" sayılmamalı.
   - Sandbox_Desk'te dene: mod aç/kapat, alan seç, karşılaştır, uyuşmazlık diyaloğu, modda ONAY ve RED. Prefab'ı builder'la kur, push, "B1 ✅ hash" yaz.
-- [ ] **B2 Düğmeler ve üst bar (madde 3, 4; T1 ve C1'den sonra):**
+- [ ] **B2 Düğmeler ve üst bar (madde 3, 4) — FAZ 2: Faz 1'in hepsi ✅ olmadan başlama:**
   - **Düğmeler:**
     - İNCELE → `btn_inspect` (`DeskSandboxBuilder.Inspect.cs`);
     - NASIL OYNANIR → `btn_help` (builder'daki `helpSprite`; TutorialView kurar);
@@ -255,7 +304,6 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - **yükseklik aynı kalır (80 px)**: ofis ve belgeler yerinden oynamaz;
     - `DeskHud.Refresh` ve `DeskPropsView`'daki müteahhit · proje yazısı (`clientTagText`) `DeskHeaderView` API'sine bağlanır (C1'deki API);
     - eski metin alanları silinebilir.
-  - T1 07:00'ye kadar gelmezse eski görselle bağla; görsel sonradan aynı adla gelir.
   - Prefab'ı builder'la kur, push, "B2 ✅ hash" yaz.
 - Eski §7 maddelerin:
   - "sekme notları" **iptal** (K3);
@@ -284,8 +332,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - sprite yoksa aynı renk dünyasında kodla çizer (kahve şerit, krem etiket, kalın kahve kontur), böylece **T1'i beklemeden bitirilebilir**.
   - İsteğe bağlı: kasa değişince rakam kısa bir süre yeşil (+) ya da kırmızı (−) parlar. Vakit yoksa yapma.
   - Push, "C1 ✅ hash" yaz.
-  - **B1 gelince (madde 2):** Sandbox_Desk'te `InspectResultView` ve `InspectorBubbleView`'un karartmanın üstünde kaldığını kontrol et. Sorun varsa burada Oğuzhan'a yaz.
-- [ ] **C2 Ana menü düğmeleri (madde 3; T1'den sonra):**
+  - **C1-K, FAZ 2'de (madde 2):** Sandbox_Desk'te `InspectResultView` ve `InspectorBubbleView`'un karartmanın üstünde kaldığını kontrol et. Sorun varsa burada Oğuzhan'a yaz.
+- [ ] **C2 Ana menü düğmeleri (madde 3) — FAZ 2: Faz 1'in hepsi ✅ olmadan başlama:**
   - `MainMenuScreen`: Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış yeni `btn_menu` ile. Tarık aynı adla üzerine yazar, bağlantı korunur.
   - Yazılar kodla, Paytone One; `ButtonHover` aynı kalır.
   - **`menu_bg`'deki çizili 3 tahta yuva kalkıyor (T1).** Düğmeleri yuvalara değil düzgün bir sütuna diz:
@@ -387,6 +435,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 | 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
+| 18 Ekim ~02:15 | Poliş turu kapı kuralı: Faz 1'in 6 işi (A1, A2, B1, C1, T1, T2) hepsi ✅ olmadan kimse Faz 2'ye geçmez; Faz 2 bitmeden Faz 3 yok. Kapıyı A açar (§7 Faz durumu tablosu). Yedek plan (görsel gelmezse eskiyle bağla) kalktı, T1 geldi | Ahmet kararı |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

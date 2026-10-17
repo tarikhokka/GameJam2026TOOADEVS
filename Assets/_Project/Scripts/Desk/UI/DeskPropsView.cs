@@ -53,7 +53,8 @@ namespace CivilJam.Desk
             LabBookObject?.SetActive(false);
             envelopeRoot.SetActive(false);
             clientTagText.text = allDecided ? "Bugünkü başvurular bitti." : "";
-            finishButton.gameObject.SetActive(allDecided);
+            // (EEE, A ve B onayı) "Mesaiyi bitir" artık gösterilmez: DeskScreen mesai zili + geçiş ekranıyla kendisi geçer.
+            finishButton.gameObject.SetActive(false);
         }
     }
 }

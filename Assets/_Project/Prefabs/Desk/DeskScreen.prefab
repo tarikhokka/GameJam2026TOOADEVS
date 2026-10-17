@@ -10882,6 +10882,8 @@ MonoBehaviour:
   officeGifts: {fileID: 6691351911644804969}
   stampDelay: 0.6
   reactionHold: 1.5
+  shiftTitleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
+  shiftInfoFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
 --- !u!1 &5338012421712891607
 GameObject:
   m_ObjectHideFlags: 0
@@ -16493,6 +16495,7 @@ MonoBehaviour:
   paper: {fileID: 8300000, guid: ab61e838ee4490848a8163b2451d9edb, type: 3}
   stamp: {fileID: 8300000, guid: 684a8d0ed7a7c0b4b9e85ee095b4dbb5, type: 3}
   glassBreak: {fileID: 8300000, guid: 0395b40312eec3d42b5b4e751ff3b946, type: 3}
+  shiftEnd: {fileID: 8300000, guid: 5610e8c9940e4346bd1e7c95e41276cf, type: 3}
   officeMusic: {fileID: 8300000, guid: 8cfae4e115afaad4a9161e5790153350, type: 3}
   typing: {fileID: 8300000, guid: 065e269b8d431004aa92dc6416285484, type: 3}
   sfxVolume: 0.8

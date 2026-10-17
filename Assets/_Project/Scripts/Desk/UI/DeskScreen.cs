@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CivilJam.Core;
+using TMPro;
 using UnityEngine;
 
 namespace CivilJam.Desk
@@ -10,7 +11,8 @@ namespace CivilJam.Desk
     // Yeni hedef arayüz (Ahmet kararı): üstte ofis, müteahhit masanın arkasında oturur (selamlama balonu); masada üç belge
     // düz ve yan yana: soldan YAPI DENETİM FORMU, LABORATUVAR RAPORU (müteahhit oturunca aşağıdan kayarak gelir) ve hep açık
     // DENETÇİ EL KİTABI. Formda ONAY / RED (ve zarf), lab raporunda ek test. Karar → kaşe forma basılır → form ve lab raporu
-    // masadan kayıp gider → tepki balonu (+ hediye) → sıradaki gelir. Oyuncu "Mesaiyi bitir"e basınca Completed bir kez tetiklenir.
+    // masadan kayıp gider → tepki balonu (+ hediye) → sıradaki gelir. Son müteahhitten sonra mesai zili + "MESAİ BİTTİ"
+    // geçiş ekranı, ardından Completed bir kez kendiliğinden tetiklenir ("Mesaiyi bitir" düğmesi kalktı, EEE).
     public class DeskScreen : MonoBehaviour, IGameScreen
     {
         [SerializeField] private DeskHud hud;
@@ -32,6 +34,15 @@ namespace CivilJam.Desk
         [Tooltip("Müteahhidin tepki balonu yazılıp bittikten sonra sıradakine geçmeden önce bu kadar beklenir (sn)")]
         [SerializeField] private float reactionHold = 1.5f;
 
+        // (EEE, 17 Ekim; A ve B onayladı) "Mesaiyi bitir" düğmesi kalktı: son müteahhit gidince kısa bir bekleme,
+        // mesai zili ve "MESAİ BİTTİ" geçiş ekranı, sonra Completed kendiliğinden tetiklenir.
+        [Tooltip("Son karar sırası bittikten sonra geçiş ekranından önce masada beklenen süre (sn)")]
+        [SerializeField] private float shiftEndDelay = 1.2f;
+        [SerializeField] private float shiftEndFade = 0.7f;
+        [SerializeField] private float shiftEndHold = 1.8f;
+        [SerializeField] private TMP_FontAsset shiftTitleFont; // PaytoneOne-Regular SDF
+        [SerializeField] private TMP_FontAsset shiftInfoFont;  // FiraSans-Bold SDF
+
         public GamePhase Phase => GamePhase.Desk;
         public event Action Completed;
 
@@ -39,6 +50,8 @@ namespace CivilJam.Desk
         private string selectedId;
         private bool completed;
         private bool stamping; // karar sonrası sıra (kaşe, tepki, olay kartı) sürerken yeni girdi alınmaz
+        private bool endingShift;
+        private ShiftEndOverlay shiftOverlay;
 
 
         private void Awake()
@@ -80,6 +93,8 @@ namespace CivilJam.Desk
             context.StateChanged += Redraw;
             completed = false;
             stamping = false;
+            endingShift = false;
+            if (shiftOverlay != null) shiftOverlay.Hide();
 
             gameObject.SetActive(true);
             if (rulebook != null)
@@ -102,6 +117,7 @@ namespace CivilJam.Desk
             Unsubscribe();
             StopAllCoroutines();
             stamping = false;
+            endingShift = false;
             formWindow.Close(instant: true);
             labWindow.Close(instant: true);
             if (rulebook != null) rulebook.Close(instant: true);
@@ -221,6 +237,31 @@ namespace CivilJam.Desk
             Completed?.Invoke();
         }
 
+        private IEnumerator EndShift()
+        {
+            endingShift = true;
+            yield return new WaitForSeconds(shiftEndDelay); // "Bugünkü başvurular bitti." masada kısa görünsün
+            if (completed) yield break;
+            if (deskAudio != null) deskAudio.PlayShiftEnd();
+            if (shiftOverlay == null) shiftOverlay = ShiftEndOverlay.Create(transform, shiftTitleFont, shiftInfoFont);
+            yield return shiftOverlay.Play("MESAİ BİTTİ", ShiftSummary(), shiftEndFade, shiftEndHold);
+            completed = true;
+            Completed?.Invoke();
+        }
+
+        private string ShiftSummary()
+        {
+            int approved = 0, rejected = 0;
+            foreach (var p in context.TodayProjects)
+            {
+                if (p.Verdict == ProjectVerdict.Approved) approved++;
+                else if (p.Verdict == ProjectVerdict.Rejected) rejected++;
+            }
+            const string gold = "#FFD27A";
+            return $"{context.State.Day}. gün  ·  <color={gold}>{context.TodayProjects.Count}</color> başvuru  ·  " +
+                   $"<color={gold}>{approved}</color> onay  ·  <color={gold}>{rejected}</color> ret";
+        }
+
         private void PlayPaper()
         {
             if (deskAudio != null) deskAudio.PlayPaper();
@@ -264,6 +305,7 @@ namespace CivilJam.Desk
                 scene.Leave(); // son müteahhit sola çıkar, koltuk boş kalır
                 props.ShowEmpty(AllDecided());
                 SyncDocuments(null);
+                if (AllDecided() && !completed && !endingShift && !stamping) StartCoroutine(EndShift());
                 return;
             }
 

@@ -17,6 +17,7 @@ namespace CivilJam.Desk
         [SerializeField] private AudioClip paper;
         [SerializeField] private AudioClip stamp;
         [SerializeField] private AudioClip glassBreak;
+        [SerializeField] private AudioClip shiftEnd; // EEE: sfx_shift_end.wav (mesai bitti zili, kodla üretildi)
         [SerializeField] private AudioClip officeMusic;
         [SerializeField] private AudioClip typing; // EEE: sfx_typing.ogg (malakme "Medium Text Blip", CC0; döngüde çalar), karaktere özel ses yok
 
@@ -39,6 +40,7 @@ namespace CivilJam.Desk
         public void PlayPaper() => Play(paper);
         public void PlayStamp() => Play(stamp);
         public void PlayGlassBreak() => Play(glassBreak);
+        public void PlayShiftEnd() => Play(shiftEnd != null ? shiftEnd : paper);
 
         // EEE (17 Ekim): sfx_typing artık 8,8 sn'lik blip dizisi. Her harfte baştan çalmak yerine harfler akarken
         // döngüde çalar; typingStopDelay boyunca yeni harf gelmezse (yazı bitti / cümle duraklaması) kendiliğinden durur.

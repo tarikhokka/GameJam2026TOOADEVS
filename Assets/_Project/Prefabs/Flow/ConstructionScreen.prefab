@@ -352,6 +352,8 @@ MonoBehaviour:
   constructionTitle: {fileID: 6073907676476074749}
   buildingInfo: {fileID: 2090394376963842034}
   continueButton: {fileID: 4771461950964343259}
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
 --- !u!1 &7324853083289995009
 GameObject:
   m_ObjectHideFlags: 0

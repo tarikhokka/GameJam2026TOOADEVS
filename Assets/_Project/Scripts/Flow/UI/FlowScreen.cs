@@ -1,6 +1,8 @@
 using System;
 using CivilJam.Core;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CivilJam.Flow
 {
@@ -14,6 +16,11 @@ namespace CivilJam.Flow
         public abstract GamePhase Phase { get; }
         public event Action Completed;
 
+        // (EEE, 17 Ekim) Prefab'taki düz düğmeler ana menüdeki tahta düğme gibi görünsün ve fare üstündeyken vurgulansın.
+        // Boşsa sadece vurgu eklenir. Kodla (UiKit) kurulan düğmelerde zaten ButtonHover var; onlara dokunulmaz.
+        [SerializeField] Sprite buttonSprite;       // btn_menu
+        [SerializeField] TMP_FontAsset buttonFont;  // FiraSans-Bold SDF
+
         protected GameContext Context { get; private set; }
         bool _built;
         bool _completed;
@@ -26,9 +33,30 @@ namespace CivilJam.Flow
             if (!_built)
             {
                 Build();
+                StylePrefabButtons();
                 _built = true;
             }
             Refresh();
+        }
+
+        void StylePrefabButtons()
+        {
+            foreach (var button in GetComponentsInChildren<Button>(true))
+            {
+                if (button.GetComponent<ButtonHover>() != null) continue;
+                if (buttonSprite != null && button.targetGraphic is Image image)
+                {
+                    image.sprite = buttonSprite;
+                    image.type = Image.Type.Simple;
+                    image.color = Color.white;
+                    foreach (var label in button.GetComponentsInChildren<TextMeshProUGUI>(true))
+                    {
+                        label.color = UiKit.Paper;
+                        if (buttonFont != null) label.font = buttonFont;
+                    }
+                }
+                button.gameObject.AddComponent<ButtonHover>();
+            }
         }
 
         public void Hide()

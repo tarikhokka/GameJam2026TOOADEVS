@@ -110,6 +110,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Müzikler oyunda çalmıyor: `mus_menu` (ana menü) ve `mus_ending_sad` (Kötü + iki Orta son) hiçbir sahne/prefab/koda bağlı değil.
 - [ ] (İsteğe bağlı) Gün başında `Context.LoadFailed` ise "Kayıt okunamadı, yeni oyun başladı." yaz.
 - [ ] Akış ekranları yeni görsel dile uymuyor: gün başı, inşaat, ödeme, kayıt ve son ekranlarında eski varsayılan font ve düz beyaz/siyah düğmeler; gün başı arka planı hâlâ eski ofis (`dayintro_bg`, eski desk_bg'den). Paytone One / Fira Sans ve masadaki kağıt/ahşap diline yaklaştır (Tarık gerekirse arka planı yeni ofisten üretir).
+  - (EEE, 17 Ekim ~18:00) Kısmen yapıldı: `dayintro_bg` yeni ofis+masadan üretildi. Gün başı ve inşaat ekranındaki prefab düğmeleri `FlowScreen.StylePrefabButtons` ile tahta düğme (`btn_menu`) + Fira Sans Bold + fare vurgusu aldı (prefab'larda `buttonSprite`/`buttonFont`). UiKit düğmeleri (ödeme, kayıt, gün özeti, gazete, son, Esc) fare vurgusunu `ButtonHover` ile alıyor ama hâlâ koyu düz; başlık/metin fontları hâlâ eski. Kalanı Onur'da.
 - [ ] Son ekranı: uzun metin parlak arka plan görselinin üstünde beyaz yazı, zor okunuyor (özellikle İyi son). Metnin arkasına yarı saydam koyu panel.
 - [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
 

@@ -94,6 +94,8 @@ MonoBehaviour:
   dayTitle: {fileID: 7990247674012031393}
   moneyInfo: {fileID: 421318791777417005}
   startDayButton: {fileID: 3435923475033334601}
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
 --- !u!1 &2525828092947691994
 GameObject:
   m_ObjectHideFlags: 0

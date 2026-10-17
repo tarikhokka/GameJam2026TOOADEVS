@@ -24,7 +24,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `bld_house_collapsed.png` | Result (gazete) | C | P |
 | `city_bg.png` | Construction | C | P |
 | `newspaper_bg.png` | Result | C | F |
-| `dayintro_bg.png` | DayIntro (gün başı): desk_bg sabah hali, hafif bulanık ve loş, ortadaki beyaz yazı okunsun diye. DayIntroScreen.prefab kök Image sprite'ına bağlı | C | F |
+| `dayintro_bg.png` | DayIntro (gün başı): yeni ofis + masa (office_bg, desk_surface, desk_edge) birleşimi, hafif bulanık ve loş, ortadaki beyaz yazı okunsun diye. DayIntroScreen.prefab kök Image sprite'ına bağlı | C | F |
 | `construction_bg.png` | Construction (inşaat ekranı): ofis penceresinden görünen vinçli şantiye manzarası (desk_bg kaynağından kırpılıp büyütüldü, bulanık, gün batımı tonu). ConstructionScreen.prefab kök Image sprite'ına bağlı | C | F |
 | `daysummary_bg.png` | DaySummary (desk_bg'nin gece hali: mavi ton + lamba ışığı) | C | F |
 | `save_bg.png` | Save (gün sonu kayıt ekranı): desk_bg gece, ışıklar sönük, ay ışığı. SaveScreen.prefab background alanına bağlı | C | F |

@@ -180,7 +180,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ✅ `1b47ce6` |
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
-| 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` |
+| 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` + `9be7aec` (imza satırı "Mühendis", vakit kalırsa maddesi; A3 build'ine dahil) |
 | 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ `d2dddb9` |
 | 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ `d2dddb9` |
 | 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
@@ -457,6 +457,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - ℹ️ `Flow/UI/PauseMenu.cs`'e A dokundu (Ahmet isteği): Ayarlar (ana ses `PlayerPrefs` "imza.masterVolume" + tam ekran), tam ekran ekranın gerçek çözünürlüğüne geçer. Test `Tests/PlayMode/SettingsMenuTests.cs`.
 
 **Tarık (EEE):**
+- [ ] (B, `9be7aec`) 3. öğretici kartta (`TutorialView.cs`, satır ~34) "müellif imzası" → "mühendis imzası": form ve lab raporundaki imza satırının adı artık iki belgede de "Mühendis". Metin senin dosyan; README zaten uyumlu.
 - [ ] `README.md`: son hâli, oyun ekran görüntüsü ve video bağlantısı (Pazar).
 - [ ] Pazar: 1 dakikalık video (A ile senaryo).
 

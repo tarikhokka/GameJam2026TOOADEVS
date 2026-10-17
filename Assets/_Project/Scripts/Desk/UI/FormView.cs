@@ -8,29 +8,30 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Yapı Denetim Formu (Documents[0]; Ahmet'in tasarımı Docs/Tasarim/yapi_denetim_formu_GORUNUM.html, içerik El Kitabı v2):
-    // dosya sekmesi, künye, bölümler (ParamRule.Section: "A · YAPI", "B · ZEMİN") ve beyan edilen değerler, imza + belediye kaşesi,
-    // ONAY / RED kutuları ve (varsa) zarf. Tutarsızlıkları işaretlemez: oyuncu Lab Raporu ve El Kitabı ile karşılaştırır.
+    // Yapı Denetim Formu (Documents[0]), yeni hedef arayüz (Onur'un referansı, EEE görselleri; içerik El Kitabı v2):
+    // başlık (proje no, tarih), PROJE BİLGİLERİ ("etiket : değer" satırları + kat sayısına göre bina resmi), TEKNİK BİLGİLER
+    // tablosu (beyan edilen değerler), belediye kaşesi, ONAY / RED düğmeleri (EEE görselleri) ve varsa zarf.
+    // Tutarsızlıkları işaretlemez: oyuncu Lab Raporu ve El Kitabı ile karşılaştırır (parsel, tarih, müellif imzası formda).
     public class FormView : MonoBehaviour
     {
         private static readonly CultureInfo Tr = CultureInfo.GetCultureInfo("tr-TR");
 
         [Header("Başlık")]
-        [SerializeField] private TMP_Text fileTabText;
-        [SerializeField] private TMP_Text dateText;
+        [SerializeField] private TMP_Text fileTabText; // "Proje : YD-2026-0412"
+        [SerializeField] private TMP_Text dateText;    // "Tarih : 12.10.2026"
 
-        [Header("Künye")]
-        [SerializeField] private Transform wideRowsContainer; // tam genişlik: proje, adres
-        [SerializeField] private DottedRowView wideRowTemplate;
-        [SerializeField] private Transform gridRowsContainer; // iki sütun: kullanım, parsel, kat, yükseklik, kişi, ücret
-        [SerializeField] private DottedRowView gridRowTemplate;
+        [Header("Proje bilgileri")]
+        [SerializeField] private Transform infoContainer;
+        [SerializeField] private DottedRowView infoTemplate;
+        [SerializeField] private Image buildingImage;
+        [Tooltip("Kat sayısına göre bina resmi: 1-3, 4-6, 7+ (EEE: bld_low, bld_mid, bld_high)")]
+        [SerializeField] private Sprite[] buildingSprites;
 
-        [Header("Bölümler")]
-        [SerializeField] private Transform sectionsContainer;
-        [SerializeField] private SectionBlockView sectionTemplate;
+        [Header("Teknik bilgiler")]
+        [SerializeField] private Transform techContainer;
+        [SerializeField] private DottedRowView techTemplate;
 
-        [Header("İmza ve kaşe")]
-        [SerializeField] private TMP_Text signatureText;
+        [Header("Kaşe")]
         [SerializeField] private GameObject municipalStamp;
         [SerializeField] private TMP_Text municipalStampText;
 
@@ -46,9 +47,8 @@ namespace CivilJam.Desk
         public event Action RejectClicked;
         public event Action TakeBribeClicked;
 
-        private readonly List<DottedRowView> wideRows = new List<DottedRowView>();
-        private readonly List<DottedRowView> gridRows = new List<DottedRowView>();
-        private readonly List<SectionBlockView> sections = new List<SectionBlockView>();
+        private readonly List<DottedRowView> infoRows = new List<DottedRowView>();
+        private readonly List<DottedRowView> techRows = new List<DottedRowView>();
 
         private void Awake()
         {
@@ -62,62 +62,49 @@ namespace CivilJam.Desk
         public void Show(GameContext ctx, ProjectData project)
         {
             var doc = project.Documents.Count > 0 ? project.Documents[0] : null;
+            var client = ctx.GetClient(project.ClientId);
 
-            fileTabText.text = $"DOSYA · {project.FileNo}";
-            dateText.text = doc != null ? doc.Date : "";
+            fileTabText.text = $"Proje : YD-{project.FileNo}";
+            dateText.text = $"Tarih : {(doc != null ? doc.Date : "")}";
 
-            Fill(wideRows, wideRowTemplate, wideRowsContainer, new[]
+            Fill(infoRows, infoTemplate, infoContainer, new[]
             {
-                ("Proje", Upper(project.Name)),
-                ("Adres", Upper(project.Address)),
-            });
-            Fill(gridRows, gridRowTemplate, gridRowsContainer, new[]
-            {
-                ("Kullanım", Upper(DeskFormat.BuildingName(project.BuildingType))),
-                ("Parsel no", doc != null ? doc.ParcelNo : ""),
-                ("Kat sayısı", project.Floors.ToString(Tr)),
-                ("Yükseklik", $"{project.HeightMeters.ToString("0.00", Tr)} M"),
+                ("Proje Adı", project.Name),
+                ("Ada / Parsel", doc != null ? doc.ParcelNo : ""),
+                ("Adres", project.Address),
+                ("Yapı Sınıfı", DeskFormat.BuildingName(project.BuildingType)),
+                ("Kat Adedi", project.Floors.ToString(Tr)),
+                ("Yükseklik", $"{project.HeightMeters.ToString("0.00", Tr)} m"),
                 ("Kat başı kişi", project.PeoplePerFloor.ToString(Tr)),
-                ("Onay ücreti", Upper(DeskFormat.Money(project.Fee))),
+                ("Müteahhit", client != null ? client.DisplayName : ""),
+                ("Proje müellifi", doc != null ? doc.SignatureName : ""),
+                ("Onay ücreti", DeskFormat.Money(project.Fee)),
             });
 
-            BindSections(ctx, project);
+            int group = project.Floors <= 3 ? 0 : project.Floors <= 6 ? 1 : 2;
+            var sprite = buildingSprites != null && group < buildingSprites.Length ? buildingSprites[group] : null;
+            buildingImage.sprite = sprite;
+            buildingImage.enabled = sprite != null;
 
-            signatureText.text = doc != null ? $"İmza: <i>{doc.SignatureName}</i>" : "";
+            // Teknik bilgiler: beyan edilen değerler, lab raporuyla aynı sırada (Core ParamType sırası).
+            var tech = new (string, string)[project.Params.Count];
+            for (int i = 0; i < project.Params.Count; i++)
+            {
+                var p = project.Params[i];
+                tech[i] = (DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type), DeskFormat.Value(ctx.Rules, p.Type, p.Reported));
+            }
+            Fill(techRows, techTemplate, techContainer, tech);
+
             bool hasStamp = doc != null && !string.IsNullOrEmpty(doc.StampId);
             municipalStamp.SetActive(hasStamp);
-            if (hasStamp) municipalStampText.text = $"ONAYLIDIR\n<size=60%>{doc.StampId}</size>";
+            if (hasStamp && municipalStampText != null) municipalStampText.text = doc.StampId;
 
             bool pending = project.Verdict == ProjectVerdict.Pending;
             approveButton.interactable = pending;
             rejectButton.interactable = pending;
             bribeRoot.SetActive(pending && project.OffersBribe);
-            if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {Upper(DeskFormat.Money(project.BribeAmount))}";
+            if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict);
-        }
-
-        // Parametreleri bölümlerine göre toplar (bölüm El Kitabı v2'de kurala bağlı); sıra lab raporuyla aynı.
-        private void BindSections(GameContext ctx, ProjectData project)
-        {
-            var order = new List<string>();
-            var lines = new Dictionary<string, List<(string, string)>>();
-            foreach (var p in project.Params)
-            {
-                var rule = ctx.Rules != null ? ctx.Rules.FindRule(project.BuildingType, p.Type, project.Floors) : null;
-                string section = rule != null && !string.IsNullOrWhiteSpace(rule.Section) ? rule.Section : "A · YAPI";
-                if (!lines.TryGetValue(section, out var list))
-                {
-                    list = new List<(string, string)>();
-                    lines[section] = list;
-                    order.Add(section);
-                }
-                list.Add((DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type),
-                    Upper(DeskFormat.Value(ctx.Rules, p.Type, p.Reported))));
-            }
-            order.Sort(StringComparer.Ordinal);
-
-            UiPool.Resize(sections, sectionTemplate, sectionsContainer, order.Count);
-            for (int i = 0; i < order.Count; i++) sections[i].Bind(order[i], lines[order[i]]);
         }
 
         private static void Fill(List<DottedRowView> rows, DottedRowView template, Transform container, (string, string)[] lines)
@@ -125,7 +112,5 @@ namespace CivilJam.Desk
             UiPool.Resize(rows, template, container, lines.Length);
             for (int i = 0; i < lines.Length; i++) rows[i].Bind(lines[i].Item1, lines[i].Item2);
         }
-
-        private static string Upper(string s) => string.IsNullOrEmpty(s) ? "" : s.ToUpper(Tr);
     }
 }

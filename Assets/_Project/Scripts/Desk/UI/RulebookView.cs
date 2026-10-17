@@ -36,6 +36,10 @@ namespace CivilJam.Desk
         [Tooltip("Kat grubu düğmelerindeki bina simgeleri: alçak, orta, yüksek (Art/bld_low, bld_mid, bld_high)")]
         [SerializeField] private Sprite[] floorIcons;
 
+        [Tooltip("Sekme görselleri (EEE: tab_beton/donati/yapi/zemin, yazı görselde). Adı tab_<bölüm> olan sekme bunu kullanır; " +
+                 "görseli olmayan sekme (HIZLI BAKIŞ, LAB) aynı renkte kodla çizilir.")]
+        [SerializeField] private Sprite[] tabSprites;
+
         [Tooltip("Bölüm sekmelerinin afet farkındalık cümlesi (EEE yazar, ICERIK_TASLAK.md). Boşsa gösterilmez.")]
         [SerializeField] private List<SectionNote> sectionNotes = new List<SectionNote>
         {
@@ -64,7 +68,7 @@ namespace CivilJam.Desk
 
         private void Awake()
         {
-            openButton.onClick.AddListener(Toggle);
+            if (openButton != null) openButton.onClick.AddListener(Toggle); // yeni düzende masada kitap yok: El Kitabı hep açık
             window.CloseClicked += () => { if (window.IsOpen) Toggle(); };
         }
 
@@ -87,6 +91,15 @@ namespace CivilJam.Desk
             PaintQuick();
         }
 
+        // Yeni düzen: El Kitabı masada hep açık (DeskScreen.Show çağırır).
+        public void Open()
+        {
+            if (window.IsOpen) return;
+            if (!built && context != null) Build(context);
+            ShowPage(page);
+            window.Open();
+        }
+
         private void Toggle()
         {
             Toggled?.Invoke();
@@ -95,9 +108,7 @@ namespace CivilJam.Desk
                 window.Close();
                 return;
             }
-            if (!built && context != null) Build(context);
-            ShowPage(page);
-            window.Open();
+            Open();
         }
 
         private void ShowPage(int index)
@@ -138,24 +149,46 @@ namespace CivilJam.Desk
             int index = pages.Count;
             pages.Add(pageObject);
 
+            // Sekme: EEE görseli varsa o (yazı görselde), yoksa aynı boyutta renkli şerit + dikey yazı.
             var tab = HandbookUi.Rect("Tab_" + tabLabel, tabsRoot);
-            HandbookUi.Size(tab, prefW: 32, prefH: tabLabel.Length > 6 ? 118 : tabLabel.Length > 3 ? 86 : 54);
-            var image = HandbookUi.Img(tab, color, raycast: true);
+            HandbookUi.Size(tab, prefW: TabWidth, prefH: TabHeight);
+            var sprite = TabSprite(tabLabel);
+            var image = HandbookUi.Img(tab, sprite != null ? Color.white : color, raycast: true);
+            image.sprite = sprite;
             var button = tab.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
+            button.transition = Selectable.Transition.None;
             button.onClick.AddListener(() =>
             {
                 if (page == index) return;
                 ShowPage(index);
                 Toggled?.Invoke();
             });
-            var label = HandbookUi.Text("Label", tab, tabLabel, 13, Title, Color.white, TextAlignmentOptions.Center);
-            var lr = label.rectTransform;
-            lr.anchorMin = lr.anchorMax = new Vector2(0.5f, 0.5f);
-            lr.sizeDelta = new Vector2(130, 30);
-            lr.localRotation = Quaternion.Euler(0, 0, -90); // dikey yazı
-            label.characterSpacing = 3;
-            tabs.Add((image, color));
+            if (sprite == null)
+            {
+                var label = HandbookUi.Text("Label", tab, tabLabel, 12, Title, Color.white, TextAlignmentOptions.Center);
+                var lr = label.rectTransform;
+                lr.anchorMin = lr.anchorMax = new Vector2(0.5f, 0.5f);
+                lr.sizeDelta = new Vector2(TabHeight - 8, TabWidth);
+                lr.localRotation = Quaternion.Euler(0, 0, -90); // dikey yazı
+                label.enableAutoSizing = true;
+                label.fontSizeMin = 8;
+                label.fontSizeMax = 12;
+                label.characterSpacing = 2;
+            }
+            tabs.Add((image, sprite != null ? Color.white : color));
+        }
+
+        private const float TabWidth = 40f, TabHeight = 88f; // EEE sekme görseli 120x300 oranına yakın; 6 sekme deftere sığar
+
+        // "ZEMİN" → tab_zemin
+        private Sprite TabSprite(string label)
+        {
+            if (tabSprites == null) return null;
+            string key = "tab_" + label.Replace("İ", "I").Replace("Ş", "S").ToLowerInvariant();
+            foreach (var s in tabSprites)
+                if (s != null && s.name == key) return s;
+            return null;
         }
 
         private GameObject NewPage(string name)

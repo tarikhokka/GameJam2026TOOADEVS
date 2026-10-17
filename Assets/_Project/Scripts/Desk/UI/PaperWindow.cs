@@ -4,17 +4,18 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Masadaki bir nesneden açılan kağıt pencere (Yapı Denetim Formu, Lab Raporu, El Kitabı). Perde yok: masa ve diğer
-    // pencereler tıklanabilir kalır, oyuncu kağıtları yan yana koyup karşılaştırır (Papers, Please).
-    // Açılınca masadaki nesnenin yönünden (fromOffset) kayarak gelir, kapanınca oraya döner; kağıt sürüklenebilir (DraggableSheet).
-    // Yerleşimi DeskScreen.ArrangeSheets verir (SetHome). Bileşen hep aktif kökte; açılıp kapanan panelRoot.
+    // Masadaki belge (Yapı Denetim Formu, Lab Raporu, El Kitabı). Yeni hedef arayüz: üç belge masada sabit yerinde (home),
+    // yan yana, düz; oyuncu isterse tutup taşır (yeni müteahhitte yine yerinden açılır). Açılınca aşağıdan (fromOffset) kayarak gelir, kapanınca oraya döner (DraggableSheet hareketi).
+    // Bileşen hep aktif kökte; açılıp kapanan panelRoot.
     public class PaperWindow : MonoBehaviour
     {
         [SerializeField] private GameObject panelRoot;
         [SerializeField] private DraggableSheet sheet;
-        [SerializeField] private Button closeButton;
-        [Tooltip("Açılış/kapanışta kağıdın geldiği yön: masadaki nesnenin tarafı (tuval px)")]
+        [SerializeField] private Button closeButton; // yeni düzende yok (boş)
+        [Tooltip("Açılış/kapanışta kağıdın geldiği yön (tuval px)")]
         [SerializeField] private Vector2 fromOffset = new Vector2(0, -900);
+        [Tooltip("Masadaki sabit yeri (tuval ortasına göre px)")]
+        [SerializeField] private Vector2 home;
 
         public event Action CloseClicked;
         public event Action OpenChanged;
@@ -34,20 +35,13 @@ namespace CivilJam.Desk
             if (open) return;
             open = true;
             panelRoot.SetActive(true);
-            sheet.BringToFront();
-            OpenChanged?.Invoke(); // yerleşim önce (SetHome), kağıt sonra oraya kayar
+            sheet.SetHome(home, 1f); // sabit yeri; kağıt oraya kayar
+            OpenChanged?.Invoke();
             sheet.AnimateIn(fromOffset);
         }
 
         // instant: gün başı / ekran gizlenirken (animasyon bekleyemez). Normalde kağıt masadaki nesnesine geri kayar.
         public void Close(bool instant = false) => CloseWith(instant, () => sheet.AnimateOut(fromOffset, HidePanel));
-
-        // Karar verildi: kağıt kapanıp kaşeli klasör olarak müteahhide gider (FolderHandoffView).
-        public void HandTo(FolderHandoffView handoff, bool approved, string title)
-        {
-            if (handoff != null) CloseWith(false, () => handoff.Play(sheet, approved, title, HidePanel));
-            else Close();
-        }
 
         public void SetHome(Vector2 position, float scale)
         {

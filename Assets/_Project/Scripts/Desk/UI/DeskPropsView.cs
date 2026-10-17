@@ -26,19 +26,19 @@ namespace CivilJam.Desk
 
         private void Awake()
         {
-            formFolder.onClick.AddListener(() => FormClicked?.Invoke());
-            labBook.onClick.AddListener(() => LabBookClicked?.Invoke());
+            if (formFolder != null) formFolder.onClick.AddListener(() => FormClicked?.Invoke());
+            if (labBook != null) labBook.onClick.AddListener(() => LabBookClicked?.Invoke());
             finishButton.onClick.AddListener(() => FinishClicked?.Invoke());
         }
 
-        private GameObject FormObject => formFolderRoot != null ? formFolderRoot : formFolder.gameObject;
-        private GameObject LabBookObject => labBookRoot != null ? labBookRoot : labBook.gameObject;
+        private GameObject FormObject => formFolderRoot != null ? formFolderRoot : formFolder != null ? formFolder.gameObject : null;
+        private GameObject LabBookObject => labBookRoot != null ? labBookRoot : labBook != null ? labBook.gameObject : null;
 
         public void Show(ProjectData project, ClientSO client)
         {
             bool pending = project.Verdict == ProjectVerdict.Pending;
-            FormObject.SetActive(pending);
-            LabBookObject.SetActive(pending);
+            FormObject?.SetActive(pending);
+            LabBookObject?.SetActive(pending);
             envelopeRoot.SetActive(pending && project.OffersBribe);
             if (project.OffersBribe) envelopeText.text = $"ZARF\n<b>{DeskFormat.Money(project.BribeAmount)}</b>";
 
@@ -49,8 +49,8 @@ namespace CivilJam.Desk
 
         public void ShowEmpty(bool allDecided)
         {
-            FormObject.SetActive(false);
-            LabBookObject.SetActive(false);
+            FormObject?.SetActive(false);
+            LabBookObject?.SetActive(false);
             envelopeRoot.SetActive(false);
             clientTagText.text = allDecided ? "Bugünkü başvurular bitti." : "";
             finishButton.gameObject.SetActive(allDecided);

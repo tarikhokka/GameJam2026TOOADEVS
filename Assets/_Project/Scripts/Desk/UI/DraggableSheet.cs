@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
@@ -10,8 +11,9 @@ namespace CivilJam.Desk
     // - Sürükleme: kağıt farenin altında birebir durur; hıza göre yatar, tutulunca kalkar (büyür, gölge uzar).
     //   Bırakınca hızıyla biraz kayar ve yayla durur. Basılan kağıt öne gelir.
     // - Yerleşim değişince (ortada / yan yana) yeni yerine yayla kayar. Her hareket yarıda kesilebilir: yeni komut eskisini değiştirir.
-    // Butonlar tıklamayı kendisi alır; butonun üstünden başlayan sürükleme yine kağıdı taşır ve tıklama sayılmaz.
-    public class DraggableSheet : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    // Düğmenin üstünden başlayan basış sürükleme sayılmaz (tıklama her seferinde çalışır); kağıdın geri kalanından tutulunca sürüklenir.
+    public class DraggableSheet : MonoBehaviour, IPointerDownHandler, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler,
+        IEndDragHandler
     {
         private const float MinVisible = 200f;   // kağıdın en az bu kadarı ekranda kalır
         private const float LiftScale = 1.04f;   // tutulunca büyüme
@@ -25,11 +27,13 @@ namespace CivilJam.Desk
         [SerializeField] private Transform layer;      // öne alınan kök (pencere kökü; "Papers" katmanında kardeşleriyle)
         [SerializeField] private RectTransform shadow; // kağıdın arkasındaki gölge (ilk çocuk, yerleşim dışı)
         [SerializeField] private CanvasGroup group;
+        [Tooltip("Yeni hedef arayüzde belgeler masada sabit: sürükleme kapalı (açılış/kapanış hareketi kalır)")]
+        [SerializeField] private bool draggable = true;
 
         public event Action Grabbed;
         public event Action Dropped;
 
-        // Yatay katlanma (1 = açık, 0 = kapanmış): dosya müteahhide verilirken kart gibi kapanır (FolderHandoffView).
+        // Yatay katlanma (1 = açık, 0 = kapanmış). Şu an kullanılmıyor (eski klasör teslimi kalktı); 1 kalır.
         public float FoldX { get; set; } = 1f;
 
         // Yay durumu
@@ -55,10 +59,28 @@ namespace CivilJam.Desk
 
         public void OnPointerDown(PointerEventData eventData) => BringToFront();
 
+        // Düğmenin (ONAY / RED / EK TEST, sekmeler, kat grubu…) üstünden başlayan basış asla sürükleme olmaz: aksi halde fare
+        // birkaç piksel kayınca Unity sürüklemeyi başlatıp tıklamayı iptal eder (düğme "2-3 tıklamada bir" çalışır).
+        public void OnInitializePotentialDrag(PointerEventData eventData)
+        {
+            if (!draggable || PressedOnSelectable(eventData)) eventData.pointerDrag = null;
+        }
+
+        private bool PressedOnSelectable(PointerEventData eventData)
+        {
+            var hit = eventData.pointerPressRaycast.gameObject;
+            for (var t = hit != null ? hit.transform : null; t != null && t != transform; t = t.parent)
+            {
+                var selectable = t.GetComponent<Selectable>();
+                if (selectable != null && selectable.IsInteractable()) return true;
+            }
+            return false;
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (canvas == null) canvas = GetComponentInParent<Canvas>().rootCanvas;
-            if (tweening) return; // kapanırken tutulmaz
+            if (tweening || !draggable) return; // kapanırken tutulmaz; sabit belgede hiç
             dragging = true;
             posVel = Vector2.zero;
             dragVel = Vector2.zero;

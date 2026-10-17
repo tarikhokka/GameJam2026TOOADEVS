@@ -21,14 +21,15 @@ namespace CivilJam.Desk.Editor
         private const string RuleSetPath = "Assets/_Project/Data/RuleSet.asset";
         private const string GiftsFolder = "Assets/_Project/Data/Gifts";
 
-        // Oda yerleşimi (desk_bg 1920x1080 üstünde px, EEE görseli): koltuk desk_bg'nin içinde (x 650-1310, üstü ~355),
-        // masanın üst kenarı ~750 (desk_front bu kenardan aşağısıdır). Portre 600x600, karakter alta ortalı ve belden
-        // yukarı: üstü 260'ta olunca kafa koltuğun üst kenarına denk gelir, masa göğüs/bel arasını keser.
-        private const float DeskTopY = 750f;
-        private const float PortraitSize = 600f;
-        private const float PortraitTopY = 260f;
-        private const float HeadTopY = PortraitTopY + 40f; // portrede saçın üstü ~40 px
-        private const float BalloonShiftX = 0f; // balon başın tam üstünde
+        // Oda yerleşimi (yeni hedef arayüz, 1920x1080 px, yukarıdan): office_bg 0-540; portre PortraitSize kare (EEE: portrait_* 1000x1000),
+        // üstü PortraitTopY'de (üst barın altında; şapkadan bele görünür, Onur'un referansı gibi); masa kenarı DeskEdgeY'de
+        // (portrenin önünde, belden aşağısını keser), masa yüzeyi DeskSurfaceY'den ekranın altına. Belgeler kenarın hemen altından başlar.
+        private const float PortraitSize = 460f;  // referanstaki gibi şapkadan bele (cep hizası) görünsün
+        private const float PortraitTopY = 58f;   // şapkanın üstü ~y 90: üst barın (80 px) hemen altı
+        private const float DeskEdgeY = 380f;     // müteahhidi bel hizasından keser
+        private const float DeskSurfaceY = 440f;
+        private const float BalloonX = 1080f;     // balon başın sağında (sol kenarı)
+        private const float BalloonTopY = 130f;
         private static readonly Color BalloonColor = new Color(1f, 0.99f, 0.96f);
 
         private static readonly Color DeskColor = new Color(0.36f, 0.27f, 0.21f);
@@ -152,11 +153,11 @@ namespace CivilJam.Desk.Editor
             AddImage(Stretch(NewRect("Background", root)), DeskColor); // 16:9 dışı ekranlarda odanın kenarları
 
             // Çizim sırası: sahne (oda, müteahhit, masa, masadaki eşyalar) → üst bar → kağıt pencereler → kartlar.
-            Wire(screen, "scene", BuildScene(root, out var room, out var handoff));
-            Wire(screen, "handoff", handoff);
+            Wire(screen, "scene", BuildScene(root, out var room));
             Wire(screen, "hud", BuildHud(root, out var clientTag));
             Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook, out var officeGifts));
             Wire(screen, "officeGifts", officeGifts);
+            room.Find("Balloon").SetAsLastSibling(); // konuşma balonu masadakilerin (zarf, hediyeler) önünde
 
             // Kağıt pencereler ortak katmanda: basılan en öne gelir (DraggableSheet.BringToFront). Ayrıntı: DeskSandboxBuilder.Papers.cs
             var papers = Stretch(NewRect("Papers", root));
@@ -327,104 +328,50 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // Karar sonrası müteahhide giden kapalı klasör: kapak + sekme + proje adı + eğik kaşe. Hiçbiri tıklamayı engellemez.
-        private static FolderHandoffView BuildHandoff(RectTransform room)
-        {
-            var root = Stretch(NewRect("Handoff", room));
-
-            var folder = NewRect("Folder", root);
-            folder.anchorMin = folder.anchorMax = folder.pivot = new Vector2(0.5f, 0.5f);
-            folder.sizeDelta = new Vector2(1000, 940);
-            AddImage(folder, FolderColor).raycastTarget = false;
-
-            var tab = NewRect("Tab", folder);
-            tab.anchorMin = tab.anchorMax = new Vector2(0f, 1f);
-            tab.pivot = new Vector2(0f, 0f);
-            tab.sizeDelta = new Vector2(280, 60);
-            tab.anchoredPosition = new Vector2(40, 0);
-            AddImage(tab, FolderColor * 0.9f + new Color(0, 0, 0, 0.1f)).raycastTarget = false;
-
-            var title = NewText("Title", folder, "Proje", 60, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
-            Anchor(title.rectTransform, new Vector2(0, 1), Vector2.one, new Vector2(60, -260), new Vector2(-60, -80));
-            title.enableAutoSizing = true;
-            title.fontSizeMin = 30;
-            title.fontSizeMax = 60;
-
-            var stamp = NewRect("Stamp", folder);
-            stamp.anchorMin = stamp.anchorMax = stamp.pivot = new Vector2(0.5f, 0.5f);
-            stamp.sizeDelta = new Vector2(680, 180);
-            stamp.anchoredPosition = new Vector2(0, -80);
-            stamp.localRotation = Quaternion.Euler(0, 0, 12);
-            var stampImage = AddImage(stamp, new Color(0, 0, 0, 0.15f));
-            stampImage.raycastTarget = false;
-            var stampText = NewText("Text", stamp, "ONAYLANDI", 96, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
-            Stretch(stampText.rectTransform);
-            stampText.enableAutoSizing = true;
-            stampText.fontSizeMin = 40;
-            stampText.fontSizeMax = 96;
-
-            var view = root.gameObject.AddComponent<FolderHandoffView>();
-            Wire(view, "folder", folder);
-            Wire(view, "titleText", title);
-            Wire(view, "stampText", stampText);
-            Wire(view, "stampImage", stampImage);
-            folder.gameObject.SetActive(false);
-            return view;
-        }
-
-        // Ofis sahnesi. Oda 1920x1080 sabit ve ortada (Canvas referansıyla birebir); çizim sırası (EEE):
-        // desk_bg (oda + koltuk + masa) → portre → desk_front (sadece masa, şeffaf) → masadaki eşyalar → konuşma balonu.
-        private static ClientSceneView BuildScene(Transform parent, out RectTransform room, out FolderHandoffView handoff)
+        // Ofis sahnesi, yeni hedef arayüz (Ahmet kararı; Onur'un Docs/Tasarim/hedef_arayuz.png'si, EEE görselleri). Oda 1920x1080:
+        // office_bg (üstte 0-540) → portre (masanın arkasında; baş ve göğüs görünür) → desk_surface (masa yüzeyi, DeskSurfaceY'den aşağı)
+        // → desk_edge (masa kenarı, DeskEdgeY'de, portrenin önünde) → masadakiler → konuşma balonu (başın sağında).
+        // Üç belge masanın üstünde, kenarın hemen altından başlar (kağıt pencereler, ayrı katman).
+        private static ClientSceneView BuildScene(Transform parent, out RectTransform room)
         {
             var root = Stretch(NewRect("Scene", parent));
-            var deskSprite = FindSprite("desk_bg");
 
             room = NewRect("Room", root);
             room.anchorMin = room.anchorMax = room.pivot = new Vector2(0.5f, 0.5f);
             room.sizeDelta = new Vector2(1920, 1080);
-            SpriteImage(room, deskSprite, DeskColor);
+            AddImage(room, DeskColor).raycastTarget = false; // görseller yoksa düz renk
+
+            var office = TopLeft(NewRect("Office", room), new Vector2(1920, 540), 0, 0);
+            SpriteImage(office, FindSprite("office_bg"), DeskColor);
 
             var portrait = TopCenter(NewRect("Portrait", room), new Vector2(PortraitSize, PortraitSize), PortraitTopY);
             var portraitImage = SpriteImage(portrait, null, Color.white);
             portraitImage.preserveAspect = true;
 
-            handoff = BuildHandoff(room); // portrenin önünde, masanın arkasında: klasör masa kenarının arkasına girer
 
-            // Masa önü portrenin önünde (müteahhit oturuyor gibi görünür). EEE'nin desk_front'u yoksa
-            // desk_bg'nin masa kenarından aşağısı maskeyle kullanılır.
-            var frontSprite = FindSprite("desk_front");
-            if (frontSprite != null)
-            {
-                SpriteImage(Stretch(NewRect("DeskFront", room)), frontSprite, Color.white);
-            }
-            else
-            {
-                var front = Anchor(NewRect("DeskFront", room), Vector2.zero, new Vector2(1, 0), Vector2.zero, new Vector2(0, 1080 - DeskTopY));
-                front.gameObject.AddComponent<RectMask2D>();
-                var frontImage = NewRect("Image", front);
-                frontImage.anchorMin = frontImage.anchorMax = frontImage.pivot = new Vector2(0.5f, 0f);
-                frontImage.sizeDelta = new Vector2(1920, 1080);
-                SpriteImage(frontImage, deskSprite, DeskColor);
-            }
+            // Masa: yüzey portrenin önünde (belden aşağısını örter), kenar onun da önünde.
+            var surface = TopLeft(NewRect("DeskSurface", room), new Vector2(1920, 1080 - DeskSurfaceY), 0, DeskSurfaceY);
+            SpriteImage(surface, FindSprite("desk_surface"), DeskColor);
+            var edge = TopLeft(NewRect("DeskEdge", room), new Vector2(1920, 110), 0, DeskEdgeY);
+            SpriteImage(edge, FindSprite("desk_edge"), DeskColor * 0.8f);
 
-            // Klasörün yolculuk katmanı: masa önünün üstünde (büyükken masanın kenarı kesmesin).
-            Wire(handoff, "frontLayer", Stretch(NewRect("HandoffFront", room)));
 
-            // Konuşma balonu: başın üstünde, alttan yukarı büyür; kuyruk portrenin başını gösterir.
+            // Konuşma balonu: başın sağında, kuyruğu sola (müteahhide) bakar; üst kenarından aşağı büyür.
             var balloon = NewRect("Balloon", room);
-            balloon.anchorMin = balloon.anchorMax = new Vector2(0.5f, 1f);
-            balloon.pivot = new Vector2(0.5f, 0f);
-            balloon.anchoredPosition = new Vector2(BalloonShiftX, -(HeadTopY - 16));
-            balloon.sizeDelta = new Vector2(520, 0);
+            balloon.anchorMin = balloon.anchorMax = new Vector2(0f, 1f);
+            balloon.pivot = new Vector2(0f, 1f);
+            balloon.anchoredPosition = new Vector2(BalloonX, -BalloonTopY);
+            balloon.sizeDelta = new Vector2(460, 0);
             AddImage(balloon, BalloonColor).raycastTarget = true; // tıklanınca yazı anında tamamlanır (ClientSceneView)
-            VLayout(balloon, 0, new RectOffset(28, 28, 18, 18));
+            VLayout(balloon, 0, new RectOffset(26, 26, 16, 16));
             balloon.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            var balloonText = NewText("Text", balloon, "Söz", 28, Ink, TextAlignmentOptions.Center, FontStyles.Italic);
+            var balloonText = NewText("Text", balloon, "Söz", 26, Ink, TextAlignmentOptions.Center, FontStyles.Normal);
+            balloonText.font = ValueFont;
             var tail = NewRect("Tail", balloon);
             tail.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
-            tail.anchorMin = tail.anchorMax = new Vector2(0.5f, 0f);
-            tail.sizeDelta = new Vector2(28, 28);
-            tail.anchoredPosition = new Vector2(-BalloonShiftX, 0);
+            tail.anchorMin = tail.anchorMax = new Vector2(0f, 1f);
+            tail.sizeDelta = new Vector2(26, 26);
+            tail.anchoredPosition = new Vector2(0, -44);
             tail.localRotation = Quaternion.Euler(0, 0, 45);
             AddImage(tail, BalloonColor).raycastTarget = false;
             balloon.gameObject.SetActive(false);
@@ -467,29 +414,22 @@ namespace CivilJam.Desk.Editor
             return rt;
         }
 
-        // Masadaki eşyalar (odanın içinde, desk_bg px'leriyle; EEE'nin sade masası, 17 Ekim öğleden sonra):
-        // oyuncu tarafında, kupa/kalemlik ile isimlik arasında yan yana LAB RAPORU (küçültüldü) ve YAPI DENETİM FORMU klasörü
-        // (Ahmet kararı, 17 Ekim öğleden sonra); EL KİTABI sağdaki boş alanda (EEE önerisi). Zarf müteahhit tarafında (isimliğin arkası).
-        // Gün bitince boş koltuğun önünde "Mesaiyi bitir" (müteahhit / proje adı üst barda).
+        // Masadaki eşyalar (yeni hedef arayüz): hediyeler, zarf (4. adımda yeni yerine), gün bitince "Mesaiyi bitir"
+        // (müteahhit / proje adı üst barda). Belgeler burada değil: Papers katmanında, masada hep açık.
         private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook,
             out OfficeGiftsView officeGifts)
         {
             var root = Stretch(NewRect("Props", room));
 
-            // Hediyeler kitaplardan önce: masanın uzak kenarında, kitapların arkasında kalırlar.
+            // Hediyeler: masa kenarının üstünde, müteahhidin iki yanında (balonun altında kalmayan yerlerde).
             officeGifts = BuildOfficeGifts(root);
 
-            // Kitaplar görselde perspektifle çizildi: eğim yok. Konum/boyut EEE önerisi (sol-üst x,y + genişlik; yükseklik görselden).
-            var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), 220, 0f, out var labBookRoot,
-                width: 320, top: 868);
-            handbookBook = BookButton("HandbookBook", root, "book_rules", new Color(0.33f, 0.6f, 0.33f), 1320, 0f, out _,
-                width: 500, top: 812);
-            // Form klasörü LAB RAPORU'nun hemen sağında (Ahmet kararı): EEE görseli (Art/form_folder.png) yoksa tasarım renginde
-            // çerçeveli klasör + yazı. Görselin altında şeffaf boşluk yok (artBottom 0).
-            var formFolder = BookButton("FormFolder", root, "form_folder", FormFolderColor, 552, 0f,
-                out var formFolderRoot, width: 180, top: 905, fallbackLabel: "YAPI DENETİM\nFORMU", artBottom: 0f);
+            // Yeni hedef arayüz: masada kitap / klasör yok; üç belge masada hep açık (kağıt pencereler, Papers katmanı).
+            handbookBook = null;
 
-            var envelope = TopLeft(NewRect("Envelope", root), new Vector2(150, 80), 1135, 778); // form klasörünün yanı, müteahhit tarafı
+            // Zarf: müteahhidin sağında, masa kenarının üstünde (balonun altı, belgelerin üstü), hafif yamuk.
+            var envelope = TopLeft(NewRect("Envelope", root), new Vector2(140, 76), 1200, DeskEdgeY - 64);
+            envelope.localRotation = Quaternion.Euler(0, 0, -6);
             AddImage(envelope, EnvelopeColor).raycastTarget = false;
             var envelopeText = NewText("Text", envelope, "ZARF", 20, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
             Stretch(envelopeText.rectTransform);
@@ -500,10 +440,6 @@ namespace CivilJam.Desk.Editor
             finish.gameObject.SetActive(false);
 
             var view = root.gameObject.AddComponent<DeskPropsView>();
-            Wire(view, "formFolder", formFolder);
-            Wire(view, "formFolderRoot", formFolderRoot);
-            Wire(view, "labBook", labBook);
-            Wire(view, "labBookRoot", labBookRoot);
             Wire(view, "envelopeRoot", envelope.gameObject);
             Wire(view, "envelopeText", envelopeText);
             Wire(view, "clientTagText", clientTag);
@@ -571,11 +507,12 @@ namespace CivilJam.Desk.Editor
             return button;
         }
 
-        // Hediye yerleri: masanın uzak kenarı (alt kenar y = GiftBottomY), form klasörü / zarf / isimlik açıkta kalır.
+        // Hediye yerleri (yeni hedef arayüz): masa kenarının üstünde, müteahhidin iki yanında, ofisin önünde (alt kenar y = GiftBottomY).
+        // Müteahhit (x ~730-1190), balon (x 1080-1540) ve zarf açıkta kalır; belgeler kenarın altından başladığı için örtmez.
         // Kabul sırasıyla dolar; sadece dürüst ustalar verdiği için pratikte 1-2 tanesi kullanılır.
-        private static readonly float[] GiftSlotCenterX = { 550, 1560, 1745, 380, 1380, 720 };
+        private static readonly float[] GiftSlotCenterX = { 460, 1640, 280, 1820, 640, 100 };
         private const float GiftSize = 160f;      // EEE: ~140-180 px (gift_*.png 300x300, nesne alta oturur)
-        private const float GiftBottomY = 868f;
+        private const float GiftBottomY = DeskEdgeY + 14f; // masa kenarının üst yüzeyi
         private const float GiftArtBottom = 0.09f; // görselde nesnenin altındaki şeffaf boşluk
 
         private static OfficeGiftsView BuildOfficeGifts(RectTransform props)

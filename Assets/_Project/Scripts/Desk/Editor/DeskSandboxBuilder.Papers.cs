@@ -25,7 +25,7 @@ namespace CivilJam.Desk.Editor
         private const float SheetW = 680f, SheetH = 990f, Border = 3f, FolderPad = 22f, PaperPad = 24f, TabH = 46f;
         private const float ContentW = SheetW - 2 * (Border + FolderPad + Border + PaperPad); // 576
         private const float RowH = 30f;
-        private const float HandbookTabW = 32f; // El Kitabı sağ kenar sekmeleri
+        private const float HandbookTabW = 44f; // El Kitabı sekme şeridi (sekme 40 px + pay; EEE tab_* 120x300 oranı)
 
         private static TMP_FontAsset titleFont, valueFont, boldFont;
         private static bool paperFontsResolved;
@@ -36,63 +36,65 @@ namespace CivilJam.Desk.Editor
 
         // ---------- Pencereler ----------
 
+        // Yapı Denetim Formu (yeni hedef arayüz): başlık, PROJE BİLGİLERİ (+ bina resmi), TEKNİK BİLGİLER tablosu, belediye kaşesi,
+        // zarf ve EEE'nin ONAY / RED düğmeleri. Tasarım boyutu 576x820, doc_form'un yazı alanına ölçeklenir.
         private static PaperWindow BuildFormWindow(Transform papers, out FormView formView)
         {
-            var window = BuildPaperWindow(papers, "FormWindow", FormFolderColor, FormShadowColor, "DOSYA · 2026-0000",
-                new Vector2(-320, -380), out var content, out var paper, out var fileTab); // masadaki form klasörü (LAB RAPORU'nun sağı)
+            var window = BuildPaperWindow(papers, "FormWindow", "doc_form", DocHomes().form, new Vector2(0.11f, 0.06f),
+                new Vector2(0.92f, 0.94f), new Vector2(DocDesignW, DocDesignH), null, out var content, out _, out _);
+            content.GetComponent<VerticalLayoutGroup>().spacing = 10;
 
-            var date = Header(content, "AFET KONTROL BÜROSU", "YAPI DENETİM FORMU");
+            DocHeader(content, "icon_building", "YAPI DENETİM FORMU", out var fileNo, out var date);
 
-            var wide = NewRect("WideRows", content);
-            VLayout(wide, 6, new RectOffset(0, 0, 0, 0));
-            var wideTemplate = DottedRow("WideRowTemplate", wide);
+            SectionBar(content, "PROJE BİLGİLERİ");
+            var infoRow = NewRect("ProjectInfo", content);
+            var infoLayout = HLayout(infoRow, 12, new RectOffset(4, 0, 0, 0));
+            infoLayout.childAlignment = TextAnchor.UpperLeft;
+            var info = NewRect("Rows", infoRow);
+            VLayout(info, 2, new RectOffset(0, 0, 0, 0));
+            Layout(info, prefW: 0, flexW: 1);
+            var infoTemplate = InfoRow("InfoTemplate", info);
+            var building = NewRect("Building", infoRow);
+            Layout(building, prefW: 150, prefH: 190);
+            var buildingImage = AddImage(building, Color.white);
+            buildingImage.preserveAspect = true;
+            buildingImage.raycastTarget = false;
 
-            var grid = NewRect("GridRows", content);
-            var gridLayout = grid.gameObject.AddComponent<GridLayoutGroup>();
-            gridLayout.cellSize = new Vector2((ContentW - 20) * 0.5f, RowH);
-            gridLayout.spacing = new Vector2(20, 6);
-            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = 2;
-            var gridTemplate = DottedRow("GridRowTemplate", grid);
-
-            var sections = NewRect("Sections", content);
-            VLayout(sections, 14, new RectOffset(0, 0, 4, 0));
-            var sectionTemplate = SectionBlock("SectionTemplate", sections, DottedRow("RowTemplate", null));
+            SectionBar(content, "TEKNİK BİLGİLER");
+            TableRow("TechHeader", content, true, "Özellik", "Beyan değeri");
+            var tech = NewRect("TechRows", content);
+            VLayout(tech, 0, new RectOffset(0, 0, 0, 0));
+            var techTemplate = TableRow("TechTemplate", tech, false, "Özellik", "Değer").GetComponent<DottedRowView>();
+            techTemplate.gameObject.SetActive(false);
 
             Layout(NewRect("Spacer", content), flexH: 1);
 
-            // İmza + belediye kaşesi (kaşe yerleşim dışı, satırın sağında, hafif yamuk)
-            var signRow = NewRect("SignatureRow", content);
-            Layout(signRow, prefH: 70);
-            var signature = NewText("Signature", signRow, "İmza", 24, PaperInk, TextAlignmentOptions.BottomLeft);
-            signature.font = ValueFont;
-            Stretch(signature.rectTransform);
-            var stamp = InkStamp("MunicipalStamp", signRow, new Vector2(250, 76), new Vector2(-10, 4), 8f, out var stampText);
-
-            // ONAY / RED kutuları ve zarf
-            var decisions = NewRect("Decisions", content);
-            var decisionsLayout = HLayout(decisions, 14, new RectOffset(0, 0, 0, 0));
-            decisionsLayout.childForceExpandWidth = true;
-            Layout(decisions, prefH: 76);
-            var approve = DecisionBox("ApproveBox", decisions, "ONAY", new Color(0.82f, 1f, 0.82f));
-            var reject = DecisionBox("RejectBox", decisions, "RED", new Color(1f, 0.82f, 0.82f));
-
             var bribe = BorderedButton("TakeBribeButton", content, EnvelopeColor, "ZARFI AL VE ONAYLA", 20, out var bribeLabel);
-            Layout(bribe, prefH: 46);
+            bribeLabel.font = BoldFont;
+            Layout(bribe, prefH: 44);
 
-            // Karar kaşesi: kağıdın ortasında, en üstte (yerleşim dışı)
-            var decisionStamp = BuildDecisionStamp(paper);
+            var decisions = NewRect("Decisions", content);
+            var decisionsLayout = HLayout(decisions, 18, new RectOffset(0, 0, 0, 0));
+            decisionsLayout.childForceExpandWidth = true;
+            decisionsLayout.childAlignment = TextAnchor.MiddleCenter;
+            Layout(decisions, prefH: 92);
+            var approve = SpriteButton("ApproveButton", decisions, "btn_approve", "ONAY", ApproveGreen);
+            var reject = SpriteButton("RejectButton", decisions, "btn_reject", "RED", RejectRed);
+
+            // Belediye kaşesi: sağ üstte, bina resminin üstüne hafif yamuk basılmış (yerleşim dışı).
+            var stamp = ArtStamp("MunicipalStamp", content, "stamp_municipal", new Vector2(120, 120), new Vector2(-6, -86), -10f,
+                new Color(0.2f, 0.3f, 0.6f), out var stampText);
+
+            var decisionStamp = BuildDecisionStamp(content); // içerikle birlikte ölçeklenir
 
             formView = window.gameObject.AddComponent<FormView>();
-            Wire(formView, "fileTabText", fileTab);
+            Wire(formView, "fileTabText", fileNo);
             Wire(formView, "dateText", date);
-            Wire(formView, "wideRowsContainer", wide);
-            Wire(formView, "wideRowTemplate", wideTemplate);
-            Wire(formView, "gridRowsContainer", grid);
-            Wire(formView, "gridRowTemplate", gridTemplate);
-            Wire(formView, "sectionsContainer", sections);
-            Wire(formView, "sectionTemplate", sectionTemplate);
-            Wire(formView, "signatureText", signature);
+            Wire(formView, "infoContainer", info);
+            Wire(formView, "infoTemplate", infoTemplate);
+            Wire(formView, "buildingImage", buildingImage);
+            Wire(formView, "techContainer", tech);
+            Wire(formView, "techTemplate", techTemplate);
             Wire(formView, "municipalStamp", stamp.gameObject);
             Wire(formView, "municipalStampText", stampText);
             Wire(formView, "approveButton", approve);
@@ -101,25 +103,37 @@ namespace CivilJam.Desk.Editor
             Wire(formView, "takeBribeButton", bribe);
             Wire(formView, "bribeLabel", bribeLabel);
             Wire(formView, "decisionStamp", decisionStamp);
+
+            var so = new SerializedObject(formView);
+            var sprites = so.FindProperty("buildingSprites");
+            string[] names = { "bld_low", "bld_mid", "bld_high" };
+            sprites.arraySize = names.Length;
+            for (int i = 0; i < names.Length; i++) sprites.GetArrayElementAtIndex(i).objectReferenceValue = FindSprite(names[i]);
+            so.ApplyModifiedPropertiesWithoutUndo();
             return window;
         }
 
+        // Laboratuvar Raporu (yeni hedef arayüz): başlık, künye, TEST SONUÇLARI tablosu, DEĞERLENDİRME (karar vermez), yetkili + imza,
+        // lab kaşesi (EEE görseli) ve altında kaşedeki lab adı, EK TEST düğmesi (EEE görseli) + ücreti.
         private static PaperWindow BuildLabWindow(Transform papers, out LabReportView labView)
         {
-            var window = BuildPaperWindow(papers, "LabWindow", LabFolderColor, LabShadowColor, "LAB RAPORU",
-                new Vector2(-480, -380), out var content, out _, out _); // LAB RAPORU kitabı (sol)
+            var window = BuildPaperWindow(papers, "LabWindow", "doc_lab", DocHomes().lab, new Vector2(0.08f, 0.06f),
+                new Vector2(0.93f, 0.95f), new Vector2(DocDesignW, DocDesignH), null, out var content, out _, out _);
+            content.GetComponent<VerticalLayoutGroup>().spacing = 10;
 
-            var date = Header(content, "LABORATUVAR", "LABORATUVAR RAPORU", out var labName);
+            DocHeader(content, "icon_tube", "LABORATUVAR RAPORU", out var topRight, out var topRight2);
+            topRight.text = "";
+            topRight2.text = "";
 
             var info = NewRect("Info", content);
-            VLayout(info, 6, new RectOffset(0, 0, 0, 0));
-            var infoTemplate = DottedRow("InfoTemplate", info);
+            VLayout(info, 2, new RectOffset(4, 0, 0, 0));
+            var infoTemplate = InfoRow("InfoTemplate", info);
 
-            // Tablo: Parametre | Beyan | Ek test
+            SectionBar(content, "TEST SONUÇLARI");
             var header = ParamRow("TableHeader", content, true);
-            Divider(content, 2);
+            header.SetActive(true);
             var list = NewRect("Rows", content);
-            VLayout(list, 4, new RectOffset(0, 0, 0, 0));
+            VLayout(list, 2, new RectOffset(0, 0, 0, 0));
             var rowTemplate = ParamRow("RowTemplate", list, false);
             var cells = rowTemplate.GetComponentsInChildren<TMP_Text>();
             var rowView = rowTemplate.AddComponent<ParamRowView>();
@@ -127,23 +141,45 @@ namespace CivilJam.Desk.Editor
             Wire(rowView, "reportedText", cells[1]);
             Wire(rowView, "actualText", cells[2]);
             rowTemplate.SetActive(false);
-            header.SetActive(true);
+
+            SectionBar(content, "DEĞERLENDİRME");
+            // Karar vermez (Ahmet): her laboratuvar bunu yazar; uygunluğu denetçi el kitabıyla kendisi kontrol eder.
+            var evaluation = NewText("Evaluation", content,
+                "Numuneler üzerinde yapılan deneylerin sonuçları yukarıda beyan edilmiştir. Yönetmeliğe uygunluğun kontrolü denetçiye aittir.",
+                18, PaperInk, TextAlignmentOptions.TopLeft);
+            evaluation.font = ValueFont;
+            evaluation.textWrappingMode = TextWrappingModes.Normal; // kodla kurulan TMP kaydırmasız gelebiliyor (tek satırda taşıyordu): açıkça aç
 
             Layout(NewRect("Spacer", content), flexH: 1);
 
-            var signRow = NewRect("SignatureRow", content);
-            Layout(signRow, prefH: 70);
-            var signature = NewText("Signature", signRow, "Raporu düzenleyen", 22, PaperInk, TextAlignmentOptions.BottomLeft);
+            // Yetkili + imza (solda), kaşe ve altında lab adı (sağda)
+            var sign = NewRect("SignatureRow", content);
+            var signLayout = HLayout(sign, 10, new RectOffset(4, 0, 0, 0));
+            signLayout.childAlignment = TextAnchor.MiddleLeft;
+            Layout(sign, prefH: 150);
+            var signer = NewRect("Signer", sign);
+            VLayout(signer, 4, new RectOffset(0, 0, 0, 0));
+            Layout(signer, prefW: 0, flexW: 1);
+            var who = NewText("Title", signer, "Laboratuvar Yetkilisi", 18, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+            who.font = BoldFont;
+            var signature = NewText("Signature", signer, "İmza", 22, PaperInk, TextAlignmentOptions.MidlineLeft);
             signature.font = ValueFont;
-            Stretch(signature.rectTransform);
-            var stamp = InkStamp("LabStamp", signRow, new Vector2(270, 76), new Vector2(-10, 4), -7f, out var stampText);
+            var stampHolder = NewRect("StampHolder", sign);
+            Layout(stampHolder, prefW: 200, prefH: 150);
+            var stamp = ArtStamp("LabStamp", stampHolder, "stamp_lab", new Vector2(120, 120), new Vector2(-40, 0), 8f, StampRed, out var stampText);
 
-            var test = BorderedButton("ExtraTestButton", content, LabFolderColor, "EK TEST İSTE", 22, out var testLabel);
-            Layout(test, prefH: 56);
+            // EK TEST düğmesi + ücret
+            var testRow = NewRect("TestRow", content);
+            var testLayout = HLayout(testRow, 14, new RectOffset(0, 0, 0, 0));
+            testLayout.childAlignment = TextAnchor.MiddleCenter;
+            Layout(testRow, prefH: 76);
+            var test = SpriteButton("ExtraTestButton", testRow, "btn_test", "EK TEST", new Color(0.24f, 0.45f, 0.7f));
+            Layout(test, prefW: 266, prefH: 76);
+            var testLabel = NewText("Cost", testRow, "300 TL", 22, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+            testLabel.font = BoldFont;
+            Layout(testLabel, prefW: 120);
 
             labView = window.gameObject.AddComponent<LabReportView>();
-            Wire(labView, "labNameText", labName);
-            Wire(labView, "dateText", date);
             Wire(labView, "infoContainer", info);
             Wire(labView, "infoTemplate", infoTemplate);
             Wire(labView, "paramContainer", list);
@@ -156,23 +192,175 @@ namespace CivilJam.Desk.Editor
             return window;
         }
 
+        // ---------- Belge parçaları (yeni hedef arayüz) ----------
+
+        private const float DocDesignW = 576f, DocDesignH = 820f; // form ve lab raporu iç tasarım boyutu (belgeye ölçeklenir)
+
+        // Belge başlığı: solda ikon, büyük başlık; sağda iki satır künye (ör. "Proje : YD-…" / "Tarih : …"); altında çizgi.
+        private static void DocHeader(Transform content, string icon, string title, out TMP_Text right1, out TMP_Text right2)
+        {
+            var row = NewRect("Header", content);
+            var layout = HLayout(row, 10, new RectOffset(0, 0, 0, 4));
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            Layout(row, prefH: 70);
+            var iconRect = NewRect("Icon", row);
+            Layout(iconRect, prefW: 60, prefH: 60);
+            var iconImage = SpriteImage(iconRect, FindSprite(icon), Color.clear);
+            iconImage.preserveAspect = true;
+            var t = NewText("Title", row, title, 30, PaperInk, TextAlignmentOptions.MidlineLeft);
+            t.font = TitleFont;
+            t.enableAutoSizing = true;
+            t.fontSizeMin = 20;
+            t.fontSizeMax = 30;
+            t.textWrappingMode = TextWrappingModes.NoWrap;
+            Layout(t, prefW: 0, flexW: 1);
+            var right = NewRect("Right", row);
+            VLayout(right, 0, new RectOffset(0, 0, 0, 0));
+            Layout(right, prefW: 190);
+            right1 = NewText("Line1", right, "Proje", 17, PaperInk, TextAlignmentOptions.MidlineRight);
+            right1.font = ValueFont;
+            right2 = NewText("Line2", right, "Tarih", 17, PaperInk, TextAlignmentOptions.MidlineRight);
+            right2.font = ValueFont;
+            Divider(content, 2);
+        }
+
+        // Bölüm başlığı şeridi: "PROJE BİLGİLERİ" (açık kahve zemin, kalın).
+        private static void SectionBar(Transform content, string title)
+        {
+            var bar = NewRect("Bar_" + title, content);
+            AddImage(bar, new Color(PaperInk.r, PaperInk.g, PaperInk.b, 0.12f));
+            Layout(bar, prefH: 28);
+            var t = NewText("Text", bar, title, 17, PaperInk, TextAlignmentOptions.MidlineLeft);
+            t.font = BoldFont;
+            t.characterSpacing = 3;
+            Stretch(t.rectTransform).offsetMin = new Vector2(8, 0);
+        }
+
+        // "Etiket  :  değer" satırı (DottedRowView: labelText, valueText). parent verilirse şablon olarak gizlenir.
+        private static DottedRowView InfoRow(string name, Transform parent)
+        {
+            var row = NewRect(name, parent);
+            var layout = HLayout(row, 4, new RectOffset(0, 0, 0, 0));
+            layout.childForceExpandHeight = true;
+            Layout(row, prefH: 24);
+            var label = NewText("Label", row, "Etiket", 17, PaperInk, TextAlignmentOptions.MidlineLeft);
+            label.font = BoldFont;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            Layout(label, prefW: 150);
+            var colon = NewText("Colon", row, ":", 17, PaperInk, TextAlignmentOptions.Midline);
+            colon.font = ValueFont;
+            Layout(colon, prefW: 10);
+            var value = NewText("Value", row, "Değer", 17, PaperInk, TextAlignmentOptions.MidlineLeft);
+            value.font = ValueFont;
+            value.textWrappingMode = TextWrappingModes.NoWrap;
+            value.overflowMode = TextOverflowModes.Ellipsis;
+            Layout(value, prefW: 0, flexW: 1);
+
+            var view = row.gameObject.AddComponent<DottedRowView>();
+            Wire(view, "labelText", label);
+            Wire(view, "valueText", value);
+            row.gameObject.SetActive(false);
+            return view;
+        }
+
+        // İki sütunlu tablo satırı (başlıkta zemin rengi; her satırın altında ince çizgi). Satır şablonu DottedRowView taşır.
+        private static GameObject TableRow(string name, Transform parent, bool header, string a, string b)
+        {
+            var row = NewRect(name, parent);
+            if (header) AddImage(row, new Color(PaperInk.r, PaperInk.g, PaperInk.b, 0.08f));
+            var layout = HLayout(row, 8, new RectOffset(8, 8, 0, 0));
+            layout.childForceExpandHeight = true;
+            Layout(row, prefH: header ? 28 : 30);
+            var left = NewText("A", row, a, header ? 16 : 18, PaperInk, TextAlignmentOptions.MidlineLeft);
+            left.font = header ? BoldFont : ValueFont;
+            Layout(left, prefW: 0, flexW: 1.4f);
+            var right = NewText("B", row, b, header ? 16 : 18, PaperInk, TextAlignmentOptions.Midline);
+            right.font = BoldFont;
+            Layout(right, prefW: 0, flexW: 1);
+            var line = NewRect("Line", row);
+            line.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            line.anchorMin = Vector2.zero;
+            line.anchorMax = new Vector2(1, 0);
+            line.sizeDelta = new Vector2(0, 1);
+            line.pivot = new Vector2(0.5f, 0);
+            AddImage(line, new Color(PaperInk.r, PaperInk.g, PaperInk.b, 0.35f)).raycastTarget = false;
+            if (!header)
+            {
+                var view = row.gameObject.AddComponent<DottedRowView>();
+                Wire(view, "labelText", left);
+                Wire(view, "valueText", right);
+            }
+            return row.gameObject;
+        }
+
+        // EEE'nin görsel düğmesi (yazı görselde). Görsel yoksa aynı yazıyla renkli düğme.
+        private static Button SpriteButton(string name, Transform parent, string sprite, string fallbackLabel, Color fallback)
+        {
+            var art = FindSprite(sprite);
+            var rt = NewRect(name, parent);
+            Layout(rt, prefW: 0, flexW: 1, prefH: 84);
+            var image = AddImage(rt, art != null ? Color.white : fallback);
+            image.sprite = art;
+            image.preserveAspect = true;
+            var button = rt.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            var colors = button.colors;
+            colors.highlightedColor = new Color(0.92f, 0.92f, 0.92f);
+            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);
+            colors.disabledColor = new Color(0.75f, 0.75f, 0.75f, 0.55f);
+            button.colors = colors;
+            if (art == null)
+            {
+                var t = NewText("Label", rt, fallbackLabel, 28, Color.white, TextAlignmentOptions.Center, FontStyles.Bold);
+                t.font = TitleFont;
+                Stretch(t.rectTransform);
+            }
+            return button;
+        }
+
+        // Görsel kaşe (EEE: stamp_lab / stamp_municipal) + altında kaşedeki metin (StampId; sahte belge ipucu lab adı burada).
+        // Yerleşim dışı, ebeveynin sağ üstüne göre offset; hafif yamuk.
+        private static RectTransform ArtStamp(string name, Transform parent, string sprite, Vector2 size, Vector2 offset, float angle,
+            Color ink, out TMP_Text text)
+        {
+            var stamp = NewRect(name, parent);
+            stamp.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            stamp.anchorMin = stamp.anchorMax = stamp.pivot = new Vector2(1f, 1f);
+            stamp.sizeDelta = size;
+            stamp.anchoredPosition = offset;
+            stamp.localRotation = Quaternion.Euler(0, 0, angle);
+            var image = SpriteImage(stamp, FindSprite(sprite), new Color(ink.r, ink.g, ink.b, 0.15f));
+            image.preserveAspect = true;
+            text = NewText("Label", stamp, "KAŞE", 13, ink, TextAlignmentOptions.Top, FontStyles.Bold);
+            text.font = BoldFont;
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 8;
+            text.fontSizeMax = 13;
+            var tr = text.rectTransform;
+            tr.anchorMin = new Vector2(0.5f, 0f);
+            tr.anchorMax = new Vector2(0.5f, 0f);
+            tr.pivot = new Vector2(0.5f, 1f);
+            tr.sizeDelta = new Vector2(size.x * 1.5f, 30);
+            tr.anchoredPosition = new Vector2(0, -2);
+            return stamp;
+        }
+
         // Denetçi El Kitabı ("Hızlı Bakış", Ahmet onayı): sayfalar ve sekmeler çalışırken kurallardan kurulur (RulebookView + HandbookUi).
         // Builder sadece kabuğu kurar: kağıt pencere, sayfa alanı, sağ kenarda sekme şeridi; fontlar ve bina simgeleri bağlanır.
         private static RulebookView BuildRulebook(Transform papers, Button openButton)
         {
-            var window = BuildPaperWindow(papers, "RulebookWindow", HandbookFolderColor, HandbookShadowColor, "EL KİTABI · BASKI 3",
-                new Vector2(600, -380), out var content, out var paper, out _); // EL KİTABI (sağ)
+            // doc_handbook: spiralin sağındaki sayfa; sekmeler defterin sağ kenarından dışarı çıkar.
+            var window = BuildPaperWindow(papers, "RulebookWindow", "doc_handbook", DocHomes().handbook, new Vector2(0.13f, 0.05f),
+                new Vector2(0.93f, 0.96f), new Vector2(540, 720), null, out var content, out var paper, out _);
 
-            // Sayfa alanı sekmelere yer açar (sayfalar esnek yükseklikle alanı doldurur).
-            content.offsetMax = new Vector2(-PaperPad - HandbookTabW - 6, -PaperPad);
-
-            // Sekmeler: kağıdın sağ iç kenarında, üstten aşağı
-            var tabs = NewRect("Tabs", paper);
-            tabs.anchorMin = new Vector2(1, 0);
-            tabs.anchorMax = new Vector2(1, 1);
-            tabs.pivot = new Vector2(1, 0.5f);
-            tabs.sizeDelta = new Vector2(HandbookTabW, -2 * (Border + 18));
-            tabs.anchoredPosition = new Vector2(-Border, 0);
+            // Sekmeler: defterin sağ kenarından dışarı taşar, sol kenarları defterin altına girer (EEE) → görselin arkasında.
+            var sheet = (RectTransform)paper.parent;
+            var tabs = NewRect("Tabs", sheet);
+            tabs.SetSiblingIndex(1); // gölgenin önü, defter görselinin arkası
+            tabs.anchorMin = tabs.anchorMax = new Vector2(1f, 0.5f);
+            tabs.pivot = new Vector2(0f, 0.5f);
+            tabs.sizeDelta = new Vector2(HandbookTabW, DocH - 60);
+            tabs.anchoredPosition = new Vector2(-(HandbookTabW - DocTabOut), 0);
             var tabsLayout = tabs.gameObject.AddComponent<VerticalLayoutGroup>();
             tabsLayout.spacing = 6;
             tabsLayout.childAlignment = TextAnchor.UpperCenter;
@@ -194,6 +382,10 @@ namespace CivilJam.Desk.Editor
             string[] names = { "bld_low", "bld_mid", "bld_high" };
             icons.arraySize = names.Length;
             for (int i = 0; i < names.Length; i++) icons.GetArrayElementAtIndex(i).objectReferenceValue = FindSprite(names[i]);
+            var tabSprites = so.FindProperty("tabSprites");
+            string[] tabNames = { "tab_beton", "tab_donati", "tab_yapi", "tab_zemin" };
+            tabSprites.arraySize = tabNames.Length;
+            for (int i = 0; i < tabNames.Length; i++) tabSprites.GetArrayElementAtIndex(i).objectReferenceValue = FindSprite(tabNames[i]);
             so.ApplyModifiedPropertiesWithoutUndo();
             return view;
         }
@@ -226,8 +418,10 @@ namespace CivilJam.Desk.Editor
             Small(text, "HEDİYE");
             var body = NewText("Body", text, "Usta size bir hediye bıraktı.", 26, PaperInk, TextAlignmentOptions.TopLeft);
             body.font = TitleFont;
+            body.textWrappingMode = TextWrappingModes.Normal;
             var note = NewText("Note", text, "Not", 22, new Color(PaperInk.r, PaperInk.g, PaperInk.b, 0.8f), TextAlignmentOptions.TopLeft);
             note.font = ValueFont;
+            note.textWrappingMode = TextWrappingModes.Normal;
             Layout(NewRect("Spacer", text), flexH: 1);
             var accept = BorderedButton("AcceptButton", text, FormFolderColor, "KABUL ET", 24, out _);
             Layout(accept, prefH: 52);
@@ -245,51 +439,67 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // Kök (PaperWindow, hep aktif) → Panel (açılıp kapanır) → Sheet (680x990, sürüklenir) → Klasör + Sekme + Kapat + Kağıt.
-        // content: kağıdın içi (VLayout); paper: kağıdın kendisi (yerleşim dışı katmanlar için); tabText: sekme yazısı.
-        private static PaperWindow BuildPaperWindow(Transform papers, string name, Color folderColor, Color shadowColor,
-            string tab, Vector2 fromOffset, out RectTransform content, out RectTransform paper, out TMP_Text tabText)
+        // ---------- Yeni hedef arayüz: masadaki üç belge ----------
+        // Belgeler masada hep açık, düz ve yan yana (soldan form, lab raporu, El Kitabı); masa kenarının hemen altından başlar.
+        // Kabuk EEE'nin boş belge görseli (doc_form / doc_lab / doc_handbook); yazılar kodla, kağıdın yazı alanına ölçeklenerek oturur.
+        private const float DocH = 640f;     // belge yüksekliği (genişlik görselin oranından)
+        private const float DocY = -200f;    // belgelerin ortası (tuval ortasına göre): üst kenar ~y 420
+        private const float DocGap = 40f;
+        private const float DocTabOut = 38f; // El Kitabı sekmelerinin defterden dışarı taşan kısmı
+
+        private static float DocWidth(string sprite)
+        {
+            var art = FindSprite(sprite);
+            return art != null ? DocH * art.rect.width / art.rect.height : DocH * 0.82f;
+        }
+
+        // Üç belgenin masadaki yerleri (x), toplam genişliğe göre ortalanmış.
+        private static (float form, float lab, float handbook) DocHomes()
+        {
+            float wForm = DocWidth("doc_form"), wLab = DocWidth("doc_lab"), wBook = DocWidth("doc_handbook");
+            float total = wForm + wLab + wBook + DocTabOut + 2 * DocGap;
+            float left = -total * 0.5f;
+            return (left + wForm * 0.5f,
+                    left + wForm + DocGap + wLab * 0.5f,
+                    left + wForm + DocGap + wLab + DocGap + wBook * 0.5f);
+        }
+
+        // Kök (PaperWindow, hep aktif) → Panel (açılıp kapanır) → Sheet (belge görseli; masadaki yerinde açılır, sürüklenebilir).
+        // inner: görselde yazı alanı (0-1 oran). content: o alana ölçeklenmiş tasarım boyutlu iç alan (VLayout);
+        // paper: yazı alanının kendisi (yerleşim dışı katmanlar için); tab verilirse içeriğin en üstünde küçük künye yazısı.
+        private static PaperWindow BuildPaperWindow(Transform papers, string name, string sprite, float homeX, Vector2 innerMin,
+            Vector2 innerMax, Vector2 design, string tab, out RectTransform content, out RectTransform paper, out TMP_Text tabText)
         {
             var root = Stretch(NewRect(name, papers));
             var panel = Stretch(NewRect("Panel", root));
 
+            var size = new Vector2(DocWidth(sprite), DocH);
             var sheet = NewRect("Sheet", panel);
             sheet.anchorMin = sheet.anchorMax = sheet.pivot = new Vector2(0.5f, 0.5f);
-            sheet.sizeDelta = new Vector2(SheetW, SheetH);
-            sheet.anchoredPosition = new Vector2(0, -40);
-            var draggable = AddSheet(sheet, root);
+            sheet.sizeDelta = size;
+            sheet.anchoredPosition = new Vector2(homeX, DocY);
+            var draggable = AddSheet(sheet, root, 0.18f);
 
-            // Klasör gövdesi (sekmenin altından başlar), içinde düz gölgeli krem kağıt
-            var folder = Anchor(NewRect("Folder", sheet), Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0, -(TabH - Border)));
-            var folderInner = Bordered(folder, folderColor);
-            var paperShadow = Anchor(NewRect("PaperShadow", folderInner), Vector2.zero, Vector2.one,
-                new Vector2(FolderPad + 6, FolderPad - 6), new Vector2(-FolderPad + 6, -FolderPad - 6));
-            AddImage(paperShadow, shadowColor);
-            paper = Anchor(NewRect("Paper", folderInner), Vector2.zero, Vector2.one,
-                new Vector2(FolderPad, FolderPad), new Vector2(-FolderPad, -FolderPad));
-            var paperInner = Bordered(paper, PaperCream);
-            content = Anchor(NewRect("Content", paperInner), Vector2.zero, Vector2.one,
-                new Vector2(PaperPad, PaperPad), new Vector2(-PaperPad, -PaperPad));
+            var doc = Stretch(NewRect("Doc", sheet));
+            SpriteImage(doc, FindSprite(sprite), PaperCream).raycastTarget = true;
+
+            paper = Anchor(NewRect("Paper", sheet), innerMin, innerMax, Vector2.zero, Vector2.zero);
+            var area = new Vector2(size.x * (innerMax.x - innerMin.x), size.y * (innerMax.y - innerMin.y));
+            float scale = Mathf.Min(area.x / design.x, area.y / design.y);
+            content = NewRect("Content", paper);
+            content.anchorMin = content.anchorMax = content.pivot = new Vector2(0.5f, 0.5f);
+            content.sizeDelta = design;
+            content.localScale = Vector3.one * scale;
             VLayout(content, 14, new RectOffset(0, 0, 0, 0));
 
-            // Sekme: alt çerçevesi yok (klasörün üst çizgisini örter)
-            var tabRect = NewRect("Tab", sheet);
-            tabRect.anchorMin = tabRect.anchorMax = tabRect.pivot = new Vector2(0f, 1f);
-            tabRect.sizeDelta = new Vector2(330, TabH);
-            AddImage(tabRect, PaperInk);
-            var tabFill = Anchor(NewRect("Fill", tabRect), Vector2.zero, Vector2.one, new Vector2(Border, -Border), new Vector2(-Border, -Border));
-            AddImage(tabFill, folderColor);
-            tabText = NewText("Text", tabFill, tab, 18, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
-            tabText.font = TitleFont;
-            tabText.characterSpacing = 3;
-            tabText.textWrappingMode = TextWrappingModes.NoWrap;
-            Stretch(tabText.rectTransform).offsetMin = new Vector2(16, 0);
-
-            // Kapat: sağ üstte, sekme yüksekliğinde kare
-            var close = BorderedButton("CloseButton", sheet, folderColor, "X", 22, out _);
-            var closeRect = (RectTransform)close.transform;
-            closeRect.anchorMin = closeRect.anchorMax = closeRect.pivot = new Vector2(1f, 1f);
-            closeRect.sizeDelta = new Vector2(TabH, TabH);
+            tabText = null;
+            if (tab != null)
+            {
+                tabText = NewText("FileTab", content, tab, 17, PaperInk, TextAlignmentOptions.MidlineRight, FontStyles.Bold);
+                tabText.font = BoldFont;
+                tabText.characterSpacing = 2;
+                Layout(tabText, prefH: 20);
+            }
 
             panel.gameObject.SetActive(false);
 
@@ -297,20 +507,20 @@ namespace CivilJam.Desk.Editor
             var window = root.gameObject.AddComponent<PaperWindow>();
             Wire(window, "panelRoot", panel.gameObject);
             Wire(window, "sheet", draggable);
-            Wire(window, "closeButton", close);
             var so = new SerializedObject(window);
-            so.FindProperty("fromOffset").vector2Value = fromOffset;
+            so.FindProperty("fromOffset").vector2Value = new Vector2(0, -760); // aşağıdan kayarak gelir
+            so.FindProperty("home").vector2Value = new Vector2(homeX, DocY);
             so.ApplyModifiedPropertiesWithoutUndo();
             return window;
         }
 
         // Kağıdı sürüklenebilir/animasyonlu yapar: saydamlık için CanvasGroup, arkasında yumuşak gölge, öne alınacak kök.
-        private static DraggableSheet AddSheet(RectTransform rt, Transform layer)
+        private static DraggableSheet AddSheet(RectTransform rt, Transform layer, float shadowAlpha = 0.35f)
         {
             var group = rt.gameObject.AddComponent<CanvasGroup>();
             var shadow = Stretch(NewRect("Shadow", rt));
             shadow.SetAsFirstSibling();
-            AddImage(shadow, new Color(0, 0, 0, 0.35f)).raycastTarget = false;
+            AddImage(shadow, new Color(0, 0, 0, shadowAlpha)).raycastTarget = false;
             shadow.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
 
             var sheet = rt.gameObject.AddComponent<DraggableSheet>();
@@ -532,6 +742,7 @@ namespace CivilJam.Desk.Editor
         private static DecisionStampView BuildDecisionStamp(RectTransform paper)
         {
             var holder = Stretch(NewRect("DecisionStampLayer", paper));
+            holder.gameObject.AddComponent<LayoutElement>().ignoreLayout = true; // içerik VLayout'unda yer kaplamaz
             var stamp = NewRect("DecisionStamp", holder);
             stamp.anchorMin = stamp.anchorMax = stamp.pivot = new Vector2(0.5f, 0.5f);
             stamp.sizeDelta = new Vector2(520, 140);

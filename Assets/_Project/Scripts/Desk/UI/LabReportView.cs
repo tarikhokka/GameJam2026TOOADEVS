@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using CivilJam.Core;
 using TMPro;
 using UnityEngine;
@@ -8,17 +7,12 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Laboratuvar Raporu (Documents[1]): ayrı belge, Yapı Denetim Formu ile aynı görsel dil (mavi-gri klasör).
-    // Başlıkta laboratuvar, künyede parsel ve tarih, tablo Parametre | Beyan | Ek test, kaşe + imza, ücretli ek test.
-    // Sahte belge ipuçları (parsel/tarih/imza/lab uyuşmazlığı) iki belgenin karşılaştırılmasıyla bulunur; işaretlenmez.
+    // Laboratuvar Raporu (Documents[1]), yeni hedef arayüz: künye (laboratuvar, rapor tarihi, proje, ada/parsel), TEST SONUÇLARI
+    // tablosu (Parametre | Beyan | Ek test), karar vermeyen değerlendirme cümlesi (builder), yetkili + imza, kırmızı lab kaşesi ve
+    // altında kaşedeki lab adı, EK TEST düğmesi (EEE görseli) ve ücreti. Sahte belge ipuçları (parsel / tarih / imza / lab adı)
+    // formla karşılaştırılarak bulunur; işaretlenmez.
     public class LabReportView : MonoBehaviour
     {
-        private static readonly CultureInfo Tr = CultureInfo.GetCultureInfo("tr-TR");
-
-        [Header("Başlık")]
-        [SerializeField] private TMP_Text labNameText;
-        [SerializeField] private TMP_Text dateText;
-
         [Header("Künye")]
         [SerializeField] private Transform infoContainer;
         [SerializeField] private DottedRowView infoTemplate;
@@ -29,12 +23,12 @@ namespace CivilJam.Desk
 
         [Header("Kaşe ve imza")]
         [SerializeField] private GameObject stampRoot;
-        [SerializeField] private TMP_Text stampText;
-        [SerializeField] private TMP_Text signatureText;
+        [SerializeField] private TMP_Text stampText;      // kaşedeki lab adı ("<LAB ADI> · AKREDİTE")
+        [SerializeField] private TMP_Text signatureText;  // raporu imzalayan
 
         [Header("Ek test")]
         [SerializeField] private Button extraTestButton;
-        [SerializeField] private TMP_Text extraTestLabel;
+        [SerializeField] private TMP_Text extraTestLabel; // ücret ya da "YAPILDI"
 
         public event Action ExtraTestClicked;
 
@@ -47,13 +41,12 @@ namespace CivilJam.Desk
         {
             var doc = project.Documents.Count > 1 ? project.Documents[1] : null;
 
-            labNameText.text = doc != null ? Upper(doc.LabName) : "";
-            dateText.text = doc != null ? doc.Date : "";
-
             var info = new[]
             {
-                ("Proje", Upper(project.Name)),
-                ("Parsel no", doc != null ? doc.ParcelNo : ""),
+                ("Laboratuvar", doc != null ? doc.LabName : ""),
+                ("Rapor tarihi", doc != null ? doc.Date : ""),
+                ("Proje", project.Name),
+                ("Ada / Parsel", doc != null ? doc.ParcelNo : ""),
             };
             UiPool.Resize(infoRows, infoTemplate, infoContainer, info.Length);
             for (int i = 0; i < info.Length; i++) infoRows[i].Bind(info[i].Item1, info[i].Item2);
@@ -64,23 +57,19 @@ namespace CivilJam.Desk
                 var p = project.Params[i];
                 rows[i].Bind(
                     DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type),
-                    Upper(DeskFormat.Value(ctx.Rules, p.Type, p.Reported)),
-                    p.Tested ? Upper(DeskFormat.Value(ctx.Rules, p.Type, p.Actual)) : null);
+                    DeskFormat.Value(ctx.Rules, p.Type, p.Reported),
+                    p.Tested ? DeskFormat.Value(ctx.Rules, p.Type, p.Actual) : null);
             }
 
             bool hasStamp = doc != null && !string.IsNullOrEmpty(doc.StampId);
             stampRoot.SetActive(hasStamp);
             if (hasStamp) stampText.text = doc.StampId;
-            signatureText.text = doc != null ? $"Raporu düzenleyen: <i>{doc.SignatureName}</i>" : "";
+            signatureText.text = doc != null ? $"<i>{doc.SignatureName}</i>" : "";
 
             bool pending = project.Verdict == ProjectVerdict.Pending;
             extraTestButton.gameObject.SetActive(pending || project.ExtraTestBought);
             extraTestButton.interactable = canBuyTest;
-            extraTestLabel.text = project.ExtraTestBought
-                ? "EK TEST YAPILDI"
-                : $"EK TEST İSTE · {Upper(DeskFormat.Money(testCost))}";
+            extraTestLabel.text = project.ExtraTestBought ? "YAPILDI" : DeskFormat.Money(testCost);
         }
-
-        private static string Upper(string s) => string.IsNullOrEmpty(s) ? "" : s.ToUpper(Tr);
     }
 }

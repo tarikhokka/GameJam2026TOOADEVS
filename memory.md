@@ -195,6 +195,36 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
     - üst yarı ofis + portre + balon, alt yarı 3 sabit belge;
     - `FormView`, `LabReportView` ve `RulebookView` içerikleri yeniden kullanılır, kabuk değişir;
     - el kitabı sekmeleri `rule.Section`'dan gelir.
+  - [ ] 📖 **El kitabı = "Hızlı Bakış" tasarımı (Ahmet onayladı, 17 Ekim akşam).** Referans: **`Docs/Tasarim/el_kitabi_hizli_bakis.html`** (tarayıcıda aç, tıklanabilir; kat grubu düğmeleri ve "Örnek dosyayı göster" çalışıyor). Eski numaralı kural satırları ("1.1 Kolon kalınlığı en az: 1-3 kat 30 cm · …") **kalkıyor**.
+    - **Sekmeler (sağ kenar, dikey):** HIZLI BAKIŞ (ilk açılan) · BETON · DONATI · YAPI · ZEMİN (+ istersen LAB: akredite laboratuvarlar ve belge kontrolü).
+      - Renkler: Hızlı Bakış mor `#7a5ea8`, BETON `#c4553f`, DONATI `#3f7cb3`, YAPI `#d18a25`, ZEMİN `#5d9152`.
+      - Sıra: `ctx.Rules.SectionsFor(BuildingType.Residential)`.
+    - **Hızlı Bakış sayfası, yukarıdan aşağı:**
+      1. Başlık: "Afet Kontrol Bürosu" küçük, "DENETÇİ EL KİTABI" büyük (Paytone One).
+      2. 3 adım şeridi: "Formda KAT ADEDİ'ni oku → Kat grubunu seç → Her değeri cetvelde bul: hepsi yeşil mi?"
+      3. **Kat grubu düğmeleri:** 1-3 / 4-6 / 7+ KAT, her birinde alçak / orta / yüksek bina simgesi; seçili olan koyu.
+         - **Oyuncu seçer**, formdan otomatik seçilmez (Ahmet kararı: oyunu kolaylaştırmasın).
+         - Yeni müteahhit gelince seçim sıfırlanır; hiçbir grup seçili değilken satırlar nötr renkte durur.
+      4. **5 satır, sekme sırasıyla:** beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü. Her satırda sol kenarı sekme renginde şerit, simge, bölüm adı ve parametre adı.
+         - **Seçenekli** (`rule.IsLabeled`: beton, demir, zemin): `rule.Labels` soldan sağa çipler. `index < Required` → kırmızı ✕, `index == Required` → yeşil + üstte "en az" etiketi, üstü yeşil ✓.
+         - **Sayısal** (kolon, temel): yatay cetvel, eşiğin solu kırmızı "✕ YETERSİZ", sağı yeşil "✓ UYGUN", eşikte "en az 35 cm" etiketi (`ctx.Rules.FormatValue(param, Required)`).
+           - Cetvel aralığı: kolon 20–50 cm (5'er çentik), temel 0,8–3,2 m (0,5'er çentik).
+         - Eşik: `ctx.Rules.FindRule(BuildingType.Residential, param, temsilciKat)`; temsilci kat 1-3 → 2, 4-6 → 5, 7+ → 8.
+         - Değerler kodda sabit yazılmaz; `RuleSet.asset`'ten okunur.
+      5. Alt kutu: kırmızı "RED" kaşesi + "**Tek bir kırmızı yeter.** Değer tutuyor ama belge şüpheliyse laboratuvardan ek test iste, form ile raporun parsel, tarih, kaşe ve imzasını karşılaştır."
+    - **Bölüm sekmeleri (BETON / DONATI / YAPI / ZEMİN):**
+      - O bölümün parametreleri için aynı çip/cetvel, büyük, üç kat grubu alt alta (seçiciye gerek yok).
+      - Altında `rule.Description` ("neden önemli").
+      - **Tema:** her sekmeye 1 cümlelik afet farkındalık bilgisi. Metni Tarık yazar, ör. "Düz demir betonu tutamaz; depremde kolon bu yüzden patlar."
+    - **Yazı tipi:** başlık ve sekmeler Paytone One, metin Fira Sans (Tarık'ın TMP asset'leri: `PaytoneOne-Regular SDF`, `FiraSans-Regular/Bold SDF`).
+    - **Kâğıt:** krem `#f4ead6`, mürekkep `#3b2f22`, kırmızı `#c2412f` / zemin `#f3d3cb`, yeşil `#3f8a4f` / zemin `#dcebd3`.
+    - **Sığmalı:** sağdaki belge alanına (yaklaşık 620x560 px) kaydırmadan sığmalı; satır yüksekliği ~44 px. Sığmazsa adım şeridini tek satıra indir.
+    - **Kabul ölçütü:**
+      - Kat grubu değişince 5 satır 1 karede yeniden boyanır.
+      - Değerler Core'un uyguladığı kuralla aynıdır (HandbookTests).
+      - Hiçbir bilgi "bu projede şu yanlış" demez, işaretlemez; formdaki değeri oyuncu kendisi bulur.
+      - Sandbox ve Game.unity'de denendi.
+    - Bitince A'ya haber ver; A Game.unity'de kontrol eder.
   - [ ] **Zarf:**
     - Formun yanında masada görünür (ya da müteahhidin elinde).
     - "ZARFI AL VE ONAYLA" düğmesi formda.
@@ -569,6 +599,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim ~15:00 | **Yeni hedef arayüz** (`Docs/Tasarim/hedef_arayuz.png`, Onur): üst yarı ofis + müteahhit, alt yarı 3 belge sabit ve yan yana (form / lab raporu / sekmeli el kitabı). Eğimli masa, masadaki kitaplar, kağıt pencereler, piksel tasarım ve Pixelify/VT323 iptal | Ahmet kararı. Kurallar (El Kitabı v2), lab raporunun rolü (beyan + ücretli ek test) ve Core sözleşmesi DEĞİŞMEZ; sadece arayüz. Görseldeki gerçek kurum adı ve standart kodları alınmaz |
 | 17 Ekim ~15:30 | Yeni müteahhit eklenmeyecek, 6 kalır; karaktere özel ses yok (sadece harf harf yazı sesi). Yazı tipleri: başlık Paytone One, metin Fira Sans (ikisi de OFL) | Tarık kararı. Lilita One'da ğ/ş/İ yok, Türkçe başlıklar bozuluyordu; Lilita sadece logoda (görsel içinde) kalır |
 | 17 Ekim akşamüstü | El kitabı bölümleri = sekmeler (BETON / DONATI / YAPI / ZEMİN, `SectionsFor`); ödeme önizlemesi `ExpenseCalculator.Preview`; kayıt sonucu `ctx.LastSave` + `ctx.RetrySave()` (günü artırmaz), `ctx.LoadFailed` | A. Yeni arayüz ve Onur'un YOL_HARITASI 2-3 ihtiyaçları; sözleşmeye sadece ekleme, testler 30/30 |
+| 17 Ekim akşam | El kitabı ilk sekmesi "Hızlı Bakış" (`Docs/Tasarim/el_kitabi_hizli_bakis.html`): oyuncu kat grubunu seçer, 5 parametre kırmızı/yeşil çip ve cetvel olarak boyanır; numaralı kural satırları kalkar | Ahmet kararı: eski ilk sayfa kullanıcı dostu değildi. Grup otomatik seçilmez (zorluk korunur); kurallar aynı |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -1,0 +1,245 @@
+<title>El Kitabı Hızlı Bakış</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Fira+Sans:wght@400;600;700&display=swap">
+<!--
+  TASLAK (Ahmet, 17 Ekim akşam): Denetçi El Kitabı 1. sayfa "Hızlı Bakış". Yeni hedef arayüzdeki (Docs/Tasarim/hedef_arayuz.png)
+  sağdaki el kitabının ilk sekmesi. Değerler El Kitabı v2 (RuleSet.asset). Fontlar Tarık'ın TMP asset'leri: Paytone One + Fira Sans.
+-->
+<style>
+:root{
+  color-scheme: light;
+  --desk:#3a2c22; --desk-2:#2c211a;
+  --paper:#f4ead6; --paper-2:#eadcc0; --line:#cdb994;
+  --ink:#3b2f22; --ink-soft:#7a6650;
+  --ok:#3f8a4f; --ok-bg:#dcebd3; --bad:#c2412f; --bad-bg:#f3d3cb;
+  --beton:#c4553f; --donati:#3f7cb3; --yapi:#d18a25; --zemin:#5d9152; --genel:#7a5ea8;
+  --note-bg:#fffaf0;
+}
+*{box-sizing:border-box}
+body{background:var(--desk);color:var(--paper);font-family:'Fira Sans',system-ui,sans-serif;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,680px) minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr)}}
+h1{font-family:'Paytone One','Fira Sans',sans-serif;font-weight:400;font-size:26px;margin:0 0 4px;text-wrap:balance}
+.lead{color:#d9c7a8;margin:0 0 18px;max-width:62ch;line-height:1.45}
+
+/* ---- Kitap ---- */
+.book{position:relative;display:flex;min-width:0}
+.page{flex:1;min-width:0;background:var(--paper);color:var(--ink);border-radius:10px 4px 4px 10px;
+  box-shadow:0 10px 0 var(--desk-2),0 18px 30px rgba(0,0,0,.35);padding:20px 22px 18px;
+  background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(120,90,50,.06) 27px 28px)}
+.tabs{display:flex;flex-direction:column;gap:6px;padding-top:26px;margin-left:-2px}
+.tab{writing-mode:vertical-rl;font-family:'Paytone One',sans-serif;font-size:13px;letter-spacing:1.5px;color:#fff;
+  padding:12px 7px;border-radius:0 8px 8px 0;border:0;cursor:pointer;opacity:.82;box-shadow:2px 2px 0 rgba(0,0,0,.25)}
+.tab.on{opacity:1;transform:translateX(3px)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:3px solid var(--ink);padding-bottom:8px}
+.head .t{font-family:'Paytone One',sans-serif;font-size:24px;line-height:1}
+.head .s{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft)}
+.head .ed{font-size:11px;color:var(--ink-soft);text-align:right}
+
+/* Adımlar */
+.steps{display:flex;gap:6px;margin:12px 0 10px;flex-wrap:wrap}
+.step{flex:1 1 150px;display:flex;gap:7px;align-items:center;background:var(--paper-2);border-radius:8px;padding:6px 8px;font-size:12.5px;line-height:1.2}
+.step b{font-family:'Paytone One',sans-serif;font-weight:400;background:var(--ink);color:var(--paper);width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;flex:none;font-size:13px}
+
+/* Kat seçici */
+.floors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.fl{border:3px solid var(--ink);background:var(--note-bg);border-radius:10px;padding:6px 6px 5px;cursor:pointer;display:flex;align-items:center;gap:8px;
+  font-family:'Paytone One',sans-serif;font-size:17px;color:var(--ink);justify-content:center;transition:transform .12s, background .12s}
+.fl svg{flex:none}
+.fl:hover{transform:translateY(-2px)}
+.fl.on{background:var(--ink);color:var(--paper)}
+.fl.on svg *{fill:var(--paper)}
+
+/* Satırlar */
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:10px;align-items:center;background:rgba(255,255,255,.35);border-radius:10px;padding:7px 8px;border-left:6px solid var(--c)}
+.pname{display:flex;gap:7px;align-items:center;min-width:0}
+.ico{width:30px;height:30px;border-radius:8px;background:var(--c);display:grid;place-items:center;flex:none}
+.pname .n{font-weight:700;font-size:13px;line-height:1.1}
+.pname .sec{font-size:9.5px;letter-spacing:1.5px;color:var(--c);font-weight:700}
+
+/* Kademe çipleri */
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{position:relative;flex:1 1 0;min-width:46px;text-align:center;font-weight:700;font-size:13px;padding:6px 3px;border-radius:7px;border:2px solid transparent;transition:background .15s,color .15s}
+.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.min{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok-bg)}
+.chip.bad::before{content:"✕ ";font-size:10px}
+.chip.ok::before{content:"✓ ";font-size:10px}
+.chip.min::after{content:"en az";position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;font-size:8.5px;
+  padding:1px 5px;border-radius:5px;letter-spacing:.5px}
+
+/* Cetvel */
+.ruler{position:relative;height:38px}
+.bar{position:absolute;left:0;right:0;top:9px;height:14px;border-radius:7px;overflow:hidden;display:flex}
+.bar .b{background:var(--bad-bg);transition:width .2s}
+.bar .g{flex:1;background:var(--ok-bg)}
+.ticks{position:absolute;left:0;right:0;top:9px;height:14px}
+.tk{position:absolute;top:0;width:1px;height:14px;background:rgba(59,47,34,.25)}
+.lbl{position:absolute;top:25px;transform:translateX(-50%);font-size:10px;color:var(--ink-soft)}
+.thr{position:absolute;top:2px;width:0;transition:left .2s}
+.thr::before{content:"";position:absolute;left:-1.5px;top:4px;width:3px;height:22px;background:var(--ok);border-radius:2px}
+.thr span{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--ok);color:#fff;font-weight:700;font-size:11.5px;padding:2px 7px;border-radius:6px}
+.zone{position:absolute;top:10px;font-size:9.5px;font-weight:700;letter-spacing:.5px}
+
+/* Örnek dosya işaretleri */
+.mark{position:absolute;z-index:2;font-size:10px;font-weight:700;background:var(--ink);color:var(--paper);padding:1px 5px;border-radius:5px;white-space:nowrap;transform:translateX(-50%);top:-14px}
+.chip .mark{top:-15px;left:50%}
+.verdict{display:none;font-weight:700;font-size:11px;margin-left:6px}
+.show-sample .verdict{display:inline}
+
+.foot{margin-top:12px;display:flex;gap:10px;align-items:center;border:3px solid var(--ink);border-radius:10px;padding:8px 12px;background:var(--note-bg)}
+.foot .stamp{font-family:'Paytone One',sans-serif;color:var(--bad);border:3px solid var(--bad);border-radius:8px;padding:2px 8px;transform:rotate(-6deg);flex:none}
+.foot p{margin:0;font-size:13px;line-height:1.3}
+
+/* Notlar */
+.notes{background:var(--note-bg);color:var(--ink);border-radius:10px;padding:18px 20px;min-width:0;line-height:1.5;font-size:14.5px}
+.notes h2{font-family:'Paytone One',sans-serif;font-weight:400;font-size:18px;margin:14px 0 6px}
+.notes h2:first-child{margin-top:0}
+.notes ul{margin:0;padding-left:18px}
+.notes li{margin:3px 0}
+.notes code{background:var(--paper-2);padding:0 4px;border-radius:4px;font-size:12.5px}
+.ctrl{display:flex;gap:10px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
+.ctrl button{font:600 13px 'Fira Sans',sans-serif;background:var(--paper);color:var(--ink);border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+.ctrl button.on{background:var(--yapi);color:#fff}
+.ctrl small{color:#d9c7a8}
+</style>
+
+<div class="wrap">
+  <div style="min-width:0">
+    <h1>Denetçi El Kitabı — Hızlı Bakış</h1>
+    <p class="lead">El kitabının ilk sekmesi. Oyuncu kat grubunu seçer; beş parametrenin her biri renkli bir cetvele dönüşür. Formdaki değeri cetvelde bul: <b style="color:#9fd39a">yeşilse geçer</b>, <b style="color:#f0a090">kırmızıysa RED</b>. Kat grubu butonlarına tıklayıp dene.</p>
+    <div class="ctrl">
+      <button id="sampleBtn" type="button">Örnek dosyayı göster</button>
+      <small id="sampleInfo">Örnek: 5 katlı “Çınar Apartmanı” formundaki değerler cetvele işaretlenir.</small>
+    </div>
+
+    <div class="book" id="book">
+      <div class="page">
+        <div class="head">
+          <div><div class="s">Afet Kontrol Bürosu</div><div class="t">DENETÇİ EL KİTABI</div></div>
+          <div class="ed">Baskı 3<br>Hızlı Bakış</div>
+        </div>
+
+        <div class="steps">
+          <div class="step"><b>1</b><span>Formda <b style="all:unset;font-weight:700">KAT ADEDİ</b>'ni oku</span></div>
+          <div class="step"><b>2</b><span>Aşağıdan kat grubunu seç</span></div>
+          <div class="step"><b>3</b><span>Her değeri cetvelde bul: hepsi yeşil mi?</span></div>
+        </div>
+
+        <div class="floors" id="floors"></div>
+        <div class="rows" id="rows"></div>
+
+        <div class="foot">
+          <span class="stamp">RED</span>
+          <p><b>Tek bir kırmızı yeter.</b> Değer tutuyor ama belge şüpheliyse: laboratuvardan <b>ek test</b> iste, form ile raporun parsel, tarih, kaşe ve imzasını karşılaştır.</p>
+        </div>
+      </div>
+      <div class="tabs" aria-hidden="true">
+        <button class="tab on" style="background:var(--genel)">HIZLI BAKIŞ</button>
+        <button class="tab" style="background:var(--beton)">BETON</button>
+        <button class="tab" style="background:var(--donati)">DONATI</button>
+        <button class="tab" style="background:var(--yapi)">YAPI</button>
+        <button class="tab" style="background:var(--zemin)">ZEMİN</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    <h2>Neden daha kolay</h2>
+    <ul>
+      <li><b>Tek soru, tek bakış:</b> Oyuncu "bu kat için bu değer yeter mi?" diye soruyor. Artık cümle okumuyor; renge bakıyor.</li>
+      <li><b>Kat grubu bir kez seçilir:</b> Üç değeri yan yana okuyup doğru sütunu aramak yok. Seçince beş cetvelin hepsi o gruba göre boyanıyor.</li>
+      <li><b>Kademeler sıralı:</b> C16 → C35 ve B220 → B500S soldan sağa zayıftan güçlüye. "B500S, B500'den iyi mi?" sorusunun cevabı görselde.</li>
+      <li><b>Hâlâ oyun:</b> Oyuncu kat adedini formdan kendisi okuyor, grubu kendisi seçiyor ve beş değeri tek tek karşılaştırıyor. Sahte belge ve ek test de aynen duruyor.</li>
+    </ul>
+    <h2>Diğer sekmeler (BETON / DONATI / YAPI / ZEMİN)</h2>
+    <ul>
+      <li>Her sekmede o bölümün parametreleri için aynı cetvel, büyük boyutta. Altında <code>Description</code> ("neden önemli") ve tek cümlelik bir afet bilgisi. Temanın farkındalık kısmı burada.</li>
+      <li>Akredite laboratuvarlar ve belge kontrolü: son sekme ya da Hızlı Bakış'ın arkası.</li>
+    </ul>
+    <h2>Oğuzhan için veri</h2>
+    <ul>
+      <li>Sekmeler: <code>ctx.Rules.SectionsFor(Residential)</code>. Satırlar ve renkler bu sırayla: BETON, DONATI, YAPI, ZEMİN.</li>
+      <li>En az değer: <code>FindRule(type, param, floors)</code>, gruplar <code>1-3 / 4-6 / 7+</code> (<code>MinFloors</code>, <code>MaxFloors</code>).</li>
+      <li>Seçenekli: <code>rule.Labels</code> çipleri; <code>index &lt; Required</code> kırmızı.</li>
+      <li>Sayısal: cetvel aralığı kolon 20–50 cm, temel 0,8–3,2 m; eşik <code>Required</code>, etiket <code>FormatValue</code>.</li>
+      <li>Varsayılan seçili grup yok ya da son seçilen. Otomatik seçmek oyunu çok kolaylaştırır; öneri: oyuncu seçsin.</li>
+    </ul>
+  </aside>
+</div>
+
+<script>
+const FLOORS = [
+  {id:0, label:'1-3 KAT', h:3},
+  {id:1, label:'4-6 KAT', h:5},
+  {id:2, label:'7+ KAT', h:8},
+];
+const ICONS = {
+  beton:'<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#fff" d="M3 6l7-3 7 3v8l-7 3-7-3z"/><path fill="rgba(0,0,0,.25)" d="M10 9v8l7-3V6z"/></svg>',
+  donati:'<svg width="20" height="20" viewBox="0 0 20 20"><g fill="#fff"><rect x="2" y="4" width="16" height="2.4" rx="1"/><rect x="2" y="9" width="16" height="2.4" rx="1"/><rect x="2" y="14" width="16" height="2.4" rx="1"/></g></svg>',
+  yapi:'<svg width="20" height="20" viewBox="0 0 20 20"><g fill="#fff"><rect x="3" y="2" width="14" height="3" rx="1"/><rect x="6.5" y="5" width="7" height="10"/><rect x="3" y="15" width="14" height="3" rx="1"/></g></svg>',
+  temel:'<svg width="20" height="20" viewBox="0 0 20 20"><g fill="#fff"><rect x="6" y="2" width="8" height="8"/><rect x="2" y="10" width="16" height="3"/><rect x="5" y="13" width="3" height="5"/><rect x="12" y="13" width="3" height="5"/></g></svg>',
+  zemin:'<svg width="20" height="20" viewBox="0 0 20 20"><g fill="#fff"><path d="M2 5c3-2 5 2 8 0s5-2 8 0v3H2z"/><rect x="2" y="10" width="16" height="3" opacity=".75"/><rect x="2" y="15" width="16" height="3" opacity=".5"/></g></svg>',
+};
+const PARAMS = [
+  {key:'beton', sec:'BETON', c:'var(--beton)', name:'Beton sınıfı', labels:['C16','C20','C25','C30','C35'], req:[1,2,3], sample:2},
+  {key:'donati', sec:'DONATI', c:'var(--donati)', name:'Demir tipi', labels:['B220 düz','B420','B500','B500S'], req:[1,2,3], sample:1},
+  {key:'yapi', sec:'YAPI', c:'var(--yapi)', name:'Kolon kalınlığı', unit:'cm', min:20, max:50, ticks:[20,25,30,35,40,45,50], req:[30,35,40], fmt:v=>v+' cm', sample:36},
+  {key:'temel', sec:'ZEMİN', c:'var(--zemin)', name:'Temel derinliği', unit:'m', min:0.8, max:3.2, ticks:[1,1.5,2,2.5,3], req:[1.5,2.0,2.5], fmt:v=>v.toFixed(1).replace('.',',')+' m', sample:2.1},
+  {key:'zemin', sec:'ZEMİN', c:'var(--zemin)', name:'Zemin türü', labels:['Dolgu','Yum. kil','Sert kil','Kaya'], req:[1,2,3], sample:2},
+];
+let group = 1, sample = false;
+
+function building(h){
+  const w=16, H=24, fh=Math.min(20, 3+h*2.2);
+  let s=`<svg width="${w}" height="${H}" viewBox="0 0 ${w} ${H}"><rect fill="#3b2f22" x="2" y="${H-fh}" width="12" height="${fh}" rx="1"/>`;
+  for(let y=H-fh+2;y<H-3;y+=3.2) s+=`<rect fill="#f4ead6" x="4.5" y="${y}" width="2.4" height="1.6"/><rect fill="#f4ead6" x="9" y="${y}" width="2.4" height="1.6"/>`;
+  return s+'</svg>';
+}
+function pct(p,v){return (v-p.min)/(p.max-p.min)*100}
+
+function render(){
+  document.getElementById('floors').innerHTML = FLOORS.map(f =>
+    `<button type="button" class="fl ${f.id===group?'on':''}" data-g="${f.id}">${building(f.h)}${f.label}</button>`).join('');
+  document.querySelectorAll('.fl').forEach(b => b.onclick = () => { group = +b.dataset.g; render(); });
+
+  document.getElementById('rows').innerHTML = PARAMS.map(p => {
+    const req = p.req[group];
+    let body;
+    if (p.labels){
+      body = '<div class="chips">' + p.labels.map((l,i) => {
+        const cls = i<req ? 'bad' : (i===req ? 'ok min' : 'ok');
+        const mk = sample && i===p.sample ? '<span class="mark">FORM</span>' : '';
+        return `<div class="chip ${cls}">${mk}${l}</div>`;
+      }).join('') + '</div>';
+    } else {
+      const t = pct(p, req);
+      const ticks = p.ticks.map(v => `<div class="tk" style="left:${pct(p,v)}%"></div><div class="lbl" style="left:${pct(p,v)}%">${p.fmt(v).replace(/ (cm|m)$/,'')}</div>`).join('');
+      const mk = sample ? `<span class="mark" style="left:${pct(p,p.sample)}%;top:-2px">FORM ${p.fmt(p.sample)}</span>` : '';
+      body = `<div class="ruler"><div class="bar"><div class="b" style="width:${t}%"></div><div class="g"></div></div>
+        <div class="ticks">${ticks}</div>
+        <div class="zone" style="left:6px;color:var(--bad)">✕ YETERSİZ</div>
+        <div class="zone" style="right:6px;color:var(--ok)">✓ UYGUN</div>
+        <div class="thr" style="left:${t}%"><span>en az ${p.fmt(req)}</span></div>${mk}</div>`;
+    }
+    let verdict = '';
+    if (sample){
+      const ok = p.labels ? p.sample >= req : p.sample >= req;
+      verdict = `<span class="verdict" style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?'✓':'✕'}</span>`;
+    }
+    return `<div class="row" style="--c:${p.c}">
+      <div class="pname"><div class="ico">${ICONS[p.key]}</div><div><div class="sec">${p.sec}</div><div class="n">${p.name}${verdict}</div></div></div>
+      ${body}</div>`;
+  }).join('');
+  document.getElementById('book').classList.toggle('show-sample', sample);
+}
+document.getElementById('sampleBtn').onclick = e => {
+  sample = !sample; e.target.classList.toggle('on', sample);
+  e.target.textContent = sample ? 'Örnek dosyayı gizle' : 'Örnek dosyayı göster';
+  render();
+};
+render();
+</script>

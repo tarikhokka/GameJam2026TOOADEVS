@@ -31,7 +31,7 @@
 
 **Müteahhitler (`Data/Clients`, 16):** 6 ana karakter: Rıfat ve Sevim dürüst (çoğunlukla uygun, bazen dikkatsiz; asla zarf/sahte belge yok); Kemal ve Nuri rüşvetçi (bazen temiz gelir); Selim çoğunlukla sahte belgeci (zarf vermez; 1-2. gün gelirse dikkatsiz proje); Rüstem kabadayı (4. günden; reddedilince 4 olaydan biri: cam, masa, kapı kilidi ya da araba lastikleri — art arda aynısı olmaz; gider "Hasar tamiri"). 10 kişiliksiz karakter (`Generic01-10`, `IsGeneric`; uygun, dikkatsiz, zarflı ya da sahte belgeli gelebilir; zarf `BalanceSO.GenericBribeRange`); kendi replik listesi boşsa `Data/Dialogue.asset` ortak havuzu kullanılır. Core selamlama (`GreetingText`; tekrar gelende "geçen sefer…") ve tepki (`ReactionText`) seçer. Nuri her retten sonra zarfı +250 TL büyütür. **Hediye:** sadece dürüst ustalar, onayda bazen, oyunda bir kez; sadece kabul edilir, ofiste kalıcı görünür, para/risk etkisi yok.
 
-**İnceleme modu (`Inspection.Check`, masadan `ctx.Actions.Inspect`):** oyuncu İNCELE ile iki **ayrı** belgeden iki alan seçer → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ. Ücretsiz, sınırsız; kararı yine oyuncu verir. El Kitabı eşiği oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır (seçilmemiş ya da binaya ait olmayan grup → ALAKASIZ). Tabloda olmayan her çift ve aynı belgeden iki alan → ALAKASIZ.
+**İnceleme modu (`Inspection.Check`, masadan `ctx.Actions.Inspect`):** oyuncu İNCELE ile iki **ayrı** belgeden iki alan seçer → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ. Ücretsiz, sınırsız; kararı yine oyuncu verir. El Kitabı eşiği oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır (seçilmemiş ya da binaya ait olmayan grup → ALAKASIZ). ⚠️ **Poliş turunda değişiyor (K1, §7):** eşik her zaman binanın kendi kat grubundan; yanlış grup durumu kalkar. Tabloda olmayan her çift ve aynı belgeden iki alan → ALAKASIZ.
 
 | # | 1. alan | 2. alan | Uyuşmazlık ne zaman |
 |---|---|---|---|
@@ -70,7 +70,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - **Masa (Desk, B):** üst yarı ofis (`office_bg`) + müteahhit portresi + konuşma balonu (harf harf yazı + yazı sesi); masa kenarı (`desk_edge`) ve yüzeyi (`desk_surface`). Masada üç belge düz ve yan yana (sürüklenebilir):
   - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, proje müellifi, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED.
   - **Laboratuvar Raporu** (`doc_lab`): laboratuvar, rapor tarihi, proje, ada/parsel, Parametre | Beyan | Ek test, karar vermeyen değerlendirme cümlesi, yetkili imzası, lab kaşesi + kaşedeki lab adı, EK TEST.
-  - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN · LAB. Hızlı Bakış'ta oyuncu kat grubunu **kendisi seçer** (otomatik seçilmez, yeni müteahhitte sıfırlanır); 5 parametre kırmızı/yeşil çip ya da cetvel olarak boyanır. Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
+  - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN · LAB. Hızlı Bakış'ta oyuncu kat grubunu **kendisi seçer** (otomatik seçilmez, yeni müteahhitte sıfırlanır) ⚠️ **Poliş turunda değişiyor (§7):** kat grubu otomatik, bölüm sekmeleri ve RED kutusu kalkıyor; 5 parametre kırmızı/yeşil çip ya da cetvel olarak boyanır. Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
   - **İNCELE** düğmesi (lab raporunun üstünde, Tarık'ın yeri): mod açıkken belgeler sürüklenmez, karar düğmeleri pasif; alanlar sarı çerçeve alır; iki alan arasına çizgi + Onur'un sonuç kaşesi (`InspectResultView`). Sağ tık ya da boş masa seçimi temizler.
   - **Diyalog** (`DeskDialogue`): denetçi satırı solda Onur'un balonunda (`InspectorBubbleView`), müteahhit satırı kendi balonunda; sürerken masa kilitli, tıklama satırı tamamlar / geçer.
   - Zarf diyalogdan sonra masaya düşer, tıklanınca açılır (`BribeEnvelopeView`); kabul edilen hediyeler masa kenarında. 1. gün 5 öğretici kart (Geri düğmesi; masadaki "NASIL OYNANIR" yeniden açar); kabadayı olayı kartı; son müteahhitten sonra mesai zili + "MESAİ BİTTİ".
@@ -109,18 +109,232 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - Teslim: Windows build ZIP + en fazla 1 dk video (MP4/AVI) + public repo + kurulum/kontrol talimatı (`README.md`).
 - Saatler: **feature freeze ve Git desteği 18 Ekim 12:00**; yükleme 15:00-16:30; son teslim 18 Ekim 18:00.
 
-## 7. Durum ve açık işler (güncelleme: B, 18 Ekim ~01:30)
+## 7. Durum ve açık işler (güncelleme: A, 18 Ekim ~01:50)
 **Durum:** İnceleme modu, uyuşmazlık diyaloğu, tıklanabilir zarf ve 7 günlük yapı bitti ve oyunda doğrulandı. EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (`AHMET.md`). **Final aday build** `Builds/Imza/Imza.exe` + teslim ZIP'i `Builds/Imza.zip` alındı. A'nın güncel teslim/kabul listesi: `AHMET.md` → "Onur'dan teslim notu — 18 Ekim". Freeze 18 Ekim 12:00.
+
+### 🛠️ POLİŞ TURU — 7 madde (Ahmet kararı, 18 Ekim ~01:50) — HERKES OKUSUN · lider: A (Ahmet'in ajanı)
+> Ahmet 7 maddelik özellik ve cila listesi verdi. A iş bölümünü ve fazları kurdu, Ahmet 4 kararı onayladı (aşağıda **Kararlar**).
+>
+> Herkes şunları yapsın:
+> 1. **Önce pull.**
+> 2. Kendi bölümünü ve **Dosya kilitleri** tablosunu oku.
+> 3. Bitirdiğin işi burada `[x]` yap, yanına commit hash'ini yaz (ör. "B1 ✅ `abc1234`"). Senkron noktaları bu satırlara bakar.
+> 4. Gecikeceksen tahmini saatini yaz.
+>
+> Feature freeze **12:00**. A'nın build alabilmesi için son kod push'u **en geç 11:00**.
+
+**Maddeler (Ahmet'in istediği):**
+1. **Kat grubu otomatik.** El Kitabı'nın Hızlı Bakış sayfasında binanın kat grubu (1-3 / 4-6 / 7+), formdaki kat adedine göre kendiliğinden seçili gelir. Oyuncu seçmez.
+2. **İnceleme modu.** Tıklanabilir (sorgulanabilir) alanlar ve ONAY / RED dışındaki her yer **çok az** kararır. ONAY ve RED inceleme modunda da basılabilir.
+3. **Düğmeler.** Masadaki İNCELE ve NASIL OYNANIR düğmeleri ile ana menüdeki Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış düğmeleri oyunun temasına uyar. ONAY / RED / EK TEST ile aynı aileden görünürler.
+4. **Üst bar.** Gün, müteahhit · proje, Kasa, Onaylanan · Bekleyen gösteren bar temaya uygun yeniden tasarlanır.
+5. **RED kutusu.** El Kitabı Hızlı Bakış'ın en altındaki kutu ("RED / Tek bir kırmızı yeter…") kalkar. Sayfadaki 5 parametre büyür, okunması kolaylaşır.
+6. **Bölüm sekmeleri.** El Kitabı'nda BETON (kırmızı), DONATI (mavi), YAPI (sarı) ve ZEMİN (yeşil) sekmeleri, açtıkları sayfalarla birlikte kalkar. **HIZLI BAKIŞ ve LAB sekmelerine ve LAB sayfasına dokunulmaz.** Hızlı Bakış'ın içi sadece madde 5 kadar değişir.
+7. **Ziyaretler.** 10 kişiliksiz karakter bir oyunda 1'er kez, 6 ana müteahhit eşit olarak 3'er kez gelir. Hiçbiri aynı gün iki kez gelmez.
+
+**Kararlar (Ahmet onayladı, 18 Ekim ~01:50):**
+- **K1 (madde 1):** 1-3 / 4-6 / 7+ düğmeleri **sadece gösterge** olur:
+  - binanın grubu koyu (seçili) görünür, diğer ikisi soluk durur ve tıklanmaz;
+  - inceleme her zaman binanın gerçek grubuyla yapılır, grubu Core kendisi hesaplar;
+  - "yanlış kat grubu = ALAKASIZ" durumu oyundan kalkar;
+  - Hızlı Bakış'taki 2. adım yazısı değişir.
+- **K2 (madde 2):** İnceleme modunda ONAY ya da RED'e basılınca **inceleme modu kendiliğinden kapanır ve karar verilir**. Kaşe, tepki ve sıradaki müteahhit bugünkü gibi gelir.
+  - **EK TEST ve zarf inceleme modunda pasif kalır ve kararır.**
+  - **İNCELE düğmesi aydınlık kalır**, çünkü mod onunla kapanır.
+- **K3 (madde 6):** Bölüm sekmeleri **tamamen kalkar**. "AFETE HAZIRLIK" notları ve parametre açıklamaları başka yere taşınmaz; tema mesajı gazete, sonlar, diyalog ve öğretici kartlarda zaten var. **Oğuzhan'ın "El Kitabı sekme notları" işi iptal.**
+- **K4 (madde 3-4):**
+  - **Tarık** görselleri üretir (düğmeler, üst bar, temiz menü arka planı).
+  - **Onur** ana menü düğmelerini ve kendini kuran üst bar bileşenini (`DeskHeaderView`) yazar. Bileşen `BribeEnvelopeView` gibi Desk klasöründe durur.
+  - **Oğuzhan** İNCELE / NASIL OYNANIR düğmelerini ve üst barı masaya bağlar.
+- **Madde 7 kodda zaten var:**
+  - `VisitPlanner` (`GameState.Schedule`, kayıtla saklanır);
+  - test `Plan_FollowsAllRules_ForManySeeds` (300 seed) var;
+  - otomatik 7 günlük oynanışta görüldü.
+
+  A sadece gerçek 16 kişilik kadroyla (`Data/Clients`) bir test ekler. Başka kimsenin işi yok.
+
+**İş bölümü:**
+| İş | Kim | Madde | Başlamak için beklediği push |
+|---|---|---|---|
+| **A1** Core: kat grubunu Core hesaplar + madde 7 için gerçek kadro testi | A | 1, 7 | yok |
+| **A2** El Kitabı: otomatik kat grubu, RED kutusu kalkar, parametreler büyür, bölüm sekmeleri kalkar (Oğuzhan'ın dosyası, A dokunur) | A | 1, 5, 6 | A1 (aynı kişi, sıralı) |
+| **B1** İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | 2 | yok |
+| **B2** İNCELE / NASIL OYNANIR yeni görselle; üst bar → `DeskHeaderView` | Oğuzhan | 3, 4 | B1 (aynı prefab), **T1** (görsel), **C1** (bileşen) |
+| **C1** `DeskHeaderView` (görselsiz de çalışır) + kendi bileşenlerinin karartmanın üstünde kaldığının kontrolü | Onur | 4, 2 | yok (kontrol kısmı B1'den sonra) |
+| **C2** Ana menü düğmeleri yeni görselle (+ Emeği Geçenler'deki Geri; vakit varsa Esc menüsü) | Onur | 3 | **T1** |
+| **T1** Görseller: düğme ailesi, üst bar, temiz `menu_bg` | Tarık | 3, 4 | yok |
+| **T2** Metinler: öğretici kartlar, README, ICERIK_TASLAK, Art/README | Tarık | 1, 5, 6 | yok |
+| **A3** Entegrasyon: testler, otomatik 7 günlük oynanış, ekran görüntüleri, §2-§3, build + ZIP | A | hepsi | hepsi |
+
+**Fazlar ve senkron noktaları (hedef saatler):**
+- **Faz 0 (~01:50, A):** Bu plan push'lanır, herkes pull eder.
+- **Faz 1 (paralel; kimse kimseyi beklemez; hedef 05:00):**
+  - A1 → A2 (sırayla);
+  - B1, C1, T1, T2.
+- **Senkron noktaları:**
+  - **S1:** "T1 ✅" satırı gelince C2 ve B2'nin düğme kısmı başlar.
+  - **S2:** "C1 ✅" satırı gelince B2'nin üst bar kısmı başlar.
+  - B2 her durumda B1'den sonra gelir: ikisi de `DeskScreen.prefab`'ı builder'la kurar.
+- **Faz 2 (hedef 08:30):** B2, C2, C1'in kontrol kısmı.
+  - **Yedek plan:** T1 07:00'ye kadar gelmezse B2 ve C2 bugünkü görsellerle bağlanır (`DeskHeaderView` kodla çizilmiş hâliyle).
+  - Görseller sonradan **aynı dosya adıyla** gelir, kod değişmez.
+- **Faz 3 (08:30 → 11:00, A):** A3.
+  - 11:00-12:00 arası sadece hata düzeltilir.
+  - **12:00 freeze:** sonrasında kod push'u yok.
+
+**Dosya kilitleri** (bu turda dosyaya sadece yazılan kişi dokunur; başkasına bir şey lazımsa burada yazar):
+| Dosya | Kim | Not |
+|---|---|---|
+| `Scripts/Core/**`, `Data/**`, `Scenes/Game.unity` | A | |
+| `Desk/UI/RulebookView.cs`, `Desk/UI/HandbookUi.cs` | **A (bu tur için)** | Oğuzhan ve Tarık bu turda dokunmaz |
+| `Desk/Sandbox/FakeGameActions.cs` | A (1 satır) | |
+| `Desk/UI/DeskScreen.cs` | Oğuzhan; A sadece 1 satır | A2'de `rulebook.ResetFloorGroup()` satırı değişir. Farklı satırlar olduğu için git kendisi birleştirir |
+| `Desk/UI/InspectController.cs`, `InspectSpot.cs`, `InspectCatcher.cs`, `FormView.cs`, `LabReportView.cs`, `DeskHud.cs`, `DeskPropsView.cs`, `Desk/Editor/**`, `Prefabs/Desk/DeskScreen.prefab` | Oğuzhan | **Prefab'ı sadece Oğuzhan kurar** (builder). Başkası prefab commit'lemez |
+| `Desk/UI/DeskHeaderView.cs` (yeni), `InspectResultView.cs`, `InspectorBubbleView.cs` | Onur | |
+| `Flow/**`, `Prefabs/Flow/**`, `Scenes/MainMenu.unity` | Onur | |
+| `Desk/UI/TutorialView.cs` (sadece metin dizeleri), `Art/**`, `README.md`, `ICERIK_TASLAK.md`, `CREDITS_AND_AI.md` | Tarık | A, A3'te README'ye son kontrol için dokunabilir |
+
+#### A (Ahmet) — A1, A2, A3
+- [ ] **A1 Core (madde 1, 7):**
+  - Yeni `Inspection.FloorGroupOf(GameContext, ProjectData)`: binanın kat adedine göre RuleSet aralıklarından 0 / 1 / 2 döner; bulunamazsa `NoFloorGroup`.
+  - `GameSession.Inspect`, gelen `handbookFloorGroup`'u **yok sayar** ve binanın grubunu kullanır.
+  - `IGameActions.Inspect` imzası **değişmez**; kimsenin kodu kırılmaz. `Inspection.Check(…, group)` testler için aynı kalır.
+  - `FakeGameActions.Inspect` (Desk sandbox) da aynı şeyi yapar.
+  - Testler:
+    - oturumdan yapılan inceleme her zaman doğru grupla yapılır;
+    - madde 7: `Data/Clients`'taki gerçek kadroyla 500 seed. Her ana müteahhit 3 kez ve 3 ayrı günde gelir, her kişiliksiz karakter 1 kez gelir, bir günde aynı kişi iki kez yoktur.
+- [ ] **A2 El Kitabı (madde 1, 5, 6; Oğuzhan'ın dosyası, Ahmet isteğiyle A dokunur):**
+  - Yeni `RulebookView.ShowProject(ProjectData)` binanın grubunu seçili gösterir. `DeskScreen`'deki `rulebook.ResetFloorGroup()` satırı bununla değişir.
+  - Kat düğmeleri tıklanmaz: seçili olan koyu, diğerleri soluk.
+  - Adım yazıları: "1 · Formda KAT ADEDİ'ne bak", "2 · Kat grubu kendiliğinden seçilir", "3 · Her değer yeşil mi?".
+  - RED kutusu ve alttaki boşluk kalkar; 5 satır sayfayı doldurur. Satır yüksekliği, parametre adı, çipler ve cetvel yazıları büyür. 1920x1080'de hiçbir yazının kesilmediği ekran görüntüsüyle doğrulanır.
+  - BETON / DONATI / YAPI / ZEMİN sayfaları ve sekmeleri kalkar; geriye HIZLI BAKIŞ ve LAB kalır. LAB sayfası aynen durur.
+  - `tabSprites` ve `sectionNotes` alanları kullanılmasa da yerinde kalır, böylece builder ve prefab değişmez (sayfalar çalışırken kuruluyor).
+- [ ] **A3 Entegrasyon (Faz 3):**
+  - hepsini pull, EditMode + PlayMode testleri, otomatik 7 günlük oynanış;
+  - ekran görüntüleri: masa, inceleme modu, El Kitabı, üst bar, ana menü, Esc menüsü;
+  - §2-§3'ü yeni hâle göre yaz, ⚠️ işaretlerini kaldır; README son kontrol;
+  - build + ZIP.
+
+#### Oğuzhan (B) — B1, B2
+- [ ] **B1 İnceleme modunda karartma + ONAY/RED aktif (madde 2, K2):**
+  - **Karartma katmanı:**
+    - tam ekran siyah `Image`, alfa **yaklaşık 0,2** ("çok azıcık"); Inspector'dan ayarlanır, ör. `inspectDimAlpha`;
+    - `raycastTarget = false`;
+    - mod açılınca yaklaşık 0,15 sn'de yumuşakça gelir, kapanınca gider (`Time.unscaledDeltaTime`);
+    - ofis, portre, masa, belgeler ve üst bar kararır.
+  - **Aydınlık kalanlar** (karartmanın üstünde):
+    - mod açıkken **tıklanabilir her `InspectSpot`**. Bu projede tıklanamayan alan karanlık kalır; ör. ek test yapılmadıysa ek test hücresi (`Inspection.IsAvailable`);
+    - **ONAY** ve **RED**;
+    - **İNCELE** düğmesi;
+    - çizgi ve sonuç kaşesi (Onur'un `InspectResultView`'u);
+    - **diyalog balonları**: denetçi balonu `InspectorBubbleView` ve müteahhit balonu. Uyuşmazlık diyaloğu mod açıkken başlıyor, okunabilmeli.
+    - Öğretici kartlar, olay kartı, zarf ekranı, mesai bitti ekranı ve Esc menüsü zaten en üstte kalmalı.
+  - **Yöntem önerisi** (uGUI'de karartmaya delik açılamaz):
+    - karartmayı belgelerin üstüne koy;
+    - aydınlık kalacak her öğeye mod açıkken `Canvas` (`overrideSorting = true`, `sortingOrder` = karartma + 1) ve `GraphicRaycaster` ekle;
+    - mod kapanınca bunları kaldır ya da `overrideSorting = false` yap;
+    - arka planı şeffaf satırlar kararmış kağıdın üstünde kalır; öne alınan alanın arkasına kağıt renginde ince bir zemin koyarsan vurgu gibi görünür.
+    - Daha temiz bir yol bulursan onu kullan.
+  - **ONAY / RED:**
+    - `FormView.SetLocked(on)` artık ONAY ve RED'i kapatmaz. EK TEST lab raporunda kapalı kalır; `takeBribeButton` zaten gizli.
+    - `DeskScreen.Decide`: mod açıksa önce `inspect.SetMode(false)`, sonra bugünkü karar sırası. `stamping` ve diyalog kilidi aynen kalır.
+    - Zarf (`OpenEnvelope`) inceleme modunda bugünkü gibi açılmaz.
+  - **Dikkat:**
+    - `InspectCatcher` ve spot'lar ONAY / RED tıklamasını yutmamalı;
+    - ONAY / RED tıklaması "boş masaya tıklandı, seçimi temizle" sayılmamalı.
+  - Sandbox_Desk'te dene: mod aç/kapat, alan seç, karşılaştır, uyuşmazlık diyaloğu, modda ONAY ve RED. Prefab'ı builder'la kur, push, "B1 ✅ hash" yaz.
+- [ ] **B2 Düğmeler ve üst bar (madde 3, 4; T1 ve C1'den sonra):**
+  - **Düğmeler:**
+    - İNCELE → `btn_inspect` (`DeskSandboxBuilder.Inspect.cs`);
+    - NASIL OYNANIR → `btn_help` (builder'daki `helpSprite`; TutorialView kurar);
+    - yazılar kodla, Paytone One; renk görsele göre;
+    - fare üstüne gelince ONAY / RED gibi davranır (hafif büyüme / parlama).
+  - **Üst bar:**
+    - `BuildHud`'daki eski koyu bant (`HudColor`, 80 px) yerine `DeskHeaderView` kurulur;
+    - **yükseklik aynı kalır (80 px)**: ofis ve belgeler yerinden oynamaz;
+    - `DeskHud.Refresh` ve `DeskPropsView`'daki müteahhit · proje yazısı (`clientTagText`) `DeskHeaderView` API'sine bağlanır (C1'deki API);
+    - eski metin alanları silinebilir.
+  - T1 07:00'ye kadar gelmezse eski görselle bağla; görsel sonradan aynı adla gelir.
+  - Prefab'ı builder'la kur, push, "B2 ✅ hash" yaz.
+- Eski §7 maddelerin:
+  - "sekme notları" **iptal** (K3);
+  - "Hızlı Bakış alt yarı boş" **A2'ye geçti**;
+  - "Üst bar" **B2'ye geçti**;
+  - "Proje müellifi / Laboratuvar Yetkilisi" maddesi duruyor (vakit kalırsa).
+
+#### Onur (C) — C1, C2
+- [ ] **C1 `DeskHeaderView` (madde 4):**
+  - Yeni dosya `Assets/_Project/Scripts/Desk/UI/DeskHeaderView.cs`: Desk asmdef'inde, `namespace CivilJam.Desk`.
+  - `BribeEnvelopeView` gibi Awake'te kendini kurar. `Reset()` fontları (başlıkta Paytone One, metinde Fira Sans) ve T1 sprite'larını bağlar.
+  - **Prefab'a dokunma**; Oğuzhan B2'de builder'a ekler.
+  - **API** (Oğuzhan buna bağlar; değiştirirsen burada yaz):
+    - `public void Refresh(GameContext ctx)`:
+      - "Gün N";
+      - Kasa (`DeskFormat.Money`), borç varsa kırmızı "Borç: X";
+      - "Onaylanan: X · Bekleyen: Y": onaylanan `ctx.State.ApprovedToday`, bekleyen bugünkü `Pending` dosya sayısı (`DeskHud`'daki hesapla aynı).
+    - `public void SetClient(string clientName, string projectName)`: ortadaki "Rıfat Usta · Çınar Apartmanı" etiketi.
+    - `public void SetDayDone(bool allDecided)`: ortaya "Bugünkü başvurular bitti." ya da boş yazar (`DeskPropsView.ShowEmpty` ile aynı).
+  - **Yerleşim:**
+    - bugünküyle aynı: solda Gün, ortada müteahhit · proje, sağda Kasa ile Onaylanan · Bekleyen;
+    - kök RectTransform ekranın üstüne yaslı, **80 px yüksek**;
+    - NASIL OYNANIR düğmesi barın altında, ofiste kalır.
+  - **Görsel:**
+    - T1 geldiyse `hud_bar` (ahşap pano şeridi), `hud_tag` (9-slice kağıt etiket) ve ikonlar (`hud_icon_day`, `hud_icon_money`, `hud_icon_count`) kullanılır;
+    - sprite yoksa aynı renk dünyasında kodla çizer (kahve şerit, krem etiket, kalın kahve kontur), böylece **T1'i beklemeden bitirilebilir**.
+  - İsteğe bağlı: kasa değişince rakam kısa bir süre yeşil (+) ya da kırmızı (−) parlar. Vakit yoksa yapma.
+  - Push, "C1 ✅ hash" yaz.
+  - **B1 gelince (madde 2):** Sandbox_Desk'te `InspectResultView` ve `InspectorBubbleView`'un karartmanın üstünde kaldığını kontrol et. Sorun varsa burada Oğuzhan'a yaz.
+- [ ] **C2 Ana menü düğmeleri (madde 3; T1'den sonra):**
+  - `MainMenuScreen`: Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış yeni `btn_menu` ile. Tarık aynı adla üzerine yazar, bağlantı korunur.
+  - Yazılar kodla, Paytone One; `ButtonHover` aynı kalır.
+  - **`menu_bg`'deki çizili 3 tahta yuva kalkıyor (T1).** Düğmeleri yuvalara değil düzgün bir sütuna diz:
+    - kayıt varken 4 düğme;
+    - kayıt yokken 3 düğme, ortalanmış.
+  - Yuva sabitlerini (`SlotTop`, `SlotLeft`, `SlotRight`, `SlotHeight`, `SlotGap`) yeni görsele göre ayarla.
+  - Emeği Geçenler'deki Geri düğmesi de aynı görselle olsun. Vakit varsa Esc menüsü düğmeleri (`UiKit.Button`, `PauseMenu`) de.
+  - `SettingsMenuTests` ve `PauseMenuTests` geçmeli. Push, "C2 ✅ hash" yaz.
+
+#### Tarık (EEE) — T1, T2
+- [ ] **T1 Görseller (madde 3, 4; Onur ve Oğuzhan bunu bekliyor, önce bunu yap):**
+  - **Hepsi için ortak kurallar:**
+    - el çizimi 2D cartoon, kalın kahve kontur, sıcak palet;
+    - ONAY (`btn_approve`), RED (`btn_reject`) ve EK TEST (`btn_test`) ile **aynı aile**: aynı kontur kalınlığı, köşe yuvarlaklığı, gölge ve kağıt dokusu;
+    - **Görsellerde yazı yok**, yazıyı kod basar (Türkçe karakter ve boyut sorunu çıkmasın);
+    - şeffaf PNG, Sprite olarak import.
+  - **Dosyalar:**
+    - `btn_inspect.png` (yaklaşık 420x120): İNCELE, solda büyüteç ikonu.
+    - `btn_help.png` (yaklaşık 420x100): NASIL OYNANIR, solda "?" ikonu.
+    - `btn_menu.png` (yaklaşık 520x120): **aynı adla üzerine yaz**. Ana menü düğmeleri için; ikonsuz ya da çok küçük ikonlu. Şu an İNCELE ve NASIL OYNANIR da bunu kullanıyor, B2'de kendi görsellerine geçecekler.
+    - `menu_bg.png`: **aynı adla üzerine yaz**. Çizili 3 tahta düğme yuvası silinir; boyut ve kadraj aynı kalır, logo ve ambiyans katmanları kaymasın. Onur'a haber ver.
+    - Üst bar:
+      - `hud_bar.png`: 1920x80-96, ahşap pano/raf şeridi, altında hafif gölge;
+      - `hud_tag.png`: kağıt etiket, 9-slice için kenar boşluklu (import'ta Sprite Border'ı sen ayarla);
+      - ikonlar (yaklaşık 64x64): `hud_icon_day.png` (takvim yaprağı), `hud_icon_money.png` (kasa/para), `hud_icon_count.png` (klasör).
+  - Her görsel için `CREDITS_AND_AI.md` "Yapay zekâ kullanımı" satırı ve `Art/README.md` satırı (sahip B/C, durum F).
+  - Hepsini **tek push'ta** at, "T1 ✅ hash" yaz.
+- [ ] **T2 Metinler (madde 1, 5, 6):**
+  - `TutorialView.cs` (sadece metin dizeleri, satır ~31 ve ~43) ve `ICERIK_TASLAK.md`'deki aynı metinler:
+    - "kat grubunu seç" → kat grubu kendiliğinden seçilir (ör. "El Kitabı'nın HIZLI BAKIŞ sayfası formdaki kat adedine göre doğru kat grubunu kendisi gösterir.");
+    - "doğru kat grubunu seçmeyi unutma" cümlesi çıkar.
+  - `README.md`:
+    - satır ~27: kat grubu otomatik; "Sekmelerde parametrelerin açıklamaları…" yerine "El Kitabı'nda Hızlı Bakış ve LAB (akredite laboratuvarlar) sayfaları var";
+    - satır ~29: "önce doğru kat grubunu seç" çıkar.
+  - `Art/README.md`: `tab_beton/donati/yapi/zemin.png` "artık kullanılmıyor" diye işaretlenir. **Silme**, prefab'da bağlılar.
+  - Kalkan RED kutusundaki bilgi ("tek kırmızı yeter; değer tutuyor ama belge şüpheliyse ek test iste, parsel/tarih/kaşe/imzayı karşılaştır") öğretici kartlarda ve LAB sayfasında var mı, kontrol et. Yoksa öğretici karta yarım cümle ekle; LAB sayfasında değişiklik gerekirse A'ya yaz.
+  - Push, "T2 ✅ hash" yaz.
+
+### Önceki açık işler
 
 **A (Ahmet):**
 - [ ] Elle oynanış: 4 sonun hepsi (F9/F10), sahte belge ve ek test, kabadayı, hediye.
 - [ ] Teslim: final build (kod değişirse yeniden), ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
-- [ ] El Kitabı sekme notları: `ICERIK_TASLAK.md` → "El Kitabı sekme notları" metnini `RulebookView.sectionNotes`'a aynen koy (prefab'da hâlâ boş).
+- ~~El Kitabı sekme notları~~ → **iptal** (poliş K3: bölüm sekmeleri kalkıyor).
 - [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi (imza ipucu; inceleme 8. satır). Formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
-- [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş. (Çipler ve yazılar `921fc8e`'de EEE tarafından büyütüldü; oyunda bakıp kalan boşluk varsa düzelt ya da maddeyi kapat.)
-- [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.
+- ~~El Kitabı Hızlı Bakış alt yarı boş~~ → **A2'ye geçti** (poliş madde 5).
+- ~~Üst bar~~ → **B2 + C1 + T1'e geçti** (poliş madde 4).
 - Not: ikili portre `g04` (boydan çift) masada kafalar küçük kalıyor; sırıtırsa Onur görseli yakınlaştırır (kod değişikliği değil).
 
 **Onur (C):**
@@ -167,6 +381,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 17 Ekim gece | Esc menüsüne Ayarlar: ana ses (kaydedilir) + tam ekran | Ahmet isteği; müzik / efekt ayrımı şimdilik yok (ses kaynakları dağınık, ekibin dosyalarına dokunmamak için) |
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
+| 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

@@ -241,6 +241,7 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
   - [x] **Formdaki bina resmi:** `bld_low.png` (3 kat, öneri 1-3 kat), `bld_mid.png` (5 kat, 4-6 kat), `bld_high.png` (9 kat, 7+ kat); 300x360 şeffaf, zemin çizgisi altta.
   - [x] **Yazı tipi:** Başlık **Paytone One** (`Fonts/PaytoneOne-Regular SDF`), metin **Fira Sans** (`Fonts/FiraSans-Regular SDF`, `FiraSans-Bold SDF`). Lilita One yerine Paytone seçildi: Lilita'da ğ/ş/İ yok ("DENETİM" bozuk çıkıyordu), Paytone aynı kalın-yuvarlak tarzda ve Türkçe tam. Asset'ler Türkçe karakter seti önceden yüklenmiş, Static (oyunda kendiliğinden değişmez). ✔/✖ simgeleri fontlarda yok: düğmelerde ikon ya da "ONAY"/"RED" yazısı kullan. Üretici menü: CivilJam > EEE > Create Font Assets.
   - [x] **Lisans:** hepsi `CREDITS_AND_AI.md`'de (font tablosu, yapay zekâ tablosu, Emeği Geçenler metni ve MainMenuScreen'deki kopyası).
+  - [ ] 📖 **El kitabı afet bilgileri (yeni "Hızlı Bakış" tasarımı):** BETON / DONATI / YAPI / ZEMİN sekmelerinin her biri için 1 kısa, doğru, korkutmayan farkındalık cümlesi (ör. "Düz demir betonu tutamaz; depremde kolon bu yüzden patlar."). İstersen 5 parametrenin `Description`'ını da düzelt (`RuleSet.asset`). Cümleleri `ICERIK_TASLAK.md`'ye yaz, Oğuzhan sekmelere koyar.
 - **Onur (C):**
   - [ ] **Kaynak kaydı:** `hedef_arayuz.png`'yi hangi araçla ürettiğini `CREDITS_AND_AI.md` → "Yapay zekâ kullanımı" tablosuna yaz.
   - [ ] **İsteğe bağlı:** Flow ekranlarını (gazete, gün özeti, ödeme, kayıt) aynı kağıt/belge diline yaklaştır.

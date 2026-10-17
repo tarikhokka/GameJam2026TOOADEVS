@@ -35,7 +35,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_good.png` | Ending İyi "Ayakta Kalanlar": gün batımında düzenli ofis, masada onaylı (✓) dosyalar, pencerede ayakta binalar (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_bad.png` | Ending Kötü "Hüküm": parmaklıklar arkasından hücre, yatakta proje rulolarıyla (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_closed.png` | Ending Orta "Kapanan Kapı" (iflas): mühürlü, şeritli ofis, koliler, devrik çay (ChatGPT, 17 Ekim akşam) | C | F |
-| `ending_collapsed.png` | Ending Orta "Enkazın Gölgesi" (desk_bg, neredeyse renksiz gri; MiddleCollapsed.asset'e bağlı) | C | F |
+| `ending_collapsed.png` | Ending Orta "Enkazın Gölgesi" (yeni ofis + masa, neredeyse renksiz soğuk gri, pencereden solgun ışık — 18 Ekim yenilendi; MiddleCollapsed.asset'e bağlı) | C | F |
 | `gift_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk: ofis hediyeleri (GiftSO.Sprite), 300x300 şeffaf, konturlu | B | F |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |

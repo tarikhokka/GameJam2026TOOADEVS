@@ -178,8 +178,14 @@ namespace CivilJam.Desk.Editor
             music.playOnAwake = false;
             music.loop = true;
 
+            var typing = new GameObject("TypingSource").AddComponent<AudioSource>(); // konuşma balonu yazı sesi (perdesi değişir)
+            typing.transform.SetParent(go.transform, false);
+            typing.playOnAwake = false;
+
             Wire(audio, "sfxSource", sfx);
             Wire(audio, "musicSource", music);
+            Wire(audio, "typingSource", typing);
+            Wire(audio, "typing", FindClip("sfx_typing"));
             Wire(audio, "click", FindClip("sfx_click"));
             Wire(audio, "paper", FindClip("sfx_paper"));
             Wire(audio, "stamp", FindClip("sfx_stamp"));
@@ -394,7 +400,7 @@ namespace CivilJam.Desk.Editor
             balloon.pivot = new Vector2(0.5f, 0f);
             balloon.anchoredPosition = new Vector2(BalloonShiftX, -(HeadTopY - 16));
             balloon.sizeDelta = new Vector2(520, 0);
-            AddImage(balloon, BalloonColor).raycastTarget = false;
+            AddImage(balloon, BalloonColor).raycastTarget = true; // tıklanınca yazı anında tamamlanır (ClientSceneView)
             VLayout(balloon, 0, new RectOffset(28, 28, 18, 18));
             balloon.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             var balloonText = NewText("Text", balloon, "Söz", 28, Ink, TextAlignmentOptions.Center, FontStyles.Italic);

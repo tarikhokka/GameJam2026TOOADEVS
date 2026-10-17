@@ -31,7 +31,7 @@ namespace CivilJam.Desk
 
         [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
-        [Tooltip("Müteahhidin tepki balonu varsa sıradakine geçmeden önce bu kadar beklenir (sn)")]
+        [Tooltip("Müteahhidin tepki balonu yazılıp bittikten sonra sıradakine geçmeden önce bu kadar beklenir (sn)")]
         [SerializeField] private float reactionHold = 1.5f;
 
         public GamePhase Phase => GamePhase.Desk;
@@ -66,6 +66,7 @@ namespace CivilJam.Desk
 
             if (rulebook != null) rulebook.Toggled += PlayPaper;
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
+            if (deskAudio != null) scene.CharTyped += deskAudio.PlayTyping; // konuşma balonu harf harf yazarken
         }
 
         private IEnumerable<PaperWindow> Windows()
@@ -204,6 +205,7 @@ namespace CivilJam.Desk
             if (project != null && !string.IsNullOrEmpty(project.ReactionText))
             {
                 scene.Say(project.ReactionText);
+                while (scene.IsTyping) yield return null; // uzun replik yarıda kesilmesin (tıklayınca anında biter)
                 yield return new WaitForSeconds(reactionHold);
             }
 

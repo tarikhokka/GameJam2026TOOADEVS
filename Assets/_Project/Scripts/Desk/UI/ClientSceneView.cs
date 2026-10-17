@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using CivilJam.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
     // Ofis sahnesi: masanın karşısındaki koltuğa müteahhit gelip oturur, başının üstünde konuşma balonu çıkar.
     // Çizim sırası (EEE): desk_bg (oda + koltuk + masa) → portre → desk_front (masa) → balon. Gelen giden portredir.
-    public class ClientSceneView : MonoBehaviour
+    // Balon metni harf harf yazılır (EEE kararı, karaktere özel ses yok): her iki harfte bir CharTyped (DeskScreen yazı sesini
+    // çalar), boşluk/noktalamada ses yok, cümle sonunda kısa duraklama. Balona tıklayınca metin anında tamamlanır.
+    public class ClientSceneView : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private RectTransform portraitRoot;
         [SerializeField] private Image portraitImage;
@@ -20,13 +24,30 @@ namespace CivilJam.Desk
         [Tooltip("Geliş başlangıcının oturduğu yere uzaklığı (px, sağdan)")]
         [SerializeField] private float arriveOffset = 1100f;
 
+        [Header("Harf harf yazı (EEE: ~35-45 harf/sn)")]
+        [SerializeField] private float charsPerSecond = 40f;
+        [Tooltip("Yazı sesi her kaç harfte bir (1 = her harf)")]
+        [SerializeField] private int soundEvery = 2;
+        [SerializeField] private float sentencePause = 0.18f; // . ! ? sonrası
+        [SerializeField] private float commaPause = 0.08f;    // , ; : sonrası
+
+        // Görünen her sesli harfte (soundEvery'de bir) tetiklenir; DeskScreen yazı sesini çalar.
+        public event Action CharTyped;
+
+        // Balon yazarken true: DeskScreen tepkiden sonra yazının bitmesini bekler.
+        public bool IsTyping => typing != null;
+
         private Vector2 seatedPosition;
         private bool seatedPositionKnown;
         private string seatedKey;
         private string pendingLine;
         private Coroutine move;
         private Coroutine balloonAnim;
+        private Coroutine typing;
         private CanvasGroup balloonGroup;
+
+        // Balona (ya da sahnedeki başka tıklanabilir bir şeye) tıklanınca yazı anında tamamlanır.
+        public void OnPointerClick(PointerEventData eventData) => FinishTyping();
 
         // Aynı proje için tekrar çağrılırsa bir şey yapmaz (her Redraw'da çağrılabilir).
         // Koltukta biri varsa önce o sola çıkar, sonra yenisi sağdan gelir (sıra akışı tek yönde).
@@ -57,8 +78,12 @@ namespace CivilJam.Desk
                 HideBalloon();
                 return;
             }
+            // Balon baştan tam metnin boyutunda açılır (yazarken büyüyüp titremez); harfler sırayla görünür.
+            StopTyping();
             balloonText.text = line;
+            balloonText.maxVisibleCharacters = 0;
             PlayBalloon(BalloonIn());
+            typing = StartCoroutine(TypeLine());
         }
 
         // Gün sonu: oturan müteahhit sola çıkar, koltuk boş kalır. Kimse yoksa bir şey yapmaz (her Redraw'da çağrılabilir).
@@ -80,6 +105,7 @@ namespace CivilJam.Desk
             if (move != null) StopCoroutine(move);
             if (balloonAnim != null) StopCoroutine(balloonAnim);
             move = balloonAnim = null;
+            StopTyping();
             seatedKey = null;
             pendingLine = null;
             portraitRoot.anchoredPosition = seatedPosition;
@@ -89,7 +115,56 @@ namespace CivilJam.Desk
 
         private void HideBalloon()
         {
+            StopTyping();
             if (balloonRoot.activeSelf) PlayBalloon(BalloonOut());
+        }
+
+        // Harf harf yazar (zaman biriktirerek: kare hızından bağımsız 40 harf/sn). Sesli harflerde (her soundEvery'de bir)
+        // CharTyped; boşluk ve noktalamada ses yok. Cümle sonunda ve virgülde kısa duraklama (konuşma gibi akar).
+        private IEnumerator TypeLine()
+        {
+            balloonText.ForceMeshUpdate();
+            var info = balloonText.textInfo;
+            int total = info.characterCount;
+            float budget = 0f;
+            int shown = 0, voiced = 0;
+
+            while (shown < total)
+            {
+                budget += Time.unscaledDeltaTime * charsPerSecond;
+                while (budget >= 1f && shown < total)
+                {
+                    budget -= 1f;
+                    char c = info.characterInfo[shown].character;
+                    shown++;
+                    balloonText.maxVisibleCharacters = shown;
+
+                    if (char.IsLetterOrDigit(c) && voiced++ % Mathf.Max(1, soundEvery) == 0) CharTyped?.Invoke();
+                    float pause = c == '.' || c == '!' || c == '?' ? sentencePause
+                        : c == ',' || c == ';' || c == ':' ? commaPause : 0f;
+                    if (pause > 0f && shown < total)
+                    {
+                        budget = 0f;
+                        yield return new WaitForSecondsRealtime(pause);
+                    }
+                }
+                yield return null;
+            }
+            typing = null;
+        }
+
+        // Tıklama: metnin tamamı hemen görünür.
+        private void FinishTyping()
+        {
+            if (typing == null) return;
+            StopTyping();
+        }
+
+        private void StopTyping()
+        {
+            if (typing != null) StopCoroutine(typing);
+            typing = null;
+            balloonText.maxVisibleCharacters = int.MaxValue;
         }
 
         private void PlayBalloon(IEnumerator routine)
@@ -141,7 +216,7 @@ namespace CivilJam.Desk
             {
                 balloonGroup = balloonRoot.GetComponent<CanvasGroup>();
                 if (balloonGroup == null) balloonGroup = balloonRoot.AddComponent<CanvasGroup>();
-                balloonGroup.blocksRaycasts = false;
+                balloonGroup.blocksRaycasts = true; // balona tıklanınca yazı tamamlanır
             }
             return balloonGroup;
         }

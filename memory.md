@@ -159,6 +159,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 **İş bölümü:**
 > **Onur'un güncellemesi:** Bu 7 günlük yapı iş paketinde Tarık yer almayacak; aşağıdaki Onur + Tarık portre görevi ve Tarık'ın ClientSO / ortak replik / README / CREDITS görevlerini Onur üstleniyor. Onur, ekibin bu iş bölümünden haberdar olduğunu belirtti. Teslim planı: `Docs/Onur/YediGun_icerik_yol_haritasi.md`. Bu not yeni bir Core/ekonomi kararı değildir.
 > **İçerik hazır (Onur):** Son gönderilen 10 ChatGPT görseli `portrait_g01`–`g10` olarak 1000×1000 şeffaf PNG'ye hazırlandı. 1. ve 4. ikililer Onur'un açık tercihiyle birlikte gelen tek müşteridir (10 ClientSO, 10 ziyaret). `Generic01`–`Generic10` sprite'lara bağlı; ortak havuzlarda 42 replik, README 7 gün, Art README/CREDITS güncel. İzole Unity 6000.6.4f1 kopyasında 54/54 EditMode (52 mevcut + 2 geçici içerik kontrolü); gerçek kadroyla 300 program ve kayıt roundtrip'i geçti. **A:** Game.unity için Link Data + final kontrol/build. **B:** iki ikili dahil masa kadrajı. Kaynaklar, eşleme ve önizleme `Docs/Onur/YediGun_icerik_yol_haritasi.md` içinde.
+> ✅ **7 GÜNLÜK YAPI TAMAM (A, `fba19e6` sonrası):** testler EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (AHMET.md); **final aday build** `Builds/Imza/Imza.exe` (172 MB, açılış temiz) ve teslim ZIP'i `Builds/Imza.zip` (54 MB, `…DontShipItWithYourGame` klasörü hariç). `Builds/` git dışında. Bundan sonra kod değişirse A yeniden build + ZIP alır.
+>
 > ✅ **Oğuzhan (B):** masada "10 gün" geçen metin yok (öğretici, üst bar "Gün N", F9 açıklaması masada değil); değişiklik gerekmedi. Kadraj: tek kişilik portreler mevcutlarla aynı ölçek; ikili `g01` kabul edilebilir, `g04` (boydan çift) kafalar küçük kalıyor: oyunda sırıtırsa Onur görseli yakınlaştırır (kod değişikliği değil).
 
 | Kim | İş | Süre |
@@ -387,7 +389,8 @@ static class Inspection
 - [ ] Teslim: final build, ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
-- [x] (A, diyalog kontrolü) Denetçi balonu formun başlığını ve İNCELE düğmesinin solunu kapatıyor; İNCELE düğmesi (Tarık'ın yeni yeri) müteahhit portresinin gövdesinin üstüne biniyor. Balonu biraz sola/aşağı, düğmeyi portreden uzağa al (küçük cila). — (B) Denetçi balonu sola, ofisin önüne (masa kenarının üstü, x ~120-720) alındı: belgeleri ve portreyi kapatmıyor. İNCELE düğmesi Tarık'ın yerinde bırakıldı (Oğuzhan kararı).
+- [x] (A, diyalog kontrolü) Denetçi balonu formun başlığını ve İNCELE düğmesinin solunu kapatıyor; İNCELE düğmesi (Tarık'ın yeni yeri) müteahhit portresinin gövdesinin üstüne biniyor. Balonu biraz sola/aşağı, düğmeyi portreden uzağa al (küçük cila).
+ — (B) Denetçi balonu sola, ofisin önüne (masa kenarının üstü, x ~120-720) alındı: belgeleri ve portreyi kapatmıyor. İNCELE düğmesi Tarık'ın yerinde bırakıldı (Oğuzhan kararı).
 - [x] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor. — (EEE yaptı) `TutorialView.StyleCard`: başlık tek satır + otomatik küçülme (Paytone), metin Fira Sans, alt satır 64 px, düğmeler 150/190 px (Fira Bold). Fontlar prefab'a ve builder'a (`Wire titleFont/bodyFont/boldFont`) bağlı; prefab yeniden üretilmedi.
 - [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.

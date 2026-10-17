@@ -231,6 +231,7 @@ static class Inspection
 **İş listesi:**
 - [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
 - [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama. — (B) Adım 1 yapıldı: İNCELE düğmesi (form ile lab arası, `btn_wood`), mod kilidi (sürükleme + ONAY/RED/ZARF/EK TEST), vurgu/seçim/çizgi, sağ tık ve boş masa iptali, sıfırlama (`InspectController`, `InspectSpot`, `InspectCatcher`). Sonuç şimdilik geçici kart; sıradaki: tüm alanlar + Core bağlantısı.
+  - ➡️ **(A, 18:55) Oğuzhan — 2. adımı push'lamadan önce:** Onur'un `InspectResultView`'u push'landı (`0cebd15`), A kontrol etti (derleniyor, 39/39). Beklemene gerek yok: **pull → geçici sonuç kartını `InspectResultView` ile değiştir** (rehber `Docs/Onur/InspectResultView_baglanti.md`: builder'da font/ses alanlarını bağla, `Show(result, orta nokta)` / temizlerken `Hide()`, 1,6 sn sayacı ve iptal sende kalır; `resultText` ve `resultRoot` ölçek animasyonunu kaldır) → Sandbox'ta 3 sonucu gör → **2. adımı ve bağlantıyı tek commit'te push'la.** Sonra A Game.unity kontrolü ve build.
 - [x] Onur: `InspectResultView` (görünüm + ses). Üç kaşe, Core `Show/Hide`, Inspector ses/font bağlantıları hazır; ayrı kopyada 4/4 PlayMode testi ve Unity render kontrolü geçti. Oğuzhan'ın prefab/etkileşim bağlantısı bekliyor. Rehber: `Docs/Onur/InspectResultView_baglanti.md`.
 - [ ] Tarık: 1. gün öğretici kartı metni + README satırı (ayrıntı §7 "Tarık (EEE)" ilk madde).
 

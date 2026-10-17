@@ -384,7 +384,7 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
-- ⚠️ **(EEE → A, 17 Ekim) Ahmet: Game.unity'ye yeni ekran.** `GamePhase.Save` için ekran yoktu, IMGUI yedek arayüzü çıkıyordu. `SaveScreen` eklendi ve `CoreSetupBuilder.InstallScreens` listesine yazıldı. **Menüden `CivilJam > Core > Install Screens Into Game Scene` çalıştırıp Game.unity'yi push'la** (sahne senin). Sonra gün sonunda yedek arayüz yerine yeni ekran açılır.
+- [x] **(EEE → A, 17 Ekim) Ahmet: Game.unity'ye yeni ekran.** `GamePhase.Save` için ekran yoktu, IMGUI yedek arayüzü çıkıyordu. `SaveScreen` eklendi ve `CoreSetupBuilder.InstallScreens` listesine yazıldı. **Menüden `CivilJam > Core > Install Screens Into Game Scene` çalıştırıp Game.unity'yi push'la** (sahne senin). Sonra gün sonunda yedek arayüz yerine yeni ekran açılır. ✅ (A) Yapıldı: SaveScreen Game.unity'de (Install Screens), sahne testi Save ekranını da arıyor.
 - ℹ️ **(EEE → C, 17 Ekim) Senin klasörüne yeni ekran:** `Scripts/Flow/UI/SaveScreen.cs` + `Prefabs/Flow/SaveScreen.prefab` (FlowScreen tabanı, UI kodla kurulur). Gece ofisi arka planı (`Art/save_bg.png`), ortada kart: "{biten gün}. Gün kaydedildi", kısa metin, kasa/borç, yamuk kırmızı "KAYDEDİLDİ" kaşesi, buton "{yeni gün}. güne geç →". Not: Save fazında Core günü zaten artırmış olur, biten gün = `Day - 1`.
 - ⚠️ **(EEE → C, 17 Ekim) Senin iki dosyana dokunuldu (Tarık onayıyla), pull et:**
   - `Prefabs/Flow/DayIntroScreen.prefab`: kök Image artık `Art/dayintro_bg.png` (sabah ofisi, bulanık/loş), renk opak beyaz (eskisi yarı saydam beyaz, varsayılan UI sprite), Image Type = Simple. Başka bir şey değişmedi.
@@ -456,6 +456,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim öğleden sonra | Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı görünümü (Docs/Tasarim), içerik v2; başvuru → Yapı Denetim Formu, lab raporu ayrı kalır | Ahmet kararı. Tasarımın örnek içeriği (yangın/sel/kaçak kat) reddedilmiş modelden; kullanılmaz |
 | 17 Ekim öğleden sonra | Hediyeyi sadece dürüst ustalar verir (Core: `IsHonest`) | Ahmet kararı: rüşvetçinin hediyesi zarfla karışıyordu. Tarık'ın 6 GiftSO'su Game.unity'de; rüşvetçilerinkiler kullanılmaz |
 | 17 Ekim öğleden sonra | YAPI DENETİM FORMU klasörü masada LAB RAPORU'nun yanında (oyuncu tarafı); LAB RAPORU küçültüldü; klasör görseli Tarık'a | Ahmet kararı: isimliğin arkasındaki klasörün yeri ve görünümü beğenilmedi; iki belge birlikte incelendiği için yan yana |
+| 17 Ekim öğleden sonra | Gün sonu kayıt ekranı (SaveScreen, EEE) Game.unity'de; IMGUI yedeği Save fazında artık çıkmaz | A bağladı; 8 fazın hepsinin ekranı var |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

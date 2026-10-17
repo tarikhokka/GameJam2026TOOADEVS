@@ -46,4 +46,4 @@ Tarık'a görsel notu: sütun eski yuva bölgesinin üzerine geliyor. Kayıtsız
 
 ## Ahmet'e teslim
 
-C2 ve C1-K tamam. B2 `1c652eb` de alındı; Faz 2'nin üç teslimi hazır. §7 faz tablosunda C2/C1-K commit'i kayıtlıdır. Ahmet, A3'te Game.unity entegrasyonunu kendi alanında yapıp son oynanış/ekran görüntüsü/build/ZIP kontrolüne geçebilir. Faz 3'ü açma kararı A'dadır.
+C2 ve C1-K `d2dddb9` ile tamam. B2 `1c652eb` de alındı; Faz 2'nin üç teslimi hazır. §7 faz tablosunda C2/C1-K commit'i kayıtlıdır. Ahmet, A3'te Game.unity entegrasyonunu kendi alanında yapıp son oynanış/ekran görüntüsü/build/ZIP kontrolüne geçebilir. Faz 3'ü açma kararı A'dadır.

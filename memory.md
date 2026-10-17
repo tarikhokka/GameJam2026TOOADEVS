@@ -181,8 +181,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
 | 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` |
-| 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ teslim hazır; hash sonraki notta |
-| 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ teslim hazır; hash sonraki notta |
+| 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ `d2dddb9` |
+| 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ `d2dddb9` |
 | 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
 
 **Faz 0 (bitti, `d0c4e59`):** Plan push'landı.
@@ -258,7 +258,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - Faz 2 dosyalarına dokunmazlar.
 
 **Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
-> **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
+> **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K `d2dddb9` ile birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
 
 **Faz 3 (08:30 → 11:00) — A:**
 - A3: hepsini pull, EditMode + PlayMode testleri, otomatik 7 günlük oynanış, ekran görüntüleri (masa, inceleme modu, El Kitabı, üst bar, ana menü, Esc menüsü), §2-§3 ve README son kontrol, build + ZIP.
@@ -387,8 +387,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - sprite yoksa aynı renk dünyasında kodla çizer (kahve şerit, krem etiket, kalın kahve kontur), böylece **T1'i beklemeden bitirilebilir**.
   - İsteğe bağlı: kasa değişince rakam kısa bir süre yeşil (+) ya da kırmızı (−) parlar. Vakit yoksa yapma.
   - Push, "C1 ✅ hash" yaz.
-  - **C1-K ✅ teslim hazır (madde 2):** B2 dahil gerçek Sandbox_Desk'te form/El Kitabı beton alanları tıklanarak Core C25/C30 uyuşmazlığı üretildi. Kaşe ve denetçi konuşması karartmanın üstünde, alfa 1; mod kapatılınca geçici katmanlar temizleniyor. Oğuzhan'a düzeltme gerektiren hata yok. Kabul/görüntüler: `Docs/Onur/Faz2_kabul_notlari.md`.
-- [x] **C2 ✅ teslim hazır — ana menü düğmeleri (madde 3):** Yeni `btn_menu` + Paytone One; kayıtlı dört/kayıtsız üç düğme aynı merkezde, credits Geri aynı stilde. Yeni Oyun tek intro, Devam Et kayıtlı gün, hover ve mevcut Settings/Pause testleri geçti. Esc görünümü isteğe bağlıydı; değiştirilmedi. Birleşik taban `d579a84`: 55/55 EditMode + 10/10 PlayMode (4 mevcut + 6 geçici kabul).
+  - **C1-K ✅ `d2dddb9` (madde 2):** B2 dahil gerçek Sandbox_Desk'te form/El Kitabı beton alanları tıklanarak Core C25/C30 uyuşmazlığı üretildi. Kaşe ve denetçi konuşması karartmanın üstünde, alfa 1; mod kapatılınca geçici katmanlar temizleniyor. Oğuzhan'a düzeltme gerektiren hata yok. Kabul/görüntüler: `Docs/Onur/Faz2_kabul_notlari.md`.
+- [x] **C2 ✅ `d2dddb9` — ana menü düğmeleri (madde 3):** Yeni `btn_menu` + Paytone One; kayıtlı dört/kayıtsız üç düğme aynı merkezde, credits Geri aynı stilde. Yeni Oyun tek intro, Devam Et kayıtlı gün, hover ve mevcut Settings/Pause testleri geçti. Esc görünümü isteğe bağlıydı; değiştirilmedi. Birleşik taban `d579a84`: 55/55 EditMode + 10/10 PlayMode (4 mevcut + 6 geçici kabul).
   - `MainMenuScreen`: Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış yeni `btn_menu` ile. Tarık aynı adla üzerine yazar, bağlantı korunur.
   - Yazılar kodla, Paytone One; `ButtonHover` aynı kalır.
   - **`menu_bg`'deki çizili 3 tahta yuva kalkıyor (T1).** Düğmeleri yuvalara değil düzgün bir sütuna diz:

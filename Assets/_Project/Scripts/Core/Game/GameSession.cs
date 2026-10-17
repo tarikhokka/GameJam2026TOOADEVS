@@ -195,7 +195,8 @@ namespace CivilJam.Core
         public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup)
         {
             var p = Context.GetTodayProject(projectId);
-            var outcome = InspectionDialogue.Run(Context, p, a, b, handbookFloorGroup,
+            // Poliş K1: kat grubu otomatik — masanın gönderdiği grup yok sayılır, binanın kendi grubu kullanılır.
+            var outcome = InspectionDialogue.Run(Context, p, a, b, Inspection.FloorGroupOf(Context, p),
                 RngFor((projectId ?? "") + ":inspect:" + (p != null ? p.InspectedMismatches.Count : 0)));
             if (outcome.BribeOffered) Context.NotifyStateChanged();
             return outcome;

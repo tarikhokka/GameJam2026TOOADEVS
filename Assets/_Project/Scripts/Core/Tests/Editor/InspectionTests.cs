@@ -68,6 +68,21 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void FloorGroupOf_FollowsBuildingFloors()
+        {
+            // Poliş K1: kat grubu otomatik (1-3 → 0, 4-6 → 1, 7+ → 2)
+            var expected = new[] { (2, Group13), (3, Group13), (4, Group46), (6, Group46), (7, Group7), (9, Group7) };
+            foreach (var (floors, group) in expected)
+            {
+                var p = Project();
+                p.Floors = floors;
+                Assert.AreEqual(group, Inspection.FloorGroupOf(_ctx, p), $"{floors} kat");
+            }
+            Assert.AreEqual(Inspection.NoFloorGroup, Inspection.FloorGroupOf(_ctx, null));
+            Assert.AreEqual(Inspection.NoFloorGroup, Inspection.FloorGroupOf(new GameContext(), Project()));
+        }
+
+        [Test]
         public void Rows3And4_ExtraTest_OnlyAfterTest()
         {
             var p = Project();

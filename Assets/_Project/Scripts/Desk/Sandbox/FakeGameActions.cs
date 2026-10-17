@@ -31,8 +31,12 @@ namespace CivilJam.Desk
 
         // (A, Core) IGameActions'a Ç4 ile eklendi; sandbox'ta hediyeyi ofis listesine yazar. memory.md'de not var.
         // (A, Core) memory.md "💬": IGameActions'a eklendi; sandbox da gerçek diyalog kuralını kullanır.
-        public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup) =>
-            InspectionDialogue.Run(context, context.GetTodayProject(projectId), a, b, handbookFloorGroup, new System.Random());
+        // (A, poliş K1) kat grubu otomatik: oyundaki gibi binanın kendi grubu kullanılır.
+        public InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup)
+        {
+            var p = context.GetTodayProject(projectId);
+            return InspectionDialogue.Run(context, p, a, b, Inspection.FloorGroupOf(context, p), new System.Random());
+        }
 
         public bool AcceptGift(string projectId)
         {

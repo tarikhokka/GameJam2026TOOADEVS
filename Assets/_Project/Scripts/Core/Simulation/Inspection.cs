@@ -32,7 +32,8 @@ namespace CivilJam.Core
     /// <summary>
     /// İnceleme modu (Papers, Please tarzı; Ahmet kararı 17 Ekim akşam, kural tablosu memory.md "🔎").
     /// Oyuncu iki ayrı belgeden iki alan seçer; sonuç: uyuyor / uyuşmazlık / alakasız. Saf fonksiyon: oyunun durumunu değiştirmez.
-    /// El kitabı eşiği oyuncunun seçtiği kat grubundan alınır; seçilmemiş ya da binaya ait olmayan grup → Alakasız.
+    /// Check'te el kitabı eşiği verilen kat grubundan alınır; seçilmemiş ya da binaya ait olmayan grup → Alakasız.
+    /// Oyunda grup her zaman binanın kendi grubudur (FloorGroupOf; poliş K1, 18 Ekim: kat grubu otomatik).
     /// </summary>
     public static class Inspection
     {
@@ -43,6 +44,21 @@ namespace CivilJam.Core
 
         /// <summary>Kat grubu indeksi → o grubun temsilci kat sayısı (0 = 1-3, 1 = 4-6, 2 = 7+).</summary>
         static readonly int[] GroupFloors = { 2, 5, 8 };
+
+        /// <summary>
+        /// Binanın El Kitabı kat grubu (0 = 1-3, 1 = 4-6, 2 = 7+), kurallardaki aralıklardan; bulunamazsa NoFloorGroup.
+        /// Poliş K1 (Ahmet, 18 Ekim): Hızlı Bakış bu grubu kendiliğinden gösterir, inceleme bu grupla yapılır.
+        /// </summary>
+        public static int FloorGroupOf(GameContext ctx, ProjectData project)
+        {
+            if (ctx == null || ctx.Rules == null || project == null) return NoFloorGroup;
+            var param = project.Params.Count > 0 ? project.Params[0].Type : ParamType.ConcreteGrade;
+            var own = ctx.Rules.FindRule(project.BuildingType, param, project.Floors);
+            if (own == null) return NoFloorGroup;
+            for (int g = 0; g < GroupFloors.Length; g++)
+                if (ctx.Rules.FindRule(project.BuildingType, param, GroupFloors[g]) == own) return g;
+            return NoFloorGroup;
+        }
 
         /// <summary>Alan bu projede tıklanabilir mi? Ek test hücresi sadece test yapıldıysa.</summary>
         public static bool IsAvailable(ProjectData project, InspectTarget t)

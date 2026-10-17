@@ -12,6 +12,7 @@ namespace CivilJam.Core
         /// <summary>
         /// İnceleme modu: iki alanı karşılaştır (Inspection.Check). UYUŞMAZLIK'ta diyalog satırları döner; projede zarf varsa
         /// ilk uyuşmazlıkta teklif edilir (BribeOffered, ProjectData.BribeRevealed). Para/risk etkisi yok. memory.md "💬".
+        /// handbookFloorGroup artık yok sayılır (poliş K1): El Kitabı eşiği binanın kendi kat grubundan (Inspection.FloorGroupOf).
         /// </summary>
         InspectOutcome Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup);
 

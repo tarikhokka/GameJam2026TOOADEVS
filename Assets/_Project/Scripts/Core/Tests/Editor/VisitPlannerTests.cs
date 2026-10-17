@@ -118,6 +118,34 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void RealCast_MainsThreeTimesOnDifferentDays_GenericsOnce()
+        {
+            // Poliş madde 7: gerçek 16 kişilik kadro (Data/Clients) — 6 ana müteahhit 3'er kez ve 3 ayrı günde,
+            // 10 kişiliksiz karakter 1'er kez, hiçbiri aynı gün iki kez gelmez.
+            var cast = new List<ClientSO>();
+            foreach (var guid in AssetDatabase.FindAssets("t:ClientSO", new[] { "Assets/_Project/Data/Clients" }))
+                cast.Add(AssetDatabase.LoadAssetAtPath<ClientSO>(AssetDatabase.GUIDToAssetPath(guid)));
+            Assert.AreEqual(16, cast.Count);
+            Assert.AreEqual(10, cast.FindAll(c => c.IsGeneric).Count);
+
+            for (int seed = 0; seed < 500; seed++)
+            {
+                var plan = VisitPlanner.Plan(7, ConfigFor, cast, _balance, new System.Random(seed));
+                var days = new Dictionary<string, HashSet<int>>();
+                var visits = new Dictionary<string, int>();
+                foreach (var day in plan)
+                    foreach (var s in day.Slots)
+                    {
+                        if (!days.TryGetValue(s.ClientId, out var set)) days[s.ClientId] = set = new HashSet<int>();
+                        Assert.IsTrue(set.Add(day.Day), $"seed {seed} gün {day.Day}: {s.ClientId} aynı gün iki kez");
+                        visits[s.ClientId] = visits.TryGetValue(s.ClientId, out var v) ? v + 1 : 1;
+                    }
+                foreach (var c in cast)
+                    Assert.AreEqual(c.IsGeneric ? 1 : 3, visits.TryGetValue(c.Id, out var n) ? n : 0, $"seed {seed}: {c.Id}");
+            }
+        }
+
+        [Test]
         public void Backup_WithoutGenerics_MainsFillTheRest()
         {
             for (int seed = 0; seed < 100; seed++)

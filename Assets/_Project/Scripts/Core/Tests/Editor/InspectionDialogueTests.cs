@@ -95,6 +95,16 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void Inspect_IgnoresDeskFloorGroup_UsesBuildingGroup()
+        {
+            // Poliş K1: masanın gönderdiği grup (seçilmemiş ya da yanlış) sonucu değiştirmez
+            var p = Bribed();
+            var (a, b) = FailingPair(p);
+            Assert.AreEqual(InspectVerdict.Mismatch, _ctx.Actions.Inspect(p.Id, a, b, Inspection.NoFloorGroup).Result.Verdict);
+            Assert.AreEqual(InspectVerdict.Mismatch, _ctx.Actions.Inspect(p.Id, a, b, 2).Result.Verdict);
+        }
+
+        [Test]
         public void BribeCannotBeTaken_BeforeOffer()
         {
             var p = Bribed();

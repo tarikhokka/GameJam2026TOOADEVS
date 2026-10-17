@@ -445,22 +445,25 @@ namespace CivilJam.Desk.Editor
             return rt;
         }
 
-        // Masadaki eşyalar (odanın içinde, desk_bg px'leriyle): ortada isimliğin önünde YAPI DENETİM FORMU klasörü
-        // (müteahhit oturunca), sol altta LAB RAPORU kitabı, sağ altta EL KİTABI, isimliğin sağındaki masa yüzeyinde zarf,
-        // gün bitince boş koltuğun önünde "Mesaiyi bitir" (müteahhit / proje adı üst barda).
+        // Masadaki eşyalar (odanın içinde, desk_bg px'leriyle; EEE'nin sade masası, 17 Ekim öğleden sonra):
+        // oyuncu tarafında LAB RAPORU (kupa/kalemlik ile isimlik arası) ve EL KİTABI (sağdaki boş alan) — EEE'nin önerdiği yer/boyut;
+        // müteahhit tarafında (isimliğin arkası, masanın uzak kenarı) YAPI DENETİM FORMU klasörü ve zarf: müteahhit getirip bırakır.
+        // Gün bitince boş koltuğun önünde "Mesaiyi bitir" (müteahhit / proje adı üst barda).
         private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook)
         {
             var root = Stretch(NewRect("Props", room));
 
-            // Sol kitap saat yönünün tersine, sağ kitap saat yönüne hafif eğik (masanın perspektifi, EEE).
-            var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), BookMargin, 2f, out var labBookRoot);
-            handbookBook = BookButton("HandbookBook", root, "book_rules", new Color(0.33f, 0.6f, 0.33f),
-                1920 - BookMargin - BookWidth, -2f, out _);
-            // Form klasörü: EEE görseli (Art/form_folder.png) yoksa tasarım renginde çerçeveli klasör + yazı.
-            var formFolder = BookButton("FormFolder", root, "form_folder", FormFolderColor, 960 - FolderWidth * 0.5f, -1.5f,
-                out var formFolderRoot, FolderWidth, 0.52f, "YAPI DENETİM\nFORMU");
+            // Kitaplar görselde perspektifle çizildi: eğim yok. Konum/boyut EEE önerisi (sol-üst x,y + genişlik; yükseklik görselden).
+            var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), 238, 0f, out var labBookRoot,
+                width: 480, top: 815);
+            handbookBook = BookButton("HandbookBook", root, "book_rules", new Color(0.33f, 0.6f, 0.33f), 1320, 0f, out _,
+                width: 500, top: 812);
+            // Form klasörü: EEE görseli (Art/form_folder.png) yoksa tasarım renginde çerçeveli klasör + yazı. Görselin altında
+            // şeffaf boşluk yok (artBottom 0).
+            var formFolder = BookButton("FormFolder", root, "form_folder", FormFolderColor, 1002 - 115, -1f,
+                out var formFolderRoot, width: 230, top: 752, fallbackLabel: "YAPI DENETİM\nFORMU", artBottom: 0f);
 
-            var envelope = TopLeft(NewRect("Envelope", root), new Vector2(160, 84), 1300, 785); // isimliğin sağı, masa yüzeyi
+            var envelope = TopLeft(NewRect("Envelope", root), new Vector2(150, 80), 1135, 778); // form klasörünün yanı, müteahhit tarafı
             AddImage(envelope, EnvelopeColor).raycastTarget = false;
             var envelopeText = NewText("Text", envelope, "ZARF", 20, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
             Stretch(envelopeText.rectTransform);
@@ -482,32 +485,30 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // book_*.png (EEE, 640x330, masaya yatık): masada 340 px genişlik → kupa (~220) ve kaşeyle (~280) orantılı.
-        // Yükseklik görselin kendi oranından (EEE: masaya yatık çizim, 640x330); alt kenarda gölgenin görüneceği kadar boşluk.
-        private const float BookWidth = 340f;
-        private const float BookMargin = 34f;
-        private const float BookBottomGap = 34f;
-        private const float FolderWidth = 300f; // masanın ortasındaki form klasörü (isimliğin önünde)
-
-        // Kitap: kök (konum + eğim, DeskBookProp) → Shadow (geniş yumuşak, sağa-aşağı) + Contact (dar koyu, tam altında)
-        // + Book (görsel + Button, pivot alt kenarda). Görsel yoksa düz renk; fallbackLabel verilirse çerçeve + yazı eklenir.
+        // Masadaki nesne: kök (konum + eğim, DeskBookProp) → Shadow (yatay yumuşak elips) + Contact (dar, alt kenarda)
+        // + Book (görsel + Button, pivot alt kenarda). x, top: sol-üst köşe (desk_bg px); yükseklik görselin oranından.
+        // artBottom: görselde nesnenin alt kenarı, yüksekliğin bu oranı kadar yukarıda (EEE kitaplarında altta şeffaf boşluk ~%17).
+        // Görsel yoksa düz renk; fallbackLabel verilirse çerçeve + yazı eklenir.
         private static Button BookButton(string name, Transform parent, string sprite, Color fallback, float x, float tilt,
-            out GameObject bookRoot, float width = BookWidth, float fallbackAspect = 0.52f, string fallbackLabel = null)
+            out GameObject bookRoot, float width, float top, float fallbackAspect = 0.52f, string fallbackLabel = null,
+            float artBottom = 0.17f)
         {
             var art = FindSprite(sprite);
             float height = art != null ? width * art.rect.height / art.rect.width : width * fallbackAspect;
             var size = new Vector2(width, height);
+            if (art == null) artBottom = 0f;
 
             var root = NewRect(name, parent);
             root.anchorMin = root.anchorMax = new Vector2(0f, 1f);
             root.pivot = new Vector2(0.5f, 0.5f); // eğim ortadan
             root.sizeDelta = size;
-            root.anchoredPosition = new Vector2(x + size.x * 0.5f, -(1080 - BookBottomGap - size.y * 0.5f));
+            root.anchoredPosition = new Vector2(x + size.x * 0.5f, -(top + size.y * 0.5f));
             root.localRotation = Quaternion.Euler(0, 0, tilt);
 
-            // Işık soldan (desk_bg): gölge sağa-aşağı düşer. Görselde kitabın alt kenarı yüksekliğin ~%9 yukarısında.
-            var shadow = BookShadow("Shadow", root, new Vector2(size.x * 1.0f, size.y * 0.6f), new Vector2(size.x * 0.07f, size.y * 0.2f));
-            var contact = BookShadow("Contact", root, new Vector2(size.x * 0.85f, size.y * 0.14f), new Vector2(size.x * 0.03f, size.y * 0.1f));
+            // EEE: gölge kitabın altında, alt kenara yakın, yatay yumuşak elips (~%30 koyu); ışık soldan → hafif sağa.
+            float baseY = size.y * artBottom;
+            var shadow = BookShadow("Shadow", root, new Vector2(size.x * 0.98f, size.y * 0.3f), new Vector2(size.x * 0.03f, baseY));
+            var contact = BookShadow("Contact", root, new Vector2(size.x * 0.88f, size.y * 0.09f), new Vector2(size.x * 0.01f, baseY + size.y * 0.01f));
 
             var book = Stretch(NewRect("Book", root));
             book.pivot = new Vector2(0.5f, 0f); // basma/kalkma alt kenardan: kitap masada oturur

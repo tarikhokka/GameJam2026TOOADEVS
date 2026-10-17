@@ -14,10 +14,10 @@ namespace CivilJam.Desk
         private const float HoverLift = 12f;      // px yukarı
         private const float HoverScale = 1.05f;
         private const float Flatten = 1f;         // EEE görseli zaten masaya yatık çizildi: basma yok (eski dik görsel için 0.9 idi)
-        private const float ShadowAlpha = 0.38f;  // geniş yumuşak gölge
-        private const float ShadowAlphaLifted = 0.22f;
+        private const float ShadowAlpha = 0.3f;   // yatay yumuşak gölge (EEE: ~%30 koyu)
+        private const float ShadowAlphaLifted = 0.18f;
         private const float ShadowSpreadLifted = 1.12f;
-        private const float ContactAlpha = 0.7f;  // kitabın masaya değdiği yerdeki dar, koyu gölge
+        private const float ContactAlpha = 0.4f;  // kitabın masaya değdiği alt kenarda dar gölge
         private static readonly Color WarmLight = Color.white; // ışık görselde (soldan sıcak); ek ton yok
 
         [SerializeField] private RectTransform book;

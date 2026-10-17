@@ -37,7 +37,7 @@ namespace CivilJam.Desk.Editor
         private static PaperWindow BuildFormWindow(Transform papers, out FormView formView)
         {
             var window = BuildPaperWindow(papers, "FormWindow", FormFolderColor, FormShadowColor, "DOSYA · 2026-0000",
-                new Vector2(0, -900), out var content, out var paper, out var fileTab);
+                new Vector2(40, -240), out var content, out var paper, out var fileTab); // masadaki form klasörü (isimliğin arkası)
 
             var date = Header(content, "AFET KONTROL BÜROSU", "YAPI DENETİM FORMU");
 
@@ -105,7 +105,7 @@ namespace CivilJam.Desk.Editor
         private static PaperWindow BuildLabWindow(Transform papers, out LabReportView labView)
         {
             var window = BuildPaperWindow(papers, "LabWindow", LabFolderColor, LabShadowColor, "LAB RAPORU",
-                new Vector2(-700, -800), out var content, out _, out _);
+                new Vector2(-480, -380), out var content, out _, out _); // LAB RAPORU kitabı (sol)
 
             var date = Header(content, "LABORATUVAR", "LABORATUVAR RAPORU", out var labName);
 
@@ -157,7 +157,7 @@ namespace CivilJam.Desk.Editor
         private static RulebookView BuildRulebook(Transform papers, Button openButton)
         {
             var window = BuildPaperWindow(papers, "RulebookWindow", HandbookFolderColor, HandbookShadowColor, "EL KİTABI · BASKI 3",
-                new Vector2(700, -800), out var content, out _, out _);
+                new Vector2(600, -380), out var content, out _, out _); // EL KİTABI (sağ)
 
             var titles = NewRect("Titles", content);
             VLayout(titles, 2, new RectOffset(0, 0, 0, 8));

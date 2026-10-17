@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace CivilJam.Desk
 {
     // Ofis sahnesi: masanın karşısındaki koltuğa müteahhit gelip oturur, başının üstünde konuşma balonu çıkar.
-    // Çizim sırası (EEE): oda → koltuk → portre → masa önü → balon. Koltuk hep durur; gelen giden portredir.
+    // Çizim sırası (EEE): desk_bg (oda + koltuk + masa) → portre → desk_front (masa) → balon. Gelen giden portredir.
     public class ClientSceneView : MonoBehaviour
     {
         [SerializeField] private RectTransform portraitRoot;

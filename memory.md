@@ -75,7 +75,7 @@
   - `UI/DeskAudio.cs` — masa sesleri: tık, kağıt, kaşe, cam kırılma + ofis müziği (döngü, %25); klipler prefab'da referansla bağlı.
   - `UI/EventCardView.cs` — masada olay kartı (perde + başlık/metin/Tamam). Kabadayı reddedilince "Camın kırıldı!" (Core `WindowRepairsToday`'i artırdıysa; masa kuralı kopyalamaz, sonucu okur).
   - `UI/RulebookView.cs` — "El Kitabı" penceresi (masadaki EL KİTABI kitabı ya da açık dosyadaki "El Kitabı'na bak"): kontrol listesi, yönetmelik alt sınırları (`ctx.Rules`), akredite laboratuvarlar (`ctx.Names.LabNames`). Sadece gösterir.
-  - `UI/ClientSceneView.cs` — ofis sahnesi: oda (`desk_bg`) → koltuk → portre → masa önü (aynı görselin masa kısmı) → konuşma balonu. Müteahhit sağdan gelip oturur; balonda gelişte `GreetingText` (+ rüşvet repliği), karardan sonra `ReactionText`.
+  - `UI/ClientSceneView.cs` — ofis sahnesi: `desk_bg` (oda + koltuk + masa) → portre (600x600) → `desk_front` (sadece masa) → masadaki eşyalar → konuşma balonu. Müteahhit sağdan gelip oturur; balonda gelişte `GreetingText` (+ rüşvet repliği), karardan sonra `ReactionText`.
   - `UI/DeskPropsView.cs` — masadakiler (dosya kapalıyken): LAB RAPORU kitabı (tıklayınca dosya açılır), zarf, müteahhit/proje adı, "Mesaiyi bitir".
   - `UI/DossierView.cs` — açık dosya: ortada belge (DocumentView) + karar sütunu (ActionPanel), perde; "Kapat" ile masaya döner.
   - `UI/TutorialView.cs` — 1. gün masa açılınca 4 öğretici kart (metinler bu dosyada; taslak, EEE onayı bekliyor).

@@ -37,6 +37,10 @@ namespace CivilJam.Core
                 Money = Balance.StartMoney,
                 DisasterChance = Balance.DisasterChanceStart
             };
+            // 7 günlük yapı (memory.md "📅"): bütün günlerin ziyaret programı oyun başında, kayıtla saklanır
+            if (Balance.UseVisitSchedule && Context.Clients != null && Context.Clients.Count > 0)
+                Context.State.Schedule = VisitPlanner.Plan(Balance.TotalDays, ConfigForDay, Context.Clients, Balance,
+                    new Random(unchecked(seed * 7919 + 4243)));
             Context.NotifyStateChanged();
         }
 
@@ -60,9 +64,14 @@ namespace CivilJam.Core
             // Dünün son müteahhidi bugün ilk gelmesin (yüklemeden sonra liste boş: kısıt yok).
             var yesterday = Context.TodayProjects;
             string lastClient = yesterday != null && yesterday.Count > 0 ? yesterday[yesterday.Count - 1].ClientId : null;
-            Context.TodayProjects = Context.DayConfig == null || Context.Rules == null
-                ? new List<ProjectData>()
-                : ProjectGenerator.Generate(State.Day, Context.DayConfig, Context.Rules, Balance,
+            var planned = State.Schedule != null ? State.Schedule.Find(s => s.Day == State.Day) : null;
+            if (Context.DayConfig == null || Context.Rules == null)
+                Context.TodayProjects = new List<ProjectData>();
+            else if (planned != null)
+                Context.TodayProjects = ProjectGenerator.GenerateFromSchedule(State.Day, planned, Context.DayConfig, Context.Rules,
+                    Balance, Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames);
+            else
+                Context.TodayProjects = ProjectGenerator.Generate(State.Day, Context.DayConfig, Context.Rules, Balance,
                     Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames, lastClient);
             ClientReactions.PrepareArrivals(Context, RngFor);
             Context.NotifyStateChanged();

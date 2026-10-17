@@ -21,6 +21,9 @@ namespace CivilJam.Core
         /// <summary>Bu oyunda masaya gelmiş bina adları (aynı ad iki kez gelmesin).</summary>
         public List<string> UsedBuildingNames = new List<string>();
 
+        /// <summary>Oyun başında kurulan ziyaret programı (memory.md "📅"): gün → kim, hangi tür. Boşsa eski gün gün üretim.</summary>
+        public List<ScheduledDay> Schedule = new List<ScheduledDay>();
+
         /// <summary>Ç4: kabul edilen ofis hediyeleri (GiftSO.Id). Masa ekranı ofiste gösterir; kayıtla birlikte saklanır.</summary>
         public List<string> OfficeGifts = new List<string>();
 

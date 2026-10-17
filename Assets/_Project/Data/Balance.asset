@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1acf823281cd54ab5e8af4be81743e, type: 3}
   m_Name: Balance
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.BalanceSO
-  TotalDays: 10
+  TotalDays: 7
   StartMoney: 1500
   DebtLimit: 2000
   ExtraTestCost: 400
   WindowRepairCost: 600
+  UseVisitSchedule: 1
+  MainClientVisits: 3
+  CompliantShare: 0.5
+  GenericBribeRange: {x: 800, y: 1500}
   ApprovalFeeRange: {x: 500, y: 700}
   DisasterChanceStart: 0.2
   DisasterChanceIncrement: 0.15

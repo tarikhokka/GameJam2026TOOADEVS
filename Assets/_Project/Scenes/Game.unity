@@ -1149,6 +1149,7 @@ MonoBehaviour:
   headlines: {fileID: 11400000, guid: 2e373839c7960b14e89507d941f4f382, type: 2}
   dayConfigs:
   - {fileID: 11400000, guid: 8d218fbf2dc394e4f880fca3d9dcc305, type: 2}
+  - {fileID: 11400000, guid: 665017c44e9601e4eb5ba0c0c487cd25, type: 2}
   - {fileID: 11400000, guid: 852da02ceb9168a4b997de8aab5b0f0e, type: 2}
   - {fileID: 11400000, guid: 82d355cf96ce58a4e940be6894d2e6e2, type: 2}
   - {fileID: 11400000, guid: eb452530aa682e84fa783e5a1e1f1a0e, type: 2}

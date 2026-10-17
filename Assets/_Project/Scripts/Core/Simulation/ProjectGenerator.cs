@@ -54,6 +54,22 @@ namespace CivilJam.Core
             return result;
         }
 
+        /// <summary>Ziyaret programından (VisitPlanner) günün projeleri: kim ve hangi tür programda, gerisi aynı üretim.</summary>
+        public static List<ProjectData> GenerateFromSchedule(int day, ScheduledDay plan, DayConfigSO config, RuleSetSO rules,
+            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames = null)
+        {
+            usedNames = usedNames ?? new HashSet<string>();
+            var result = new List<ProjectData>();
+            for (int i = 0; i < plan.Slots.Count; i++)
+            {
+                var slot = plan.Slots[i];
+                ClientSO client = null;
+                if (clients != null) foreach (var c in clients) if (c != null && c.Id == slot.ClientId) { client = c; break; }
+                result.Add(CreateProject(day, i, slot.Kind, config, rules, balance, names, client, rng, usedNames));
+            }
+            return result;
+        }
+
         static ProjectKind PickBadKind(DayConfigSO config, Random rng)
         {
             var kinds = new List<ProjectKind> { ProjectKind.Sloppy };

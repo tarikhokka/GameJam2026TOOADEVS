@@ -14,6 +14,13 @@ namespace CivilJam.Core
         public int DebtLimit = 2000;      // Borç bunu aşarsa ofis kapanır (Orta son)
         public int ExtraTestCost = 300;   // Anında düşülür
         public int WindowRepairCost = 200;
+        [Header("Ziyaret programı (memory.md \"📅\")")]
+        [Tooltip("Açıksa oyun başında bütün günlerin ziyaret programı kurulur: ana müteahhitler MainClientVisits kez, " +
+                 "kalan yerler kişiliksiz karakterler; projelerin CompliantShare'i uygun. Kapalıysa eski gün gün üretim.")]
+        public bool UseVisitSchedule;
+        public int MainClientVisits = 3;
+        [Range(0f, 1f)] public float CompliantShare = 0.5f;
+
         [Tooltip("Kişiliksiz müteahhitlerin (ClientSO.IsGeneric) zarf tutarı aralığı")]
         public Vector2Int GenericBribeRange = new Vector2Int(800, 1500);
         public Vector2Int ApprovalFeeRange = new Vector2Int(300, 500);

@@ -90,6 +90,14 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
 ### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
+> ✅ **Core 2. adım hazır (A, push'landı): 7 gün oyunda.**
+> - Oyun başında ziyaret programı kurulur (`VisitPlanner`, `GameState.Schedule`, kayıtla saklanır).
+> - Gün ayarları: Day01 (3), Day02 (3, zarf), Day03 (4, sahte belge), Day04 (4, kabadayı), Day06 (5). `TotalDays` 7; F9 7. güne atlar.
+> - 300 programda doğrulandı: 3-3-4-4-4-5-5; ana müteahhit 3'er, kişiliksiz 1'er; tam 14 uygunsuz; aynı gün iki kez yok; arka arkaya yok; kabadayı 4. günden; 1. gün en çok 1 uygunsuz; dürüst usta zarf / sahte getirmez. EditMode 52/52.
+> - Kişiliksiz asset'ler yokken yedek plan çalışır (ana müteahhitler doldurur). Tarık'ın 10 `ClientSO`'su gelince A Link Data ile bağlar, başka iş yok.
+> - Denge (yedek planla, Tarık'ın ekonomisi): dikkatli %75 İyi / %25 ofis kapanır; tek zarf %43 İyi / %44 Enkazın Gölgesi / %11 hapis; her zarfı alan %82 hapis; reddeci 3. gün kapanır. Ekonomi kararı Ahmet'te.
+> - **Oğuzhan:** masada "10 gün" geçen metin varsa 7'ye çevir. **Tarık:** README "10 gün" → "7 gün".
+>
 > ✅ **Core 1. adım hazır (A, push'landı):** `ClientSO.IsGeneric`, `Dialogue.asset` ortak havuz listeleri (`GenericGreetingLines` … `GenericBribeRefusedLines`), `BalanceSO.GenericBribeRange` (800-1500). Kişiliksiz karakterin kendi listesi boşsa ortak havuz kullanılır (testli, 48/48). **Tarık ve Onur asset'lere girebilir.** Not: 2. adım (program kurucu) gelene kadar kişiliksizler eski rastgele seçimde "dürüst olmayan" havuzuna düşer; oyunda görünmeleri 2. adımla düzelir. A 2. adımda.
 
 **Neden:** 10 gün sıkıcı bulundu; oyun kısalıyor ve iyi/kötü projeler eşitleniyor.

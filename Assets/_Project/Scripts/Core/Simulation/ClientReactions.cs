@@ -18,7 +18,8 @@ namespace CivilJam.Core
     /// Ç4: müteahhit konuşmaları ve etkileri. Saf C#; GameSession çağırır.
     ///  - Selamlama: daha önce karar verilmişse ReturnLines ({last} → "onaylamıştınız" / "reddetmiştiniz"), yoksa GreetingLines.
     ///  - Tepki: onay → ApproveLines; ret → zarf geri çevrildiyse BribeRefusedLines, değilse RejectLines.
-    ///  - Hediye: onayda ClientSO.Gift tanımlıysa, bu hediye henüz alınmadıysa ve bugün başka projede çıkmadıysa GiftChance ihtimalle.
+    ///  - Hediye: SADECE dürüst usta (IsHonest) verir (Ahmet kararı); onayda ClientSO.Gift tanımlıysa, bu hediye henüz alınmadıysa
+    ///    ve bugün başka projede çıkmadıysa GiftChance ihtimalle.
     ///  - Zarf artışı: BribeRaiseOnReject × şimdiye kadarki ret sayısı (Nuri).
     /// Replik listesi boşsa metin boş kalır; masa bu durumda balon göstermez.
     /// </summary>
@@ -67,7 +68,7 @@ namespace CivilJam.Core
 
             var gift = client.Gift;
             bool giftAlreadyToday = ctx.TodayProjects.Exists(x => x != p && !string.IsNullOrEmpty(x.GiftId) && x.GiftId == gift?.Id);
-            if (gift != null && !string.IsNullOrEmpty(gift.Id) && !ctx.State.OfficeGifts.Contains(gift.Id)
+            if (client.IsHonest && gift != null && !string.IsNullOrEmpty(gift.Id) && !ctx.State.OfficeGifts.Contains(gift.Id)
                 && !giftAlreadyToday && rng.Chance(client.GiftChance))
                 p.GiftId = gift.Id;
 

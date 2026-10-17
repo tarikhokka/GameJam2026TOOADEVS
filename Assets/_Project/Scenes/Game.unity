@@ -1064,7 +1064,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fbf75e601929e934db54bbd7109bdf30, type: 2}
   - {fileID: 11400000, guid: f71d72d2ff6cfea4db540742096ac4f9, type: 2}
   - {fileID: 11400000, guid: 5e9cf3a4449b48548a2a57e9d6cb152e, type: 2}
-  gifts: []
+  gifts:
+  - {fileID: 11400000, guid: 2625afaccdec48598bdf547861471986, type: 2}
+  - {fileID: 11400000, guid: e06d46fc42ac45adb4ffde12026447ae, type: 2}
+  - {fileID: 11400000, guid: 6de7d4c48d4443e58f8c4e3ce8579fa8, type: 2}
+  - {fileID: 11400000, guid: a6d5a4293e1f4f91a314ca75459aa797, type: 2}
+  - {fileID: 11400000, guid: 54db3a1fbe7549bda784785ab1720f91, type: 2}
+  - {fileID: 11400000, guid: 76a240ceb7ec47559a0032ec513e2f1b, type: 2}
   fixedSeed: 0
   fallbackGui: 1
   demoKeys: 1

@@ -46,6 +46,7 @@ namespace CivilJam.Core.Tests
             _briber.GreetingLines = new List<string> { "Hocaam!" };
             _briber.RejectLines = new List<string> { "Peki." };
             _briber.BribeRefusedLines = new List<string> { "Zarfımı geri mi çeviriyorsunuz?" };
+            _briber.Gift = _clock; _briber.GiftChance = 1f; // dürüst olmadığı için hediye vermemeli
 
             _ctx = new GameContext { Balance = _balance, Rules = _rules, Clients = new List<ClientSO> { _honest, _briber } };
             _session = new GameSession(_ctx, new[] { _config }, new ExpenseSO[0]);
@@ -99,6 +100,21 @@ namespace CivilJam.Core.Tests
                 {
                     _ctx.Actions.Approve(x.Id, false);
                     Assert.IsTrue(string.IsNullOrEmpty(x.GiftId), "Ofiste olan hediye tekrar verilmez");
+                }
+            }
+        }
+
+        [Test]
+        public void OnlyHonestClientsGiveGifts()
+        {
+            for (int d = 0; d < 4; d++)
+            {
+                _ctx.State.Day = d + 1;
+                _session.BeginDay();
+                foreach (var p in _ctx.TodayProjects.FindAll(x => x.ClientId == "nuri"))
+                {
+                    _ctx.Actions.Approve(p.Id, true);
+                    Assert.IsTrue(string.IsNullOrEmpty(p.GiftId), "Dürüst olmayan müteahhit hediye vermez");
                 }
             }
         }

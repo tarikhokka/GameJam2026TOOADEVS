@@ -226,7 +226,7 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - ⚠️ **Oğuzhan:** selamlamayı artık kendin `GreetingLines`'tan seçme; `project.GreetingText`'i göster (tekrar gelen müteahhitte "geçen sefer…" orada).
 - Her karardan sonra müteahhit tepki verir: onay → teşekkür; red → söylenme/kavga; zarf geri çevrilince; tekrar gelince ("Geçen sefer reddettiniz hocam…").
 - Etkiler: Rüstem reddedilince cam kırar (zaten var, artık masada görünür); Nuri reddedildikçe sonraki zarfı büyütür.
-- **Hediye (Ahmet kararı, güncel):** belirli bir karakter, projesi onaylanınca **bazen** ofis için bir eşya hediye eder (saat, tablo, masa isimliği...). **Para ya da risk etkisi yok**; kabul edilince ofiste (masa ekranında) kalıcı görünür. **Geri çevrilemez, sadece kabul edilir.**
+- **Hediye (Ahmet kararı, güncel):** **sadece dürüst ustalar (Rıfat, Sevim)** hediye verir (Core kuralı: `IsHonest`; diğer müteahhitlere bağlı hediyeler yok sayılır). Projesi onaylanınca **bazen** ofis için bir eşya hediye eder (saat, tablo, masa isimliği...). **Para ya da risk etkisi yok**; kabul edilince ofiste (masa ekranında) kalıcı görünür. **Geri çevrilemez, sadece kabul edilir.**
 - A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları + hediye asset'leri. **B:** karar sonrası konuşma balonu + hediye kartı (sadece "Kabul et") + ofiste hediyelerin görünmesi.
 
 **Ç5 — İsim çeşitliliği (şikayet 5). A ✅ yapıldı (oyun başına tekrar 0); EEE ✅ ad listesi 36.**
@@ -429,6 +429,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim öğle | El kitabı v2: mahalle/bölge tamamen kaldırıldı; 5 parametre (kolon kalınlığı, temel derinliği, beton sınıfı, demir tipi, zemin türü), gerekli değer kat grubuna göre (1-3 / 4-6 / 7+) | Ahmet kararı: daha az ama daha anlaşılır ve keyifli parametre; tek tabloda arama. Denge simülasyonla korundu |
 | 17 Ekim öğle | Demir tipi kat grubuna göre 3 farklı tür (B420 / B500 / B500S); B220 düz hiçbir binada kabul edilmez; gerçek sınıf kodları | Ahmet kararı: tek tip demir parametreyi anlamsızlaştırıyordu. Denge korundu (tek zarf %45/%45/%10) |
 | 17 Ekim öğleden sonra | Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı görünümü (Docs/Tasarim), içerik v2; başvuru → Yapı Denetim Formu, lab raporu ayrı kalır | Ahmet kararı. Tasarımın örnek içeriği (yangın/sel/kaçak kat) reddedilmiş modelden; kullanılmaz |
+| 17 Ekim öğleden sonra | Hediyeyi sadece dürüst ustalar verir (Core: `IsHonest`) | Ahmet kararı: rüşvetçinin hediyesi zarfla karışıyordu. Tarık'ın 6 GiftSO'su Game.unity'de; rüşvetçilerinkiler kullanılmaz |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -12,7 +12,7 @@
 ## 2. Oyun kuralları (güncel, kodda uygulanmış)
 **Akış:** MainMenu → (Yeni Oyun: hikâye intro'su) → Game: DayIntro → Desk → Construction → (afet ? gazete (Result) : gün özeti (DaySummary)) → günlük ödeme → (son ? Ending : Save) → ertesi gün. Deprem sahnesi/animasyonu yok; afetsiz günde gazete yok.
 
-**Gün ve içerik (`Data/Days`):** 10 gün. 1. gün 3 proje, rüşvet/sahte belge yok. 3. günden 4 proje, rüşvet ve sahte belge. 5. günden 5 proje + kabadayı. 8. günden 6 proje. Fabrika, yangın, sel, sigorta, kota **yok**.
+**Gün ve içerik (`Data/Days`):** 10 gün. 1. gün 3 proje (1 kötü), rüşvet/sahte belge yok. 3. günden 4 proje (2 kötü), rüşvet ve sahte belge. 5. günden 5 proje (3 kötü) + kabadayı. 8. günden 6 proje (4 kötü). (5. ve 8. gün kötü oranı 0,6: Tarık, 17 Ekim gece.) Bir müteahhit günde bir kez gelir, arka arkaya gelmez (`ProjectGenerator.AssignClients`; imkânsızsa tekrar, yine arka arkaya değil). Fabrika, yangın, sel, sigorta, kota **yok**.
 
 **El Kitabı v2 (`Data/RuleSet.asset`, 15 kural):** her projede 5 parametre; gereken değer sadece kat grubuna bağlı (binalar 2-9 kat). Değerler "en az"; seçeneklilerde sağdaki daha iyi.
 
@@ -33,7 +33,7 @@
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner.
 
-**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 350-550 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 400; borç limiti 2.000 (17 Ekim gece, Tarık: oynanışta para hâlâ rahattı, ikinci sıkılaştırma; ilki Ahmet onaylı). ⚠️ Balance Report bu son değerlerle henüz çalıştırılmadı; EEE modeli dikkatli oyuncunun sık iflas edebileceğini gösteriyor → rapor kötüyse ilk ayar onay ücreti 400-600. Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
+**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 500-700 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 400; borç limiti 2.000. **Bilerek zor (Tarık kararı, 17 Ekim gece):** dürüst oyuncunun yaklaşık yarısı iflas eder; 600-800 ile %86 kazanıyordu, Tarık 500-700'ü seçti. Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
 
 **Hapis ve sonlar** (günlük ödemeden sonra, öncelik sırasıyla): yıkılan bina JailRisk +0,15, rüşvetle onaylanmış yıkılan bina +0,25; her yıkımdan sonra hapis zarı.
 1. **Kötü** "Hüküm": hapis zarı tuttu.
@@ -41,7 +41,7 @@
 3. **Orta** "Enkazın Gölgesi": 10. gün bitti, en az bir bina yıkıldı.
 4. **İyi** "Ayakta Kalanlar": 10. gün bitti, hiç yıkım yok.
 
-Denge (ESKİ — kira 700, kredi 350, test 250, limit 2.500 ile; yeni değerlerle yeniden çalıştırılmalı) (`CivilJam > Core > Balance Report`, 300 oyun/tip): dikkatli oyuncu (değer farkında ek test alır) %100 İyi, son kasa ~975 + borç ~240, en dip kasa ~0; saf (test almaz) %6 İyi / %49 Enkazın Gölgesi / %46 hapis; tek zarf %50 İyi / %38 Enkazın Gölgesi / %13 hapis; her zarfı alan %91 hapis; her şeyi reddeden 4. gün ofisi kaybeder.
+Denge (`CivilJam > Core > Balance Report`, 300 oyun/tip, 17 Ekim ~22:00, yukarıdaki değerler + günde bir müteahhit + değer farkı): dikkatli (değer farkında ek test alır) %47 İyi / %53 ofis kapanır (son borç ~2.050); saf (test almaz) %3 İyi / %38 Enkazın Gölgesi / %58 hapis; tek zarf %40 İyi / %43 Enkazın Gölgesi / %13 hapis / %3 kapanır; her zarfı alan %95 hapis; her şeyi reddeden 3. gün ofisi kaybeder. (Karşılaştırma: ücret 600-800 ile dikkatli %86 İyi.)
 
 **Kayıt:** tek slot JSON (`persistentDataPath/save.json`), sadece `GameState`. Gün sonunda gün +1 yapılıp kaydedilir; "Devam Et" yeni günün başını açar. Son ekranına girince kayıt silinir.
 
@@ -361,6 +361,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 | 17 Ekim gece | Yeni ekonomi: başlangıç 1.500, kira 700, kredi 350, ücret 350-550, ek test 250, borç limiti 2.500 | Tarık önerisi, Ahmet onayı. Eski değerlerde dikkatli oyuncu hiç borca girmiyordu; şimdi kıl payı kazanıyor (Balance Report §2) |
 | 17 Ekim gece | Değer farkı: lab beyanı formdan farklı yazabilir (sahtede gerçek kötü, uygun projede masum yazım hatası); bazı sahtelerde künye ipucu yok, sadece ek test kanıtlar | Tarık önerisi, Ahmet onayı: ek testin net bir işi yoktu (her sahtede bedava ipucu vardı). Core + testler EEE yazdı (`ProjectGenerator.AddLabDifference`, `Inspection`, `DialogueSO.FormVsLab`); EditMode yeşil |
+| 17 Ekim gece | Bir müteahhit günde bir kez gelir (günün tamamı birlikte yerleştirilir, geri izlemeli); 5. günden kötü proje oranı 0,6; ekonomi bilerek zor: ücret 500-700, kira 750, kredi 400, kabadayı hasarı 600 (4 farklı olay), ek test 400, borç limiti 2.000 | Tarık kararı. Balance Report: dürüst oyuncu %47 İyi / %53 iflas (600-800 ile %86 İyi idi). EditMode 47/47 (InspectionDialogue seed 5→7, Reaction'da bir test seed 12: yeni sırada eski seed'ler rüşvetli proje üretmiyordu) |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

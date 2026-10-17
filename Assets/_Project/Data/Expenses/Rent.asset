@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ExpenseSO
   Id: rent
   DisplayName: "Ofis kiras\u0131"
-  Amount: 600
+  Amount: 700
   Mandatory: 1

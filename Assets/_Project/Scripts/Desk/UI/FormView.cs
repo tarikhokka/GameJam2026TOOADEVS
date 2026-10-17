@@ -96,10 +96,10 @@ namespace CivilJam.Desk
                 ("Onay ücreti", DeskFormat.Money(project.Fee)),
             });
 
-            // İnceleme modunda tıklanabilir alanlar (Core hedefleri adım 3'te).
-            InspectSpot.Mark(dateText, "Form: Tarih");
-            InspectSpot.Mark(infoRows[1], "Form: Ada / Parsel");
-            InspectSpot.Mark(infoRows[8], "Form: Proje müellifi");
+            // İnceleme modunda tıklanabilir alanlar (memory.md "Uygulama notu" tablosu; başka hiçbir yer).
+            InspectSpot.Mark(dateText, InspectTarget.Of(InspectDoc.Form, InspectField.Date));
+            InspectSpot.Mark(infoRows[1], InspectTarget.Of(InspectDoc.Form, InspectField.Parcel));
+            InspectSpot.Mark(infoRows[8], InspectTarget.Of(InspectDoc.Form, InspectField.Signature));
 
             int group = project.Floors <= 3 ? 0 : project.Floors <= 6 ? 1 : 2;
             var sprite = buildingSprites != null && group < buildingSprites.Length ? buildingSprites[group] : null;
@@ -114,6 +114,8 @@ namespace CivilJam.Desk
                 tech[i] = (DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type), DeskFormat.Value(ctx.Rules, p.Type, p.Reported));
             }
             Fill(techRows, techTemplate, techContainer, tech);
+            for (int i = 0; i < project.Params.Count; i++)
+                InspectSpot.Mark(techRows[i], InspectTarget.OfParam(InspectDoc.Form, project.Params[i].Type));
 
             bool hasStamp = doc != null && !string.IsNullOrEmpty(doc.StampId);
             municipalStamp.SetActive(hasStamp);

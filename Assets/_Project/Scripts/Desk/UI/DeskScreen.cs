@@ -71,6 +71,11 @@ namespace CivilJam.Desk
             {
                 inspect.ModeChanged += OnInspectMode;
                 inspect.Clicked += PlayClick;
+                // Karar Core'da: bugünkü dosya + El Kitabı'nda oyuncunun seçtiği kat grubu (yanlış grup = ALAKASIZ).
+                inspect.Checker = (a, b) => Inspection.Check(context,
+                    selectedId != null ? context.GetTodayProject(selectedId) : null, a, b,
+                    rulebook != null ? rulebook.SelectedFloorGroup : Inspection.NoFloorGroup);
+                // Sonuç sesi (uyuşmazlık = kaşe, diğerleri = tık) Onur'un InspectResultView'unda.
             }
         }
 

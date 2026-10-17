@@ -14,6 +14,10 @@ namespace CivilJam.Desk
         [SerializeField] private Color testedColor = new Color(0.17f, 0.17f, 0.17f);
         [SerializeField] private Color hiddenColor = new Color(0.55f, 0.55f, 0.55f);
 
+        // İnceleme modunda tıklanabilir hücreler (LabReportView işaretler).
+        public TMP_Text ReportedCell => reportedText;
+        public TMP_Text ActualCell => actualText;
+
         // actual null ise ek test yapılmamıştır ("?").
         public void Bind(string displayName, string reported, string actual)
         {

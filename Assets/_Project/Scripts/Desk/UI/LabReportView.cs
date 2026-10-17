@@ -59,10 +59,12 @@ namespace CivilJam.Desk
             UiPool.Resize(infoRows, infoTemplate, infoContainer, info.Length);
             for (int i = 0; i < info.Length; i++) infoRows[i].Bind(info[i].Item1, info[i].Item2);
 
-            // İnceleme modunda tıklanabilir alanlar (Core hedefleri adım 3'te).
-            InspectSpot.Mark(infoRows[1], "Lab: Rapor tarihi");
-            InspectSpot.Mark(infoRows[3], "Lab: Ada / Parsel");
-            InspectSpot.Mark(signatureText, "Lab: Yetkili imzası");
+            // İnceleme modunda tıklanabilir alanlar (memory.md "Uygulama notu" tablosu; başka hiçbir yer).
+            InspectSpot.Mark(infoRows[0], InspectTarget.Of(InspectDoc.Lab, InspectField.LabName));
+            InspectSpot.Mark(infoRows[1], InspectTarget.Of(InspectDoc.Lab, InspectField.Date));
+            InspectSpot.Mark(infoRows[3], InspectTarget.Of(InspectDoc.Lab, InspectField.Parcel));
+            InspectSpot.Mark(signatureText, InspectTarget.Of(InspectDoc.Lab, InspectField.Signature));
+            InspectSpot.Mark(stampRoot.transform, InspectTarget.Of(InspectDoc.Lab, InspectField.LabStamp));
 
             UiPool.Resize(rows, paramRowTemplate, paramContainer, project.Params.Count);
             for (int i = 0; i < project.Params.Count; i++)
@@ -72,6 +74,9 @@ namespace CivilJam.Desk
                     DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type),
                     DeskFormat.Value(ctx.Rules, p.Type, p.Reported),
                     p.Tested ? DeskFormat.Value(ctx.Rules, p.Type, p.Actual) : null);
+                InspectSpot.Mark(rows[i].ReportedCell, InspectTarget.OfParam(InspectDoc.Lab, p.Type));
+                var test = InspectTarget.OfTest(p.Type);
+                InspectSpot.Mark(rows[i].ActualCell, test, Inspection.IsAvailable(project, test)); // sadece test yapıldıysa
             }
 
             bool hasStamp = doc != null && !string.IsNullOrEmpty(doc.StampId);

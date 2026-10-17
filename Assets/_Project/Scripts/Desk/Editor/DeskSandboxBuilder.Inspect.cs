@@ -29,18 +29,14 @@ namespace CivilJam.Desk.Editor
             AddImage(line, InspectLine).raycastTarget = false;
             line.gameObject.SetActive(false);
 
-            // Geçici sonuç kartı (adım 1): Onur'un InspectResultView'u gelince yerine o bağlanır.
+            // Sonuç kaşesi (Onur, Docs/Onur/InspectResultView_baglanti.md): kartı, hareketi ve sesi kendisi kurar; tam ekran katmanın
+            // çocuğu, konumu katmanın merkezine göre (çizginin ortası). Fontlar ve sesler burada bağlanır.
             var result = NewRect("Result", overlay);
-            result.anchorMin = result.anchorMax = result.pivot = new Vector2(0.5f, 0.5f);
-            result.sizeDelta = new Vector2(380, 76);
-            AddImage(result, BalloonColor).raycastTarget = false;
-            var resultText = NewText("Text", result, "KONTROL", 24, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
-            resultText.font = BoldFont;
-            resultText.enableAutoSizing = true;
-            resultText.fontSizeMin = 12;
-            resultText.fontSizeMax = 24;
-            Anchor(resultText.rectTransform, Vector2.zero, Vector2.one, new Vector2(12, 6), new Vector2(-12, -6));
-            result.gameObject.SetActive(false);
+            var resultView = result.gameObject.AddComponent<InspectResultView>();
+            Wire(resultView, "titleFont", TitleFont);
+            Wire(resultView, "detailFont", ValueFont);
+            Wire(resultView, "click", FindClip("sfx_click"));
+            Wire(resultView, "stamp", FindClip("sfx_stamp"));
 
             // İNCELE düğmesi: form ile lab raporunun arasında, masa kenarının üstünde (belgelerin hemen üstü).
             var homes = DocHomes();
@@ -67,8 +63,7 @@ namespace CivilJam.Desk.Editor
             Wire(controller, "catcherGraphic", catcherImage);
             Wire(controller, "overlay", overlay);
             Wire(controller, "line", line);
-            Wire(controller, "resultRoot", result);
-            Wire(controller, "resultText", resultText);
+            Wire(controller, "resultView", resultView);
             return controller;
         }
     }

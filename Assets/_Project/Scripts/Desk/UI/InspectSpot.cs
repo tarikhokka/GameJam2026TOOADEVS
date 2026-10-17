@@ -1,3 +1,4 @@
+using CivilJam.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,13 +7,13 @@ namespace CivilJam.Desk
 {
     // İnceleme modunda tıklanabilir alan (form / lab satırı, kaşe, El Kitabı satırı). Görünümler alanı çalışırken ekler (Mark).
     // Mod kapalıyken görünmez ve tıklama almaz (sürükleme ve düğmeler bugünkü gibi). Mod açıkken fare üstüne gelince ince sarı
-    // çerçeve, seçilince sarı dolgu + kalın çerçeve. Hangi bilgiye ait olduğu Core gelince eklenecek (InspectTarget); şimdilik Label.
+    // çerçeve, seçilince sarı dolgu + kalın çerçeve. Hangi bilgiye ait olduğu Target (Core InspectTarget); karar Core'da (Inspection.Check).
     public class InspectSpot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private const float Pad = 4f;
         private static readonly Color Amber = new Color(0.96f, 0.72f, 0.1f);
 
-        public string Label { get; set; }
+        public InspectTarget Target { get; set; }
         public bool Available { get; set; } = true; // ör. ek test hücresi sadece test yapıldıysa
 
         private InspectController controller;
@@ -21,12 +22,13 @@ namespace CivilJam.Desk
         private bool modeOn, hover, selected;
 
         // Verilen nesneyi tıklanabilir alan yapar (zaten öyleyse aynı bileşen döner).
-        public static InspectSpot Mark(Component target, string label, bool available = true)
+        public static InspectSpot Mark(Component target, InspectTarget inspectTarget, bool available = true)
         {
             var spot = target.GetComponent<InspectSpot>();
             if (spot == null) spot = target.gameObject.AddComponent<InspectSpot>();
-            spot.Label = label;
+            spot.Target = inspectTarget;
             spot.Available = available;
+            spot.Paint();
             return spot;
         }
 

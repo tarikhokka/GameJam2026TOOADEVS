@@ -54,6 +54,10 @@ namespace CivilJam.Desk
 
         public PaperWindow Window => window;
 
+        // İnceleme modu: El Kitabı eşiği oyuncunun Hızlı Bakış'ta seçtiği kat grubundan (0 = 1-3, 1 = 4-6, 2 = 7+; seçim yoksa
+        // Inspection.NoFloorGroup). Gruplar küçükten büyüğe sıralı (HandbookUi.FloorGroups), Core'un sırasıyla aynı.
+        public int SelectedFloorGroup => floorGroup < 0 ? Inspection.NoFloorGroup : floorGroup;
+
         private GameContext context;
         private bool built;
         private int floorGroup = -1; // seçili kat grubu; -1 = seçilmedi (nötr)
@@ -267,6 +271,7 @@ namespace CivilJam.Desk
                     var any = FirstRule(rules, param);
                     var color = HandbookUi.SectionColor(section);
                     var row = HandbookUi.Rect("Row_" + param, rows);
+                    InspectSpot.Mark(row, InspectTarget.OfParam(InspectDoc.Handbook, param)); // inceleme modunda tıklanabilir
                     HandbookUi.Size(row, prefH: 46);
                     HandbookUi.Img(row, new Color(1f, 1f, 1f, 0.35f));
                     HandbookUi.HL(row, 10, new RectOffset(14, 8, 7, 7));
@@ -359,18 +364,24 @@ namespace CivilJam.Desk
             sb.AppendLine("• Formdaki parsel no, tarih ve imza lab raporundakiyle aynı olmalı.");
             sb.AppendLine("• Raporun başlığındaki laboratuvar ile kaşedeki aynı olmalı ve aşağıdaki listede bulunmalı.");
             sb.AppendLine($"• Beyana güvenmiyorsan lab raporundan ek test iste ({DeskFormat.Money(testCost)}): gerçek değerleri gösterir.");
-            sb.AppendLine();
-            sb.AppendLine("<b>AKREDİTE LABORATUVARLAR</b>");
-            var labs = ctx.Names != null ? ctx.Names.LabNames : null;
-            if (labs == null || labs.Count == 0) sb.AppendLine("• (liste yok)");
-            else foreach (var lab in labs) sb.AppendLine($"• {lab}");
 
             var text = HandbookUi.Text("Text", page.transform, sb.ToString().TrimEnd(), 16, textFont, HandbookUi.Ink,
                 TextAlignmentOptions.TopLeft, wrap: true);
             text.enableAutoSizing = true;
             text.fontSizeMin = 11;
             text.fontSizeMax = 16;
-            HandbookUi.Size(text, flexH: 1);
+
+            // Akredite liste ayrı blok: inceleme modunda tek tıklanabilir alan (lab adı / kaşe bununla karşılaştırılır).
+            var list = new StringBuilder();
+            list.AppendLine("<b>AKREDİTE LABORATUVARLAR</b>");
+            var labs = ctx.Names != null ? ctx.Names.LabNames : null;
+            if (labs == null || labs.Count == 0) list.AppendLine("• (liste yok)");
+            else foreach (var lab in labs) list.AppendLine($"• {lab}");
+            var labList = HandbookUi.Text("Labs", page.transform, list.ToString().TrimEnd(), 16, textFont, HandbookUi.Ink,
+                TextAlignmentOptions.TopLeft, wrap: true);
+            InspectSpot.Mark(labList, InspectTarget.Of(InspectDoc.Handbook, InspectField.AccreditedLabs));
+
+            HandbookUi.Size(HandbookUi.Rect("Spacer", page.transform), flexH: 1);
             return page;
         }
 

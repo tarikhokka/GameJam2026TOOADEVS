@@ -17,11 +17,34 @@ namespace CivilJam.Flow
         [SerializeField] string gameSceneName = "Game";
 
         // CREDITS_AND_AI.md "Oyun içi Emeği Geçenler metni" ile aynı tutulur (yeni CC BY asset gelince burayı da güncelle).
-        const string CreditsText =
-            "<b>SESLER</b>\n" +
+        // İki sütun: sol = oyun/ekip/yapay zekâ, sağ = sesler/görseller/yazı tipleri. (EEE, 17 Ekim)
+        const string CreditsLeft =
+            "<size=130%><b>İMZA</b></size>\n" +
+            "TOOADEVS · Civil Game Jam 2026\n\n" +
+            "<b>EKİP</b>\n" +
+            "Ahmet İlman — Oyun mantığı ve sistemler\n" +
+            "Oğuzhan Yurt — Masa ekranı\n" +
+            "Onur Kabadayılar — Akış ekranları ve menü\n" +
+            "Tarık Hokkaömeroğlu — Görsel, ses ve içerik\n\n" +
+            "<b>YAPAY ZEKÂ</b>\n" +
+            "Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları " +
+            "(Claude, ChatGPT/Codex, Gemini) kullanıldı. Ayrıntılı liste: CREDITS_AND_AI.md";
+
+        const string CreditsRight =
+            "<b>SESLER VE MÜZİKLER</b>\n" +
             "Ortam sesi: \"Suburban House Ambience 02\" — msepitaph (freesound.org), CC BY 4.0\n" +
+            "Menü müziği: \"Ambient Paulstretched Piano\" — waveplaysfx (freesound.org), CC0\n" +
+            "Son müziği: \"The Sad Piano\" — dasgoat (freesound.org), CC0\n" +
             "Kağıt sesi: \"paper5\" — florian_reinke (freesound.org), CC0\n" +
-            "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0";
+            "Cam kırılma sesi: \"Breaking Glass\" — hifijohn (freesound.org), CC0\n" +
+            "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0\n" +
+            "Yazı sesi: ekip tarafından üretildi\n\n" +
+            "<b>GÖRSELLER</b>\n" +
+            "Müteahhit karakterleri ve ofis: yapay zekâ (ChatGPT)\n" +
+            "Gazete şablonu: yapay zekâ (Gemini)\n\n" +
+            "<b>YAZI TİPLERİ</b>\n" +
+            "Liberation Sans — SIL Open Font License 1.1\n" +
+            "Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1";
 
         GameObject _menuPanel, _creditsPanel;
         Transform _root;
@@ -74,11 +97,18 @@ namespace CivilJam.Flow
         {
             _creditsPanel = UiKit.Stretch(root, "Credits").gameObject;
             UiKit.Image(_creditsPanel.transform, "Shade", null, new Color(0f, 0f, 0f, 0.8f), Vector2.zero, Vector2.one);
-            UiKit.Image(_creditsPanel.transform, "Panel", null, UiKit.Paper, new Vector2(0.2f, 0.25f), new Vector2(0.8f, 0.8f));
-            UiKit.Text(_creditsPanel.transform, "Text", CreditsText, 40, UiKit.Ink, TextAlignmentOptions.TopLeft,
-                new Vector2(0.23f, 0.38f), new Vector2(0.77f, 0.77f), true, 22);
+            UiKit.Image(_creditsPanel.transform, "Panel", null, UiKit.Paper, new Vector2(0.08f, 0.07f), new Vector2(0.92f, 0.93f));
+            var title = UiKit.Text(_creditsPanel.transform, "Title", "Emeği Geçenler", 60, UiKit.Ink, TextAlignmentOptions.Center,
+                new Vector2(0.1f, 0.82f), new Vector2(0.9f, 0.91f), true, 36);
+            title.fontStyle = FontStyles.Bold;
+            UiKit.Image(_creditsPanel.transform, "Rule", null, new Color(UiKit.Ink.r, UiKit.Ink.g, UiKit.Ink.b, 0.35f),
+                new Vector2(0.12f, 0.81f), new Vector2(0.88f, 0.814f));
+            UiKit.Text(_creditsPanel.transform, "Left", CreditsLeft, 30, UiKit.Ink, TextAlignmentOptions.TopLeft,
+                new Vector2(0.12f, 0.2f), new Vector2(0.47f, 0.78f), true, 18);
+            UiKit.Text(_creditsPanel.transform, "Right", CreditsRight, 30, UiKit.Ink, TextAlignmentOptions.TopLeft,
+                new Vector2(0.51f, 0.2f), new Vector2(0.88f, 0.78f), true, 18);
             UiKit.Button(_creditsPanel.transform, "Back", "Geri", () => SetCredits(false),
-                new Vector2(0.42f, 0.28f), new Vector2(0.58f, 0.35f), 32f);
+                new Vector2(0.42f, 0.09f), new Vector2(0.58f, 0.16f), 32f);
         }
 
         void SetCredits(bool on)

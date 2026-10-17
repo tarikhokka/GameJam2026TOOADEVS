@@ -90,7 +90,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
 ### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
-> 🚧 **İş başladı.** A, Core'un 1. adımını (yeni alanlar) push'layınca burada "✅ Core 1. adım hazır" yazar; Tarık ve Onur asset'lere o zaman girer (portre çizimi hemen başlayabilir).
+> ✅ **Core 1. adım hazır (A, push'landı):** `ClientSO.IsGeneric`, `Dialogue.asset` ortak havuz listeleri (`GenericGreetingLines` … `GenericBribeRefusedLines`), `BalanceSO.GenericBribeRange` (800-1500). Kişiliksiz karakterin kendi listesi boşsa ortak havuz kullanılır (testli, 48/48). **Tarık ve Onur asset'lere girebilir.** Not: 2. adım (program kurucu) gelene kadar kişiliksizler eski rastgele seçimde "dürüst olmayan" havuzuna düşer; oyunda görünmeleri 2. adımla düzelir. A 2. adımda.
 
 **Neden:** 10 gün sıkıcı bulundu; oyun kısalıyor ve iyi/kötü projeler eşitleniyor.
 

@@ -25,6 +25,40 @@ namespace CivilJam.Core
     /// </summary>
     public static class ClientReactions
     {
+        public enum LineKind { Greeting, Approve, Reject, Mismatch, Bribe, BribeClose, BribeRefused }
+
+        /// <summary>
+        /// Müteahhidin replik listesi. Kişiliksiz karakterde (IsGeneric) kendi listesi boşsa Dialogue.asset'teki ortak havuz
+        /// (memory.md "📅"). Ana karakterler sadece kendi listelerini kullanır.
+        /// </summary>
+        public static List<string> LinesOf(GameContext ctx, ClientSO client, LineKind kind)
+        {
+            if (client == null) return null;
+            List<string> own;
+            switch (kind)
+            {
+                case LineKind.Greeting: own = client.GreetingLines; break;
+                case LineKind.Approve: own = client.ApproveLines; break;
+                case LineKind.Reject: own = client.RejectLines; break;
+                case LineKind.Mismatch: own = client.MismatchLines; break;
+                case LineKind.Bribe: own = client.BribeLines; break;
+                case LineKind.BribeClose: own = client.BribeCloseLines; break;
+                default: own = client.BribeRefusedLines; break;
+            }
+            if ((own != null && own.Count > 0) || !client.IsGeneric || ctx == null || ctx.Dialogue == null) return own;
+            var d = ctx.Dialogue;
+            switch (kind)
+            {
+                case LineKind.Greeting: return d.GenericGreetingLines;
+                case LineKind.Approve: return d.GenericApproveLines;
+                case LineKind.Reject: return d.GenericRejectLines;
+                case LineKind.Mismatch: return d.GenericMismatchLines;
+                case LineKind.Bribe: return d.GenericBribeLines;
+                case LineKind.BribeClose: return d.GenericBribeCloseLines;
+                default: return d.GenericBribeRefusedLines;
+            }
+        }
+
         public static ClientRecord RecordOf(GameState state, string clientId, bool create = false)
         {
             if (string.IsNullOrEmpty(clientId)) return null;
@@ -51,7 +85,7 @@ namespace CivilJam.Core
                     p.GreetingText = rng.Pick(client.ReturnLines, "")
                         .Replace("{last}", rec.LastVerdict == 1 ? "onaylamıştınız" : "reddetmiştiniz");
                 else
-                    p.GreetingText = rng.Pick(client.GreetingLines, "");
+                    p.GreetingText = rng.Pick(LinesOf(ctx, client, LineKind.Greeting), "");
 
                 if (p.OffersBribe && client.BribeRaiseOnReject > 0 && rec != null && rec.Rejected > 0)
                     p.BribeAmount += client.BribeRaiseOnReject * rec.Rejected;
@@ -64,7 +98,7 @@ namespace CivilJam.Core
             var client = ctx.GetClient(p.ClientId);
             if (client == null) return;
             var rng = rngFor(p.Id + ":react");
-            p.ReactionText = rng.Pick(client.ApproveLines, "");
+            p.ReactionText = rng.Pick(LinesOf(ctx, client, LineKind.Approve), "");
 
             var gift = client.Gift;
             bool giftAlreadyToday = ctx.TodayProjects.Exists(x => x != p && !string.IsNullOrEmpty(x.GiftId) && x.GiftId == gift?.Id);
@@ -84,8 +118,8 @@ namespace CivilJam.Core
             if (client == null) return;
             var rng = rngFor(p.Id + ":react");
             bool refusedBribe = p.OffersBribe && p.BribeRevealed; // teklif edilmemiş zarf geri çevrilemez
-            var lines = refusedBribe && client.BribeRefusedLines != null && client.BribeRefusedLines.Count > 0
-                ? client.BribeRefusedLines : client.RejectLines;
+            var refused = LinesOf(ctx, client, LineKind.BribeRefused);
+            var lines = refusedBribe && refused != null && refused.Count > 0 ? refused : LinesOf(ctx, client, LineKind.Reject);
             p.ReactionText = rng.Pick(lines, "");
 
             var rec = RecordOf(ctx.State, client.Id, create: true);

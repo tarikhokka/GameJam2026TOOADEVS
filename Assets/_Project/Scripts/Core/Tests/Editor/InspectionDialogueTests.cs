@@ -162,5 +162,20 @@ namespace CivilJam.Core.Tests
             CollectionAssert.AreEqual(new[] { DialogueSpeaker.Inspector, DialogueSpeaker.Inspector }, o.Lines.ConvertAll(l => l.Speaker),
                 "Boş replikler atlanır; denetçi cümlesi ve tepkisi kalır");
         }
+
+        [Test]
+        public void GenericClient_UsesSharedPool_WhenOwnListsEmpty()
+        {
+            var g = ScriptableObject.CreateInstance<ClientSO>();
+            g.Id = "g01"; g.IsGeneric = true;
+            _dialogue.GenericGreetingLines = new List<string> { "Merhaba hocam." };
+            _dialogue.GenericMismatchLines = new List<string> { "Kontrol ettireyim." };
+            Assert.AreEqual("Merhaba hocam.", ClientReactions.LinesOf(_ctx, g, ClientReactions.LineKind.Greeting)[0]);
+            Assert.AreEqual("Kontrol ettireyim.", ClientReactions.LinesOf(_ctx, g, ClientReactions.LineKind.Mismatch)[0]);
+            g.GreetingLines = new List<string> { "Kendi selamım." };
+            Assert.AreEqual("Kendi selamım.", ClientReactions.LinesOf(_ctx, g, ClientReactions.LineKind.Greeting)[0], "Kendi listesi doluysa o");
+            Assert.IsEmpty(ClientReactions.LinesOf(_ctx, _briber, ClientReactions.LineKind.Greeting), "Ana karakter havuza düşmez");
+            Object.DestroyImmediate(g);
+        }
     }
 }

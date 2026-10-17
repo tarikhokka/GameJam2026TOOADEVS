@@ -14,6 +14,8 @@ namespace CivilJam.Core
         public int DebtLimit = 2000;      // Borç bunu aşarsa ofis kapanır (Orta son)
         public int ExtraTestCost = 300;   // Anında düşülür
         public int WindowRepairCost = 200;
+        [Tooltip("Kişiliksiz müteahhitlerin (ClientSO.IsGeneric) zarf tutarı aralığı")]
+        public Vector2Int GenericBribeRange = new Vector2Int(800, 1500);
         public Vector2Int ApprovalFeeRange = new Vector2Int(300, 500);
 
         [Header("Afet olasılığı")]

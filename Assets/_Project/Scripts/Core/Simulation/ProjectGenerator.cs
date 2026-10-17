@@ -117,7 +117,8 @@ namespace CivilJam.Core
             if (bribe)
             {
                 p.OffersBribe = true;
-                var range = client != null && client.OffersBribes ? client.BribeRange : new UnityEngine.Vector2Int(500, 2000);
+                var range = client != null && client.OffersBribes ? client.BribeRange
+                    : client != null && client.IsGeneric ? balance.GenericBribeRange : new UnityEngine.Vector2Int(500, 2000);
                 p.BribeAmount = Math.Max(50, RoundTo(rng.RangeInclusive(range.x, range.y), 50));
             }
 

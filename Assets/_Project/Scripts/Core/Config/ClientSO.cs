@@ -26,6 +26,11 @@ namespace CivilJam.Core
         [Tooltip("Daha önce geldiyse selamlama yerine; {last} = \"onaylamıştınız\" / \"reddetmiştiniz\" yerine geçer")]
         [TextArea] public List<string> ReturnLines = new List<string>();
 
+        [Header("Kişiliksiz karakter (memory.md \"📅\")")]
+        [Tooltip("Kişiliksiz müteahhit: oyunda bir kez gelir, uygun / dikkatsiz / zarflı / sahte belgeli proje getirebilir. " +
+                 "Boş replik listeleri Dialogue.asset'teki ortak havuzdan dolar; zarf tutarı BalanceSO.GenericBribeRange.")]
+        public bool IsGeneric;
+
         [Header("Uyuşmazlık diyaloğu (memory.md \"💬\") — EEE yazar")]
         [Tooltip("Denetçi bir uyuşmazlık söyleyince müteahhidin tek cümlelik cevabı (parametre adı geçmesin, genel kalsın)")]
         [TextArea] public List<string> MismatchLines = new List<string>();

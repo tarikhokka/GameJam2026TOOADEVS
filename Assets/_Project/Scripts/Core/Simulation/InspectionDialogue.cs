@@ -28,16 +28,16 @@ namespace CivilJam.Core
 
             var client = ctx.GetClient(project.ClientId);
             Add(outcome, DialogueSpeaker.Inspector, InspectorLine(ctx, project, a, b, floorGroup));
-            Add(outcome, DialogueSpeaker.Client, rng.Pick(client != null ? client.MismatchLines : null, ""));
+            Add(outcome, DialogueSpeaker.Client, rng.Pick(ClientReactions.LinesOf(ctx, client, ClientReactions.LineKind.Mismatch), ""));
 
             if (project.OffersBribe && !project.BribeRevealed)
             {
                 project.BribeRevealed = true;
                 outcome.BribeOffered = true;
-                Add(outcome, DialogueSpeaker.Client, rng.Pick(client != null ? client.BribeLines : null, ""));
+                Add(outcome, DialogueSpeaker.Client, rng.Pick(ClientReactions.LinesOf(ctx, client, ClientReactions.LineKind.Bribe), ""));
                 var reactions = ctx.Dialogue != null ? ctx.Dialogue.BribeReactions : null;
                 Add(outcome, DialogueSpeaker.Inspector, rng.Pick(reactions, DialogueSO.DefaultBribeReaction));
-                Add(outcome, DialogueSpeaker.Client, rng.Pick(client != null ? client.BribeCloseLines : null, ""));
+                Add(outcome, DialogueSpeaker.Client, rng.Pick(ClientReactions.LinesOf(ctx, client, ClientReactions.LineKind.BribeClose), ""));
             }
             return outcome;
         }

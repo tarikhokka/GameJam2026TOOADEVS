@@ -25,6 +25,15 @@ namespace CivilJam.Core
         [Header("Denetçi: rüşvet teklifine kısa tepki (rastgele biri)")]
         [TextArea] public List<string> BribeReactions = new List<string>();
 
+        [Header("Kişiliksiz müteahhitler (ClientSO.IsGeneric) — ortak havuz; kendi listesi boşsa bunlar kullanılır (memory.md \"📅\")")]
+        [TextArea] public List<string> GenericGreetingLines = new List<string>();
+        [TextArea] public List<string> GenericApproveLines = new List<string>();
+        [TextArea] public List<string> GenericRejectLines = new List<string>();
+        [TextArea] public List<string> GenericMismatchLines = new List<string>();
+        [TextArea] public List<string> GenericBribeLines = new List<string>();
+        [TextArea] public List<string> GenericBribeCloseLines = new List<string>();
+        [TextArea] public List<string> GenericBribeRefusedLines = new List<string>();
+
         public const string DefaultParamBelowRule = "{param} {value} yazıyor; {group}lı binada en az {required} olmalı.";
         public const string DefaultTestBelowRule = "Ek testte {param} {value} çıktı; {group}lı binada en az {required} olmalı.";
         public const string DefaultReportedVsTest = "Formda {param} {reported} yazıyor ama ek test {actual} gösteriyor.";

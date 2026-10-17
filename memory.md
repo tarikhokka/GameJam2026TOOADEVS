@@ -97,7 +97,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Teslim: final build, ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
-- [ ] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor.
+- [x] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor. — (EEE yaptı) `TutorialView.StyleCard`: başlık tek satır + otomatik küçülme (Paytone), metin Fira Sans, alt satır 64 px, düğmeler 150/190 px (Fira Bold). Fontlar prefab'a ve builder'a (`Wire titleFont/bodyFont/boldFont`) bağlı; prefab yeniden üretilmedi.
 - [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.
 - [x] ~~Kurum adı tutarlılığı~~ **Değişiklik yok (Tarık kararı, `54c580d`):** bunlar bilerek ayrı kurumlar. "Ulusal Yapı Denetim Kurumu" = oyuncunun çalıştığı ve son onayı veren yer; "Afet Kontrol Bürosu" = El Kitabı'nı yayımlayan kurum; "Betonya Belediyesi" = imar kaşesi. Metinler eşitlenmez.

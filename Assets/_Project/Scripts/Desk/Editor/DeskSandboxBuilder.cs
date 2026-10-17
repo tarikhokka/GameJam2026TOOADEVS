@@ -290,6 +290,9 @@ namespace CivilJam.Desk.Editor
             Wire(view, "nextButton", next);
             Wire(view, "nextLabel", next.GetComponentInChildren<TMP_Text>());
             Wire(view, "skipButton", skip);
+            Wire(view, "titleFont", TitleFont); // EEE: kart fontları ve yerleşimi TutorialView.StyleCard'da
+            Wire(view, "bodyFont", ValueFont);
+            Wire(view, "boldFont", BoldFont);
             return view;
         }
 

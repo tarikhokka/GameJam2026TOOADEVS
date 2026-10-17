@@ -16,6 +16,10 @@ namespace CivilJam.Desk
         [SerializeField] private Button nextButton;
         [SerializeField] private TMP_Text nextLabel;
         [SerializeField] private Button skipButton;
+        // (EEE, 17 Ekim) Kart yeni yazı tiplerine geçer ve yerleşimi düzeltilir (başlık tek satıra sığar, düğmeler makul boyda).
+        [SerializeField] private TMP_FontAsset titleFont; // PaytoneOne-Regular SDF
+        [SerializeField] private TMP_FontAsset bodyFont;  // FiraSans-Regular SDF
+        [SerializeField] private TMP_FontAsset boldFont;  // FiraSans-Bold SDF
 
         [SerializeField] private Card[] cards =
         {
@@ -42,6 +46,55 @@ namespace CivilJam.Desk
         {
             nextButton.onClick.AddListener(Next);
             skipButton.onClick.AddListener(Finish);
+            StyleCard();
+        }
+
+        private void StyleCard()
+        {
+            // Başlık: tek satır, sığmazsa küçülür (eskiden iki satıra taşıp metnin üstüne biniyordu).
+            if (titleFont != null) titleText.font = titleFont;
+            titleText.fontStyle = FontStyles.Normal; // Paytone zaten kalın
+            titleText.textWrappingMode = TextWrappingModes.NoWrap;
+            titleText.enableAutoSizing = true;
+            titleText.fontSizeMin = 24;
+            titleText.fontSizeMax = 44;
+            SetLayout(titleText, 64, 0);
+
+            if (bodyFont != null) { bodyText.font = bodyFont; pageText.font = bodyFont; }
+            bodyText.lineSpacing = 6;
+            SetLayout(bodyText, -1, 1); // kalan yükseklik metnin
+
+            // Alt satır: sabit 64 px; düğmeler makul genişlikte.
+            var footer = nextButton.transform.parent;
+            SetLayout(footer, 64, 0);
+            if (footer.parent != null && footer.parent.TryGetComponent<VerticalLayoutGroup>(out var cardLayout))
+                cardLayout.childForceExpandHeight = false;
+            SetWidth(skipButton, 150);
+            SetWidth(nextButton, 190);
+            foreach (var label in new[] { skipButton.GetComponentInChildren<TMP_Text>(), nextLabel })
+            {
+                if (label == null) continue;
+                if (boldFont != null) label.font = boldFont;
+                label.fontStyle = FontStyles.Normal;
+                label.fontSize = 28;
+            }
+        }
+
+        private static void SetLayout(Component target, float preferredHeight, float flexibleHeight)
+        {
+            var element = target.GetComponent<LayoutElement>();
+            if (element == null) element = target.gameObject.AddComponent<LayoutElement>();
+            element.preferredHeight = preferredHeight;
+            element.minHeight = preferredHeight > 0 ? preferredHeight : -1;
+            element.flexibleHeight = flexibleHeight;
+        }
+
+        private static void SetWidth(Component target, float width)
+        {
+            var element = target.GetComponent<LayoutElement>();
+            if (element == null) element = target.gameObject.AddComponent<LayoutElement>();
+            element.preferredWidth = width;
+            element.flexibleHeight = 0;
         }
 
         public void Open()

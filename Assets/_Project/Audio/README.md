@@ -18,6 +18,6 @@ Bu klasöre sadece EEE yazar.
 | `mus_office_ambient.wav` | Desk (loop) | P |
 | `mus_menu.wav` | MainMenu (loop) | P |
 | `mus_ending_sad.mp3` | Kötü ve Orta sonlar (Hüküm, Enkazın Gölgesi, Kapanan Kapı) | P |
-| `sfx_typing.wav` | Konuşma balonu: harf harf yazı sesi (Among Us tarzı kısa bip; özgün, script ile üretildi). Karaktere özel ses yok | F |
+| `sfx_typing.ogg` | Konuşma balonu: harf harf yazarken döngüde çalan blip (Freesound #468927, CC0, 8,8 sn). Yeni harf gelmezse 0,25 sn sonra durur. Karaktere özel ses yok | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

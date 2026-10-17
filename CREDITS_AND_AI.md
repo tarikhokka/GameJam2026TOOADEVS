@@ -20,6 +20,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Freesound #341070 "Breaking Glass" — hifijohn (adı `sfx_glass_break.wav` yapıldı) | Kabadayı olayı: ofis camı kırılır | https://freesound.org/people/hifijohn/sounds/341070/ | CC0 1.0 | Tarık | 2026-10-17 |
 | Freesound #811581 "Ambient Paulstretched Piano (short)" — waveplaysfx (adı `mus_menu.wav` yapıldı) | Ana menü müziği (loop) | https://freesound.org/people/waveplaysfx/sounds/811581/ | CC0 1.0 | Tarık | 2026-10-17 |
 | Freesound #330599 "The Sad Piano" — dasgoat (adı `mus_ending_sad.mp3` yapıldı) | Kötü ve Orta son ekranları müziği | https://freesound.org/people/dasgoat/sounds/330599/ | CC0 1.0 | Tarık | 2026-10-17 |
+| Freesound #468927 "Medium Text Blip" — malakme (adı `sfx_typing.ogg` yapıldı) | Konuşma balonu: harf harf yazarken döngüde çalan blip | https://freesound.org/people/malakme/sounds/468927/ | CC0 1.0 | Tarık | 2026-10-17 |
 
 ## Kod
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -52,7 +53,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Kitap görsellerini (EL KİTABI, LAB RAPORU) masada yatan 3B nesne olarak sıfırdan çizen script (Lilita One başlık); masa arka planından kaşe, kağıt, not ve kalemi ahşap dokusuyla silen script, desk_front yeniden üretildi | `Assets/_Project/Art/book_rules.png`, `book_lab.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Gün özeti, ödeme ve 4 son görselini ChatGPT ofis görselinden (desk_bg) renk/ışık/bulanıklık ile türeten script | `Assets/_Project/Art/daysummary_bg.png`, `payment_bg.png`, `ending_good.png`, `ending_bad.png`, `ending_closed.png`, `ending_collapsed.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | 6 ofis hediyesi görselini çizen script (konturlu, iki tonlu) ve hediye kayıtları (GiftSO: isim, not) | `Assets/_Project/Art/gift_*.png`, `Assets/_Project/Data/Gifts/*.asset` | Tarık | 2026-10-17 |
-| Claude (Anthropic) | Harf harf yazı sesini (kısa "bip") sentezleyen script — hazır ses kullanılmadı | `Assets/_Project/Audio/sfx_typing.wav` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Harf harf yazı sesini (kısa "bip") sentezleyen script; yerine Freesound #468927 geldi. Yeni sesin döngüde çalması için DeskAudio.PlayTyping düzenlemesi (Oğuzhan'ın dosyası, ekip onayıyla) | `Assets/_Project/Scripts/Desk/UI/DeskAudio.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Gün başı arka planını (dayintro_bg) ChatGPT ofis görselinden türeten script; ana menü Emeği Geçenler panelinin iki sütunlu yeniden düzeni ve güncel metni (MainMenuScreen.cs, Onur'un dosyası, ekip onayıyla) | `Assets/_Project/Art/dayintro_bg.png`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Scripts/Flow/UI/MainMenuScreen.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Gün sonu kayıt ekranı: SaveScreen.cs (kodla kurulan arayüz, "KAYDEDİLDİ" kaşesi), SaveScreen.prefab, save_bg görseli (ChatGPT ofis görselinden türetildi); CoreSetupBuilder ekran listesine ekleme | `Assets/_Project/Scripts/Flow/UI/SaveScreen.cs`, `Assets/_Project/Prefabs/Flow/SaveScreen.prefab`, `Assets/_Project/Art/save_bg.png`, `Assets/_Project/Scripts/Core/Editor/CoreSetupBuilder.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT masa görselini arka/ön katmana (desk_bg / desk_front) ayıran, kitapların ve portrelerin beyaz arka planını (saç aralarındaki boşluklar dahil) silen script | `Assets/_Project/Art/desk_*.png`, `book_*.png`, `portrait_*.png` | Tarık | 2026-10-17 |
@@ -97,7 +98,7 @@ Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
 Menü müziği: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
 Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
-Yazı sesi: ekip tarafından üretildi
+Yazı sesi: "Medium Text Blip" — malakme (freesound.org), CC0
 
 GÖRSELLER
 Müteahhit karakterleri ve ofis: yapay zekâ (ChatGPT)

@@ -59,6 +59,14 @@ MonoBehaviour:
   - "Hocaaam, özledim sizi! Geçen sefer {last}, ama ben hep buradayım."
   - "Yine ben hocam! Geçen sefer {last}; eşim bu sefer de selam söyledi."
   - "Göz nurum! Geçen sefer {last}. Bugün çok güzel şeyler olacak, hissediyorum."
+  MismatchLines:
+  - "Hocam ne keskin gözünüz var, maşallah! Ama o kadar da önemli değil."
+  - "Aaa, ben de görmemiştim! Sizin gibisi yok hocam."
+  - "Olur öyle küçük şeyler hocam, gönlünüz geniş olsun."
+  BribeCloseLines:
+  - "Aile arasında bir hatıra hocam, ayıp olmasın."
+  - "Kırmayın beni hocam, gönülden getirdim."
+  - "Siz bir bakın, beğenmezseniz geri alırım. Ama beğenirsiniz!"
   Gift: {fileID: 11400000, guid: e06d46fc42ac45adb4ffde12026447ae, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 250

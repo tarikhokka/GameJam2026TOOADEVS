@@ -49,6 +49,11 @@ MonoBehaviour:
   - "Hocam iyi günler. Geçen sefer {last}; bu dosyada kaşeler de imzalar da yerinde."
   - "Yine ben, Selim. Geçen sefer {last}. Bugün testlere gerek kalmayacak."
   - "Merhaba hocam! Geçen sefer {last}, ama bu sefer her şey kâğıt üstünde kusursuz."
+  MismatchLines:
+  - "Kâğıtta öyle mi görünüyor? Bence bir okuma hatası var."
+  - "Laboratuvar karıştırmış olmalı hocam, bizim taraf temiz."
+  - "Ben öyle hatırlamıyorum. Belgeler doğru olmalı."
+  BribeCloseLines: []
   Gift: {fileID: 11400000, guid: 54db3a1fbe7549bda784785ab1720f91, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

@@ -49,6 +49,11 @@ MonoBehaviour:
   - "Hocam merhaba. Geçen sefer {last}, unutmadım. Bu sefer daha da özenli çalıştım."
   - "Yine ben, Rıfat. Geçen sefer {last}; bu dosyaya iki kere baktım."
   - "Hocam, geçen sefer {last}. Ustalık bitmez, her seferinde bir şey öğreniyorum."
+  MismatchLines:
+  - "Haklısınız hocam, gözümden kaçmış. Hemen düzeltirim."
+  - "Vay... Bunu ben de görmedim hocam. Kalfayla konuşacağım."
+  - "Yanlış yazılmış demek. Kusura bakmayın hocam, eksiği tamamlarım."
+  BribeCloseLines: []
   Gift: {fileID: 11400000, guid: 6de7d4c48d4443e58f8c4e3ce8579fa8, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

@@ -59,6 +59,14 @@ MonoBehaviour:
   - "Hocam yine geldim. Geçen sefer {last}, unutmadım."
   - "Selam hocam. Geçen sefer {last}. Bugün daha iyi anlaşırız."
   - "Ben yine buradayım hocam. Geçen sefer {last}; camlar hâlâ yerinde mi?"
+  MismatchLines:
+  - "Hocam bunu kurcalamasan iyi olur."
+  - "Benim projemde sorun olmaz. Bir daha bak istersen."
+  - "Hm. Bunu bulmak zorunda mıydın?"
+  BribeCloseLines:
+  - "Ne olduğunu biliyorsun hocam. Al ve imzala."
+  - "Masada duruyor. Gerisi sana kalmış."
+  - "Akıllı adam ne yapacağını bilir hocam."
   Gift: {fileID: 11400000, guid: a6d5a4293e1f4f91a314ca75459aa797, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

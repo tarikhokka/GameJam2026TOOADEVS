@@ -49,6 +49,11 @@ MonoBehaviour:
   - "Yine ben hocam! Geçen sefer {last}; bu dosyada notlarınızı da dikkate aldım."
   - "Hocam merhaba, geçen sefer {last}. Bu projeyi de baştan sona kendim takip ettim."
   - "Merhaba hocam! Geçen sefer {last}. Bugün de her şey kurallara uygun olsun istiyorum."
+  MismatchLines:
+  - "Doğru söylüyorsunuz. Laboratuvarla hemen konuşuyorum."
+  - "Not aldım hocam. Bu benim hatam, düzelteceğim."
+  - "İyi ki baktınız. Bu haliyle ben de imzalamazdım."
+  BribeCloseLines: []
   Gift: {fileID: 11400000, guid: 76a240ceb7ec47559a0032ec513e2f1b, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

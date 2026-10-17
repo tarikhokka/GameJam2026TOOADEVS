@@ -59,6 +59,14 @@ MonoBehaviour:
   - "Hocam ben geldim, kısa keseceğim. Geçen sefer {last}, bugün işimiz kolay."
   - "Yine ben, Kemal! Geçen sefer {last}; bu sefer bir yolunu buluruz."
   - "Hocam selam! Geçen sefer {last}. Vaktimiz az, hemen başlayalım."
+  MismatchLines:
+  - "Hocam o ufak bir şey, kimse fark etmez."
+  - "Yazım hatası olmuştur hocam, takılmayalım."
+  - "Bir yolu vardır hocam, bunu büyütmeyelim."
+  BribeCloseLines:
+  - "Hiç, ufak bir teşekkür. Düşünün hocam, acelesi yok."
+  - "Bir çay parası hocam. Masada dursun, siz bilirsiniz."
+  - "Ben bıraktım, karar sizin. Kimse bir şey demez."
   Gift: {fileID: 11400000, guid: 2625afaccdec48598bdf547861471986, type: 2}
   GiftChance: 0.3
   BribeRaiseOnReject: 0

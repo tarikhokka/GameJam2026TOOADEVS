@@ -378,6 +378,8 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
 - ✅ **Çakışma çözüldü (EEE, 23:50):** Kaşe/imza ipuçları A'nın 22:50 versiyonuyla kalıyor (5 ipucu). 23:15 "kaldırıldı" kararı geri alındı; A kodu değiştirmeyecek.
 
 **Onur (C / Akış) için:**
+- ⚠️ **(EEE → A, 17 Ekim) Ahmet: Game.unity'ye yeni ekran.** `GamePhase.Save` için ekran yoktu, IMGUI yedek arayüzü çıkıyordu. `SaveScreen` eklendi ve `CoreSetupBuilder.InstallScreens` listesine yazıldı. **Menüden `CivilJam > Core > Install Screens Into Game Scene` çalıştırıp Game.unity'yi push'la** (sahne senin). Sonra gün sonunda yedek arayüz yerine yeni ekran açılır.
+- ℹ️ **(EEE → C, 17 Ekim) Senin klasörüne yeni ekran:** `Scripts/Flow/UI/SaveScreen.cs` + `Prefabs/Flow/SaveScreen.prefab` (FlowScreen tabanı, UI kodla kurulur). Gece ofisi arka planı (`Art/save_bg.png`), ortada kart: "{biten gün}. Gün kaydedildi", kısa metin, kasa/borç, yamuk kırmızı "KAYDEDİLDİ" kaşesi, buton "{yeni gün}. güne geç →". Not: Save fazında Core günü zaten artırmış olur, biten gün = `Day - 1`.
 - ⚠️ **(EEE → C, 17 Ekim) Senin iki dosyana dokunuldu (Tarık onayıyla), pull et:**
   - `Prefabs/Flow/DayIntroScreen.prefab`: kök Image artık `Art/dayintro_bg.png` (sabah ofisi, bulanık/loş), renk opak beyaz (eskisi yarı saydam beyaz, varsayılan UI sprite), Image Type = Simple. Başka bir şey değişmedi.
   - `Scripts/Flow/UI/MainMenuScreen.cs`: Emeği Geçenler paneli iki sütunlu oldu (`CreditsLeft`: İMZA, EKİP, YAPAY ZEKÂ; `CreditsRight`: SESLER VE MÜZİKLER, GÖRSELLER, YAZI TİPLERİ), başlık + çizgi, panel ekranın %84'ü, Geri butonu altta. Metin `CREDITS_AND_AI.md` sonuyla aynı. Eski `CreditsText` kaldırıldı.

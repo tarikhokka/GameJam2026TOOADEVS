@@ -26,6 +26,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `newspaper_bg.png` | Result | C | F |
 | `dayintro_bg.png` | DayIntro (gün başı): desk_bg sabah hali, hafif bulanık ve loş, ortadaki beyaz yazı okunsun diye. DayIntroScreen.prefab kök Image sprite'ına bağlı | C | F |
 | `daysummary_bg.png` | DaySummary (desk_bg'nin gece hali: mavi ton + lamba ışığı) | C | F |
+| `save_bg.png` | Save (gün sonu kayıt ekranı): desk_bg gece, ışıklar sönük, ay ışığı. SaveScreen.prefab background alanına bağlı | C | F |
 | `payment_bg.png` | Günlük ödeme (desk_bg bulanık ve loş) | C | F |
 | `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
 | `ending_good.png` | Ending İyi "Ayakta Kalanlar" (desk_bg, altın sabah ışığı) | C | F |

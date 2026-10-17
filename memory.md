@@ -174,8 +174,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 **Faz durumu** (işini bitiren kendi satırını günceller):
 | Faz | İş | Kim | Durum |
 |---|---|---|---|
-| 1 | A1 Core: kat grubu Core'da + madde 7 gerçek kadro testi | A | ⏳ |
-| 1 | A2 El Kitabı: otomatik kat grubu, RED kutusu, parametreler, sekmeler | A | ⏳ |
+| 1 | A1 Core: kat grubu Core'da + madde 7 gerçek kadro testi | A | ✅ `fb60575` |
+| 1 | A2 El Kitabı: otomatik kat grubu, RED kutusu, parametreler, sekmeler | A | ✅ `93686f0` |
 | 1 | B1 İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | ⏳ |
 | 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ⏳ |
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
@@ -244,6 +244,12 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | `Desk/UI/TutorialView.cs` (sadece metin dizeleri), `Art/**`, `README.md`, `ICERIK_TASLAK.md`, `CREDITS_AND_AI.md` | Tarık | A, A3'te README'ye son kontrol için dokunabilir |
 
 #### A (Ahmet) — A1, A2, A3
+- [x] **A1 ✅ `fb60575`** + **A2 ✅ `93686f0`** (EditMode 55/55, PlayMode 4/4; El Kitabı ekran görüntüsüyle doğrulandı: 4 katlı binada 4-6 KAT, 7 katlıda 7+ KAT kendiliğinden seçili; sekmeler HIZLI BAKIŞ + LAB). **Oğuzhan, pull et:**
+  - `DeskScreen.Select`'te tek satır değişti: `rulebook.ResetFloorGroup()` → `rulebook.ShowProject(context.GetTodayProject(projectId))`. `ResetFloorGroup` artık yok.
+  - `RulebookView.SelectedFloorGroup` duruyor (DeskScreen.Inspect hâlâ gönderiyor), ama Core onu yok sayar (`Inspection.FloorGroupOf`).
+  - Kat düğmeleri artık `Button` değil (sadece gösterge). B1'de karartmayla öne alınacak El Kitabı alanları sadece 5 parametre satırı ve LAB'daki akredite liste (`InspectSpot`).
+  - `HandbookUi.Chips.Paint`: boyanan çipin etiketi de iki satır kalır (önceden "Yumuşak kil" tek satıra dönüp `ChipFontEqualizer` bütün satırı küçültüyordu; EEE'nin kodu, A düzeltti).
+  - `RulebookView.sectionNotes` silindi (builder'da kullanılmıyordu); `tabSprites` ve `floorIcons` builder için yerinde.
 - [ ] **A1 Core (madde 1, 7):**
   - Yeni `Inspection.FloorGroupOf(GameContext, ProjectData)`: binanın kat adedine göre RuleSet aralıklarından 0 / 1 / 2 döner; bulunamazsa `NoFloorGroup`.
   - `GameSession.Inspect`, gelen `handbookFloorGroup`'u **yok sayar** ve binanın grubunu kullanır.

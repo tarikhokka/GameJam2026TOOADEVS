@@ -21,6 +21,7 @@ namespace CivilJam.Desk
         [SerializeField] private RulebookView rulebook;
         [SerializeField] private TutorialView tutorial;
         [SerializeField] private EventCardView eventCard;
+        [SerializeField] private FolderHandoffView handoff; // karar sonrası kaşeli klasör müteahhide gider
 
         [Tooltip("Karar kaşesi basıldıktan sonra dosya kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -54,9 +55,25 @@ namespace CivilJam.Desk
             props.LabBookClicked += OpenDossier;
             props.FinishClicked += Finish;
             dossier.CloseClicked += CloseDossier;
+            dossier.OpenChanged += ArrangeSheets;
 
-            if (rulebook != null) rulebook.Toggled += PlayPaper;
+            if (rulebook != null)
+            {
+                rulebook.Toggled += PlayPaper;
+                rulebook.OpenChanged += ArrangeSheets;
+                if (rulebook.Sheet != null) rulebook.Sheet.Dropped += PlayPaper;
+            }
+            if (dossier.Sheet != null) dossier.Sheet.Dropped += PlayPaper; // kağıt masaya bırakılınca
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
+        }
+
+        // Dosya ve El Kitabı ikisi de açıksa yan yana: dosya küçülüp sola, kitap sağa (karşılaştırma için kapatmak gerekmez).
+        // Dosya kapanınca kitap sağda kalır (ortaya dönüp müteahhidin önüne geçmesin); tek başına açılırsa ortada açılır.
+        private void ArrangeSheets()
+        {
+            bool sideBySide = dossier.IsOpen && rulebook != null && rulebook.IsOpen;
+            dossier.SetCompact(sideBySide);
+            if (sideBySide) rulebook.Dock();
         }
 
         public void Show(GameContext gameContext)
@@ -70,7 +87,7 @@ namespace CivilJam.Desk
             gameObject.SetActive(true);
             if (rulebook != null) rulebook.Bind(context);
             if (deskAudio != null) deskAudio.StartMusic();
-            dossier.Close();
+            dossier.Close(instant: true);
             scene.Clear();
             Select(FirstPendingId());
             if (tutorial != null && context.State.Day == 1) tutorial.Open();
@@ -81,8 +98,8 @@ namespace CivilJam.Desk
             Unsubscribe();
             StopAllCoroutines();
             stamping = false;
-            dossier.Close();
-            if (rulebook != null) rulebook.Close();
+            dossier.Close(instant: true);
+            if (rulebook != null) rulebook.Close(instant: true);
             if (tutorial != null) tutorial.Close();
             if (eventCard != null) eventCard.Close();
             if (deskAudio != null) deskAudio.StopMusic();
@@ -149,7 +166,13 @@ namespace CivilJam.Desk
         private IEnumerator AfterDecision(ProjectData project, bool windowBroken)
         {
             yield return new WaitForSeconds(stampDelay);
-            dossier.Close();
+            if (project != null)
+            {
+                dossier.HandToClient(handoff, project.Verdict == ProjectVerdict.Approved, project.Name);
+                if (handoff != null) PlayPaper();
+                while (handoff != null && handoff.Playing) yield return null; // müteahhit klasörü alınca konuşur
+            }
+            else dossier.Close();
 
             // Tepki: Core karardan sonra doldurur (ClientReactions); boşsa beklemeden geçilir.
             if (project != null && !string.IsNullOrEmpty(project.ReactionText))

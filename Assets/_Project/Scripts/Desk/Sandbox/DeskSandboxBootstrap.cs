@@ -9,6 +9,7 @@ namespace CivilJam.Desk
     {
         [SerializeField] private DeskScreen screen;
         [SerializeField] private Sprite[] portraits; // sahte müşterilere verilir (EEE'nin portrait_*.png'leri)
+        [SerializeField] private RuleSetSO rules;    // Data/RuleSet.asset (oyundaki yönetmelik); boşsa sahte 3 kural
 
         private GameContext context;
         private int day;
@@ -22,7 +23,7 @@ namespace CivilJam.Desk
         // Aynı sahte gün tekrar açılır ama gün sayısı artar (öğretici sadece 1. gün çıkar).
         private void StartDay()
         {
-            context = SandboxDeskContext.Create(portraits);
+            context = SandboxDeskContext.Create(portraits, rules);
             context.State.Day = ++day;
             screen.Show(context);
         }

@@ -18,6 +18,7 @@ namespace CivilJam.Desk.Editor
         private const string ScenePath = SceneFolder + "/Sandbox_Desk.unity";
         private const string AudioFolder = "Assets/_Project/Audio";
         private const string ArtFolder = "Assets/_Project/Art";
+        private const string RuleSetPath = "Assets/_Project/Data/RuleSet.asset";
 
         // Oda yerleşimi (desk_bg 1920x1080 üstünde px, EEE görseli): koltuk desk_bg'nin içinde (x 650-1310, üstü ~355),
         // masanın üst kenarı ~750 (desk_front bu kenardan aşağısıdır). Portre 600x600, karakter alta ortalı ve belden
@@ -90,6 +91,7 @@ namespace CivilJam.Desk.Editor
             var bootstrap = new GameObject("DeskSandboxBootstrap").AddComponent<DeskSandboxBootstrap>();
             Wire(bootstrap, "screen", screenGo.GetComponent<DeskScreen>());
             WirePortraits(bootstrap);
+            Wire(bootstrap, "rules", AssetDatabase.LoadMainAssetAtPath(RuleSetPath)); // el kitabı oyundakiyle aynı olsun
 
             EnsureFolder(SceneFolder);
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -135,13 +137,17 @@ namespace CivilJam.Desk.Editor
             AddImage(Stretch(NewRect("Background", root)), DeskColor); // 16:9 dışı ekranlarda odanın kenarları
 
             // Çizim sırası: sahne (oda, müteahhit, masa, masadaki eşyalar) → üst bar → açık dosya → pencereler.
-            Wire(screen, "scene", BuildScene(root, out var room));
+            Wire(screen, "scene", BuildScene(root, out var room, out var handoff));
+            Wire(screen, "handoff", handoff);
             Wire(screen, "hud", BuildHud(root, out var clientTag));
             Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook));
-            Wire(screen, "dossier", BuildDossier(root, out var documentView, out var actionPanel, out var dossierHandbook));
+            var dossier = BuildDossier(root, out var documentView, out var actionPanel, out var dossierHandbook);
+            Wire(screen, "dossier", dossier);
             Wire(screen, "documentView", documentView);
             Wire(screen, "actionPanel", actionPanel);
-            Wire(screen, "rulebook", BuildRulebook(root, handbookBook, dossierHandbook)); // açık dosyanın da üstünde
+            var rulebook = BuildRulebook(root, handbookBook, dossierHandbook); // açık dosyanın da üstünde
+            Wire(screen, "rulebook", rulebook);
+            LinkSheets(dossier.transform, rulebook.transform);
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "deskAudio", BuildAudio(root));
@@ -216,32 +222,72 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // El kitabı penceresi. Kök her zaman aktif (grafiği yok, tıklamayı engellemez); açılıp kapanan "Panel".
-        // Arka perde ile kitap kardeş: kitaba tıklama perdenin butonuna kabarmasın.
+        // Kağıdı sürüklenebilir/animasyonlu yapar: saydamlık için CanvasGroup, arkasında gölge (ilk çocuk, yerleşim dışı).
+        private static DraggableSheet AddSheet(RectTransform rt)
+        {
+            var group = rt.gameObject.AddComponent<CanvasGroup>();
+            var shadow = Stretch(NewRect("Shadow", rt));
+            shadow.SetAsFirstSibling();
+            AddImage(shadow, new Color(0, 0, 0, 0.35f)).raycastTarget = false;
+            shadow.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+
+            var sheet = rt.gameObject.AddComponent<DraggableSheet>();
+            Wire(sheet, "shadow", shadow);
+            Wire(sheet, "group", group);
+            return sheet;
+        }
+
+        // Sürüklenen iki kağıt (dosya ve El Kitabı) basılınca birbirinin önüne geçer: kökleri kardeş, sadece ikisi yer değiştirir.
+        private static void LinkSheets(Transform dossierRoot, Transform rulebookRoot)
+        {
+            var dossierSheet = dossierRoot.GetComponentInChildren<DraggableSheet>(true);
+            var book = rulebookRoot.GetComponentInChildren<DraggableSheet>(true);
+            Wire(dossierSheet, "layer", dossierRoot);
+            Wire(dossierSheet, "otherLayer", rulebookRoot);
+            Wire(book, "layer", rulebookRoot);
+            Wire(book, "otherLayer", dossierRoot);
+        }
+
+        // El kitabı penceresi. Kök ve "Panel" grafiksiz (tıklamayı engellemez); perde YOK: kitap açıkken dosya ve masa
+        // tıklanabilir kalır. Dosya da açıksa kitap sağa yaslanır, dosya küçülüp sola kayar (DeskScreen.ArrangeSheets).
+        // Kitap 760 genişlikte: yan yana modda ekranın sağ kısmına sığar.
         private static RulebookView BuildRulebook(Transform parent, Button openButton, Button dossierOpenButton)
         {
             var root = Stretch(NewRect("Rulebook", parent));
             var panel = Stretch(NewRect("Panel", root));
 
-            var backdrop = Stretch(NewRect("Backdrop", panel));
-            var backdropButton = backdrop.gameObject.AddComponent<Button>();
-            backdropButton.targetGraphic = AddImage(backdrop, new Color(0, 0, 0, 0.55f));
-            backdropButton.transition = Selectable.Transition.None;
-
             var book = NewRect("Book", panel);
             book.anchorMin = book.anchorMax = book.pivot = new Vector2(0.5f, 0.5f);
-            book.sizeDelta = new Vector2(1100, 860);
+            book.sizeDelta = new Vector2(760, 900);
+            book.anchoredPosition = new Vector2(0, -40);
             AddImage(book, PaperColor);
-            VLayout(book, 16, new RectOffset(50, 50, 40, 40));
+            VLayout(book, 14, new RectOffset(30, 30, 30, 30));
+            var bookSheet = AddSheet(book);
 
-            Layout(NewText("Title", book, "Denetçi El Kitabı", 44, Ink, TextAlignmentOptions.TopLeft, FontStyles.Bold), prefH: 60);
+            var title = NewText("Title", book, "Denetçi El Kitabı", 40, Ink, TextAlignmentOptions.TopLeft, FontStyles.Bold);
+            title.enableAutoSizing = true;
+            title.fontSizeMin = 28;
+            title.fontSizeMax = 40;
+            Layout(title, prefH: 56);
             var body = NewText("Body", book, "Kurallar", 26, Ink, TextAlignmentOptions.TopLeft);
             body.enableAutoSizing = true;
             body.fontSizeMin = 16;
             body.fontSizeMax = 26;
+            body.overflowMode = TextOverflowModes.Truncate;
             Layout(body, prefH: 0, flexH: 1);
-            var close = NewButton("CloseButton", book, "Kapat", NeutralButton, Color.white, 28);
-            Layout(close, prefH: 70);
+
+            // Alt bar: < Önceki · sayfa no · Sonraki > · Kapat
+            var footer = NewRect("Footer", book);
+            HLayout(footer, 12, new RectOffset(0, 0, 0, 0));
+            Layout(footer, prefH: 64);
+            var prev = NewButton("PrevButton", footer, "< Önceki", NeutralButton, Color.white, 24);
+            Layout(prev, prefW: 170, prefH: 64);
+            var pageLabel = NewText("Page", footer, "1 / 1", 24, Ink, TextAlignmentOptions.Center);
+            Layout(pageLabel, prefH: 64, flexW: 1);
+            var next = NewButton("NextButton", footer, "Sonraki >", NeutralButton, Color.white, 24);
+            Layout(next, prefW: 170, prefH: 64);
+            var close = NewButton("CloseButton", footer, "Kapat", NeutralButton, Color.white, 24);
+            Layout(close, prefW: 130, prefH: 64);
 
             panel.gameObject.SetActive(false);
 
@@ -249,9 +295,13 @@ namespace CivilJam.Desk.Editor
             Wire(view, "openButton", openButton);
             Wire(view, "dossierOpenButton", dossierOpenButton);
             Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "book", bookSheet);
+            Wire(view, "titleText", title);
             Wire(view, "bodyText", body);
+            Wire(view, "pageText", pageLabel);
+            Wire(view, "prevButton", prev);
+            Wire(view, "nextButton", next);
             Wire(view, "closeButton", close);
-            Wire(view, "backdropButton", backdropButton);
             return view;
         }
 
@@ -336,9 +386,54 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
+        // Karar sonrası müteahhide giden kapalı klasör: kapak + sekme + proje adı + eğik kaşe. Hiçbiri tıklamayı engellemez.
+        private static FolderHandoffView BuildHandoff(RectTransform room)
+        {
+            var root = Stretch(NewRect("Handoff", room));
+
+            var folder = NewRect("Folder", root);
+            folder.anchorMin = folder.anchorMax = folder.pivot = new Vector2(0.5f, 0.5f);
+            folder.sizeDelta = new Vector2(1000, 940);
+            AddImage(folder, FolderColor).raycastTarget = false;
+
+            var tab = NewRect("Tab", folder);
+            tab.anchorMin = tab.anchorMax = new Vector2(0f, 1f);
+            tab.pivot = new Vector2(0f, 0f);
+            tab.sizeDelta = new Vector2(280, 60);
+            tab.anchoredPosition = new Vector2(40, 0);
+            AddImage(tab, FolderColor * 0.9f + new Color(0, 0, 0, 0.1f)).raycastTarget = false;
+
+            var title = NewText("Title", folder, "Proje", 60, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
+            Anchor(title.rectTransform, new Vector2(0, 1), Vector2.one, new Vector2(60, -260), new Vector2(-60, -80));
+            title.enableAutoSizing = true;
+            title.fontSizeMin = 30;
+            title.fontSizeMax = 60;
+
+            var stamp = NewRect("Stamp", folder);
+            stamp.anchorMin = stamp.anchorMax = stamp.pivot = new Vector2(0.5f, 0.5f);
+            stamp.sizeDelta = new Vector2(680, 180);
+            stamp.anchoredPosition = new Vector2(0, -80);
+            stamp.localRotation = Quaternion.Euler(0, 0, 12);
+            var stampImage = AddImage(stamp, new Color(0, 0, 0, 0.15f));
+            stampImage.raycastTarget = false;
+            var stampText = NewText("Text", stamp, "ONAYLANDI", 96, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
+            Stretch(stampText.rectTransform);
+            stampText.enableAutoSizing = true;
+            stampText.fontSizeMin = 40;
+            stampText.fontSizeMax = 96;
+
+            var view = root.gameObject.AddComponent<FolderHandoffView>();
+            Wire(view, "folder", folder);
+            Wire(view, "titleText", title);
+            Wire(view, "stampText", stampText);
+            Wire(view, "stampImage", stampImage);
+            folder.gameObject.SetActive(false);
+            return view;
+        }
+
         // Ofis sahnesi. Oda 1920x1080 sabit ve ortada (Canvas referansıyla birebir); çizim sırası (EEE):
         // desk_bg (oda + koltuk + masa) → portre → desk_front (sadece masa, şeffaf) → masadaki eşyalar → konuşma balonu.
-        private static ClientSceneView BuildScene(Transform parent, out RectTransform room)
+        private static ClientSceneView BuildScene(Transform parent, out RectTransform room, out FolderHandoffView handoff)
         {
             var root = Stretch(NewRect("Scene", parent));
             var deskSprite = FindSprite("desk_bg");
@@ -351,6 +446,8 @@ namespace CivilJam.Desk.Editor
             var portrait = TopCenter(NewRect("Portrait", room), new Vector2(PortraitSize, PortraitSize), PortraitTopY);
             var portraitImage = SpriteImage(portrait, null, Color.white);
             portraitImage.preserveAspect = true;
+
+            handoff = BuildHandoff(room); // portrenin önünde, masanın arkasında: klasör masa kenarının arkasına girer
 
             // Masa önü portrenin önünde (müteahhit oturuyor gibi görünür). EEE'nin desk_front'u yoksa
             // desk_bg'nin masa kenarından aşağısı maskeyle kullanılır.
@@ -368,6 +465,9 @@ namespace CivilJam.Desk.Editor
                 frontImage.sizeDelta = new Vector2(1920, 1080);
                 SpriteImage(frontImage, deskSprite, DeskColor);
             }
+
+            // Klasörün yolculuk katmanı: masa önünün üstünde (büyükken masanın kenarı kesmesin).
+            Wire(handoff, "frontLayer", Stretch(NewRect("HandoffFront", room)));
 
             // Konuşma balonu: başın üstünde, alttan yukarı büyür; kuyruk portrenin başını gösterir.
             var balloon = NewRect("Balloon", room);
@@ -493,6 +593,7 @@ namespace CivilJam.Desk.Editor
             sheet.anchorMin = sheet.anchorMax = sheet.pivot = new Vector2(0.5f, 0.5f);
             sheet.sizeDelta = new Vector2(1560, 940);
             sheet.anchoredPosition = new Vector2(0, -40);
+            var draggable = AddSheet(sheet);
 
             documentView = BuildDocument(sheet, 1000);
             actionPanel = BuildActions(sheet, 540, out handbookButton, out var closeButton);
@@ -502,6 +603,7 @@ namespace CivilJam.Desk.Editor
             // Bileşen panele değil, hep aktif köke konur: pasif objede Awake çalışmaz.
             var view = root.gameObject.AddComponent<DossierView>();
             Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "sheet", draggable);
             Wire(view, "closeButton", closeButton);
             Wire(view, "backdropButton", backdropButton);
             return view;

@@ -13,7 +13,8 @@ namespace CivilJam.Desk
         private const string GoodLab = "Betonya Yapı Lab.";
 
         // portraits: sahte müşterilere sırayla verilen portreler (Sandbox_Desk kurulurken Art'tan bağlanır); boş olabilir.
-        public static GameContext Create(IReadOnlyList<Sprite> portraits = null)
+        // rules: gerçek yönetmelik (Data/RuleSet.asset); boşsa aşağıdaki sahte 3 kural.
+        public static GameContext Create(IReadOnlyList<Sprite> portraits = null, RuleSetSO rules = null)
         {
             var balance = ScriptableObject.CreateInstance<BalanceSO>();
 
@@ -21,7 +22,7 @@ namespace CivilJam.Desk
             {
                 Phase = GamePhase.Desk,
                 Balance = balance,
-                Rules = CreateRules(),
+                Rules = rules != null ? rules : CreateRules(),
                 Names = CreateNames(),
                 State = new GameState { Day = 1, Money = balance.StartMoney, DisasterChance = balance.DisasterChanceStart },
                 Clients = new List<ClientSO>

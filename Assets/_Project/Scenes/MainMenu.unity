@@ -438,6 +438,15 @@ MonoBehaviour:
   logoInBackground: 1
   buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
   buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  lightLayers:
+  - {fileID: 21300000, guid: 941acb55a3cc420a8230054e76675555, type: 3}
+  - {fileID: 21300000, guid: 2bceeb81042345b49b110948466a3383, type: 3}
+  - {fileID: 21300000, guid: 30a8d519c102461e8588d4939d752816, type: 3}
+  - {fileID: 21300000, guid: a2a15b289ea748038bc513b8a70e854c, type: 3}
+  sunGlow: {fileID: 21300000, guid: db42deb825d446dc875ce75375e44eda, type: 3}
+  dustSprite: {fileID: 21300000, guid: 73dc56408b5948719caa166a09b552f2, type: 3}
+  craneLight: {fileID: 21300000, guid: 0b43508f079d4885aa6fbe57ced1d51b, type: 3}
+  craneLoad: {fileID: 21300000, guid: 625c42d7bd9d415b9bf893f089982a8f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -20,6 +20,12 @@ namespace CivilJam.Flow
         [SerializeField] bool logoInBackground = true;
         [SerializeField] Sprite buttonSprite;   // btn_menu
         [SerializeField] TMP_FontAsset buttonFont; // FiraSans-Bold SDF
+        // (EEE, 17 Ekim) Menü canlandırma (MenuAmbience): pencere ışıkları, güneş halesi, toz, açılış.
+        [SerializeField] Sprite[] lightLayers;  // menu_lights_0..3 (ilk yarısı söner, ikinci yarısı parlar)
+        [SerializeField] Sprite sunGlow;        // menu_glow
+        [SerializeField] Sprite dustSprite;     // menu_dust
+        [SerializeField] Sprite craneLight;     // menu_redlight (vinç ikaz lambası)
+        [SerializeField] Sprite craneLoad;      // menu_load (sallanan kiriş)
 
         // Resimdeki düğme yuvaları (1600x900 menu_bg'den ölçüldü).
         const float SlotLeft = 0.389f, SlotRight = 0.6026f, SlotTop = 0.498f, SlotHeight = 0.0878f, SlotGap = 0.0155f;
@@ -96,6 +102,11 @@ namespace CivilJam.Flow
 
             BuildCredits(root);
             SetCredits(false);
+
+            // Arka planın üstüne, menünün altına canlandırma katmanları; açılışta karanlıktan gelir.
+            var ambience = root.gameObject.AddComponent<MenuAmbience>();
+            ambience.Build(root, _menuPanel.transform, lightLayers, sunGlow, dustSprite, craneLight, craneLoad);
+            ambience.PlayIntro(_menuPanel.transform);
         }
 
         // Düğmeleri yukarıdan aşağı dizer (btn_menu varsa resimdeki yuvalara, yoksa eski düz düğmeler).

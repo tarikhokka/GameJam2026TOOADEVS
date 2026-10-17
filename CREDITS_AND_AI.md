@@ -47,8 +47,10 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | ChatGPT (OpenAI) | 6 müteahhit karakter görselinin üretimi (Rıfat, Sevim, Kemal, Nuri, Selim, Rüstem) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT portrelerinin beyaz arka planını silip şeffaf 600x600 PNG'ye çeviren script | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
-| Claude (Anthropic) | Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
-| Claude (Anthropic) | Masa arka planı (ofis, inşaat resimli çerçeveler, aksesuarlar) ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
+| ChatGPT (OpenAI) | Masa ekranı arka planı (ofis, koltuk, masa, aksesuarlar) ve iki kitap görseli (EL KİTABI, LAB RAPORU); prompt'lar Claude ile yazıldı | `Assets/_Project/Art/desk_bg.png`, `desk_front.png`, `book_rules.png`, `book_lab.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | ChatGPT masa görselini arka/ön katmana (desk_bg / desk_front) ayıran, kitapların ve portrelerin beyaz arka planını (saç aralarındaki boşluklar dahil) silen script | `Assets/_Project/Art/desk_*.png`, `book_*.png`, `portrait_*.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | (KULLANILMIYOR) Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Masa arka planı ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Ana menü arka planı (akşam şehir, vinçler) ve "İMZA" logosunu çizen script (flat) | `Assets/_Project/Art/menu_bg.png`, `logo.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması; son metinlerinin kod koşullarıyla tutarlılık düzeltmesi, EndingSO asset'leri ve "Enkazın Gölgesi" son metninin son hali; README son düzenlemesi (ekip, kabadayı, sonlar, jüri kısayolları); oyun içi Emeği Geçenler metni | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset`, `Assets/_Project/Data/Endings/*.asset` | Tarık | 2026-10-16 |
 | Claude Code (Anthropic) | Core veri sözleşmesi kodu, deprem simülatörü, A rolü çalışma planı | `Assets/_Project/Scripts/Core/**`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
@@ -88,7 +90,7 @@ Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 
 GÖRSELLER
-Müteahhit karakterleri: yapay zekâ (ChatGPT) ile üretildi
+Müteahhit karakterleri ve masa ekranı görselleri: yapay zekâ (ChatGPT) ile üretildi
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1

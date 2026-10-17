@@ -14,7 +14,8 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 ## İhtiyaç listesi (B/C ile netleştir)
 | Dosya | Ekran | Kim kullanıyor | Durum |
 |---|---|---|---|
-| `desk_bg.png` | Desk (oda + masa + isimlik, kalemlik, kupa, ıstampa; kitaplar YOK) | B | F |
+| `desk_bg.png` | Desk ARKA katman: oda + koltuk + masa (ChatGPT, 1920x1080). Çizim sırası: desk_bg → portre → desk_front → kitaplar | B | F |
+| `desk_front.png` | Desk ÖN katman: sadece masa (şeffaf, 1920x1080, tam ekran). Portrenin ÖNÜNE çizilir, karakterin belden aşağısını kapatır | B | F |
 | `doc_paper.png` | Desk | B | P |
 | `stamp_approve.png` | Desk | B | P |
 | `stamp_reject.png` | Desk | B | P |
@@ -30,8 +31,8 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
-| `chair_back.png` | Desk (müteahhitin arkasındaki koltuk, 320x360 şeffaf) | B | F (script ile çizildi, flat) — yerleşim: portre ile yatayda ortalı, koltuk üstü portre üstünden 90 px aşağıda; çizim sırası koltuk → portre → masa |
-| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler", masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
-| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler", müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
+| `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT, 600x400 şeffaf), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT, 600x400 şeffaf), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

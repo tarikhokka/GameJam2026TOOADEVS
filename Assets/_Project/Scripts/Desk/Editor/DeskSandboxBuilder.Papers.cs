@@ -607,62 +607,6 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // "1.1  Kural metni" satırı (metin sarar). parent null ise şablon.
-        private static RuleRowView RuleRow(string name, Transform parent)
-        {
-            var row = NewRect(name, parent);
-            var layout = HLayout(row, 10, new RectOffset(0, 0, 0, 0));
-            layout.childAlignment = TextAnchor.UpperLeft;
-
-            var number = NewText("Number", row, "1.1", 24, PaperInk, TextAlignmentOptions.TopLeft);
-            number.font = ValueFont;
-            Layout(number, prefW: 44);
-            var body = NewText("Body", row, "Kural", 23, PaperInk, TextAlignmentOptions.TopLeft);
-            body.font = ValueFont;
-            body.lineSpacing = -8;
-            Layout(body, prefW: 0, flexW: 1);
-
-            var view = row.gameObject.AddComponent<RuleRowView>();
-            Wire(view, "numberText", number);
-            Wire(view, "bodyText", body);
-            return view;
-        }
-
-        // Bölüm: [harf kutusu] BAŞLIK + satırlar. rowTemplate bölümün satır listesine taşınır.
-        private static SectionBlockView SectionBlock(string name, Transform parent, RowView rowTemplate)
-        {
-            var block = NewRect(name, parent);
-            VLayout(block, 6, new RectOffset(0, 0, 0, 0));
-
-            var head = NewRect("Head", block);
-            var headLayout = HLayout(head, 10, new RectOffset(0, 0, 0, 0));
-            headLayout.childAlignment = TextAnchor.MiddleLeft;
-            Layout(head, prefH: 34);
-            var box = NewRect("Box", head);
-            Layout(box, prefW: 34, prefH: 34);
-            var boxInner = Bordered(box, PaperCream);
-            var letter = NewText("Letter", boxInner, "A", 20, PaperInk, TextAlignmentOptions.Center, FontStyles.Bold);
-            letter.font = TitleFont;
-            Stretch(letter.rectTransform);
-            var title = NewText("Title", head, "YAPI", 20, PaperInk, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
-            title.font = TitleFont;
-            title.characterSpacing = 6;
-            title.textWrappingMode = TextWrappingModes.NoWrap;
-
-            var rows = NewRect("Rows", block);
-            VLayout(rows, 6, new RectOffset(0, 0, 0, 0));
-            rowTemplate.transform.SetParent(rows, false);
-            rowTemplate.gameObject.SetActive(false);
-
-            var view = block.gameObject.AddComponent<SectionBlockView>();
-            Wire(view, "letterText", letter);
-            Wire(view, "titleText", title);
-            Wire(view, "rowsContainer", rows);
-            Wire(view, "rowTemplate", rowTemplate);
-            block.gameObject.SetActive(false);
-            return view;
-        }
-
         // Lab raporu tablo satırı: Parametre | Beyan | Ek test.
         private static GameObject ParamRow(string name, Transform parent, bool isHeader)
         {

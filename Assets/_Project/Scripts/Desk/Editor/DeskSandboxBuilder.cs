@@ -472,66 +472,6 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
-        // Masadaki nesne: kök (konum + eğim, DeskBookProp) → Shadow (yatay yumuşak elips) + Contact (dar, alt kenarda)
-        // + Book (görsel + Button, pivot alt kenarda). x, top: sol-üst köşe (desk_bg px); yükseklik görselin oranından.
-        // artBottom: görselde nesnenin alt kenarı, yüksekliğin bu oranı kadar yukarıda (EEE kitaplarında altta şeffaf boşluk ~%17).
-        // Görsel yoksa düz renk; fallbackLabel verilirse çerçeve + yazı eklenir.
-        private static Button BookButton(string name, Transform parent, string sprite, Color fallback, float x, float tilt,
-            out GameObject bookRoot, float width, float top, float fallbackAspect = 0.52f, string fallbackLabel = null,
-            float artBottom = 0.17f)
-        {
-            var art = FindSprite(sprite);
-            float height = art != null ? width * art.rect.height / art.rect.width : width * fallbackAspect;
-            var size = new Vector2(width, height);
-            if (art == null) artBottom = 0f;
-
-            var root = NewRect(name, parent);
-            root.anchorMin = root.anchorMax = new Vector2(0f, 1f);
-            root.pivot = new Vector2(0.5f, 0.5f); // eğim ortadan
-            root.sizeDelta = size;
-            root.anchoredPosition = new Vector2(x + size.x * 0.5f, -(top + size.y * 0.5f));
-            root.localRotation = Quaternion.Euler(0, 0, tilt);
-
-            // EEE: gölge kitabın altında, alt kenara yakın, yatay yumuşak elips (~%30 koyu); ışık soldan → hafif sağa.
-            float baseY = size.y * artBottom;
-            var shadow = BookShadow("Shadow", root, new Vector2(size.x * 0.98f, size.y * 0.3f), new Vector2(size.x * 0.03f, baseY));
-            var contact = BookShadow("Contact", root, new Vector2(size.x * 0.88f, size.y * 0.09f), new Vector2(size.x * 0.01f, baseY + size.y * 0.01f));
-
-            var book = Stretch(NewRect("Book", root));
-            book.pivot = new Vector2(0.5f, 0f); // basma/kalkma alt kenardan: kitap masada oturur
-            var image = SpriteImage(book, art, fallback);
-            image.raycastTarget = true;
-            image.preserveAspect = true;
-            var button = book.gameObject.AddComponent<Button>();
-            button.targetGraphic = image;
-            button.transition = Selectable.Transition.None; // geri bildirim DeskBookProp'ta (kalkma)
-            if (art == null && fallbackLabel != null)
-            {
-                var outline = book.gameObject.AddComponent<Outline>(); // piksel tasarımdaki 3 px koyu çerçeve
-                outline.effectColor = PaperInk;
-                outline.effectDistance = new Vector2(3, -3);
-                var label = NewText("Label", book, fallbackLabel, 26, PaperInk, TextAlignmentOptions.Center, FontStyles.Bold);
-                Stretch(label.rectTransform);
-                label.font = TitleFont;
-                label.characterSpacing = 4;
-                label.enableAutoSizing = true; // küçük klasörde taşmasın
-                label.fontSizeMin = 12;
-                label.fontSizeMax = 26;
-                label.margin = new Vector4(8, 6, 8, 6);
-            }
-
-            var prop = root.gameObject.AddComponent<DeskBookProp>();
-            Wire(prop, "book", book);
-            Wire(prop, "bookImage", image);
-            Wire(prop, "shadow", shadow);
-            Wire(prop, "shadowImage", shadow.GetComponent<Image>());
-            Wire(prop, "contact", contact);
-            Wire(prop, "contactImage", contact.GetComponent<Image>());
-
-            bookRoot = root.gameObject;
-            return button;
-        }
-
         // Hediye yerleri (yeni hedef arayüz): masa kenarının üstünde, müteahhidin iki yanında, ofisin önünde (alt kenar y = GiftBottomY).
         // Müteahhit (x ~730-1190), balon (x 1080-1540) ve zarf açıkta kalır; belgeler kenarın altından başladığı için örtmez.
         // Kabul sırasıyla dolar; sadece dürüst ustalar verdiği için pratikte 1-2 tanesi kullanılır.

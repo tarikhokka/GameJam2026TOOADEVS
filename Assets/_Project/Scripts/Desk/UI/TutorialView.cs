@@ -43,15 +43,75 @@ namespace CivilJam.Desk
                 "El Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."),
         };
 
+        // (EEE, 17 Ekim) Geri düğmesi (Atla'nın kopyası, ilk kartta gizli) ve kartları istenince yeniden açan
+        // "NASIL OYNANIR" düğmesi (masanın sağ üst köşesi, üst barın altı; kartın perdesinin altında kalır).
+        [SerializeField] private Sprite helpSprite; // btn_menu
+
         public event Action PageChanged;
 
         private int page;
+        private bool reopened; // oyuncu NASIL OYNANIR'la açtı: son kartta "Başla" yerine "Kapat"
+        private Button backButton;
 
         private void Awake()
         {
             nextButton.onClick.AddListener(Next);
             skipButton.onClick.AddListener(Finish);
             StyleCard();
+            BuildBackButton();
+            BuildHelpButton();
+        }
+
+        private void BuildBackButton()
+        {
+            var go = Instantiate(skipButton.gameObject, skipButton.transform.parent);
+            go.name = "BackButton";
+            go.transform.SetSiblingIndex(skipButton.transform.GetSiblingIndex()); // Atla'nın soluna
+            backButton = go.GetComponent<Button>();
+            backButton.onClick.RemoveAllListeners();
+            backButton.onClick.AddListener(Back);
+            var label = go.GetComponentInChildren<TMP_Text>();
+            if (label != null) label.text = "Geri";
+            go.SetActive(false);
+        }
+
+        private void BuildHelpButton()
+        {
+            var parent = panelRoot.transform.parent;
+            var go = new GameObject("HelpButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(parent, false);
+            rt.SetSiblingIndex(panelRoot.transform.GetSiblingIndex()); // kartın perdesinin altında kalsın
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(1f, 1f);
+            rt.sizeDelta = new Vector2(236, 56);
+            rt.anchoredPosition = new Vector2(-24f, -84f); // üst barın hemen altı
+            var image = go.GetComponent<Image>();
+            image.sprite = helpSprite;
+            image.color = helpSprite != null ? Color.white : new Color(0.12f, 0.1f, 0.09f, 0.92f);
+            var button = go.GetComponent<Button>();
+            button.targetGraphic = image;
+            var colors = button.colors;
+            colors.highlightedColor = new Color(1f, 0.88f, 0.62f);
+            colors.pressedColor = new Color(0.8f, 0.75f, 0.65f);
+            button.colors = colors;
+            button.onClick.AddListener(() =>
+            {
+                Open(fromHelp: true);
+                PageChanged?.Invoke();
+            });
+
+            var labelGo = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
+            var lrt = (RectTransform)labelGo.transform;
+            lrt.SetParent(rt, false);
+            lrt.anchorMin = Vector2.zero; lrt.anchorMax = Vector2.one; lrt.offsetMin = lrt.offsetMax = Vector2.zero;
+            var label = labelGo.GetComponent<TextMeshProUGUI>();
+            if (boldFont != null) label.font = boldFont;
+            label.text = "NASIL OYNANIR";
+            label.fontSize = 24;
+            label.characterSpacing = 2;
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = new Color(1f, 0.96f, 0.86f);
+            label.raycastTarget = false;
         }
 
         private void StyleCard()
@@ -102,9 +162,10 @@ namespace CivilJam.Desk
             element.flexibleHeight = 0;
         }
 
-        public void Open()
+        public void Open(bool fromHelp = false)
         {
             if (cards == null || cards.Length == 0) return;
+            reopened = fromHelp;
             page = 0;
             Draw();
             PopupMotion.On(panelRoot).Show(); // kart yaylanarak gelir
@@ -132,6 +193,14 @@ namespace CivilJam.Desk
             PageChanged?.Invoke();
         }
 
+        private void Back()
+        {
+            if (page <= 0) return;
+            page--;
+            Draw();
+            PageChanged?.Invoke();
+        }
+
         private void Draw()
         {
             var card = cards[page];
@@ -139,8 +208,9 @@ namespace CivilJam.Desk
             bodyText.text = card.Body;
             pageText.text = $"{page + 1} / {cards.Length}";
             bool last = page == cards.Length - 1;
-            nextLabel.text = last ? "Başla" : "İleri";
+            nextLabel.text = last ? (reopened ? "Kapat" : "Başla") : "İleri";
             skipButton.gameObject.SetActive(!last);
+            if (backButton != null) backButton.gameObject.SetActive(page > 0);
         }
 
         [Serializable]

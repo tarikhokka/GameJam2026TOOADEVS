@@ -12368,6 +12368,7 @@ MonoBehaviour:
   titleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
   bodyFont: {fileID: 11400000, guid: 8af5995d193981a4797d0ddd25143df8, type: 2}
   boldFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  helpSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
   cards:
   - Title: "Ulusal Yap\u0131 Denetim Kurumu'na ho\u015F geldin"
     Body: "M\xFCteahhitler s\u0131rayla gelip kar\u015F\u0131na oturacak. Senin imzan olmadan hi\xE7bir bina y\xFCkselmez.\n\n\xD6n\xFCndeki \xFC\xE7 belgeyi soldan sa\u011Fa kar\u015F\u0131la\u015Ft\u0131r: <b>YAPI DENET\u0130M FORMU</b>, <b>LABORATUVAR RAPORU</b> ve <b>DENET\xC7\u0130 EL K\u0130TABI</b>. Karar\u0131 formdaki <b>ONAY / RED</b> d\xFC\u011Fmeleriyle verirsin."

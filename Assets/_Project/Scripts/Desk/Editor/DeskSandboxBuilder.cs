@@ -301,6 +301,7 @@ namespace CivilJam.Desk.Editor
             Wire(view, "titleFont", TitleFont); // EEE: kart fontları ve yerleşimi TutorialView.StyleCard'da
             Wire(view, "bodyFont", ValueFont);
             Wire(view, "boldFont", BoldFont);
+            Wire(view, "helpSprite", FindSprite("btn_menu")); // EEE: NASIL OYNANIR düğmesi (TutorialView kurar)
             return view;
         }
 

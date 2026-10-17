@@ -85,6 +85,7 @@ namespace CivilJam.Flow
             });
 
             Text(rt, "Label", label, fontSize, Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+            rt.gameObject.AddComponent<ButtonHover>().AllowWhilePaused = allowWhilePaused; // fare üstündeyken belirginleşir (EEE)
             return btn;
         }
 

@@ -9,7 +9,7 @@ namespace CivilJam.Desk.Editor
     public static partial class DeskSandboxBuilder
     {
         private static readonly Color InspectLine = new Color(0.86f, 0.58f, 0.06f);
-        private static readonly Vector2 InspectButtonSize = new Vector2(256, 60); // EEE btn_menu 410x96 oranı
+        private static readonly Vector2 InspectButtonSize = new Vector2(160, 46); // EEE btn_inspect 420x120 oranı (poliş B2); küçük: lab raporunun başlığına ve portreye az biner (Oğuzhan)
 
         private static InspectController BuildInspect(RectTransform root, RectTransform papers)
         {
@@ -46,12 +46,12 @@ namespace CivilJam.Desk.Editor
             Wire(resultView, "click", FindClip("sfx_click"));
             Wire(resultView, "stamp", FindClip("sfx_stamp"));
 
-            // İNCELE düğmesi (EEE, 17 Ekim): ortada, lab raporunun hemen üstünde; ana menüdeki koyu tahta (göze çarpsın).
+            // İNCELE düğmesi (yer: EEE, 17 Ekim): ortada, lab raporunun hemen üstünde. Görsel: btn_inspect (EEE T1, ONAY / RED ailesi; poliş B2).
             var homes = DocHomes();
             float labX = 960f + homes.lab;
             var buttonRect = TopLeft(NewRect("InspectButton", overlay), InspectButtonSize, labX - InspectButtonSize.x * 0.5f,
-                DeskEdgeY - 24);
-            var buttonImage = SpriteImage(buttonRect, FindSprite("btn_menu"), Color.white);
+                DeskEdgeY - 10); // y 370-416: masa kenarında, lab raporu (y 420) başlamadan biter
+            var buttonImage = SpriteImage(buttonRect, FindSprite("btn_inspect"), new Color(0.2f, 0.17f, 0.15f));
             buttonImage.raycastTarget = true;
             var button = buttonRect.gameObject.AddComponent<Button>();
             button.targetGraphic = buttonImage;
@@ -59,10 +59,14 @@ namespace CivilJam.Desk.Editor
             colors.highlightedColor = new Color(0.92f, 0.92f, 0.92f);
             colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);
             button.colors = colors;
+            // Görselde yazı yok (EEE T1): solda büyüteç ikonu, yazı ikonun sağındaki alana kodla (Paytone One, krem).
             var label = NewText("Label", buttonRect, "İNCELE", 28, LightText, TextAlignmentOptions.Center, FontStyles.Normal);
-            label.font = BoldFont;
-            label.characterSpacing = 4;
-            Stretch(label.rectTransform);
+            label.font = TitleFont;
+            label.characterSpacing = 2;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 12;
+            label.fontSizeMax = 18;
+            Anchor(label.rectTransform, new Vector2(0.27f, 0f), Vector2.one, new Vector2(0, 4), new Vector2(-10, -4));
 
             var controller = root.gameObject.AddComponent<InspectController>();
             Wire(controller, "toggleButton", button);

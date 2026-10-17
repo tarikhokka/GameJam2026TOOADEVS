@@ -34,7 +34,6 @@ namespace CivilJam.Desk.Editor
         private static readonly Color BalloonColor = new Color(1f, 0.99f, 0.96f);
 
         private static readonly Color DeskColor = new Color(0.36f, 0.27f, 0.21f);
-        private static readonly Color HudColor = new Color(0.12f, 0.11f, 0.1f, 0.92f);
         private static readonly Color PanelColor = new Color(0.16f, 0.14f, 0.12f, 0.85f);
         private static readonly Color PaperColor = new Color(0.95f, 0.92f, 0.85f);
         private static readonly Color FolderColor = new Color(0.86f, 0.78f, 0.6f);
@@ -106,13 +105,14 @@ namespace CivilJam.Desk.Editor
         // Sandbox'taki sahte müşterilere EEE'nin portrelerini verir (Art/portrait_*.png).
         private static void WirePortraits(DeskSandboxBootstrap bootstrap)
         {
+            // Sahte müteahhitlerin sırasıyla (SandboxDeskContext.Clients) role uyan ana karakter portresi: dürüst Hilmi → Rıfat,
+            // rüşvetçi Cevdet → Kemal, sahte belgeci Nurettin → Selim, kabadayı Rüstem → Rüstem. Adla seçilir: klasördeki sıraya
+            // bakılsaydı 10 kişiliksiz portre (portrait_g01…) araya girip Cevdet'e başka bir yüz düşüyordu.
+            string[] names = { "portrait_rifat", "portrait_kemal", "portrait_selim", "portrait_rustem" };
             var so = new SerializedObject(bootstrap);
             var list = so.FindProperty("portraits");
-            var guids = AssetDatabase.FindAssets("portrait_ t:Sprite", new[] { ArtFolder });
-            list.arraySize = guids.Length;
-            for (int i = 0; i < guids.Length; i++)
-                list.GetArrayElementAtIndex(i).objectReferenceValue =
-                    AssetDatabase.LoadAssetAtPath<Sprite>(AssetDatabase.GUIDToAssetPath(guids[i]));
+            list.arraySize = names.Length;
+            for (int i = 0; i < names.Length; i++) list.GetArrayElementAtIndex(i).objectReferenceValue = FindSprite(names[i]);
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -157,8 +157,8 @@ namespace CivilJam.Desk.Editor
             // Çizim sırası: sahne (oda, müteahhit, masa, masadaki eşyalar) → üst bar → kağıt pencereler → kartlar.
             var sceneView = BuildScene(root, out var room);
             Wire(screen, "scene", sceneView);
-            Wire(screen, "hud", BuildHud(root, out var clientTag));
-            Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook, out var officeGifts));
+            Wire(screen, "header", BuildHeader(root)); // poliş B2: Onur'un üst barı (eski koyu bant kalktı)
+            Wire(screen, "props", BuildProps(room, out var handbookBook, out var officeGifts));
             Wire(screen, "officeGifts", officeGifts);
             room.Find("Balloon").SetAsLastSibling(); // konuşma balonu masadakilerin (zarf, hediyeler) önünde
 
@@ -235,27 +235,24 @@ namespace CivilJam.Desk.Editor
             return null;
         }
 
-        private static DeskHud BuildHud(Transform parent, out TMP_Text clientTag)
+        // Üst bar (poliş B2): Onur'un DeskHeaderView'u (C1, Docs/Onur/DeskHeaderView_baglanti.md). Ekranın üstüne yaslı, 80 px;
+        // görünümünü çalışırken kendisi kurar. Görseller Tarık'ın T1'i, yoksa kodla çizer. Ofis ve belgeler yerinden oynamaz.
+        private static DeskHeaderView BuildHeader(Transform parent)
         {
-            var hud = Anchor(NewRect("Hud", parent), new Vector2(0, 1), Vector2.one, new Vector2(0, -80), Vector2.zero);
-            AddImage(hud, HudColor);
-            var layout = HLayout(hud, 20, new RectOffset(30, 30, 10, 10));
-            layout.childForceExpandHeight = true;
-
-            var title = NewText("LevelTitle", hud, "Ay", 36, LightText, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
-            Layout(title, prefW: 200);
-            // Masadaki müteahhit / proje adı (DeskPropsView yazar); masa eşyalarla dolu olduğu için üst barda.
-            clientTag = NewText("ClientTag", hud, "Müteahhit · Proje", 28, LightText, TextAlignmentOptions.Center, FontStyles.Bold);
-            Layout(clientTag, flexW: 1);
-            var money = NewText("Money", hud, "Kasa", 30, LightText, TextAlignmentOptions.MidlineRight);
-            Layout(money, prefW: 420);
-            var quota = NewText("Quota", hud, "Onay", 28, LightText, TextAlignmentOptions.MidlineRight);
-            Layout(quota, prefW: 440);
-
-            var view = hud.gameObject.AddComponent<DeskHud>();
-            Wire(view, "levelTitleText", title);
-            Wire(view, "moneyText", money);
-            Wire(view, "quotaText", quota);
+            var host = NewRect("Header", parent);
+            var view = host.gameObject.AddComponent<DeskHeaderView>();
+            host.anchorMin = new Vector2(0f, 1f);
+            host.anchorMax = Vector2.one;
+            host.pivot = new Vector2(0.5f, 1f);
+            host.anchoredPosition = Vector2.zero;
+            host.sizeDelta = new Vector2(0f, DeskHeaderView.Height);
+            Wire(view, "titleFont", TitleFont);
+            Wire(view, "bodyFont", ValueFont);
+            Wire(view, "barSprite", FindSprite("hud_bar"));
+            Wire(view, "tagSprite", FindSprite("hud_tag"));
+            Wire(view, "dayIcon", FindSprite("hud_icon_day"));
+            Wire(view, "moneyIcon", FindSprite("hud_icon_money"));
+            Wire(view, "countIcon", FindSprite("hud_icon_count"));
             return view;
         }
 
@@ -317,7 +314,7 @@ namespace CivilJam.Desk.Editor
             Wire(view, "titleFont", TitleFont); // EEE: kart fontları ve yerleşimi TutorialView.StyleCard'da
             Wire(view, "bodyFont", ValueFont);
             Wire(view, "boldFont", BoldFont);
-            Wire(view, "helpSprite", FindSprite("btn_menu")); // EEE: NASIL OYNANIR düğmesi (TutorialView kurar)
+            Wire(view, "helpSprite", FindSprite("btn_help")); // EEE T1 (poliş B2): NASIL OYNANIR düğmesi, solda "?" ikonu (TutorialView kurar)
             return view;
         }
 
@@ -444,7 +441,7 @@ namespace CivilJam.Desk.Editor
 
         // Masadaki eşyalar (yeni hedef arayüz): hediyeler, zarf (4. adımda yeni yerine), gün bitince "Mesaiyi bitir"
         // (müteahhit / proje adı üst barda). Belgeler burada değil: Papers katmanında, masada hep açık.
-        private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook,
+        private static DeskPropsView BuildProps(RectTransform room, out Button handbookBook,
             out OfficeGiftsView officeGifts)
         {
             var root = Stretch(NewRect("Props", room));
@@ -470,7 +467,6 @@ namespace CivilJam.Desk.Editor
             var view = root.gameObject.AddComponent<DeskPropsView>();
             Wire(view, "envelopeRoot", envelope.gameObject);
             Wire(view, "envelopeText", envelopeText);
-            Wire(view, "clientTagText", clientTag);
             Wire(view, "finishButton", finish);
             return view;
         }

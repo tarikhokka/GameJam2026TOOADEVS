@@ -45,7 +45,7 @@ namespace CivilJam.Desk
 
         // (EEE, 17 Ekim) Geri düğmesi (Atla'nın kopyası, ilk kartta gizli) ve kartları istenince yeniden açan
         // "NASIL OYNANIR" düğmesi (masanın sağ üst köşesi, üst barın altı; kartın perdesinin altında kalır).
-        [SerializeField] private Sprite helpSprite; // btn_menu
+        [SerializeField] private Sprite helpSprite; // btn_help (EEE T1)
 
         public event Action PageChanged;
 
@@ -91,8 +91,8 @@ namespace CivilJam.Desk
             var button = go.GetComponent<Button>();
             button.targetGraphic = image;
             var colors = button.colors;
-            colors.highlightedColor = new Color(1f, 0.88f, 0.62f);
-            colors.pressedColor = new Color(0.8f, 0.75f, 0.65f);
+            colors.highlightedColor = new Color(0.92f, 0.92f, 0.92f); // ONAY / RED ile aynı (poliş B2)
+            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);
             button.colors = colors;
             button.onClick.AddListener(() =>
             {
@@ -103,9 +103,15 @@ namespace CivilJam.Desk
             var labelGo = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
             var lrt = (RectTransform)labelGo.transform;
             lrt.SetParent(rt, false);
-            lrt.anchorMin = Vector2.zero; lrt.anchorMax = Vector2.one; lrt.offsetMin = lrt.offsetMax = Vector2.zero;
+            // btn_help'te yazı yok, solda "?" ikonu (EEE T1): yazı ikonun sağına, Paytone One (poliş B2).
+            lrt.anchorMin = new Vector2(helpSprite != null ? 0.24f : 0f, 0f); lrt.anchorMax = Vector2.one;
+            lrt.offsetMin = new Vector2(0f, 4f); lrt.offsetMax = new Vector2(-10f, -4f);
             var label = labelGo.GetComponent<TextMeshProUGUI>();
-            if (boldFont != null) label.font = boldFont;
+            if (titleFont != null) label.font = titleFont;
+            else if (boldFont != null) label.font = boldFont;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 14;
+            label.fontSizeMax = 24;
             label.text = "NASIL OYNANIR";
             label.fontSize = 24;
             label.characterSpacing = 2;

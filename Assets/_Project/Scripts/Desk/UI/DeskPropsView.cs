@@ -9,7 +9,7 @@ namespace CivilJam.Desk
 {
     // Masanın üstündekiler: müteahhit oturunca ortada (isimliğin önünde) YAPI DENETİM FORMU klasörü ve solda LAB RAPORU
     // kitabı belirir (tıklayınca kendi pencereleri açılır), rüşvet teklif edildiyse zarf (uyuşmazlık diyaloğundan sonra
-    // müteahhidin elinden masaya yaylanarak düşer), üst barda müteahhit/proje adı,
+    // müteahhidin elinden masaya yaylanarak düşer). Müteahhit / proje adı artık üst barda (DeskHeaderView, DeskScreen yazar),
     // gün bitince "Mesaiyi bitir". EL KİTABI kitabı da masada durur ama onu RulebookView dinler.
     public class DeskPropsView : MonoBehaviour
     {
@@ -19,7 +19,6 @@ namespace CivilJam.Desk
         [SerializeField] private GameObject labBookRoot;    // kitap + gölgesi (DeskBookProp)
         [SerializeField] private GameObject envelopeRoot;
         [SerializeField] private TMP_Text envelopeText;
-        [SerializeField] private TMP_Text clientTagText;
         [SerializeField] private Button finishButton;
 
         public event Action FormClicked;
@@ -63,8 +62,6 @@ namespace CivilJam.Desk
             // (A, Ahmet kararı) Masada tutar görünmez; zarf açılınca (BribeEnvelopeView) görünür.
             envelopeText.text = "ZARF";
 
-            string name = client != null ? client.DisplayName : "Başvuru sahibi";
-            clientTagText.text = $"{name}  ·  {project.Name}";
             finishButton.gameObject.SetActive(false);
         }
 
@@ -73,7 +70,6 @@ namespace CivilJam.Desk
             FormObject?.SetActive(false);
             LabBookObject?.SetActive(false);
             SetEnvelope(false);
-            clientTagText.text = allDecided ? "Bugünkü başvurular bitti." : "";
             // (EEE, A ve B onayı) "Mesaiyi bitir" artık gösterilmez: DeskScreen mesai zili + geçiş ekranıyla kendisi geçer.
             finishButton.gameObject.SetActive(false);
         }

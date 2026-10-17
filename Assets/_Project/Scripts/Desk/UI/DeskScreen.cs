@@ -15,7 +15,7 @@ namespace CivilJam.Desk
     // geçiş ekranı, ardından Completed bir kez kendiliğinden tetiklenir ("Mesaiyi bitir" düğmesi kalktı, EEE).
     public class DeskScreen : MonoBehaviour, IGameScreen
     {
-        [SerializeField] private DeskHud hud;
+        [SerializeField] private DeskHeaderView header; // üst bar (Onur'un bileşeni, poliş B2): gün, kasa, müteahhit · proje, sayaçlar
         [SerializeField] private ClientSceneView scene;
         [SerializeField] private DeskPropsView props;
         [SerializeField] private PaperWindow formWindow;
@@ -430,13 +430,14 @@ namespace CivilJam.Desk
         {
             if (context == null) return;
 
-            hud.Refresh(context);
+            if (header != null) header.Refresh(context);
 
             var project = selectedId != null ? context.GetTodayProject(selectedId) : null;
             if (project == null)
             {
                 scene.Leave(); // son müteahhit sola çıkar, koltuk boş kalır
                 props.ShowEmpty(AllDecided());
+                if (header != null) header.SetDayDone(AllDecided());
                 SyncDocuments(null);
                 if (inspect != null) inspect.SetAvailable(false);
                 if (AllDecided() && !completed && !endingShift && !stamping) StartCoroutine(EndShift());
@@ -447,6 +448,7 @@ namespace CivilJam.Desk
             scene.Seat(project.Id, client, Greeting(project, client));
             bool bribeVisible = BribeVisible(project);
             props.Show(project, client, bribeVisible);
+            if (header != null) header.SetClient(client != null ? client.DisplayName : "Başvuru sahibi", project.Name);
             formView.Show(context, project, bribeVisible);
             labView.Show(context, project, CanBuyExtraTest(project),
                 context.Balance != null ? context.Balance.ExtraTestCost : 0);

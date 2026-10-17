@@ -209,6 +209,43 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 > - **Oğuzhan → B2** ve **Onur → C2 + C1-K** şimdi başlar; önce pull. Bağlantı rehberi: `Docs/Onur/DeskHeaderView_baglanti.md`.
 > - Hedef 08:30. Bitince tablodaki satırını ✅ + hash yap.
 
+**Faz 1 son kontrol (A, 18 Ekim ~02:25) — hepsi tamam:**
+| İş | Kontrol | Sonuç |
+|---|---|---|
+| A1 | EditMode 55/55; `FloorGroupOf` ve gerçek 16 kişilik kadroyla ziyaret testi (500 seed) | ✅ |
+| A2 | Oyun içi ekran görüntüsü: 2 katta 1-3, 4 katta 4-6, 7 katta 7+ kendiliğinden seçili; sekmeler HIZLI BAKIŞ + LAB; RED kutusu yok; satırlar büyük, yazı kesilmiyor | ✅ |
+| B1 | Oyunda otomatik tıklama testi: modda ONAY ve RED basılabilir, basınca mod kapanır ve karar verilir; EK TEST modda pasif; ekran görüntüsünde karartma, aydınlık alanlar, ONAY/RED doğru | ✅ |
+| C1 | `DeskHeaderView`: Desk asmdef, prefab'a dokunmamış, API `Refresh` / `SetClient` / `SetDayDone`, editör kodu `#if UNITY_EDITOR` içinde (build kırılmaz), görselsiz görünüm var | ✅ |
+| T1 | 9 görsel var, boyutlar plandaki gibi, hepsi Sprite; `hud_tag` 9-slice kenarlı (24); `btn_menu` ve `menu_bg` GUID'leri korunmuş; yazısız; CREDITS ve Art/README satırları var | ✅ |
+| T2 | Öğretici kart, README, ICERIK_TASLAK, Art/README güncel; eski "kat grubunu seç" ifadesi kalmadı | ✅ |
+| Birleşik | `fac2bae`: EditMode 55/55, PlayMode 4/4 | ✅ |
+
+**Faz 2 izinleri (A, Ahmet onayıyla; sadece bu dosyalar, başka dosyaya dokunmak gerekirse önce burada yaz):**
+- **Oğuzhan (B2) şunlara yazabilir:**
+  - `Desk/Editor/DeskSandboxBuilder*.cs`: İNCELE → `btn_inspect`, NASIL OYNANIR → `btn_help`, `BuildHud` → `DeskHeaderView`;
+  - `Desk/UI/DeskScreen.cs`, `DeskHud.cs`, `DeskPropsView.cs`, `TutorialView.cs` (sadece düğme görseli / bağlantı, metinler Tarık'ın), `InspectController.cs`, `InspectSpot.cs`, `InspectLift.cs`, `FormView.cs`;
+  - `Prefabs/Desk/DeskScreen.prefab` ve `Scenes/Sandbox_Desk.unity`: **sadece builder ile** kurulur, bu turda tek kurucu Oğuzhan.
+  - `DeskHeaderView.cs` Onur'un: Oğuzhan sadece kullanır. API değişikliği gerekirse §7'de Onur'a yazar.
+  - C1-K'dan karartma sırası notu gelirse düzeltme B2'nin içinde yapılır.
+- **Onur (C2 + C1-K) şunlara yazabilir:**
+  - `Flow/**` (`MainMenuScreen`, `UiKit`, `ButtonHover`, `PauseMenu` dahil; `PauseMenu`'deki A'nın Ayarlar kodu korunur, `SettingsMenuTests` ve `PauseMenuTests` geçmeli), `Prefabs/Flow/**`, `Scenes/MainMenu.unity`;
+  - `Desk/UI/DeskHeaderView.cs`, `InspectResultView.cs`, `InspectorBubbleView.cs`.
+  - **`DeskScreen.prefab` ve `Desk/Editor/**`'e dokunmaz**; karartma sırasıyla ilgili bir şey gerekiyorsa §7'de Oğuzhan'a yazar.
+  - ⚠️ `menu_bg`'deki dolgu bölgesi (eski 3 tahta yuvanın yeri, ortada hafif bulanık dikdörtgen ve soluk ikinci güneş parıltısı) düğmelerin altında kalmalı. C2'de düğme sütununu bu alanın üstüne yerleştir; açıkta kalırsa Tarık'a yaz.
+- **Tarık:**
+  - Faz 2'de kod yok.
+  - Onur ya da Oğuzhan isterse görselleri **aynı adla** düzeltebilir (`Art/**`, `CREDITS_AND_AI.md`).
+  - Video ve README ekran görüntüsü planı.
+  - (İsteğe bağlı) `ICERIK_TASLAK.md`'deki "El Kitabı sekme notları" bölümüne "artık kullanılmıyor (poliş K3)" yaz.
+- **A:**
+  - Faz 2'de Desk/Flow koduna dokunmaz; gelen push'ları test eder, sorunları sahibine yazar.
+  - Core'a sadece hata düzeltmesi.
+- **Herkes:**
+  - push'tan önce pull → derle → test;
+  - Unity'nin kendiliğinden değiştirdiği dosyalar commit'lenmez (§5);
+  - bitince Faz durumu tablosunda satırını ✅ + hash yapar.
+
+
 **Faz 2 (hedef 08:30) — kapı açılınca:**
 - **Oğuzhan, B2.** İhtiyaç duyduğu her şey Faz 1'de geldi: kendi B1'i (aynı prefab), Tarık'ın görselleri (T1) ve Onur'un `DeskHeaderView`'u (C1). Başlamadan önce pull eder. B2, `DeskScreen.prefab`'ı builder'la kuran **tek** iştir.
 - **Onur, C2.** T1 görselleri hazır, kimseyi beklemez. B2 ile aynı anda yapılır; dosyaları ayrı (Flow ve Desk).

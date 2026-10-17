@@ -6,9 +6,9 @@ using UnityEngine;
 namespace CivilJam.Core
 {
     /// <summary>
-    /// Yönetmelik ve Denetçi El Kitabı'nın verisi.
-    /// Gerekli değer projenin bina türü, deprem bölgesi (mahalleden) ve kat sayısına göre değişir (Ç1).
-    /// Masa ekranı "min." değerini GÖSTERMEZ; oyuncu el kitabında arar.
+    /// Yönetmelik ve Denetçi El Kitabı'nın verisi (v2, 17 Ekim öğle).
+    /// 5 parametre (2 sayısal + 3 seçenekli); gerekli değer sadece binanın KAT SAYISINA göre değişir (1-3 / 4-6 / 7+ kat).
+    /// Mahalle / deprem bölgesi kaldırıldı. Masa "min." değerini GÖSTERMEZ; oyuncu el kitabındaki tablodan bulur.
     /// </summary>
     [CreateAssetMenu(menuName = "CivilJam/Rule Set", fileName = "RuleSet")]
     public class RuleSetSO : ScriptableObject
@@ -16,49 +16,38 @@ namespace CivilJam.Core
         [Tooltip("El kitabının giriş metni (EEE)")]
         [TextArea(3, 12)] public string HandbookIntro;
 
-        [Tooltip("El kitabı s.1: mahalle → deprem bölgesi (1-4)")]
-        public List<ZoneEntry> Zones = new List<ZoneEntry>();
-
         public List<ParamRule> Rules = new List<ParamRule>();
 
-        /// <summary>Mahallenin deprem bölgesi; listede yoksa 0.</summary>
-        public int ZoneOf(string neighborhood)
-        {
-            foreach (var z in Zones)
-                if (string.Equals(z.Neighborhood, neighborhood, StringComparison.OrdinalIgnoreCase)) return z.Zone;
-            return 0;
-        }
-
-        /// <summary>Bina türünün bütün kuralları (bölge/kat ayırmadan; el kitabı sayfaları için).</summary>
+        /// <summary>Bina türünün bütün kuralları (kat grubu ayırmadan; el kitabı tablosu için).</summary>
         public IEnumerable<ParamRule> RulesFor(BuildingType type)
         {
             foreach (var r in Rules)
                 if (r.BuildingType == type) yield return r;
         }
 
-        /// <summary>Bu projeye uygulanan kurallar: her parametre için bölge ve kata en özel uyan kural.</summary>
-        public List<ParamRule> RulesFor(BuildingType type, int zone, int floors)
+        /// <summary>Bu binaya uygulanan kurallar: her parametre için kat sayısına en özel uyan kural.</summary>
+        public List<ParamRule> RulesFor(BuildingType type, int floors)
         {
             var best = new Dictionary<ParamType, ParamRule>();
             foreach (var r in Rules)
             {
-                if (r.BuildingType != type || !r.Matches(zone, floors)) continue;
+                if (r.BuildingType != type || !r.Matches(floors)) continue;
                 if (!best.TryGetValue(r.Param, out var cur) || r.Specificity > cur.Specificity) best[r.Param] = r;
             }
             return new List<ParamRule>(best.Values);
         }
 
-        /// <summary>Tek parametrenin bu projeye uygulanan kuralı; yoksa null.</summary>
-        public ParamRule FindRule(BuildingType type, ParamType param, int zone, int floors)
+        /// <summary>Tek parametrenin bu binaya uygulanan kuralı; yoksa null.</summary>
+        public ParamRule FindRule(BuildingType type, ParamType param, int floors)
         {
             ParamRule found = null;
             foreach (var r in Rules)
-                if (r.BuildingType == type && r.Param == param && r.Matches(zone, floors)
+                if (r.BuildingType == type && r.Param == param && r.Matches(floors)
                     && (found == null || r.Specificity > found.Specificity)) found = r;
             return found;
         }
 
-        /// <summary>Değeri ekranda gösterilecek metne çevirir: harfli parametrede etiket (C25, ZB), değilse sayı + birim.</summary>
+        /// <summary>Değeri ekranda gösterilecek metne çevirir: seçenekli parametrede etiket (C25, Nervürlü), değilse sayı + birim.</summary>
         public string FormatValue(ParamType param, float value)
         {
             foreach (var r in Rules)
@@ -85,45 +74,42 @@ namespace CivilJam.Core
     }
 
     [Serializable]
-    public class ZoneEntry
-    {
-        public string Neighborhood;   // NamePool.Neighborhoods ile aynı yazım
-        [Range(1, 4)] public int Zone = 1;
-    }
-
-    [Serializable]
     public class ParamRule
     {
         public BuildingType BuildingType;
         public ParamType Param;
-        public string DisplayName;   // Ör. "Beton sınıfı"
-        public string Unit;          // Ör. "MPa" (harfli parametrede boş)
-        [Tooltip("En düşük kabul edilen değer. Harfli parametrede Labels içindeki sıra numarası.")]
+        public string DisplayName;   // Ör. "Kolon kalınlığı"
+        public string Unit;          // Ör. "cm" (seçenekli parametrede boş)
+        [Tooltip("En düşük kabul edilen değer. Seçenekli parametrede Labels içindeki sıra numarası.")]
         public float Required;
 
-        [Header("Ne zaman geçerli (Ç1)")]
-        [Tooltip("0 = bütün bölgeler, 1-4 = sadece o deprem bölgesi")]
-        [Range(0, 4)] public int Zone;
+        [Header("Ne zaman geçerli")]
         [Tooltip("0 = alt sınır yok")] public int MinFloors;
         [Tooltip("0 = üst sınır yok")] public int MaxFloors;
 
         [Header("El kitabı")]
-        [Tooltip("Harfli parametre için kötüden iyiye sıra (ör. C20, C25, C30, C35). Boşsa sayısal.")]
+        [Tooltip("Seçenekli parametre için kötüden iyiye sıra (ör. Düz, Nervürlü). Boşsa sayısal.")]
         public List<string> Labels = new List<string>();
         [Tooltip("El kitabındaki açıklama (EEE)")]
         [TextArea] public string Description;
 
-        [Tooltip("Uygunsuz projede Actual = Required * bu aralıktan bir oran (harfli parametrede 1-2 kademe aşağı)")]
+        [Tooltip("Uygunsuz projede Actual = Required * bu aralıktan bir oran (seçenekli parametrede 1-2 kademe aşağı)")]
         public Vector2 FailRatioRange = new Vector2(0.55f, 0.9f);
 
         public bool IsLabeled => Labels != null && Labels.Count > 0;
 
-        public bool Matches(int zone, int floors) =>
-            (Zone == 0 || Zone == zone) &&
+        public bool Matches(int floors) =>
             (MinFloors == 0 || floors >= MinFloors) &&
             (MaxFloors == 0 || floors <= MaxFloors);
 
-        /// <summary>Bölge ve kat koşulu olan kural, genel kuraldan önce gelir.</summary>
-        public int Specificity => (Zone != 0 ? 2 : 0) + (MinFloors != 0 || MaxFloors != 0 ? 1 : 0);
+        /// <summary>Kat koşulu olan kural, genel kuraldan önce gelir.</summary>
+        public int Specificity => MinFloors != 0 || MaxFloors != 0 ? 1 : 0;
+
+        /// <summary>El kitabı sütun başlığı, ör. "1-3 kat", "7+ kat", "Tüm binalar".</summary>
+        public string FloorsLabel =>
+            MinFloors == 0 && MaxFloors == 0 ? "Tüm binalar"
+            : MaxFloors == 0 ? $"{MinFloors}+ kat"
+            : MinFloors == 0 ? $"en çok {MaxFloors} kat"
+            : $"{MinFloors}-{MaxFloors} kat";
     }
 }

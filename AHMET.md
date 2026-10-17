@@ -61,6 +61,7 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [x] Ç3 gevşek roller: uygun %80 dürüst usta; dikkatsiz %50/%50; sahte belge %70 Selim tipi. Dürüst usta asla rüşvet/sahte belge getirmez. Testler 15/15; `CivilJam > Core > Content Stats`.
 - [x] Ç1 bölge + kat kuralları, 8 parametre, harfli değerler (`ParamEntry.Labeled`), el kitabı verisi (`HandbookDataBuilder`, 16 mahalle, 60 kural), üretici (mahalle → bölge, 5-6 parametre), testler 19/19, simülasyon (denge korunuyor). Gazete yıkım nedeni zaten `Rules`'tan ad okuyor.
 - [x] Ç4 `ClientReactions` (selamlama/tepki seçimi, hediye çıkışı, zarf artışı), `GameState.ClientHistory` (`ClientRecord`), Nuri `BribeRaiseOnReject` 250. Testler 23/23.
+- [x] El kitabı v2 (Ahmet kararı): mahalle/bölge kaldırıldı, 5 parametre × 3 kat grubu (15 kural), her projede 5 parametre, binalar 2-9 kat, seçenekli kademe cezası %25 (simülasyonla). Testler 23/23.
 - [x] Onur'un DayIntro / Construction ekranları (`8c05324`) Game.unity'de; sahne testi 7 fazı kontrol ediyor.
 
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
@@ -113,6 +114,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | Ç1/Ç4 sözleşme iskeleti | `RuleSetSO` (HandbookIntro, Zones/ZoneEntry, ZoneOf, RulesFor(tür,bölge,kat), FindRule, FormatValue, DisplayNameOf); `ParamRule` (Zone, MinFloors, MaxFloors, Labels, Description, IsLabeled); `ParamType` +5; `ProjectData` (Neighborhood, Zone, GreetingText, ReactionText, GiftId); `GiftSO`; `ClientSO` (Approve/Reject/BribeRefused/ReturnLines, Gift, GiftChance, BribeRaiseOnReject); `GameState.OfficeGifts`; `GameContext.Gifts`/`GetGift`; `IGameActions.AcceptGift` | B, C (sandbox `AcceptGift` eklendi), EEE |
 | Ç1 mantığı | `ParamEntry.Labeled` (harfli parametre; değer = etiket sırası); `ProjectGenerator` artık `RuleSetSO.Zones` ve `RulesFor(tür, bölge, kat)` kullanıyor | B (`FormatValue` ile göster) |
 | Ç4 mantığı | `ClientRecord` + `GameState.ClientHistory`; `ClientReactions.RecordOf(state, id)` (okuma) | B ("tekrar geldi" göstergesi isterse) |
+| El kitabı v2 | KALDIRILDI: `RuleSetSO.Zones`/`ZoneEntry`/`ZoneOf`, `ParamRule.Zone`, `ProjectData.Neighborhood`/`Zone`. DEĞİŞTİ: `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`. YENİ: `ParamRule.FloorsLabel`, `ParamType` ColumnThickness/FoundationDepth/RebarType/SoilType, `ParamEntry.LabelStepPenalty` | B (el kitabı tablosu), EEE (metinler) |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

@@ -31,7 +31,12 @@ namespace CivilJam.Core
         BarDiameter,      // Donatı çapı (mm)
         ColumnSection,    // Kolon kesiti (cm²)
         SoilClass,        // Zemin sınıfı (harfli: ZE ... ZA → Labels)
-        ShearWallRatio    // Perde duvar oranı (%)
+        ShearWallRatio,   // Perde duvar oranı (%)
+        // El kitabı v2 (17 Ekim öğle, Ahmet kararı): 5 parametre, 2 sayısal + 3 seçenekli. Yukarıdakiler artık kullanılmıyor.
+        ColumnThickness,  // Kolon kalınlığı (cm)
+        FoundationDepth,  // Temel derinliği (m)
+        RebarType,        // Demir tipi (seçenekli: Düz / Nervürlü)
+        SoilType          // Zemin türü (seçenekli: Dolgu / Yumuşak kil / Sert kil / Kaya)
     }
 
     public enum BuildingType

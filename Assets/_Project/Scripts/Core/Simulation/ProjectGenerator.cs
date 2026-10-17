@@ -19,8 +19,6 @@ namespace CivilJam.Core
         const float SloppyRatioMin = 0.85f;
         const float SloppyRatioMax = 0.95f;
         const float BribeAlsoFakeChance = 0.25f;
-        const int ParamsPerProjectMin = 5;
-        const int ParamsPerProjectMax = 6;
 
         static readonly string[] BlockLetters = { "A", "B", "C", "D" };
 
@@ -61,9 +59,8 @@ namespace CivilJam.Core
             bool bribe = kind == ProjectKind.Bribe || kind == ProjectKind.BribeFake;
             bool fake = kind == ProjectKind.Fake || kind == ProjectKind.BribeFake;
 
-            // Konum (Ç1): mahalle → deprem bölgesi. Bölge gizli; oyuncu adresteki mahalleyi el kitabında arar.
-            var (neighborhood, zone) = PickLocation(rules, names, rng);
-            int floors = type == BuildingType.Factory ? rng.RangeInclusive(1, 3) : rng.RangeInclusive(3, 8);
+            // Kat sayısı el kitabındaki sütunu belirler (1-3 / 4-6 / 7+); üç grup da gelsin diye 2-9 kat.
+            int floors = type == BuildingType.Factory ? rng.RangeInclusive(1, 3) : rng.RangeInclusive(2, 9);
 
             var p = new ProjectData
             {
@@ -71,20 +68,14 @@ namespace CivilJam.Core
                 BuildingType = type,
                 Kind = kind,
                 Name = MakeBuildingName(type, names, rng, usedNames),
-                Neighborhood = neighborhood,
-                Zone = zone,
-                Address = MakeAddress(neighborhood, names, rng),
+                Address = MakeAddress(names, rng),
                 Floors = floors,
                 Fee = rng.RangeInclusive(balance.ApprovalFeeRange.x, balance.ApprovalFeeRange.y)
             };
 
-            // Parametreler: bu bölge + kata uyan kurallardan 5-6'sı (Ç1). Hangi satırların geleceği projeden projeye değişir.
-            var applicable = rules.RulesFor(type, zone, floors);
-            applicable.Sort((a, b) => a.Param.CompareTo(b.Param));
-            rng.Shuffle(applicable);
-            int take = Math.Min(applicable.Count, rng.RangeInclusive(ParamsPerProjectMin, ParamsPerProjectMax));
-            var selected = applicable.GetRange(0, take);
-            selected.Sort((a, b) => a.Param.CompareTo(b.Param)); // belgede sabit sıra
+            // Parametreler: bu kat grubuna uyan kuralların hepsi (el kitabı v2: 5 parametre), belgede sabit sırayla.
+            var selected = rules.RulesFor(type, floors);
+            selected.Sort((a, b) => a.Param.CompareTo(b.Param));
 
             var failing = new HashSet<int>();
             if (!compliant && selected.Count > 0)
@@ -262,22 +253,11 @@ namespace CivilJam.Core
         /// <summary>Kültürden bağımsız Türkçe büyük harf (i → İ, ı → I).</summary>
         static string UpperTr(string s) => s.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant();
 
-        /// <summary>Adres her zaman "&lt;Mahalle&gt; Mah. ..." ile başlar (masa ayrı mahalle satırı göstermez).</summary>
-        static string MakeAddress(string neighborhood, NamePoolSO names, Random rng)
+        /// <summary>Görsel adres (sokak + kapı no). Mahalle kaldırıldı: oyun kuralını etkileyen bir bilgi taşımaz.</summary>
+        static string MakeAddress(NamePoolSO names, Random rng)
         {
             string street = rng.Pick(names != null ? names.Streets : null, "Lale");
-            return $"{neighborhood} Mah. {street} Sok. No: {rng.RangeInclusive(1, 60)}";
-        }
-
-        /// <summary>Mahalleyi RuleSet.Zones'tan seç (bölgesi belli); tablo boşsa NamePool'dan, bölge 0.</summary>
-        static (string neighborhood, int zone) PickLocation(RuleSetSO rules, NamePoolSO names, Random rng)
-        {
-            if (rules.Zones != null && rules.Zones.Count > 0)
-            {
-                var z = rules.Zones[rng.Next(rules.Zones.Count)];
-                return (z.Neighborhood, z.Zone);
-            }
-            return (rng.Pick(names != null ? names.Neighborhoods : null, "Yeşiltepe"), 0);
+            return $"{street} Sokak No: {rng.RangeInclusive(1, 60)}";
         }
 
         // ---------- Değer üretimi ----------

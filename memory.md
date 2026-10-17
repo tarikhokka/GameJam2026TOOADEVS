@@ -162,15 +162,23 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 
 **Çözümler ve sahipleri**
 
-**Ç1 — El kitabı ve bağlama göre kurallar (şikayet 4, 6). A ✅ Core kısmı yapıldı; masa (B) ve metinler (EEE) bekleniyor.**
-- (A) Veri `RuleSet.asset`'te: **16 mahalle** (4'er tane bölge 1-4; bölge 1 en riskli), konut için **8 parametre × 4 bölge × 2 kat grubu** (1-4 kat / 5+ kat; perde duvar oranı sadece 5+ kat) = 60 kural. Her projede bunlardan 5-6'sı gelir. Mahalle adları, parametre adları/açıklamaları ve `HandbookIntro` **taslaktır**; EEE doğrudan `RuleSet.asset` içinde düzeltebilir (Inspector'da). Değerleri yeniden üretmek: `CivilJam > Core > Rebuild Handbook Rules` (EEE metinlerini korur).
-- (A) Harfli parametreler (beton sınıfı C16-C40, zemin sınıfı ZE-ZA) değer olarak **etiket sıra numarası** taşır. ⚠️ **Oğuzhan:** masa `FormatValue`'ya geçene kadar bu satırlarda "C25" yerine "2" görünür; lab raporundaki değerleri `ctx.Rules.FormatValue(param.Type, value)` ile yaz.
-- Gerekli değer artık projenin **deprem bölgesi** (1-4, mahalleden) ve **kat grubu** (1-4 kat / 5+ kat) ile değişir.
-- **8 parametre** (her projede 5-6'sı; adlar taslak, EEE son halini verir): beton sınıfı (C20/C25/C30/C35, harfli), donatı oranı (%), donatı çapı (mm), kolon kesiti (cm²), zemin taşıma gücü (kPa), zemin sınıfı (ZA–ZE, harfli), deprem dayanım katsayısı, kat yüksekliği (m).
-- **Masada "min." değeri yazmaz.** Oyuncu: adres → el kitabı s.1 "Mahalle → bölge" tablosu → ilgili bölge sayfası → kat grubu satırı → değer. (Papers, Please araması.)
-- Ek test kalır; test sonucu da **renkli gösterilmez** (yeşil/kırmızı cevabı verirdi), oyuncu yine el kitabıyla karşılaştırır.
-- A: kural modeli + üretici + gazetedeki yıkım nedeni + simülasyon. **B:** sayfalı "Denetçi El Kitabı" ekranı (sayfa çevirme; masada her zaman açılabilir), lab raporundan "min." ve renkleri, künyeden yan yana başvuru değerini kaldırmak. **EEE:** el kitabı metinleri (giriş, bölüm başlıkları, parametre açıklamaları), mahalle adları (~16), parametre adları/birimleri.
-- Referans: Oğuzhan'ın reddedilen önerisindeki el kitabı görseli git geçmişinde (`62165c0`, `Docs/Tasarim/denetci_el_kitabi.png`); kural modeli değil, sadece görünüm için kullanılabilir.
+**Ç1 — El kitabı v2 (Ahmet kararı, 17 Ekim öğle) — eski bölge/8 parametre modelinin YERİNE GEÇER. A ✅ Core kısmı yapıldı.**
+- **Mahalle / deprem bölgesi TAMAMEN KALDIRILDI.** Adres artık sadece görsel bilgi ("Akasya Sokak No: 12"), oyun kuralını etkilemez.
+- **5 parametre, her projede beşi de gelir** (2 sayısal + 3 seçenekli):
+
+  | Parametre | 1-3 kat | 4-6 kat | 7+ kat |
+  |---|---|---|---|
+  | Kolon kalınlığı (sayısal) | 30 cm | 35 cm | 40 cm |
+  | Temel derinliği (sayısal) | 1,5 m | 2,0 m | 2,5 m |
+  | Beton sınıfı (C16 / C20 / C25 / C30 / C35) | C20 | C25 | C30 |
+  | Demir tipi (Düz / Nervürlü) | Nervürlü | Nervürlü | Nervürlü |
+  | Zemin türü (Dolgu / Yumuşak kil / Sert kil / Kaya) | Yumuşak kil | Sert kil | Kaya |
+
+- Değerler "en az" kuralıdır (seçeneklilerde sırada sağdaki daha iyi). Gerekli değer **sadece kat sayısına** göre değişir; binalar 2-9 kat. Oyuncu: başvurudan kat sayısını okur → el kitabı tablosunda sütunu bulur → lab raporuyla karşılaştırır. Masada "min." yok.
+- Veri `RuleSet.asset`'te (15 kural); yeniden üretmek: `CivilJam > Core > Rebuild Handbook Rules` (EEE metinlerini korur). Açıklamalar ve `HandbookIntro` sade dille A taslağı; EEE düzeltebilir.
+- Denge (simülasyon, 300 oyun/tip): dikkatli %100 İyi; tek zarf %49 İyi / %42 Enkazın Gölgesi / %9 hapis; her zarfı alan %85 hapis; reddeci 5. gün ofisi kaybeder. Seçenekli parametrede her eksik kademe dayanımı %25 düşürür (`ParamEntry.LabelStepPenalty`).
+- ⚠️ **Oğuzhan (el kitabı ekranı):** en okunaklısı **tek tablo**: satırlar 5 parametre (`DisplayName`), sütunlar 3 kat grubu (`rule.FloorsLabel` → "1-3 kat", "4-6 kat", "7+ kat"), hücre `ctx.Rules.FormatValue(rule.Param, rule.Required)`; altında `Description`'lar. Sayfalı kitap gerekmiyorsa sayfa sayısı azalır (giriş + tablo + akredite lab'lar). Mahalle → bölge sayfası **artık yok**.
+- **Tarık:** mahalle adı yazmana gerek yok (özellik kalktı). El kitabı metinleri (5 parametre açıklaması + giriş) sende kalabilir ya da A'nın taslağı kalır.
 
 **Ç2 — Uygunsuz proje karışımı (şikayet 2, 3). A ✅ yapıldı (aşağıdaki son madde B'de).**
 - Sahte belge 3. günden başlar. Rüşvetsiz ama bir değeri yetersiz proje **her gün** gelir (Ç1 ile ancak el kitabıyla fark edilir). Bazı rüşvetçiler sahte belge de getirir.
@@ -196,12 +204,12 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - Gizli `ProjectData.Kind` (Compliant / Sloppy / Bribe / Fake / BribeFake) eklendi; **masada gösterilmez.**
 
 **Core sözleşmesi — KESİN ADLAR (A, push'landı; alanlar var, Ç1/Ç4 mantığı arkadan dolacak)**
-- **Ç1 (el kitabı):**
-  - `RuleSetSO.HandbookIntro` (string), `RuleSetSO.Zones` → `List<ZoneEntry>` (`Neighborhood`, `Zone` 1-4).
-  - `ParamRule` yeni alanlar: `Zone` (0 = bütün bölgeler), `MinFloors` / `MaxFloors` (0 = sınırsız), `Labels` (harfli parametrede kötüden iyiye sıra, ör. C20, C25, C30, C35), `Description` (el kitabı açıklaması), `IsLabeled`.
-  - `RuleSetSO` yardımcıları: `ZoneOf(mahalle)`, `RulesFor(tür)` (el kitabı sayfaları için hepsi), `RulesFor(tür, bölge, kat)`, `FindRule(tür, parametre, bölge, kat)`, **`FormatValue(parametre, değer)`** (harfli → "C25", sayısal → "32,5 MPa"; masa ve gazete bunu kullansın), `DisplayNameOf(parametre)`.
-  - Yeni `ParamType` değerleri (enum'un sonuna): `ConcreteGrade`, `BarDiameter`, `ColumnSection`, `SoilClass`, `ShearWallRatio`. Mevcutlar kalıyor.
-  - `ProjectData.Neighborhood` (adresteki mahalle; masada ayrı satır yok), `ProjectData.Zone` (gizli; oyuncu el kitabından bulur). `Address` her zaman "<Mahalle> Mah. ..." ile başlar.
+- **Ç1 (el kitabı v2):**
+  - `RuleSetSO.HandbookIntro` (string), `RuleSetSO.Rules`.
+  - `ParamRule`: `MinFloors` / `MaxFloors` (0 = sınırsız), `FloorsLabel` ("1-3 kat", "7+ kat"), `Labels` (seçenekli parametrede kötüden iyiye sıra), `Description`, `IsLabeled`.
+  - `RuleSetSO` yardımcıları: `RulesFor(tür)` (el kitabı tablosu için hepsi), `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`, **`FormatValue(parametre, değer)`** ("Nervürlü", "C25", "2,5 m"), `DisplayNameOf(parametre)`.
+  - Kullanılan `ParamType`'lar: `ColumnThickness`, `FoundationDepth`, `ConcreteGrade`, `RebarType`, `SoilType`. Eski değerler enum'da duruyor ama kullanılmıyor.
+  - **KALDIRILDI:** `RuleSetSO.Zones`, `ZoneEntry`, `ZoneOf`, `ParamRule.Zone`, `ProjectData.Neighborhood`, `ProjectData.Zone`.
   - `ParamEntry.Required` kalır ama **masada gösterilmez**.
 - **Ç4 (tepkiler ve hediye):**
   - `ProjectData.GreetingText` (masaya gelişte; tekrar gelen müteahhitte "geçen sefer..."), `ProjectData.ReactionText` (karardan hemen sonra), `ProjectData.GiftId` (onaydan sonra hediye varsa `GiftSO.Id`, yoksa boş).
@@ -231,7 +239,7 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
   - [x] Kabadayı reddedilince olay kartı + `sfx_glass_break` (O4).
     - (B) `d9d4aca`'da yapıldı.
 - **Tarık (EEE) — içerik:**
-  - [ ] El kitabı metinleri: `HandbookIntro`, parametre adları/birimleri/`Description` (8 parametre), ~16 mahalle adı (A bölgelere dağıtır).
+  - [ ] El kitabı metinleri: `HandbookIntro` ve 5 parametrenin `Description`'ı (A'nın sade taslağı var, istersen düzelt). ~~Mahalle adları~~ gerekmiyor (mahalle kaldırıldı).
   - [x] ~~Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).~~ **→ Ahmet devraldı (Ahmet kararı, Tarık görselle meşgul).** 6 müteahhit için 56 replik yazıldı: okunur kopyası `ICERIK_TASLAK.md` → "Tepki replikleri (Ç4) — A taslağı"; asset'lere `CivilJam > Core > Fill Empty Client Lines` ile yazılır.
     - ⚠️ **Tarık:** bu replikleri **yeniden yazmana gerek yok**; istersen ton/üslup düzeltmesi yap. Düzeltmeyi doğrudan `Data/Clients/*.asset`'te (Inspector) yap ve `ICERIK_TASLAK.md`'deki kopyayı da güncelle. Araç sadece **boş** listeleri doldurur, senin düzeltmelerinin üzerine yazmaz. Yeni müteahhit eklersen onun repliklerini sen yaz (araç sadece bu 6 kişiyi bilir).
     - Kural: `ReturnLines`'taki `{last}` hem "onaylamıştınız" hem "reddetmiştiniz" ile okunur; cümleyi ikisine de uyacak kur. Dürüst ustalar ve Selim rüşvet vermediği için `BribeRefusedLines` boş.
@@ -368,6 +376,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim oynanış testi | Ç1 el kitabı (bölge + kat + 8 parametre, masada "min." yok), Ç2 uygunsuz proje karışımı, Ç3 gevşek müteahhit rolleri, Ç4 tepkiler + birkaç etki (hediye, Nuri zarf artırır, Rüstem cam), Ç5 isim çeşitliliği | Ahmet oynadı: karşılaştırma çok kolay, isimden tür tahmin ediliyor, sahte belge hissedilmiyor, isimler tekrar ediyor. Sırası: Ç5+Ç2+Ç3 → Ç1 → Ç4 |
 | Ç1 Core | Deprem bölgesi 1 = en riskli (en sıkı değerler); kat grupları 1-4 / 5+; projede 5-6 parametre; harfli değerde yetersizlik 1-2 kademe | A. Simülasyon: dengeye etki yok (dikkatli %100 İyi; tek zarf %41/%45/%14) |
 | Ç4 Core | Tepki/selamlama Core'da seçilir (ProjectData metinleri); hediye onayda GiftChance ile, oyunda bir kez; Nuri her retten sonra +250 TL zarf | A. Replik listesi boşsa metin boş |
+| 17 Ekim öğle | El kitabı v2: mahalle/bölge tamamen kaldırıldı; 5 parametre (kolon kalınlığı, temel derinliği, beton sınıfı, demir tipi, zemin türü), gerekli değer kat grubuna göre (1-3 / 4-6 / 7+) | Ahmet kararı: daha az ama daha anlaşılır ve keyifli parametre; tek tabloda arama. Denge simülasyonla korundu |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

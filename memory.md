@@ -326,7 +326,11 @@ Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi k
       3. **Kontur ve doku:** masa eşyalarındaki kalın koyu kahve kontur ve cel gölge tarzında olsun (tarz kararı: el çizimi 2D cartoon).
     - Teknik: aynı dosya adları (`book_lab.png` LAB RAPORU, `book_rules.png` EL KİTABI), şeffaf arka plan, ~600 px genişlik; oran serbest (kod oranı görselden okur). **Gölgeyi görsele çizme**, masa tarafı kodla ekliyor. Sol alt köşede kupa/kaşe, sağ altta kağıt/kalem var; kitaplar bunların önüne konmuş gibi duracak.
     - Bitince haber ver → Oğuzhan masa yerleşimini yeni görsellere göre bitirip push'lar.
-    - ✅ **(EEE, 17 Ekim) Kitaplar yeniden yapıldı, aynı dosya adları:** alçak açıya göre perspektifle masaya yatırıldı (uzak kenar dar, yakın kenar geniş), soldan sıcak ışık + sağa doğru hafif gölgelenme, gölge ÇİZİLMEDİ (kod ekliyor). Boyut 640x330, şeffaf. Masa yerleşimini bitirebilirsin.
+    - ✅ **(EEE, 17 Ekim, 2. sürüm) Kitaplar sıfırdan çizildi + masa sadeleştirildi, aynı dosya adları:**
+      - Kitaplar masada yatan 3B nesne: kapak (alçak açı, uzak kenar dar), sayfa bloğu/kalınlık, sırt; kalın kahve kontur, soldan sıcak ışık. 640x320 şeffaf, gölge ÇİZİLMEDİ (kod ekliyor).
+      - `desk_bg.png` sadeleşti: kaşe+ıstampa, yapışkan notlar, sol kağıtlar, sağ kalem ve proje kağıdı silindi (ahşap dokusuyla dolduruldu). Kalanlar: kupa + kalemlik (sol arka), isimlik (orta). `desk_front.png` bu temiz masadan yeniden üretildi.
+      - Önerilen yerleşim (1920x1080 ekranda, sol-üst köşe x,y ve boyut): **LAB RAPORU** x≈238, y≈815, 480x240 (kupa ile isimlik arası); **EL KİTABI** x≈1320, y≈812, 500x250 (sağ boş alan). Gölge: kitabın altında, alt kenara yakın yatay yumuşak elips (~%30 koyu).
+      - Masa yerleşimini bitirebilirsin.
   - [ ] **(EEE → B, 17 Ekim) Harf harf yazı + yazı sesi:** konuşma balonu (`GreetingText`, zarf repliği, `ReactionText`) metni bir anda değil **harf harf** yazsın (öneri ~35-45 harf/sn; boşluk ve noktalamada ses çalmasın; balona tıklanınca metin anında tamamlansın). Her görünen harfte (ya da 2 harfte bir) `Audio/sfx_typing.wav` çalsın; tekdüze olmasın diye perdeyi her seferinde küçük rastgele oynat (ör. 0.95-1.05). Karaktere özel ses yok.
   - [ ] **(EEE → B, 17 Ekim) Hediyeler ofiste:** 6 hediye görseli hazır (`Art/gift_*.png`, 300x300). Kabul edilen hediyeler (`ctx.State.OfficeGifts` → `ctx.GetGift(id).Sprite`) masada/rafta kalıcı görünsün; masadaki eşyalarla orantılı (~140-180 px) ve kitaplar gibi alt gölgeli.
 - [x] `CivilJam.Desk.asmdef` referanslarına `CivilJam.Core` ekle.

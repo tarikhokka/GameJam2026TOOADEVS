@@ -14,7 +14,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 ## İhtiyaç listesi (B/C ile netleştir)
 | Dosya | Ekran | Kim kullanıyor | Durum |
 |---|---|---|---|
-| `desk_bg.png` | Desk ARKA katman: oda + koltuk + masa (ChatGPT, 1920x1080). Çizim sırası: desk_bg → portre → desk_front → kitaplar | B | F |
+| `desk_bg.png` | Desk ARKA katman: oda + koltuk + masa (ChatGPT, 1920x1080; masa sadeleştirildi: kaşe, kağıtlar, notlar, kalem kaldırıldı, kupa/kalemlik/isimlik kaldı). Çizim sırası: desk_bg → portre → desk_front → kitaplar | B | F |
 | `desk_front.png` | Desk ÖN katman: sadece masa (şeffaf, 1920x1080, tam ekran). Portrenin ÖNÜNE çizilir, karakterin belden aşağısını kapatır | B | F |
 | `doc_paper.png` | Desk | B | P |
 | `stamp_approve.png` | Desk | B | P |
@@ -34,7 +34,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `gift_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk: ofis hediyeleri (GiftSO.Sprite), 300x300 şeffaf, konturlu | B | F |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |
-| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT + perspektifle masaya yatırıldı, 640x330 şeffaf; gölge kodda), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
-| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT + perspektifle masaya yatırıldı, 640x330 şeffaf; gölge kodda), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (script ile sıfırdan çizildi, masada yatan 3B kitap, 640x320 şeffaf; gölge kodda), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (script ile sıfırdan çizildi, masada yatan halkalı klasör, 640x320 şeffaf; gölge kodda), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

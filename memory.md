@@ -1,6 +1,6 @@
 # memory.md — Projenin ortak hafızası
 
-> **17 Ekim ~17:30 temizlendi (A).** Eskimiş ve bitmiş notlar silindi; bu dosya artık sadece **güncel** kuralları, yapıyı ve açık işleri anlatır. Eski hâli git geçmişinde: `f14d2ed`. Ajanlar: oturum başında §7'yi oku; bir maddeyi bitirince orada `[x]` yap ve tek satır not düş.
+> **18 Ekim ~01:30 temizlendi (B, ekibin izniyle).** Bitmiş özelliklerin planlama notları, iş bölümü tabloları ve `[x]` maddeler silindi; kurallar güncel hâliyle §2-§3'e taşındı. Eski hâli git geçmişinde: `45d3503` (önceki temizlik `f14d2ed`). Ajanlar: oturum başında §7'yi oku; bir maddeyi bitirince orada `[x]` yap ve tek satır not düş.
 
 ## 1. Proje özeti
 - CIVIL GAME JAM (ODTÜ KKK, KALTEV), 48 saat: 16 Ekim 2026 18:00 → 18 Ekim 2026 18:00 (UTC+3). Tema: "Afete Hazırlık ve Farkındalık".
@@ -12,7 +12,7 @@
 ## 2. Oyun kuralları (güncel, kodda uygulanmış)
 **Akış:** MainMenu → (Yeni Oyun: hikâye intro'su) → Game: DayIntro → Desk → Construction → (afet ? gazete (Result) : gün özeti (DaySummary)) → günlük ödeme → (son ? Ending : Save) → ertesi gün. Deprem sahnesi/animasyonu yok; afetsiz günde gazete yok.
 
-**Gün ve içerik (`Data/Days`):** 10 gün. 1. gün 3 proje (1 kötü), rüşvet/sahte belge yok. 3. günden 4 proje (2 kötü), rüşvet ve sahte belge. 5. günden 5 proje (3 kötü) + kabadayı. 8. günden 6 proje (4 kötü). (5. ve 8. gün kötü oranı 0,6: Tarık, 17 Ekim gece.) Bir müteahhit günde bir kez gelir, arka arkaya gelmez (`ProjectGenerator.AssignClients`; imkânsızsa tekrar, yine arka arkaya değil). Fabrika, yangın, sel, sigorta, kota **yok**.
+**Gün ve içerik (`Data/Days`, `BalanceSO.TotalDays` = 7):** günlük proje 3 · 3 · 4 · 4 · 4 · 5 · 5 = 28. 1. gün zarf ve sahte belge yok; 2. gün zarf, 3. gün sahte belge, 4. gün kabadayı başlar. Oyun başında sabit rastgele ziyaret programı kurulur (`VisitPlanner`, `GameState.Schedule`, kayıtla saklanır): 6 ana müteahhit 3'er kez, 10 kişiliksiz karakter 1'er kez; aynı müteahhit aynı gün iki kez ve arka arkaya gelmez; projeler tam 14 uygun / 14 uygunsuz, hiçbir yüz kararı ele vermez. Fabrika, yangın, sel, sigorta, kota **yok**.
 
 **El Kitabı v2 (`Data/RuleSet.asset`, 15 kural):** her projede 5 parametre; gereken değer sadece kat grubuna bağlı (binalar 2-9 kat). Değerler "en az"; seçeneklilerde sağdaki daha iyi.
 
@@ -24,52 +24,73 @@
 | ZEMİN | Temel derinliği | 1,5 m | 2,0 m | 2,5 m |
 | ZEMİN | Zemin türü (Dolgu / Yumuşak kil / Sert kil / Kaya) | Yumuşak kil | Sert kil | Kaya |
 
-**Belgeler ve ipuçları:** Form (`Documents[0]`) ve lab raporu (`Documents[1]`) beyan değerini (`Reported`) gösterir; gerçek değeri (`Actual`) sadece ücretli **ek test** (400 TL, anında düşer) açar. Sahte belgede değerler temiz görünür; bedava ipuçları iki belgenin farkındadır: parsel, tarih, bilinmeyen laboratuvar (akredite listede yok), kaşedeki lab adı ≠ raporun lab'ı, imzalayan mühendis farklı. Masa hiçbir şeyi "yanlış" diye işaretlemez.
-**Değer farkı (Tarık önerisi, Ahmet onayı, 17 Ekim gece):** lab raporunun beyanı formdan farklı yazabilir (`ParamEntry.LabDiffers` / `LabReported` / `LabValue`); ikisi de yönetmeliği geçiyor görünür, İNCELE form ↔ lab'da UYUŞMAZLIK der. Sahtelerin %65'inde (gerçek değer kötü; bunların yarısında künye ipucu yok → sadece ek test kanıtlar), uygun projelerin %15'inde masum yazım hatası (gerçek değer iyi, 1. günden). Hangisi olduğunu ek test söyler.
+**Belgeler ve ipuçları:** Form (`Documents[0]`) ve lab raporu (`Documents[1]`) beyan değerini (`Reported`) gösterir; gerçek değeri (`Actual`) sadece ücretli **ek test** (400 TL, anında düşer) açar. Sahte belgede değerler temiz görünür; bedava ipuçları iki belgenin farkındadır: parsel, tarih, bilinmeyen laboratuvar (akredite listede yok), kaşedeki lab adı ≠ raporun lab'ı (kaşedeki lab da akredite değil), imzalayan mühendis farklı. Sahte parsel/tarih gerçeğiyle asla aynı çıkmaz. Masa hiçbir şeyi "yanlış" diye işaretlemez.
+**Değer farkı:** lab raporunun beyanı formdan farklı yazabilir (`ParamEntry.LabDiffers` / `LabReported` / `LabValue`); ikisi de yönetmeliği geçiyor görünür. Sahtelerin %65'inde (gerçek değer kötü; bunların yarısında künye ipucu yok → sadece ek test kanıtlar), uygun projelerin %15'inde masum yazım hatası (gerçek değer iyi). Hangisi olduğunu ek test söyler.
 
-**Proje türleri (gizli `ProjectKind`):** Compliant, Sloppy (rüşvetsiz ama bir değeri eksik; her gün), Bribe, Fake (3. günden), BribeFake. Rüşvet teklif edilen her proje uygunsuzdur.
+**Proje türleri (gizli `ProjectKind`):** Compliant, Sloppy (rüşvetsiz ama bir değeri eksik), Bribe, Fake, BribeFake. Rüşvet teklif edilen her proje uygunsuzdur.
 
-**Müteahhitler (6, `Data/Clients`):** Rıfat ve Sevim dürüst (çoğunlukla uygun, bazen dikkatsiz; asla zarf/sahte belge yok); Kemal ve Nuri rüşvetçi (bazen temiz gelir); Selim çoğunlukla sahte belgeci (zarf vermez); Rüstem kabadayı (5. günden; reddedilince 4 olaydan biri: cam, masa, kapı kilidi ya da araba lastikleri — art arda aynısı olmaz; hepsi "Hasar tamiri" 200 TL, olay masada seçilir). İsim türü tek başına ele vermez. Core selamlama (`GreetingText`; tekrar gelende "geçen sefer…") ve tepki (`ReactionText`) seçer. Nuri her retten sonra zarfı +250 TL büyütür. **Hediye:** sadece dürüst ustalar, onayda bazen, oyunda bir kez; sadece kabul edilir, ofiste kalıcı görünür, para/risk etkisi yok.
+**Müteahhitler (`Data/Clients`, 16):** 6 ana karakter: Rıfat ve Sevim dürüst (çoğunlukla uygun, bazen dikkatsiz; asla zarf/sahte belge yok); Kemal ve Nuri rüşvetçi (bazen temiz gelir); Selim çoğunlukla sahte belgeci (zarf vermez; 1-2. gün gelirse dikkatsiz proje); Rüstem kabadayı (4. günden; reddedilince 4 olaydan biri: cam, masa, kapı kilidi ya da araba lastikleri — art arda aynısı olmaz; gider "Hasar tamiri"). 10 kişiliksiz karakter (`Generic01-10`, `IsGeneric`; uygun, dikkatsiz, zarflı ya da sahte belgeli gelebilir; zarf `BalanceSO.GenericBribeRange`); kendi replik listesi boşsa `Data/Dialogue.asset` ortak havuzu kullanılır. Core selamlama (`GreetingText`; tekrar gelende "geçen sefer…") ve tepki (`ReactionText`) seçer. Nuri her retten sonra zarfı +250 TL büyütür. **Hediye:** sadece dürüst ustalar, onayda bazen, oyunda bir kez; sadece kabul edilir, ofiste kalıcı görünür, para/risk etkisi yok.
+
+**İnceleme modu (`Inspection.Check`, masadan `ctx.Actions.Inspect`):** oyuncu İNCELE ile iki **ayrı** belgeden iki alan seçer → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ. Ücretsiz, sınırsız; kararı yine oyuncu verir. El Kitabı eşiği oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır (seçilmemiş ya da binaya ait olmayan grup → ALAKASIZ). Tabloda olmayan her çift ve aynı belgeden iki alan → ALAKASIZ.
+
+| # | 1. alan | 2. alan | Uyuşmazlık ne zaman |
+|---|---|---|---|
+| 1 | Form: parametre X | El Kitabı: parametre X | Beyan eşiğe yetmiyor (rüşvetli, dikkatsiz) |
+| 2 | Lab: beyan X | El Kitabı: parametre X | Aynısı |
+| 3 | Lab: ek test X (test yapıldıysa) | El Kitabı: parametre X | Gerçek değer eşiğe yetmiyor (sahte dahil) |
+| 4 | Form: parametre X | Lab: ek test X | Beyan ≠ gerçek değer (sahte) |
+| 5 | Form: parametre X | Lab: beyan X | Değer farkı varsa |
+| 6 | Form: Ada/Parsel | Lab: Ada/Parsel | Parsel ipucu |
+| 7 | Form: Tarih | Lab: Rapor tarihi | Tarih ipucu |
+| 8 | Form: Proje müellifi | Lab: Laboratuvar yetkilisi | Farklı mühendis imzası |
+| 9 | Lab: Laboratuvar (başlık) | El Kitabı: LAB listesi | Bilinmeyen laboratuvar |
+| 10 | Lab: kaşe | El Kitabı: LAB listesi | Başka (akredite olmayan) laboratuvarın kaşesi |
+
+**Uyuşmazlık diyaloğu ve rüşvet (`InspectionDialogue`):** zarf başta yoktur, rüşvetçi sadece selamlar. UYUŞMAZLIK bulununca (bu projede bu alan çifti için ilk kez) kaşeden sonra kısa diyalog: denetçi cümlesi (`Dialogue.asset` şablonu, gerçek veriyle) + müteahhit cevabı (`ClientSO.MismatchLines`). Projede zarf varsa **ilk uyuşmazlıkta** devam eder: teklif (`BribeLines`) + denetçi tepkisi (`BribeReactions`) + kapanış (`BribeCloseLines`); `ProjectData.BribeRevealed` = true ve zarf masaya düşer. Uyuşmazlık bulunmazsa zarf hiç teklif edilmez; teklif edilmemiş zarf alınamaz, ret sonrası "zarf geri çevrildi" repliği çıkmaz. SORUN YOK ve ALAKASIZ'da diyalog yok.
+**Zarf:** masada sadece "ZARF" yazar; tıklanınca açılır (para + tutar): RÜŞVETİ KABUL ET → zarfla onay; RÜŞVETİ REDDET → zarf masaya döner, proje karar bekler.
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner.
 
-**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 500-700 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 400; borç limiti 2.000. **Bilerek zor (Tarık kararı, 17 Ekim gece):** dürüst oyuncunun yaklaşık yarısı iflas eder; 600-800 ile %86 kazanıyordu, Tarık 500-700'ü seçti. Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
+**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 500-700 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 400; borç limiti 2.000. **Bilerek zor (Tarık kararı).** Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
 
 **Hapis ve sonlar** (günlük ödemeden sonra, öncelik sırasıyla): yıkılan bina JailRisk +0,15, rüşvetle onaylanmış yıkılan bina +0,25; her yıkımdan sonra hapis zarı.
 1. **Kötü** "Hüküm": hapis zarı tuttu.
 2. **Orta** "Kapanan Kapı": borç > 2.000 TL (her gün bakılır).
-3. **Orta** "Enkazın Gölgesi": 10. gün bitti, en az bir bina yıkıldı.
-4. **İyi** "Ayakta Kalanlar": 10. gün bitti, hiç yıkım yok.
+3. **Orta** "Enkazın Gölgesi": 7. gün bitti, en az bir bina yıkıldı.
+4. **İyi** "Ayakta Kalanlar": 7. gün bitti, hiç yıkım yok.
 
-Denge (`CivilJam > Core > Balance Report`, 300 oyun/tip, 17 Ekim ~22:00, yukarıdaki değerler + günde bir müteahhit + değer farkı): dikkatli (değer farkında ek test alır) %47 İyi / %53 ofis kapanır (son borç ~2.050); saf (test almaz) %3 İyi / %38 Enkazın Gölgesi / %58 hapis; tek zarf %40 İyi / %43 Enkazın Gölgesi / %13 hapis / %3 kapanır; her zarfı alan %95 hapis; her şeyi reddeden 3. gün ofisi kaybeder. (Karşılaştırma: ücret 600-800 ile dikkatli %86 İyi.)
+Denge (`CivilJam > Core > Balance Report`, gerçek 16 kişilik kadroyla, A `17179b4`): dikkatli %82 İyi / %18 ofis kapanır; tek zarf %44 İyi / %45 Enkazın Gölgesi / %11 hapis; her zarfı alan %76 hapis; her şeyi reddeden 3. gün ofisi kaybeder.
 
 **Kayıt:** tek slot JSON (`persistentDataPath/save.json`), sadece `GameState`. Gün sonunda gün +1 yapılıp kaydedilir; "Devam Et" yeni günün başını açar. Son ekranına girince kayıt silinir.
 
-**Jüri demo tuşları (Game sahnesi, build'de de):** F9 = son güne atla, F10 = bu gece afet kesin.
+**Jüri demo tuşları (Game sahnesi, build'de de):** F9 = son güne (7) atla, F10 = bu gece afet kesin.
 
-## 3. Arayüz (yeni hedef arayüz, 17 Ekim akşam — kuruldu)
+## 3. Arayüz
 Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/Tasarim/el_kitabi_hizli_bakis.html`.
-- **Masa (Desk, B):** üst yarı ofis (`office_bg`) + müteahhit portresi + konuşma balonu (harf harf yazı + yazı sesi); masa kenarı (`desk_edge`) ve yüzeyi (`desk_surface`). Masada üç belge düz ve yan yana:
-  - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, proje müellifi, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED, zarf varsa "ZARFI AL VE ONAYLA".
+- **Masa (Desk, B):** üst yarı ofis (`office_bg`) + müteahhit portresi + konuşma balonu (harf harf yazı + yazı sesi); masa kenarı (`desk_edge`) ve yüzeyi (`desk_surface`). Masada üç belge düz ve yan yana (sürüklenebilir):
+  - **Yapı Denetim Formu** (`doc_form`): proje bilgileri (proje, ada/parsel, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, proje müellifi, onay ücreti) + kat grubuna göre bina resmi, teknik bilgiler (beyan değerleri), belediye kaşesi, ONAY / RED.
   - **Laboratuvar Raporu** (`doc_lab`): laboratuvar, rapor tarihi, proje, ada/parsel, Parametre | Beyan | Ek test, karar vermeyen değerlendirme cümlesi, yetkili imzası, lab kaşesi + kaşedeki lab adı, EK TEST.
   - **Denetçi El Kitabı** (`doc_handbook`), sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN · LAB. Hızlı Bakış'ta oyuncu kat grubunu **kendisi seçer** (otomatik seçilmez, yeni müteahhitte sıfırlanır); 5 parametre kırmızı/yeşil çip ya da cetvel olarak boyanır. Eşikler Core'dan (`FindRule`), kodda sabit değer yok.
-  - Zarf müteahhidin sağında masa kenarında; kabul edilen hediyeler masa kenarında müteahhidin iki yanında. 1. gün 4 öğretici kart; kabadayı reddedilince "Camın kırıldı!" kartı.
-- **Akış ekranları (Flow, C):** gün başı (DayIntro), inşaat (Construction), gazete (Result), gün özeti (DaySummary), günlük ödeme (DailyExpenses), kayıt (Save), son (Ending), ana menü (MainMenu: Yeni Oyun / Devam Et / Emeği Geçenler / Çıkış), hikâye intro'su, Esc menüsü (her sahnede kendiliğinden kurulur).
+  - **İNCELE** düğmesi (lab raporunun üstünde, Tarık'ın yeri): mod açıkken belgeler sürüklenmez, karar düğmeleri pasif; alanlar sarı çerçeve alır; iki alan arasına çizgi + Onur'un sonuç kaşesi (`InspectResultView`). Sağ tık ya da boş masa seçimi temizler.
+  - **Diyalog** (`DeskDialogue`): denetçi satırı solda Onur'un balonunda (`InspectorBubbleView`), müteahhit satırı kendi balonunda; sürerken masa kilitli, tıklama satırı tamamlar / geçer.
+  - Zarf diyalogdan sonra masaya düşer, tıklanınca açılır (`BribeEnvelopeView`); kabul edilen hediyeler masa kenarında. 1. gün 5 öğretici kart (Geri düğmesi; masadaki "NASIL OYNANIR" yeniden açar); kabadayı olayı kartı; son müteahhitten sonra mesai zili + "MESAİ BİTTİ".
+- **Akış ekranları (Flow, C):** gün başı (DayIntro), inşaat (Construction), gazete (Result), gün özeti (DaySummary), günlük ödeme (DailyExpenses), kayıt (Save), son (Ending), hareketli ana menü (MainMenu: Yeni Oyun / Devam Et / Emeği Geçenler / Çıkış), hikâye intro'su, Esc menüsü (her sahnede kendiliğinden kurulur; Ayarlar: ana ses + tam ekran).
 - **Görsel dil:** el çizimi 2D cartoon (kalın kahve kontur, sıcak palet), görseller ChatGPT ile üretilip Claude script'leriyle hazırlandı. Yazı tipleri Paytone One (başlık) + Fira Sans (metin), ikisi de OFL, TMP asset'leri `Assets/_Project/Fonts/` (Static).
 
 ## 4. Mimari ve dosya haritası
 - Tek `Game` sahnesi + prefab ekranlar. Diğer sahneler: `MainMenu` (Build Settings 1. sıra), `Sandbox_Desk`, `Sandbox_Flow`.
 - Oyun mantığı saf C# (`GameSession`); tek MonoBehaviour `GameManager` faz sırasını yürütür ve sahnedeki `IGameScreen`'leri bulur. Ekranı olmayan faz: Editor'de mavi IMGUI yedeği, build'de atlanır (şu an 8 fazın hepsinin ekranı var).
-- **Ekranlar Core'a sadece `ctx.Actions` (IGameActions) ile yazar** (Approve, Reject, BuyExtraTest, SetExpensePaid, AcceptGift). Okuma `GameContext`'ten. Kullanım rehberi: `AHMET.md`.
-- Assembly'ler: `CivilJam.Core` (+ `.Editor`, `.Tests`), `CivilJam.Desk`, `CivilJam.Flow` (+ PlayMode testleri). Desk ve Flow sadece Core'a bağlı, birbirini görmez.
+- **Ekranlar Core'a sadece `ctx.Actions` (IGameActions) ile yazar** (Approve, Reject, BuyExtraTest, Inspect, SetExpensePaid, AcceptGift). Okuma `GameContext`'ten. Kullanım rehberi: `AHMET.md`.
+- Assembly'ler: `CivilJam.Core` (+ `.Editor`, `.Tests`), `CivilJam.Desk`, `CivilJam.Flow` (+ PlayMode testleri). Desk ve Flow sadece Core'a bağlı, birbirini görmez (bu yüzden Onur'un masa bileşenleri Desk klasöründe).
 - `Assets/_Project/`
-  - `Scripts/Core/` (A): `Runtime/` (ProjectData, ParamEntry, DocumentData, GameState, GameContext, QuakeResult, DailyExpenseResult), `Config/` (BalanceSO, RuleSetSO, ClientSO, GiftSO, DayConfigSO, ExpenseSO, HeadlineSO, EndingSO, NamePoolSO), `Simulation/` (ProjectGenerator, EarthquakeSimulator, DisasterSystem, CasualtyGenerator, ExpenseCalculator, ClientReactions), `Game/` (GameSession, GameManager, FallbackGui, SaveSystem, GameLaunch), `Editor/` (menü CivilJam > Core: Install Screens, Link Data, Rebuild Handbook Rules, Balance Report, Content Stats), `Tests/Editor/` (30 EditMode testi).
-  - `Scripts/Desk/` (B): `UI/DeskScreen` (IGameScreen), `ClientSceneView`, `FormView`, `LabReportView`, `RulebookView` + `HandbookUi`, `PaperWindow`, `DraggableSheet`, `DecisionStampView`, `GiftOfferView`, `OfficeGiftsView`, `EventCardView`, `TutorialView`, `DeskAudio`, `DeskMotion`, `PopupMotion`, `DeskHud`; `Sandbox/`; `Editor/DeskSandboxBuilder(.Papers)` (menü CivilJam > Desk > Build Sandbox_Desk Scene: prefab + sahne yeniden kurulur).
-  - `Scripts/Flow/` (C): `UI/` (FlowScreen tabanı, UiKit, ekranlar, MainMenuScreen, IntroSequence, PauseMenu), `Sandbox/`, `Editor/FlowBuilder`, `Tests/PlayMode/`.
+  - `Scripts/Core/` (A): `Runtime/` (ProjectData, ParamEntry, DocumentData, GameState, GameContext, InspectOutcome, …), `Config/` (BalanceSO, RuleSetSO, ClientSO, DialogueSO, GiftSO, DayConfigSO, ExpenseSO, HeadlineSO, EndingSO, NamePoolSO), `Simulation/` (ProjectGenerator, VisitPlanner, Inspection, InspectionDialogue, EarthquakeSimulator, DisasterSystem, CasualtyGenerator, ExpenseCalculator, ClientReactions), `Game/` (GameSession, GameManager, FallbackGui, SaveSystem, GameLaunch), `Editor/` (menü CivilJam > Core: Install Screens, Link Data, Rebuild Handbook Rules, Balance Report, Content Stats, Build Windows (Release)), `Tests/Editor/` (EditMode 52/52).
+  - `Scripts/Desk/` (B): `UI/DeskScreen` (IGameScreen) ve masa görünümleri (ayrıntı `OGUZHAN.md`); `Sandbox/`; `Editor/DeskSandboxBuilder(.Papers/.Inspect/.Dialogue)` (menü CivilJam > Desk > Build Sandbox_Desk Scene: prefab + sahne yeniden kurulur; prefab elle değiştirilmez).
+  - `Scripts/Flow/` (C): `UI/` (FlowScreen tabanı, UiKit, ekranlar, MainMenuScreen, MenuAmbience, IntroSequence, PauseMenu), `Sandbox/`, `Editor/FlowBuilder`, `Tests/PlayMode/`.
   - `Prefabs/Desk/DeskScreen.prefab` (B), `Prefabs/Flow/*` (C). `Scenes/Game.unity` (**sadece A**, CoreSetupBuilder ile değişir).
-  - `Data/` (A, içerik EEE): Balance, RuleSet, NamePool (36 bina adı, akredite lab'lar), Headlines (20 manşet), Days, Expenses, Clients (6), Gifts (6), Endings (4).
+  - `Data/` (A, içerik EEE): Balance, RuleSet, NamePool (bina adları, akredite lab'lar), Dialogue (denetçi şablonları + ortak replik havuzu), Headlines, Days (7 gün), Expenses, Clients (16), Gifts (6), Endings (4).
   - `Art/` ve `Audio/` (EEE): listeler `Art/README.md`, `Audio/README.md`. `Fonts/` (EEE).
-- Belgeler: `README.md` (jüri), `CREDITS_AND_AI.md` (asset + AI kaydı, oyun içi Emeği Geçenler metni), `ICERIK_TASLAK.md` (metin taslakları; oyun asset'lerden okur), kişisel planlar `AHMET.md`, `OGUZHAN.md`, `ONUR.md`.
+- Build: `CivilJam > Core > Build Windows (Release)` → `Builds/Imza/Imza.exe`; teslim ZIP'ine `…BackUpThisFolder_ButDontShipItWithYourGame` klasörü konmaz. `Builds/` git dışında.
+- Belgeler: `README.md` (jüri), `CREDITS_AND_AI.md` (asset + AI kaydı, oyun içi Emeği Geçenler metni), `ICERIK_TASLAK.md` (metin taslakları; oyun asset'lerden okur), kişisel planlar `AHMET.md`, `OGUZHAN.md`, `ONUR.md`, Onur'un bağlantı notları `Docs/Onur/`.
 
 ## 5. Takım, sahiplik, çalışma kuralları
 - **A (Core) — Ahmet İlman:** Scripts/Core, Data, Game.unity, build. **B (Masa) — Oğuzhan Yurt:** Scripts/Desk, Prefabs/Desk, Sandbox_Desk. **C (Akış) — Onur Kabadayılar:** Scripts/Flow, Prefabs/Flow, Sandbox_Flow, MainMenu. **EEE — Tarık Hokkaömeroğlu:** Art, Audio, Fonts, içerik metinleri, CREDITS_AND_AI.md.
@@ -80,6 +101,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - `Game.unity`'yi Editor'den kaydetme (prefab override'ları bozuluyor); değişiklikler CoreSetupBuilder ile.
 - Unity'nin kendiliğinden değiştirdiği şu dosyaları commit'leme, pull engellerse `git checkout -- <yol>`: `Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset`, `Assets/_Project/Fonts/*SDF.asset`, `Assets/Settings/*`, `ProjectSettings/UnityConnectSettings.asset`.
 - Görsel/ses: önce placeholder, final **aynı dosya adıyla** üzerine yazılır (GUID ve prefab bağlantıları korunur).
+- Final aday build alındı: bundan sonra kod değişirse A yeniden build + ZIP alır.
 
 ## 6. Jam kuralları (ihlal = diskalifiye)
 - Repo **public** kalmalı; build ile repo kodu uyumlu olmalı.
@@ -87,346 +109,33 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - Teslim: Windows build ZIP + en fazla 1 dk video (MP4/AVI) + public repo + kurulum/kontrol talimatı (`README.md`).
 - Saatler: **feature freeze ve Git desteği 18 Ekim 12:00**; yükleme 15:00-16:30; son teslim 18 Ekim 18:00.
 
-## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
-
-### 💰 YENİ — Tıklanabilir rüşvet zarfı (Ahmet isteği, 18 Ekim ~00:30) — Oğuzhan ve Tarık OKUSUN
-> ✅ **Yapıldı ve push'landı (A).** Oyunda doğrulandı (PlayMode, ekran görüntüleriyle): masada zarf → tıkla → aç → reddet → zarf masaya döner, proje bekler → tekrar aç → kabul → zarfla onay. EditMode 52/52, PlayMode 4/4.
-
-**Nasıl çalışıyor:**
-- Zarf masaya düştüğünde (ilk uyuşmazlıktan sonra) üstünde **sadece "ZARF"** yazar. Para ve tutar görünmez.
-- Zarfa tıklanınca masadaki zarf kalkar. `BribeEnvelopeView` öne gelip büyür: karartılmış ekran, açık zarf, banknotlar ve ön banknotun ovalinde tutar (ör. "1.450 TL").
-- İki seçenek:
-  - **RÜŞVETİ KABUL ET** → zarfla onay (karar kaşesi, `Approve(id, acceptBribe: true)`).
-  - **RÜŞVETİ REDDET** → zarf masadaki yerine döner; proje **karar bekler**. Oyuncu sonra ONAY ya da RED verir ve zarfı tekrar açabilir.
-- Formdaki **"ZARFI AL VE ONAYLA" düğmesi kalktı**; zarfı almanın tek yolu zarfa tıklamak.
-- Core değişmedi.
-
-**Başkasının dosyasına dokunuldu (A, Ahmet isteğiyle):**
-- **Oğuzhan, pull et (masada çalışmadan önce):**
-  - yeni dosya `Desk/UI/BribeEnvelopeView.cs`;
-  - `DeskScreen.cs`: `bribeEnvelope` alanı, `OpenEnvelope` / `CloseEnvelope`; zarf açıkken `BribeVisible` false; yeni müteahhitte ve `Hide`'da kapanır;
-  - `DeskPropsView.cs`: zarf tıklanabilir (`EnvelopeClicked`, `EnvelopeWorld`), masada tutar yok;
-  - `FormView.cs`: `bribeRoot` hep kapalı;
-  - `Editor/DeskSandboxBuilder.cs`: `BuildBribeEnvelope` (fontlar, görsel, `sfx_paper` bağlanır).
-  - `DeskScreen.prefab` builder'la yeniden kuruldu (elle değişiklik yok).
-  - Senin de prefab değişikliğin varsa çakışmada **kendi prefab'ını al ve builder'ı bir kez çalıştır** (`CivilJam > Desk > Build Sandbox_Desk Scene`); zarf ekranı builder'da olduğu için kendiliğinden gelir.
-- **Tarık:** Gönderdiğin görsel `Art/bribe_envelope_open.png` olarak eklendi (beyaz arka plan silindi, kırpıldı, Sprite). Art klasörün olduğu için haber veriyorum. `Art/README.md` satırı ve `CREDITS_AND_AI.md` satırları A tarafından eklendi (ChatGPT: sen; arka plan silme: Claude/A). İstersen kontrol et.
-
-### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
-> ✅ **Kişiliksizler oyunda (A, `17179b4`):** Onur'un 10 `Generic` müşterisi + 42 ortak replik Game.unity'ye bağlandı (Link Data: 16 müteahhit). Gerçek kadroyla denge: dikkatli %82 İyi / %18 ofis kapanır; tek zarf %44 İyi / %45 Enkazın Gölgesi / %11 hapis; her zarfı alan %76 hapis; reddeci 3. gün kapanır. **Kalan: Oğuzhan** (masada "10 gün" metinleri + yeni portrelerin kadraj kontrolü), sonra **A** uçtan uca kontrol + build. README zaten Onur'un `b1a40e8` paketinde 7 güne çevrildi. **A'nın güncel teslim/kabul listesi: `AHMET.md` → "Onur'dan teslim notu — 18 Ekim".**
->
-> ✅ **Core 2. adım hazır (A, push'landı): 7 gün oyunda.**
-> - Oyun başında ziyaret programı kurulur (`VisitPlanner`, `GameState.Schedule`, kayıtla saklanır).
-> - Gün ayarları: Day01 (3), Day02 (3, zarf), Day03 (4, sahte belge), Day04 (4, kabadayı), Day06 (5). `TotalDays` 7; F9 7. güne atlar.
-> - 300 programda doğrulandı: 3-3-4-4-4-5-5; ana müteahhit 3'er, kişiliksiz 1'er; tam 14 uygunsuz; aynı gün iki kez yok; arka arkaya yok; kabadayı 4. günden; 1. gün en çok 1 uygunsuz; dürüst usta zarf / sahte getirmez. EditMode 52/52.
-> - Kişiliksiz asset'ler yokken yedek plan çalışır (ana müteahhitler doldurur). Tarık'ın 10 `ClientSO`'su gelince A Link Data ile bağlar, başka iş yok.
-> - Denge (yedek planla, Tarık'ın ekonomisi): dikkatli %75 İyi / %25 ofis kapanır; tek zarf %43 İyi / %44 Enkazın Gölgesi / %11 hapis; her zarfı alan %82 hapis; reddeci 3. gün kapanır. Ekonomi kararı Ahmet'te.
-> - **Oğuzhan:** masada "10 gün" geçen metin varsa 7'ye çevir. **Tarık:** README "10 gün" → "7 gün".
->
-> ✅ **Core 1. adım hazır (A, push'landı):** `ClientSO.IsGeneric`, `Dialogue.asset` ortak havuz listeleri (`GenericGreetingLines` … `GenericBribeRefusedLines`), `BalanceSO.GenericBribeRange` (800-1500). Kişiliksiz karakterin kendi listesi boşsa ortak havuz kullanılır (testli, 48/48). **Tarık ve Onur asset'lere girebilir.** Not: 2. adım (program kurucu) gelene kadar kişiliksizler eski rastgele seçimde "dürüst olmayan" havuzuna düşer; oyunda görünmeleri 2. adımla düzelir. A 2. adımda.
-
-**Neden:** 10 gün sıkıcı bulundu; oyun kısalıyor ve iyi/kötü projeler eşitleniyor.
-
-**Kesin kararlar (Ahmet):**
-- **7 gün.** Günlük proje sayısı: **3 · 3 · 4 · 4 · 4 · 5 · 5 = 28**.
-- **Gün planı:**
-  | Gün | Proje | Açılan içerik |
-  |---|---|---|
-  | 1 | 3 | zarf ve sahte belge yok |
-  | 2 | 3 | zarf başlar |
-  | 3 | 4 | sahte belge başlar |
-  | 4 | 4 | kabadayı başlar |
-  | 5–7 | 4, 5, 5 | — |
-- **6 ana müteahhit 3'er kez (18 ziyaret).** Oyun başında rastgele ama sabit bir program kurulur (kayıtla saklanır):
-  - aynı gün iki kez gelmez, arka arkaya da gelmez;
-  - Rüstem sadece 4-7. günlerde gelir;
-  - Selim 1-2. günlerde gelirse dikkatsiz proje getirir, 3. günden sahte belge getirebilir.
-- **10 kişiliksiz karakter (10 ziyaret):** kalan yerleri doldurur. Uygun, dikkatsiz, **zarflı ya da sahte belgeli** proje getirebilir (gün kurallarına uyarak). Her biri oyunda bir kez gelir.
-- **Projeler tam 14 uygun / 14 uygunsuz.** Core dağıtır:
-  - ana karakterler kişiliklerine yakın ama gevşek (Rıfat bazen dikkatsiz, Kemal bazen temiz);
-  - toplam kişiliksizlerle 14 / 14'e tamamlanır;
-  - hiçbir yüz kararı ele vermez.
-- Ekonomi hedefi şimdilik açık; A yeni yapıyla denge raporunu Ahmet'e sunar.
-- **Yedek plan:** portreler yetişmezse Core'daki tek ayarla kişiliksizlerin yerini ana müteahhitler doldurur.
-
-**Core sözleşmesi (A; adlar kesin):**
-- `ClientSO.IsGeneric` (bool): kişiliksiz karakter. Kendi replik listeleri boş bırakılabilir; boşsa ortak havuz kullanılır.
-- Ortak replik havuzu `Data/Dialogue.asset` (`DialogueSO`) içinde: `GenericGreetingLines`, `GenericApproveLines`, `GenericRejectLines`, `GenericMismatchLines`, `GenericBribeLines`, `GenericBribeCloseLines`, `GenericBribeRefusedLines`.
-- Kişiliksizlerin zarf tutarı: `BalanceSO.GenericBribeRange`.
-- Program: `GameState.Schedule` (gün → müteahhit Id listesi). Masa ve akış ekranları bunu okumak zorunda değil; projeler yine `ctx.TodayProjects`'ten gelir.
-- `BalanceSO.TotalDays = 7`; F9 son güne (7) atlar.
-
-**İş bölümü:**
-> **Onur'un güncellemesi:** Bu 7 günlük yapı iş paketinde Tarık yer almayacak; aşağıdaki Onur + Tarık portre görevi ve Tarık'ın ClientSO / ortak replik / README / CREDITS görevlerini Onur üstleniyor. Onur, ekibin bu iş bölümünden haberdar olduğunu belirtti. Teslim planı: `Docs/Onur/YediGun_icerik_yol_haritasi.md`. Bu not yeni bir Core/ekonomi kararı değildir.
-> **İçerik hazır (Onur):** Son gönderilen 10 ChatGPT görseli `portrait_g01`–`g10` olarak 1000×1000 şeffaf PNG'ye hazırlandı. 1. ve 4. ikililer Onur'un açık tercihiyle birlikte gelen tek müşteridir (10 ClientSO, 10 ziyaret). `Generic01`–`Generic10` sprite'lara bağlı; ortak havuzlarda 42 replik, README 7 gün, Art README/CREDITS güncel. İzole Unity 6000.6.4f1 kopyasında 54/54 EditMode (52 mevcut + 2 geçici içerik kontrolü); gerçek kadroyla 300 program ve kayıt roundtrip'i geçti. **A:** Game.unity için Link Data + final kontrol/build. **B:** iki ikili dahil masa kadrajı. Kaynaklar, eşleme ve önizleme `Docs/Onur/YediGun_icerik_yol_haritasi.md` içinde.
-> ✅ **7 GÜNLÜK YAPI TAMAM (A, `fba19e6` sonrası):** testler EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (AHMET.md); **final aday build** `Builds/Imza/Imza.exe` (172 MB, açılış temiz) ve teslim ZIP'i `Builds/Imza.zip` (54 MB, `…DontShipItWithYourGame` klasörü hariç). `Builds/` git dışında. Bundan sonra kod değişirse A yeniden build + ZIP alır.
->
-> ✅ **Oğuzhan (B):** masada "10 gün" geçen metin yok (öğretici, üst bar "Gün N", F9 açıklaması masada değil); değişiklik gerekmedi. Kadraj: tek kişilik portreler mevcutlarla aynı ölçek; ikili `g01` kabul edilebilir, `g04` (boydan çift) kafalar küçük kalıyor: oyunda sırıtırsa Onur görseli yakınlaştırır (kod değişikliği değil).
-
-| Kim | İş | Süre |
-|---|---|---|
-| **A** | **1. adım (hemen):** `IsGeneric`, ortak havuz alanları, `GenericBribeRange`, havuza düşme kuralı; push. **2. adım:** 7 günlük program kurucu, tam 14 / 14, gün kuralları, `Data/Days` (7 gün), `TotalDays` 7, testler, Game.unity bağlantısı (Link Data yeni müteahhitleri de bağlar), denge raporu | ~2 sa |
-| **Onur + Tarık** | 10 kişiliksiz karakter portresi: mevcut tarz, 1000x1000 şeffaf, mevcut portrelerle aynı kadraj (belden yukarı, alta ortalı) → `Art/portrait_g01.png` … `portrait_g10.png` | gece |
-| **Tarık** | 10 `ClientSO` (`Data/Clients/Generic01.asset` … `Generic10.asset`): `Id` `g01`…`g10`, `DisplayName` (kurgusal ad soyad), `Portrait`, `IsGeneric` = true, `IsHonest` = false, `BribeRange` 0-0 (tutar `GenericBribeRange`'ten). Ortak havuzu `Dialogue.asset`'e yaz (her listede 5-6 cümle; parametre adı geçmesin; kişiliksiz, nötr esnaf dili). README "10 gün" → "7 gün". CREDITS | ~1 sa + portreler |
-| **Oğuzhan** | Masada "10 gün" geçen metinler (öğretici kartları, F9 açıklaması); yeni portrelerin masadaki yerleşim kontrolü | ~20 dk |
-| **A (son)** | Uçtan uca otomatik oynanış (7 günde 4 son), build | ~45 dk |
-
-**Sıra:**
-1. A'nın 1. adımı (~23:50) → Tarık ve Onur asset'leri kurar.
-2. A'nın 2. adımı (~01:30) ve içerik paralel ilerler.
-3. Portreler ve asset'ler gelince A bağlar, kontrol eder, build alır (~02:30).
-
-Freeze 12:00'ye kadar sabah hata düzeltmeye kalır.
-
-### 💬 YENİ ÖZELLİK — Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra (Ahmet kararı, 17 Ekim ~19:20) — ÖNCE BUNU OKU
-> ✅✅ **TAMAMLANDI (A, `12ac4f2` sonrası):** Game.unity'de oynatılarak doğrulandı (5. gün, Kemal): zarf başta gizli → kolon ↔ El Kitabı UYUŞMAZLIK → denetçi "Kolon kalınlığı 23 cm yazıyor; 4-6 katlı binada en az 35 cm olmalı." → Kemal cevap → teklif → denetçi tepki → kapanış → zarf (1.050 TL) ve "ZARFI AL VE ONAYLA" belirdi. EditMode 46/46, Windows build alındı. Küçük görsel notlar §7 Oğuzhan'da.
->
-> ✅ **CORE HAZIR (A, push'landı).** `ctx.Actions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, `ClientSO.MismatchLines` / `BribeCloseLines`, `Data/Dialogue.asset` (`DialogueSO`: denetçi şablonları + rüşvete tepki havuzu, Game.unity'ye bağlı). Teklif edilmemiş zarf alınamaz, geri çevrilmiş de sayılmaz. EditMode 46/46. Denge: tek zarf %50 İyi / %39 Enkazın Gölgesi / %11 hapis, her zarfı alan %89 hapis (öncekiyle aynı bant). **Başkasının dosyasına dokundum:** `Desk/Sandbox/FakeGameActions.cs` (Oğuzhan) ve `Flow/Sandbox/FlowSandboxBootstrap.cs` (Onur) → `Inspect` eklendi (yoksa derlenmezdi); Desk sandbox'ı gerçek diyalog kuralını kullanır.
->
-> **Kim kimi bekliyor:** Onur bağımsız (balon Core'a bağlı değil, istediği an push'lar). Oğuzhan artık Core'u beklemiyor; Onur'un balonunu takmak için onun push'unu bekler (önce Onur, sonra Oğuzhan tek commit). Tarık asset'lere şimdi girebilir. A en son Game.unity kontrolü + build.
->
-> (eski not) **Onaylandı, iş başladı.** Herkes kendi satırına bu nottaki adlarla başlayabilir. Core adları kesin; Core push'lanana kadar masa ve içerik tarafı bu adlara göre hazırlanır, bağlantı Core gelince yapılır. A, Core'u push'layınca burada "✅ Core hazır" yazar.
-
-**Ne değişiyor:**
-1. **Zarf başta yok.** Rüşvetçi müteahhit gelir ve sadece selamlar; masada zarf ve formda "ZARFI AL VE ONAYLA" görünmez.
-2. **Uyuşmazlık diyaloğu:** oyuncu inceleme modunda bir **UYUŞMAZLIK** bulunca (kaşeden hemen sonra) kısa bir diyalog:
-   - **Denetçi (oyuncu):** yanlış bilgiyle ilgili tek cümle. Core gerçek veriden şablonla kurar, ör. "Kolon kalınlığı 33 cm; 4-6 katlı binada en az 35 cm olmalı." / "Formdaki parsel 561/8, raporda 123/4 yazıyor."
-   - **Müteahhit:** karakterine göre tek cümle (`ClientSO.MismatchLines`).
-3. **Rüşvet teklifi:** müteahhit rüşvetçiyse ve projede zarf varsa, **o projede bulunan ilk uyuşmazlıktan sonra** diyalog devam eder:
-   - müteahhit teklif eder (mevcut `BribeLines`);
-   - denetçi kısa tepki verir (ortak havuz);
-   - müteahhit kapanış cümlesi söyler (`ClientSO.BribeCloseLines`).
-
-   Ardından zarf masaya gelir ve "ZARFI AL VE ONAYLA" belirir.
-4. **Oyuncu hiç uyuşmazlık bulmazsa zarf hiç teklif edilmez.** Kötü projeyi zarfsız onaylayabilir (bina yine riskli, rüşvet riski eklenmez); reddederse "zarf geri çevrildi" repliği çıkmaz.
-5. **Tekrar:** diyalog her projede **farklı alanlar için birer kez** çıkar; aynı uyuşmazlığa tekrar tıklanınca sadece kaşe çıkar. Teklif sadece bir kez gelir. SORUN YOK ve ALAKASIZ'da diyalog yok.
-- Kapsam dışı: oyuncu cevap seçmez; diyaloğun oyuna başka bir etkisi yok. Nuri'nin zarf artırması, Rüstem'in camı ve hediyeler aynen kalır.
-
-**Core sözleşmesi (A yazıyor; adlar kesin, `CivilJam.Core`):**
-```
-IGameActions.Inspect(string projectId, InspectTarget a, InspectTarget b, int handbookFloorGroup) → InspectOutcome
-class InspectOutcome {
-    InspectResult Result;           // kaşe için (SORUN YOK / UYUŞMAZLIK / ALAKASIZ), Inspection.Check ile aynı
-    List<DialogueLine> Lines;       // sırayla oynatılır; boşsa diyalog yok
-    bool BribeOffered;              // true: bu çağrıda zarf teklif edildi → zarf ve "ZARFI AL VE ONAYLA" şimdi görünür
-}
-class DialogueLine { DialogueSpeaker Speaker; string Text; }      // DialogueSpeaker { Inspector, Client }
-ProjectData.BribeRevealed (bool)    // zarf teklif edildi mi; masa zarfı ve düğmeyi SADECE bu true iken gösterir
-```
-- Kurallar Core'da: hangi uyuşmazlık için diyalog çıkacağı (farklı alan başına bir kez), ilk uyuşmazlıkta teklif, replik seçimi. `Approve(id, acceptBribe: true)` zarf teklif edilmemişse zarfsız onay sayılır. Ret sonrası "zarf geri çevrildi" repliği sadece teklif edildiyse.
-- `Inspection.Check` aynen kalır (saf, test için); masa artık **`ctx.Actions.Inspect`'i** çağırır.
-- Yeni veri: `ClientSO.MismatchLines`, `ClientSO.BribeCloseLines`; ortak denetçi metinleri `Data/Dialogue.asset` (`DialogueSO`: oyuncu cümle şablonları ve rüşvete tepki havuzu), `GameContext.Dialogue`. A oluşturur ve Game.unity'ye bağlar.
-
-**İş bölümü:**
-| Kim | İş | Süre |
-|---|---|---|
-| **A (Ahmet)** | Core: `Inspect` eylemi, `InspectOutcome` / `DialogueLine`, `BribeRevealed`, Approve/ret kuralları, `DialogueSO` + şablonlar (taslak), `ClientSO` yeni alanlar, Game.unity'ye bağlama, sandbox'lardaki sahte `IGameActions`'a `Inspect` eklemesi (not düşülür), testler, denge simülasyonu (zarf artık sadece uyuşmazlık bulan oyuncuya) | ~1 sa |
-| **Tarık** ✅ **(EEE yaptı: 6 müteahhide 3'er `MismatchLines`, Kemal/Nuri/Rüstem'e 3'er `BribeCloseLines`, `Dialogue.asset` `BribeReactions` 4 cümle; şablonlar aynen; README "Zarf"; taslak `ICERIK_TASLAK.md` "Uyuşmazlık diyaloğu")** | Replikler: her müteahhide 3 `MismatchLines` (6 kişi; dürüstler özür/düzeltme, Selim kıvırır, Rüstem sertleşir; parametre adı geçmesin, genel kalsın); rüşvetçilere (Kemal, Nuri, Rüstem) 2-3 `BribeCloseLines`; denetçinin rüşvete tepki havuzu 3-4 cümle; istersen denetçi şablonlarının tonu (yer tutucular kalmalı). **Önce `ICERIK_TASLAK.md`'ye** ("Uyuşmazlık diyaloğu" başlığı) yaz; A Core'u push'layınca asset'lere sen gir (`Data/Clients/*.asset`, `Data/Dialogue.asset`, Inspector). Sonra README "Zarf" maddesi ve öğretici metni | ~1 sa, Core'la paralel |
-| **Oğuzhan (masa)** | Selamlamaya rüşvet repliği ekleme (`DeskScreen` ~314) **kaldırılır**. Zarf (`DeskPropsView`) ve "ZARFI AL VE ONAYLA" (`FormView`) `project.BribeRevealed && pending` iken görünür. İnceleme sonucu `ctx.Actions.Inspect`'ten gelir: önce kaşe, sonra `Lines` sırayla; denetçi satırı Onur'un balonuyla, müteahhit satırı mevcut balonla, harf harf yazı ve yazı sesiyle. Diyalog sürerken inceleme ve karar düğmeleri kilitli; balona tıklamak satırı tamamlar / geçer. `BribeOffered` ise diyalog bitince zarf yaylanarak gelir. Yeni müteahhitte diyalog sıfırlanır | ~2 sa |
-| **Onur** | Denetçi (oyuncu) konuşma balonu bileşeni: yeni dosya `Assets/_Project/Scripts/Desk/UI/InspectorBubbleView.cs` (inceleme kaşesindeki gibi Desk klasöründe). API `Show(string text)`, `Hide()`, `bool IsTyping`, `CompleteTyping()`. Müteahhit balonundan ayrışan görünüm: masa tarafında, belgelerin üst kenarına yakın, "DENETÇİ" etiketi, krem kağıt + koyu mürekkep, Fira Sans; harf harf yazı 40 harf/sn + yazı sesi (`sfx_typing`), müteahhit balonuyla aynı his. Bağlantı notu yaz; Oğuzhan bağlar | ~45 dk |
-| **A** | Hepsi gelince Game.unity'de ekran görüntülü oynanış (dürüst usta uyuşmazlığı, rüşvetçinin teklifi, zarf alma, uyuşmazlık bulmadan onay) + build | ~45 dk |
-
-**Sıra:** A (Core) → Tarık asset'lere girer. Oğuzhan ve Onur hemen başlar; Oğuzhan Core gelince bağlar, Onur'un balonu gelince takar. **Bitti ölçütü:** Game.unity'de dört senaryo doğru + EditMode testleri + build. Hedef ~22:30.
-
-- ✅ **Onur — balon bileşeni hazır:** `Desk/UI/InspectorBubbleView.cs` + `.meta`; dört zorunlu API, 40 harf/sn, Fira Sans, DENETÇİ etiketi, yazı sesi, ilk tık tamamlama / sonraki tık `ContinueRequested`. Altı balon + üç mevcut Esc testi 9/9 geçti; Unity render'ı kontrol edildi. Başka Desk dosyası/prefab'ı değiştirilmedi. Oğuzhan'ın bağlantısı ve A'nın son kabulü bekliyor. Rehber: `Docs/Onur/InspectorBubbleView_baglanti.md`.
-- ✅ **Oğuzhan — masa bağlandı:** selamlamada rüşvet yok; inceleme `ctx.Actions.Inspect` (kaşe → `Lines` sırayla: denetçi Onur'un balonunda, müteahhit kendi balonunda, harf harf + ses); diyalog sürerken tam ekran katman masayı kilitler, tıklama satırı tamamlar / geçer (otomatik geçiş yok); zarf ve "ZARFI AL VE ONAYLA" sadece `BribeRevealed` iken, teklif olduysa diyalog bitince zarf masaya yaylanarak düşer; yeni müteahhitte diyalog sıfırlanır (`DeskDialogue`). Öğretici 5. kart (Tarık metni) + 4. kart zarf cümlesi güncellendi. Sandbox `Data/Dialogue.asset` kullanır. **A:** Game.unity dört senaryo + build.
-
-### 🔎 YENİ ÖZELLİK — İnceleme modu (Papers, Please tarzı) — PLANLAMA AŞAMASI, KOD YAZILMAZ
-> ✅ **ONAYLANDI (Ahmet, 17 Ekim akşam): plan + Core düzeltmeleri (a) ve (b).** A Core'u yazıyor; Onur ve Oğuzhan'ın uygulama notu bu bölümün sonunda ("🛠️ Uygulama notu"). Core push'lanınca A memory.md'de haber verir.
-
-**Fikir (Ahmet + Onur):**
-- Oyuncu masadaki "İncele" düğmesiyle inceleme moduna geçer.
-- İki **ayrı** belgeden iki alana tıklar; sıra önemli değil. Belgeler: Yapı Denetim Formu, Laboratuvar Raporu, Denetçi El Kitabı.
-- Oyun üç mesajdan birini verir:
-  - **SORUN YOK:** iki alan aynı bilgiye ait ve birbirini tutuyor ya da kurala uyuyor.
-  - **UYUŞMAZLIK SAPTANDI:** aynı bilgiye ait ama tutmuyor ya da kurala uymuyor.
-  - **ALAKASIZ:** farklı bilgiler seçildi.
-- Kontrol ücretsiz ve sınırsız; para, risk ya da karar etkisi yok. Oyuncu yine ONAY / RED'e kendisi basar.
-
-**Kesin kararlar (Ahmet, 17 Ekim akşam):**
-1. El kitabı tarafında eşik, oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır. Seçilen grup binanın kat grubu değilse (ya da grup seçilmemişse) sonuç **ALAKASIZ** olur.
-2. Künye alanları (parsel, tarih, imza, laboratuvar, kaşe) kapsama **girer**.
-3. Kaşe, el kitabının LAB sekmesindeki **akredite listesiyle** karşılaştırılır (aynı belge içinde karşılaştırma yok).
-4. Masada **"İncele" modu** var. Mod kapalıyken belgeler bugünkü gibi çalışır (sürükleme, ONAY / RED / EK TEST).
-5. Bedeli yok.
-6. İş bölümü:
-   - **A:** kontrol mantığı (Core, saf C#, testli).
-   - **Oğuzhan:** İncele düğmesi, tıklanabilir alanlar, seçim, çizgi (masa / `DeskScreen.prefab`).
-   - **Onur:** sonuç mesajının görünümü ve sesi (ayrı bileşen; masa prefab'ına Oğuzhan bağlar).
-
-**Kural tablosu (tek kaynak; tabloda olmayan her çift = ALAKASIZ, aynı belgeden iki alan = ALAKASIZ):**
-
-| # | 1. alan | 2. alan | Kontrol | Ne zaman uyuşmazlık |
-|---|---|---|---|---|
-| 1 | Form: parametre X | El Kitabı: parametre X (seçili grup) | Formdaki beyan eşiğe yetiyor mu | Uygunsuz proje (rüşvetli, dikkatsiz) |
-| 2 | Lab: beyan X | El Kitabı: parametre X (seçili grup) | Aynısı | Aynısı |
-| 3 | Lab: **ek test** X (test yapıldıysa) | El Kitabı: parametre X (seçili grup) | Gerçek değer eşiğe yetiyor mu | Sahte belge dahil her uygunsuz proje |
-| 4 | Form: parametre X | Lab: **ek test** X (test yapıldıysa) | Beyan = gerçek değer mi | Sahte belge (beyan temiz, gerçek kötü) |
-| 5 | Form: parametre X | Lab: beyan X | Aynı mı | Hiçbir zaman (Core'da iki belge aynı beyanı taşır) |
-| 6 | Form: Ada/Parsel | Lab: Ada/Parsel | Aynı mı | Sahte belge ipucu "parsel farkı" |
-| 7 | Form: Tarih | Lab: Rapor tarihi | Aynı mı | Sahte belge ipucu "tarih farkı" |
-| 8 | Form: Proje müellifi | Lab: Laboratuvar yetkilisi | Aynı kişi mi | Sahte belge ipucu "farklı mühendis imzası" |
-| 9 | Lab: Laboratuvar (başlık) | El Kitabı: LAB listesi | Akredite mi | Sahte belge ipucu "bilinmeyen laboratuvar" |
-| 10 | Lab: kaşe | El Kitabı: LAB listesi | Kaşedeki lab akredite mi | Sahte belge ipucu "başka laboratuvarın kaşesi" (aşağıdaki Core düzeltmesiyle) |
-
-- **Olasılıklar değişmiyor.** Künye uyuşmazlıkları zaten var: sahte belgeler 3. günden itibaren günde ~1 tane geliyor, her birinde 5 ipucundan 1-2'si bulunuyor (parsel / tarih / bilinmeyen lab / başka lab kaşesi / farklı imza).
-- Form ile lab raporunun beyan değerleri her zaman aynı (5. satır). Değer farkı sadece ek testte görünür (3. ve 4. satırlar).
-- **Core düzeltmeleri (A, onaylandı):**
-  - (a) "Başka laboratuvarın kaşesi" ipucunda kaşeye akredite **olmayan** bir lab adı yazılsın; yoksa 10. satır bu ipucunu hiç yakalayamaz.
-  - (b) Sahte parsel ve tarih gerçeğiyle asla aynı çıkmasın (şu an rastgele, nadiren aynı çıkabiliyor).
-
-**Yol haritası (onaydan sonra):**
-| Adım | Kim | İş | Süre |
-|---|---|---|---|
-| 0 | Ahmet | ✅ Onaylandı; uygulama notu aşağıda | — |
-| 1 | A | Core: alan tanımı, kontrol fonksiyonu (tablo), (a)+(b) düzeltmeleri, her satır için test, `AHMET.md` sözleşme satırı | ~45 dk |
-| 2 | Oğuzhan | İncele modu, tıklanabilir alanlar (vurgu, seçim, iki alan arası çizgi), sağ tık / Esc iptal, yeni müteahhitte sıfırlama. Arayüz kural bilmez, sadece Core'u çağırır | ~2 sa |
-| 3 | Onur | Sonuç mesajı bileşeni: yeşil SORUN YOK / kırmızı UYUŞMAZLIK SAPTANDI / gri ALAKASIZ (kaşe ya da şerit) + kısa ses. Adım 2 ile paralel | ~1 sa |
-| 4 | A | Testler, Game.unity, ekran görüntülü otomatik oynanış (dürüst, uygunsuz, sahte belge, ek test sonrası), Windows build | ~45 dk |
-| 5 | Tarık | 1. gün öğretici kartı + README satırı | ~20 dk |
-
-**Yalın tutmak için kapsam dışı:** sorgulama / müteahhide soru yok; sonuç kayda geçmez; tablo dışı çiftler için özel mesaj yok.
-
-#### 🛠️ Uygulama notu — Onur ve Oğuzhan (A, onaydan sonra)
-> ✅ **CORE HAZIR (A, push'landı):** `Simulation/Inspection.cs` aşağıdaki API ile birebir; (a) sahte kaşe akredite olmayan lab, (b) sahte parsel hep farklı; `DocumentData.StampLabName` dolu. EditMode 39/39 (7 yeni inceleme testi: tablonun her satırı, sıra önemsiz, 400 oyunda sahte olmayan belgede künye uyuşmazlığı yok ve her sahte belge yakalanabiliyor). **Onur ve Oğuzhan başlayabilir.**
-**Sıra:** Core'u A push'lar ve burada "✅ Core hazır" yazar. Ondan önce arayüz iskeletini (düğme, vurgu, mesaj görünümü) kurabilirsiniz; Core çağrısını Core gelince bağlayın. **Kural kodu yazmayın:** karar her zaman Core'dan gelir, arayüz sadece gösterir.
-
-**1) Core API (A yazıyor; adlar kesin, `CivilJam.Core`):**
-```
-enum InspectDoc   { Form, Lab, Handbook }
-enum InspectField { Param, ExtraTest, Parcel, Date, Signature, LabName, LabStamp, AccreditedLabs }
-struct InspectTarget { InspectDoc Doc; InspectField Field; ParamType Param; }   // Param sadece Param/ExtraTest için
-   kısayollar: InspectTarget.Of(doc, field) ve InspectTarget.OfParam(doc, paramType) / InspectTarget.OfTest(paramType)
-enum InspectVerdict { Match, Mismatch, Unrelated }
-class InspectResult { InspectVerdict Verdict; string Title; string Detail; }
-   Title: "SORUN YOK" / "UYUŞMAZLIK SAPTANDI" / "ALAKASIZ"; Detail: kısa açıklama (ör. "Ada/Parsel farklı: 561/8 ↔ 123/4")
-static class Inspection
-   InspectResult Check(GameContext ctx, ProjectData project, InspectTarget a, InspectTarget b, int handbookFloorGroup)
-   bool IsAvailable(ProjectData project, InspectTarget t)   // ör. ek test hücresi sadece test yapıldıysa true
-   const int NoFloorGroup = -1                              // grup indeksi: 0 = 1-3 kat, 1 = 4-6 kat, 2 = 7+ kat
-```
-- Sıra önemsiz (a, b ↔ b, a aynı sonucu verir). Aynı belgeden iki alan, tablo dışı çift, seçilmemiş ya da binaya ait olmayan kat grubu → `Unrelated`.
-- `Check` oyunun durumunu değiştirmez (para, risk, gün, karar yok); istediğiniz kadar çağırın.
-- `DocumentData.StampLabName` (yeni): kaşedeki laboratuvar adı. Kaşenin altına bunu yazın (`StampId` aynen kalır).
-
-**2) Tıklanabilir alanlar (Oğuzhan) — sadece bunlar, başka hiçbir yer:**
-| Belge | Ekrandaki yer | InspectTarget |
-|---|---|---|
-| Form | Teknik Bilgiler'de her parametre satırı (beyan değeri) | `OfParam(Form, p.Type)` |
-| Form | Ada / Parsel | `Of(Form, Parcel)` |
-| Form | Başlıktaki Tarih | `Of(Form, Date)` |
-| Form | Proje müellifi | `Of(Form, Signature)` |
-| Lab | Test Sonuçları'nda Beyan hücresi | `OfParam(Lab, p.Type)` |
-| Lab | Ek test hücresi (**sadece** `IsAvailable` true, yani test yapıldıysa) | `OfTest(p.Type)` |
-| Lab | Ada / Parsel | `Of(Lab, Parcel)` |
-| Lab | Rapor tarihi | `Of(Lab, Date)` |
-| Lab | Laboratuvar yetkilisi (imza) | `Of(Lab, Signature)` |
-| Lab | Laboratuvar (künye satırı) | `Of(Lab, LabName)` |
-| Lab | Lab kaşesi (+ altındaki lab adı) | `Of(Lab, LabStamp)` |
-| El Kitabı | Hızlı Bakış'taki 5 parametre satırı | `OfParam(Handbook, type)` |
-| El Kitabı | LAB sekmesindeki akredite laboratuvar listesi (tek alan) | `Of(Handbook, AccreditedLabs)` |
-- Tıklanamaz: proje adı, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, ücret, değerlendirme metni, bölüm sekmelerindeki (BETON…) satırlar.
-- `RulebookView`'a okunabilir `SelectedFloorGroup` (0/1/2, seçim yoksa `Inspection.NoFloorGroup`) ekle; `Check`'e bunu ver.
-
-**3) Etkileşim (Oğuzhan):**
-- **İNCELE düğmesi** masada sabit (ör. form ile lab raporu arasında, masa kenarına yakın; büyüteç simgesi + "İNCELE"). Tıklayınca mod açılır/kapanır; açıkken düğme basılı görünür.
-- **Mod açıkken:**
-  - Tıklanabilir alanlar fare üstüne gelince ince sarı çerçeve alır.
-  - Belgeler sürüklenmez; ONAY / RED / EK TEST / ZARF düğmeleri pasiftir.
-  - El Kitabı sekmeleri ve kat grubu düğmeleri çalışır (LAB sekmesine ve grup seçimine ulaşmak için).
-- **1. tıklama:** alan sarı dolgulu çerçeveyle seçili kalır. Aynı alana tekrar tıklamak seçimi kaldırır.
-- **2. tıklama:** `Inspection.Check(...)` çağır.
-  - İki alanın arasına ince bir çizgi çek.
-  - Onur'un mesajını çizginin ortasında göster.
-  - ~1,6 sn sonra (ya da tıklayınca) çizgi, mesaj ve seçim temizlenir; mod açık kalır.
-- **İptal:** sağ tık ya da belgelerin dışına boş masaya tıklamak seçimi temizler. **Esc kullanma** (Onur'un Esc menüsü).
-- **Sıfırlama:** karar verilince, yeni müteahhit gelince ve gün bitince mod kapanır, seçim temizlenir.
-- `DeskScreen.prefab` ve builder Oğuzhan'ın. Onur'un bileşenini prefab'a Oğuzhan bağlar.
-
-**4) Sonuç mesajı (Onur) — yeni dosya `Assets/_Project/Scripts/Desk/UI/InspectResultView.cs`:**
-- Desk ve Flow birbirini göremediği için bu dosya **Desk klasöründe** durur. Onur yazar; Oğuzhan prefab'a bağlar. Başka Desk dosyasına dokunma.
-- API: `public void Show(InspectResult r, Vector2 anchoredPosition)` ve `public void Hide()`.
-- Görünüm, kaşe tarzı ve hafif eğik:
-  - `Match` → yeşil (`#3f8a4f`) "SORUN YOK";
-  - `Mismatch` → kırmızı (`#c2412f`) "UYUŞMAZLIK SAPTANDI";
-  - `Unrelated` → gri-kahve (`#7a6650`) "ALAKASIZ".
-  - Başlık Paytone One, altında `Detail` küçük Fira Sans.
-- Açılış: `PopupMotion` / `DeskMotion` sürelerini kullan, kendi süreni uydurma.
-- Ses: `Match` / `Unrelated` için `sfx_click`, `Mismatch` için `sfx_stamp`. Klip alanı Inspector'dan bağlanır, yeni ses dosyası gerekmez.
-
-**5) Nasıl test edilir:**
-- **Sandbox_Desk** (Oğuzhan'ın 4 sahte projesi):
-  - dürüst proje: form parametresi ↔ El Kitabı (doğru grup) → SORUN YOK;
-  - aynı çift yanlış grupla ya da grupsuz → ALAKASIZ;
-  - rüşvetçinin eksik parametresi ↔ El Kitabı → UYUŞMAZLIK;
-  - sahte belgeli proje: parsel ↔ parsel, tarih ↔ tarih, müellif ↔ yetkili, lab adı ↔ akredite listesi → hangi ipucu varsa UYUŞMAZLIK, yoksa SORUN YOK;
-  - ek testten sonra: form ↔ ek test ve ek test ↔ El Kitabı → UYUŞMAZLIK;
-  - form beton ↔ El Kitabı demir → ALAKASIZ.
-- **Kontrol listesi:**
-  - mod kapalıyken her şey eskisi gibi;
-  - mod açıkken ONAY / RED basılmıyor;
-  - yeni müteahhitte mod kapanıyor;
-  - aynı alana iki tık seçimi kaldırıyor;
-  - sağ tık iptal ediyor;
-  - Esc menüsü hâlâ açılıyor.
-- **Bitince:** push'la, burada maddeni `[x]` yap. A Game.unity'de ekran görüntülü otomatik oynanışla kontrol eder ve build alır.
-
-**İş listesi:**
-- [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
-- [x] (A, `c3bb9f8` sonrası) Game.unity'de oynatarak kontrol edildi: İNCELE modu açılıyor, ONAY/RED pasif; grupsuz El Kitabı → ALAKASIZ, doğru grup → SORUN YOK ("Demir tipi: B500, 1-3 kat için uygun"), parsel ↔ parsel → SORUN YOK, farklı parametre → ALAKASIZ, kaşe ↔ akredite listesi → SORUN YOK; çizgi ve Onur'un kaşesi doğru yerde. UYUŞMAZLIK yolu Core testleriyle doğrulandı (39/39). Windows build alındı. **Mekanik çalışıyor; kalan tek iş Tarık'ın öğretici kart metni + README (sonra Oğuzhan kartı ekler).**
-- [x] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama. — (B) Yapıldı: İNCELE düğmesi (form ile lab arası, `btn_wood`), mod kilidi (sürükleme + ONAY/RED/ZARF/EK TEST), vurgu/seçim/çizgi, sağ tık ve boş masa iptali, sıfırlama; tablodaki tüm alanlar (`InspectSpot.Mark`, LAB sekmesinde akredite liste ayrı blok); `Inspection.Check` + `RulebookView.SelectedFloorGroup`; sonuç Onur'un `InspectResultView`'u (ses onda). Kaşe altında `StampId` ("LAB ADI · AKREDİTE") kaldı: lab adı zaten içinde. Sandbox'ta üç sonuç test edildi. **A:** Game.unity kontrolü + build.
-  - ➡️ **(A, 18:55) Oğuzhan — 2. adımı push'lamadan önce:** Onur'un `InspectResultView`'u push'landı (`0cebd15`), A kontrol etti (derleniyor, 39/39). Beklemene gerek yok: **pull → geçici sonuç kartını `InspectResultView` ile değiştir** (rehber `Docs/Onur/InspectResultView_baglanti.md`: builder'da font/ses alanlarını bağla, `Show(result, orta nokta)` / temizlerken `Hide()`, 1,6 sn sayacı ve iptal sende kalır; `resultText` ve `resultRoot` ölçek animasyonunu kaldır) → Sandbox'ta 3 sonucu gör → **2. adımı ve bağlantıyı tek commit'te push'la.** Sonra A Game.unity kontrolü ve build.
-- [x] Onur: `InspectResultView` (görünüm + ses). Üç kaşe, Core `Show/Hide`, Inspector ses/font bağlantıları hazır; ayrı kopyada 4/4 PlayMode testi ve Unity render kontrolü geçti. Oğuzhan'ın prefab/etkileşim bağlantısı bekliyor. Rehber: `Docs/Onur/InspectResultView_baglanti.md`.
-- [x] Tarık: 1. gün öğretici kartı metni + README satırı (EEE yaptı: `ICERIK_TASLAK.md` "Öğretici: İnceleme kartı"; Oğuzhan karta ekler) (ayrıntı §7 "Tarık (EEE)" ilk madde).
-
-**Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
+## 7. Durum ve açık işler (güncelleme: B, 18 Ekim ~01:30)
+**Durum:** İnceleme modu, uyuşmazlık diyaloğu, tıklanabilir zarf ve 7 günlük yapı bitti ve oyunda doğrulandı. EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (`AHMET.md`). **Final aday build** `Builds/Imza/Imza.exe` + teslim ZIP'i `Builds/Imza.zip` alındı. A'nın güncel teslim/kabul listesi: `AHMET.md` → "Onur'dan teslim notu — 18 Ekim". Freeze 18 Ekim 12:00.
 
 **A (Ahmet):**
-- [x] (A, yapıldı, testli) Core: projelerdeki parametre sırası El Kitabı sekme sırasıyla aynı olsun (beton, demir, kolon, temel, zemin). Şu an form/lab "beton, kolon, temel, demir, zemin" sırasında, El Kitabı farklı → oyuncu satır eşleştirirken şaşırıyor.
-- [x] Windows build aracı: `CivilJam > Core > Build Windows (Release)` → `Builds/Imza/Imza.exe` (148 MB; ZIP'e `Imza_BackUpThisFolder_ButDontShipItWithYourGame` klasörü KONMAZ). 17 Ekim akşam build'i hatasız açıldı.
-- [x] Baştan sona otomatik oynanış (PlayMode, ekran görüntüleriyle): menü → gün başı → masa → inşaat → gazete → ödeme → kayıt → son (İyi) akışı hatasız; borç kuralı doğru çalışıyor. Bulunanlar aşağıda sahiplerinde.
-- [ ] Elle oynanış (Ahmet): 4 sonun hepsi (F9/F10), sahte belge ve ek test, kabadayı, hediye.
-- [ ] Teslim: final build, ZIP, README kontrolü, video planı.
+- [ ] Elle oynanış: 4 sonun hepsi (F9/F10), sahte belge ve ek test, kabadayı, hediye.
+- [ ] Teslim: final build (kod değişirse yeniden), ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
-- [x] (A, diyalog kontrolü) Denetçi balonu formun başlığını ve İNCELE düğmesinin solunu kapatıyor; İNCELE düğmesi (Tarık'ın yeni yeri) müteahhit portresinin gövdesinin üstüne biniyor. Balonu biraz sola/aşağı, düğmeyi portreden uzağa al (küçük cila).
- — (B) Denetçi balonu sola, ofisin önüne (masa kenarının üstü, x ~120-720) alındı: belgeleri ve portreyi kapatmıyor. İNCELE düğmesi Tarık'ın yerinde bırakıldı (Oğuzhan kararı).
-- [x] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor. — (EEE yaptı) `TutorialView.StyleCard`: başlık tek satır + otomatik küçülme (Paytone), metin Fira Sans, alt satır 64 px, düğmeler 150/190 px (Fira Bold). Fontlar prefab'a ve builder'a (`Wire titleFont/bodyFont/boldFont`) bağlı; prefab yeniden üretilmedi.
-- [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
+- [ ] El Kitabı sekme notları: `ICERIK_TASLAK.md` → "El Kitabı sekme notları" metnini `RulebookView.sectionNotes`'a aynen koy (prefab'da hâlâ boş).
+- [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi (imza ipucu; inceleme 8. satır). Formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
+- [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş. (Çipler ve yazılar `921fc8e`'de EEE tarafından büyütüldü; oyunda bakıp kalan boşluk varsa düzelt ya da maddeyi kapat.)
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.
-- [x] ~~Kurum adı tutarlılığı~~ **Değişiklik yok (Tarık kararı, `54c580d`):** bunlar bilerek ayrı kurumlar. "Ulusal Yapı Denetim Kurumu" = oyuncunun çalıştığı ve son onayı veren yer; "Afet Kontrol Bürosu" = El Kitabı'nı yayımlayan kurum; "Betonya Belediyesi" = imar kaşesi. Metinler eşitlenmez.
-- [ ] Formdaki "Proje müellifi" ile lab raporundaki "Laboratuvar Yetkilisi" aynı kişi gösteriliyor (imza ipucu böyle çalışıyor: sahtede farklı mühendis). Oyuncu için mantıklı olsun: formdaki satırın adı "Denetim mühendisi" / "Raporu onaylayan mühendis" gibi, iki belgede aynı kişinin imzası beklendiği belli olsun (README de "aynı mühendisin imzası" diyor).
+- Not: ikili portre `g04` (boydan çift) masada kafalar küçük kalıyor; sırıtırsa Onur görseli yakınlaştırır (kod değişikliği değil).
 
 **Onur (C):**
-- ℹ️ **(A, 18 Ekim ~00:45) `Flow/UI/PauseMenu.cs` yine dokunuldu (Ahmet bildirdi: tam ekran bulanıktı):** Tam ekran düğmesi artık `Screen.SetResolution` ile ekranın gerçek çözünürlüğüne geçer (pencere: ekranın %80'i, 16:9); açılışta tam ekran + düşük çözünürlük kaydı varsa gerçek çözünürlüğe çekilir. Sebep: A'nın açılış testleri 960x540 pencereyle yapılmış, Unity bunu kayıt defterine yazmıştı (silindi). PlayMode 4/4.
-- ℹ️ **(A, 17 Ekim gece) Senin `Flow/UI/PauseMenu.cs`'ine dokunuldu (Ahmet isteği), pull et:** Esc menüsüne **Ayarlar** eklendi: ses kaydırıcısı (`AudioListener.volume`, `PlayerPrefs` "imza.masterVolume", açılışta uygulanır) + "Tam ekran: Açık/Kapalı" + Geri. Ana grup ve ayarlar grubu aynı kartta yer değiştirir; menü her açılışta ana gruptan başlar; ana menüde "Ana menüye dön" gizliyken Çıkış yukarı kayar. Düğme adları aynı (`PausePanel/Resume` vb.), senin 3 testin geçiyor; yeni test `Tests/PlayMode/SettingsMenuTests.cs` (PlayMode 4/4). Müzik / efekt ayrı kaydırıcı yok (ileride Core'da ortak ses ayarıyla eklenebilir).
-- (İnceleme modu) Ahmet'in görevlendirmesiyle yeni `Desk/UI/InspectResultView.cs` + `.meta` yazıldı; başka Desk script/prefab'ı değiştirilmedi. Bileşen kendini kurar; builder'ın bağlayacağı alanlar ve koordinat/sayaç sözleşmesi `Docs/Onur/InspectResultView_baglanti.md` içinde.
 - [ ] 🔴 **Jam kuralı:** `Docs/Tasarim/hedef_arayuz.png`'yi hangi araçla ürettiğini `CREDITS_AND_AI.md` → "Yapay zekâ kullanımı" tablosuna yaz.
-- [ ] Ödeme ekranı yanlış rakam gösterebiliyor (`DailyExpensesScreen.UpdateTotals` kasadan basit çıkarma yapıyor). Core hazır: seçim her değiştiğinde `var pv = ExpenseCalculator.Preview(Context.State, Context.PendingExpenses);` → `pv.MoneyAfter`, `pv.DebtAfter`, `pv.PaidTotal`, `pv.AddedToDebt` (borca yazılacak zorunlu gider), `pv.DebtPaid`, kalem bazında `pv.Lines[i].Paid`.
-- [ ] Kayıt ekranı (`SaveScreen`, Tarık yazdı, Flow'da) her zaman "Kaydedildi" diyor. Core hazır: `Context.LastSave` (`Ok`, `Day`, `Error`); `Ok` false ise "Kayıt yapılamadı" + "Tekrar dene" (`Context.RetrySave()`, günü artırmaz) + "Kaydetmeden devam".
+- [ ] Ödeme ekranı yanlış rakam gösterebiliyor (`DailyExpensesScreen.UpdateTotals` kasadan basit çıkarma yapıyor). Core hazır: seçim her değiştiğinde `var pv = ExpenseCalculator.Preview(Context.State, Context.PendingExpenses);` → `pv.MoneyAfter`, `pv.DebtAfter`, `pv.PaidTotal`, `pv.AddedToDebt`, `pv.DebtPaid`, kalem bazında `pv.Lines[i].Paid`.
+- [ ] Kayıt ekranı (`SaveScreen`) her zaman "Kaydedildi" diyor. Core hazır: `Context.LastSave` (`Ok`, `Day`, `Error`); `Ok` false ise "Kayıt yapılamadı" + "Tekrar dene" (`Context.RetrySave()`, günü artırmaz) + "Kaydetmeden devam".
 - [ ] Müzikler oyunda çalmıyor: `mus_menu` (ana menü) ve `mus_ending_sad` (Kötü + iki Orta son) hiçbir sahne/prefab/koda bağlı değil.
 - [ ] (İsteğe bağlı) Gün başında `Context.LoadFailed` ise "Kayıt okunamadı, yeni oyun başladı." yaz.
-- [x] (EEE yaptı, `c30100b`: gün başı, inşaat, gün özeti, ödeme, kayıt, son → kağıt kart, Paytone/Fira, tahta düğme, yeni ofis arka planları; gazete ve Esc menüsü hariç) Akış ekranları yeni görsel dile uymuyor: gün başı, inşaat, ödeme, kayıt ve son ekranlarında eski varsayılan font ve düz beyaz/siyah düğmeler; gün başı arka planı hâlâ eski ofis (`dayintro_bg`, eski desk_bg'den). Paytone One / Fira Sans ve masadaki kağıt/ahşap diline yaklaştır (Tarık gerekirse arka planı yeni ofisten üretir).
-  - (EEE, 17 Ekim ~18:00) Kısmen yapıldı: `dayintro_bg` yeni ofis+masadan üretildi. Gün başı ve inşaat ekranındaki prefab düğmeleri `FlowScreen.StylePrefabButtons` ile tahta düğme (`btn_menu`) + Fira Sans Bold + fare vurgusu aldı (prefab'larda `buttonSprite`/`buttonFont`). UiKit düğmeleri (ödeme, kayıt, gün özeti, gazete, son, Esc) fare vurgusunu `ButtonHover` ile alıyor ama hâlâ koyu düz; başlık/metin fontları hâlâ eski. Kalanı Onur'da.
-- [x] (EEE yaptı, `c30100b`: koyu metin paneli, krem konturlu yazı) Son ekranı: uzun metin parlak arka plan görselinin üstünde beyaz yazı, zor okunuyor (özellikle İyi son). Metnin arkasına yarı saydam koyu panel.
 - [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
+- [ ] Akış ekranlarının görsel dili: gün başı, inşaat, gün özeti, ödeme, kayıt, son EEE tarafından yapıldı (`c30100b`); **gazete ve Esc menüsü** hâlâ eski görünümde.
+- ℹ️ `Flow/UI/PauseMenu.cs`'e A dokundu (Ahmet isteği): Ayarlar (ana ses `PlayerPrefs` "imza.masterVolume" + tam ekran), tam ekran ekranın gerçek çözünürlüğüne geçer. Test `Tests/PlayMode/SettingsMenuTests.cs`.
 
 **Tarık (EEE):**
-- [x] (EEE: 1 ve 2 yapıldı; 3 — oyunda kelime kontrolü — Oğuzhan kartı ekleyince) ✅ Kart metni `ICERIK_TASLAK.md` → "Öğretici: İnceleme kartı" (Oğuzhan ekler; 4. kartın zarf cümlesi için isteğe bağlı öneri de orada). README: "İncele" maddesi, "Ek test" ve "Zarf" yeni kurala göre, Kontroller'e İnceleme modu satırı. 🔴 **YENİ GÖREV — İnceleme modu metinleri (Ahmet, 17 Ekim akşam).** Ayrıntı: bu dosyada "🔎 YENİ ÖZELLİK — İnceleme modu". Oyuncu masadaki **İNCELE** düğmesine basar, iki ayrı belgeden aynı bilgiye tıklar (ör. formdaki Ada/Parsel ile lab raporundaki Ada/Parsel, ya da formdaki kolon kalınlığı ile El Kitabı'ndaki kolon satırı); oyun **SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ** der. El Kitabı ile karşılaştırırken önce doğru kat grubu seçilmeli, yoksa ALAKASIZ çıkar.
-  1. **1. gün öğretici kartı:** mevcut 4 kartın ardına gelecek 5. kartın başlığını ve metnini yaz (kısa, 2-3 cümle; "İNCELE", "iki belge", "aynı bilgi", "kat grubu" geçsin, cevabı vermesin). Metni `ICERIK_TASLAK.md` → "Öğretici: İnceleme kartı" başlığına yaz. **`TutorialView.cs`'e sen koyma**; Oğuzhan masayı bağlarken ekler (aynı dosyada çakışma olmasın).
-  2. **`README.md`:** "Nasıl oynanır"a tek madde (**İncele:** …) ve "Kontroller" tablosuna satır (İnceleme modu: İNCELE düğmesi, iki alana tıkla; sağ tık seçimi iptal eder). README'yi doğrudan düzenleyebilirsin.
-  3. Düğmenin yeri ve adı Oğuzhan push'layınca kesinleşir; metni yazdıktan sonra oyunda bir kez bakıp kelimeleri eşitle. Bitince bu maddeyi `[x]` yap.
-- [x] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş). — (EEE, `54c580d`) Yazıldı: `ICERIK_TASLAK.md` → "El Kitabı sekme notları". **Oğuzhan:** Inspector'dan aynen koy.
-- [x] Kurum adı kararı: değişiklik yok, üç ayrı kurum (Oğuzhan maddesine bak).
-- [ ] `README.md`: A "Nasıl oynanır"ı yeni arayüze göre güncelledi; son hali, oyun ekran görüntüsü ve video bağlantısı (Pazar).
+- [ ] `README.md`: son hâli, oyun ekran görüntüsü ve video bağlantısı (Pazar).
 - [ ] Pazar: 1 dakikalık video (A ile senaryo).
-
-**Öneri (B, 17 Ekim akşam) — ZORUNLU DEĞİL, karar Ahmet'in / takımın:**
-Jüriden bir hocanın notu ("Aynı Tema, Başka Bir Dünya", Murat Oktay): "Oyuncu neden sizi seçsin, oynadıktan sonra neyi hatırlasın? Oyuncunun konumunu değiştirin: afet, kimin açısından afet?" Bizim oyun ilk bakışta "Papers Please'in deprem versiyonu" gibi duruyor. Ama asıl farkımız oyunda zaten var, sadece oyuncuya gösterilmiyor: imza iki saniyelik sıradan bir hareket, sonucunu ise o binada oturan insanlar yaşıyor. Elimizde "kat başı kişi" verisi de var. Freeze'e sığabilecek ucuz fikirler:
-1. **Afetten sonra sakinin gözünden kısa kart (gazete/sonuç ekranında):** onaylanan binada oturan birinin tek paragraflık notu. Yıkıldıysa "3. kattaydık…", sağlamsa "Sallandı ama ayakta kaldı, çocuklar uyuyordu." Metinler EEE'nin, ekran C'nin.
-2. **"Yeniden bakmak":** afetten sonraki gün masada sakinlerden bir iz kalsın: bir fotoğraf, bir mektup ya da yıkıldıysa bir haber kupürü. Oyuncu sıradaki formu imzalarken o kâğıt masada durur. Hediye slotlarıyla (`OfficeGiftsView`) büyük ölçüde aynı altyapıyla yapılabilir (B).
-3. **İmza anını ağırlaştırmak:** ONAY'a basınca formda kısa bir vurgu çıksın: "Bu imza 48 kişiyi bağlıyor" (kat adedi × kat başı kişi). FormView'de, birkaç saatlik iş (B).
-Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core değişikliği değil. Yapılmazsa da sorun yok; önce açık hatalar biter.
 
 ## 8. Karar günlüğü (güncel kararlar; eski satırlar `f14d2ed`'de)
 | Ne zaman | Karar | Gerekçe |
@@ -446,17 +155,18 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim | El Kitabı sekmeleri BETON / DONATI / YAPI / ZEMİN; ilk sekme "Hızlı Bakış" (oyuncu kat grubunu seçer, otomatik değil) | Ahmet: eski sayfa kullanıcı dostu değildi; zorluk korunur |
 | 17 Ekim | Ödeme önizlemesi ve kayıt sonucu Core'dan (`ExpenseCalculator.Preview`, `ctx.LastSave`, `ctx.RetrySave`) | Onur'un ihtiyacı; ekran ikinci ekonomi hesabı yazmasın |
 | 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
+| 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
+| 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 | 17 Ekim akşam | İnceleme modu (Papers, Please tarzı) planlandı: iki ayrı belgeden iki alan → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ; eşik seçili kat grubundan (yanlış grup = ALAKASIZ), künye dahil, kaşe akredite listeyle, İncele modu, bedelsiz; A Core, Oğuzhan masa, Onur mesaj. **Uygulama Ahmet onayından sonra** | Ahmet + Onur fikri; Ahmet kararları. Olasılıklar değişmez |
 | 17 Ekim akşam | İnceleme modu ONAYLANDI + Core düzeltmeleri: (a) başka lab kaşesi ipucunda kaşeye akredite olmayan lab adı, (b) sahte parsel gerçeğiyle asla aynı değil. Onur'un mesaj bileşeni Desk klasöründe (asmdef kuralı) | Ahmet |
 | 17 Ekim ~19:20 | Rüşvet uyuşmazlıktan sonra: zarf başta yok; ilk UYUŞMAZLIK'tan sonra denetçi ve müteahhit birer cümle konuşur, rüşvetçi o anda teklif eder (teklif + denetçi tepkisi + kapanış); uyuşmazlık bulunmazsa zarf hiç teklif edilmez; diyalog farklı alan başına bir kez; denetçi cümlesi Core şablonundan; replikleri Tarık yazar | Ahmet kararı. Rüşvet "yakalanan müteahhidin hamlesi" olur; tema ve Papers, Please hissi |
-| 17 Ekim ~23:30 | **7 gün** (3-3-4-4-4-5-5 = 28 proje); 6 ana müteahhit 3'er kez (oyun başı sabit rastgele program, aynı gün iki kez değil, arka arkaya değil); 10 kişiliksiz karakter kalan 10 ziyaret (zarf/sahte belge getirebilir); projeler tam 14 uygun / 14 uygunsuz; gün planı: 2. gün zarf, 3. gün sahte belge, 4. gün kabadayı | Ahmet kararı: 10 gün sıkıcıydı; yüz kararı ele vermesin |
-| 17 Ekim gece | Esc menüsüne Ayarlar: ana ses (kaydedilir) + tam ekran | Ahmet isteği; müzik / efekt ayrımı şimdilik yok (ses kaynakları dağınık, ekibin dosyalarına dokunmamak için) |
-| 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
-| 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
-| 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 | 17 Ekim gece | Yeni ekonomi: başlangıç 1.500, kira 700, kredi 350, ücret 350-550, ek test 250, borç limiti 2.500 | Tarık önerisi, Ahmet onayı. Eski değerlerde dikkatli oyuncu hiç borca girmiyordu; şimdi kıl payı kazanıyor (Balance Report §2) |
 | 17 Ekim gece | Değer farkı: lab beyanı formdan farklı yazabilir (sahtede gerçek kötü, uygun projede masum yazım hatası); bazı sahtelerde künye ipucu yok, sadece ek test kanıtlar | Tarık önerisi, Ahmet onayı: ek testin net bir işi yoktu (her sahtede bedava ipucu vardı). Core + testler EEE yazdı (`ProjectGenerator.AddLabDifference`, `Inspection`, `DialogueSO.FormVsLab`); EditMode yeşil |
 | 17 Ekim gece | Bir müteahhit günde bir kez gelir (günün tamamı birlikte yerleştirilir, geri izlemeli); 5. günden kötü proje oranı 0,6; ekonomi bilerek zor: ücret 500-700, kira 750, kredi 400, kabadayı hasarı 600 (4 farklı olay), ek test 400, borç limiti 2.000 | Tarık kararı. Balance Report: dürüst oyuncu %47 İyi / %53 iflas (600-800 ile %86 İyi idi). EditMode 47/47 (InspectionDialogue seed 5→7, Reaction'da bir test seed 12: yeni sırada eski seed'ler rüşvetli proje üretmiyordu) |
+| 17 Ekim ~23:30 | **7 gün** (3-3-4-4-4-5-5 = 28 proje); 6 ana müteahhit 3'er kez (oyun başı sabit rastgele program, aynı gün iki kez değil, arka arkaya değil); 10 kişiliksiz karakter kalan 10 ziyaret (zarf/sahte belge getirebilir); projeler tam 14 uygun / 14 uygunsuz; gün planı: 2. gün zarf, 3. gün sahte belge, 4. gün kabadayı | Ahmet kararı: 10 gün sıkıcıydı; yüz kararı ele vermesin |
+| 17 Ekim gece | Esc menüsüne Ayarlar: ana ses (kaydedilir) + tam ekran | Ahmet isteği; müzik / efekt ayrımı şimdilik yok (ses kaynakları dağınık, ekibin dosyalarına dokunmamak için) |
+| 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
+| 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

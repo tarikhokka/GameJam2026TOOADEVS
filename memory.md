@@ -136,6 +136,8 @@ ProjectData.BribeRevealed (bool)    // zarf teklif edildi mi; masa zarfı ve dü
 
 **Sıra:** A (Core) → Tarık asset'lere girer. Oğuzhan ve Onur hemen başlar; Oğuzhan Core gelince bağlar, Onur'un balonu gelince takar. **Bitti ölçütü:** Game.unity'de dört senaryo doğru + EditMode testleri + build. Hedef ~22:30.
 
+- ✅ **Onur — balon bileşeni hazır:** `Desk/UI/InspectorBubbleView.cs` + `.meta`; dört zorunlu API, 40 harf/sn, Fira Sans, DENETÇİ etiketi, yazı sesi, ilk tık tamamlama / sonraki tık `ContinueRequested`. Altı balon + üç mevcut Esc testi 9/9 geçti; Unity render'ı kontrol edildi. Başka Desk dosyası/prefab'ı değiştirilmedi. Oğuzhan'ın bağlantısı ve A'nın son kabulü bekliyor. Rehber: `Docs/Onur/InspectorBubbleView_baglanti.md`.
+
 ### 🔎 YENİ ÖZELLİK — İnceleme modu (Papers, Please tarzı) — PLANLAMA AŞAMASI, KOD YAZILMAZ
 > ✅ **ONAYLANDI (Ahmet, 17 Ekim akşam): plan + Core düzeltmeleri (a) ve (b).** A Core'u yazıyor; Onur ve Oğuzhan'ın uygulama notu bu bölümün sonunda ("🛠️ Uygulama notu"). Core push'lanınca A memory.md'de haber verir.
 

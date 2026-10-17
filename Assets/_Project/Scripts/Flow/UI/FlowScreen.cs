@@ -20,6 +20,9 @@ namespace CivilJam.Flow
         // Boşsa sadece vurgu eklenir. Kodla (UiKit) kurulan düğmelerde zaten ButtonHover var; onlara dokunulmaz.
         [SerializeField] Sprite buttonSprite;       // btn_menu
         [SerializeField] TMP_FontAsset buttonFont;  // FiraSans-Bold SDF
+        // Başlık / bilgi yazıları için (UiKit.StyleTitle / StyleInfo). Boşsa prefab fontu kalır.
+        [SerializeField] protected TMP_FontAsset titleFont; // PaytoneOne-Regular SDF
+        [SerializeField] protected TMP_FontAsset infoFont;  // FiraSans-Bold SDF
 
         protected GameContext Context { get; private set; }
         bool _built;

@@ -89,6 +89,51 @@ namespace CivilJam.Flow
             return btn;
         }
 
+        // (EEE, 17 Ekim) Akış ekranı başlık/bilgi yazı stili: Paytone One başlık (krem→altın, koyu kontur, gölge),
+        // Fira Sans Bold bilgi (krem, ince kontur, gölge). Font null ise prefab fontu kalır, sadece renk/kontur uygulanır.
+        static readonly Color Cream = new Color(1f, 0.96f, 0.86f, 1f);
+        static readonly Color Gold = new Color(0.98f, 0.74f, 0.36f, 1f);
+        static readonly Color OutlineInk = new Color(0.23f, 0.16f, 0.15f, 1f);
+        public const string GoldHex = "#FFD27A";
+        public const string RedHex = "#FF9A8A";
+
+        public static void StyleTitle(TMP_Text text, TMP_FontAsset font, float size)
+        {
+            if (text == null) return;
+            if (font != null) text.font = font;
+            text.fontSize = size;
+            text.fontStyle = FontStyles.Normal;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            text.color = Color.white;
+            text.enableVertexGradient = true;
+            text.colorGradient = new VertexGradient(Cream, Cream, Gold, Gold);
+            Decorate(text, 0.24f, 0.9f);
+        }
+
+        public static void StyleInfo(TMP_Text text, TMP_FontAsset font, float size)
+        {
+            if (text == null) return;
+            if (font != null) text.font = font;
+            text.fontSize = size;
+            text.fontStyle = FontStyles.Normal;
+            text.color = Cream;
+            Decorate(text, 0.18f, 0.7f);
+        }
+
+        // Koyu kahve kontur + aşağı düşen yumuşak gölge (malzeme kopyası sadece bu metne).
+        static void Decorate(TMP_Text text, float outline, float shadow)
+        {
+            if (text.fontSharedMaterial == null) return; // pasif/kurulmamış metinde TMP kontur verirken hata atar
+            text.outlineWidth = outline;
+            text.outlineColor = OutlineInk;
+            var mat = text.fontMaterial;
+            mat.EnableKeyword(ShaderUtilities.Keyword_Underlay);
+            mat.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0f, 0f, 0f, shadow));
+            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, 0.6f);
+            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetY, -0.8f);
+            mat.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0.35f);
+        }
+
         public static void SetLabel(Button button, string label)
         {
             var tmp = button.GetComponentInChildren<TextMeshProUGUI>();

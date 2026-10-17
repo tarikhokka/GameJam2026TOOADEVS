@@ -47,6 +47,16 @@ namespace CivilJam.Core
             return found;
         }
 
+        // ---- Uyumluluk (Desk RulebookView, a9932ac): mahalle/bölge kaldırıldı, her zaman BOŞ. ----
+        // RulebookView Zones boşken tek "Yönetmelik" tablosu gösteriyor; v2 için doğru davranış bu.
+        // Oğuzhan bölge kodunu kendi tarafından kaldırınca bu iki üye silinecek (memory.md'de not).
+
+        /// <summary>Kaldırıldı: her zaman boş liste.</summary>
+        public IReadOnlyList<ZoneEntry> Zones => Array.Empty<ZoneEntry>();
+
+        /// <summary>Kaldırıldı: bölge yok sayılır, FindRule(tür, parametre, kat) ile aynı.</summary>
+        public ParamRule FindRule(BuildingType type, ParamType param, int zone, int floors) => FindRule(type, param, floors);
+
         /// <summary>Değeri ekranda gösterilecek metne çevirir: seçenekli parametrede etiket (C25, Nervürlü), değilse sayı + birim.</summary>
         public string FormatValue(ParamType param, float value)
         {
@@ -71,6 +81,14 @@ namespace CivilJam.Core
                 if (r.Param == param && !string.IsNullOrEmpty(r.DisplayName)) return r.DisplayName;
             return param.ToString();
         }
+    }
+
+    /// <summary>Kaldırıldı (uyumluluk için duruyor; RuleSetSO.Zones hep boş).</summary>
+    [Serializable]
+    public class ZoneEntry
+    {
+        public string Neighborhood;
+        public int Zone;
     }
 
     [Serializable]

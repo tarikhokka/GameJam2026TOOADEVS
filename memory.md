@@ -174,6 +174,7 @@ Ahmet iki görsel tasarım verdi: `Docs/Tasarim/yapi_denetim_formu_GORUNUM.html`
   - [ ] Lab raporunu aynı görsel dile uydur (ayrı belge; renk/kâğıt farkı olabilir).
   - [ ] El kitabını tasarıma göre kur (bölüm kutuları, numaralı kurallar, kat grubu değerleri tek satırda, GENEL KURAL kutusu).
 - **Tarık (EEE):**
+  - [ ] 🔴 **LİSANS KAYDINI UNUTMA (Ahmet hatırlatması, jam kuralı = ihlal diskalifiye):** eklediğin her font, görsel ve ses **eklendiği anda** `CREDITS_AND_AI.md`'ye yazılır. Fontlar için → "Font" tablosuna: `Pixelify Sans` ve `VT323` · kaynak Google Fonts linki · **SIL Open Font License 1.1** · ekleyen · tarih. OFL lisans metni font dosyalarıyla birlikte repoda dursun (`OFL.txt`). Oyun içi "Emeği Geçenler"e de font satırı eklensin (Onur'un `MainMenuScreen` metni + `CREDITS_AND_AI.md` sonundaki blok). AI ile üretilen görseller (ChatGPT/Gemini kitapları, portreler) de "Yapay zekâ kullanımı" tablosunda olmalı; eksik varsa tamamla.
   - [ ] ⚠️ **Yazı tipi / tarz:** tasarımlar **Pixelify Sans** + **VT323** (Google Fonts, ikisi de SIL OFL) kullanıyor; bu sabahki "piksel art yok, düz çizgi film" kararınla çelişiyor. Ahmet'in kararı tasarımın görünümünü almak → bu iki fontu **TMP font asset** olarak ekle (`CREDITS_AND_AI.md` → Font, OFL), Oğuzhan'a haber ver. Masa/portre görsellerinin bu fontlarla uyumuna bak; uyumsuzsa Ahmet'le konuş.
 
 ### 🎮 Oynanış testi → yeni işler (Ahmet oynadı, 17 Ekim gece) — ÖNCE BUNU OKU

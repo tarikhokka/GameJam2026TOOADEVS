@@ -42,6 +42,7 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 | Oynanış testi | `ProjectKind` + `ProjectData.Kind` (gizli); `GameState.UsedBuildingNames`; tepki/hediye alanları (`GreetingText`, `ReactionText`, `GiftId`, `GiftSO`, `ClientSO` replik listeleri, `OfficeGifts`, `AcceptGift`, `ClientHistory`) | B, C, EEE |
 | El Kitabı v2 | Bölge/mahalle kaldırıldı; `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`, `ParamRule.FloorsLabel/Labels/Description/IsLabeled`, `ParamEntry.Labeled` + `LabelStepPenalty` | B, EEE |
 | Belge tasarımı | `ParamRule.Section`, `ProjectData.FileNo`, `PeoplePerFloor`, `HeightMeters` | B |
+| İnceleme modu | YENİ: `InspectDoc`, `InspectField`, `InspectTarget` (`Of`, `OfParam`, `OfTest`), `InspectVerdict`, `InspectResult`, `Inspection.Check(ctx, project, a, b, kat grubu)` / `IsAvailable` / `NoFloorGroup`, `DocumentData.StampLabName`. DEĞİŞTİ: sahte kaşe akredite olmayan lab, sahte parsel hep farklı | B, C |
 | Yeni arayüz | `RuleSetSO.SectionsFor`; `Section` = BETON/DONATI/YAPI/ZEMİN; `ExpenseCalculator.Preview` + `DailyExpenseResult.PaidTotal/AddedToDebt/DebtPaid/Clone`; `GameContext.LastSave/RetrySave/LoadFailed/LoadError`, `SaveResult`, `GameSession.SaveNow`, `SaveSystem.Save(state, out error)` / `LastLoadError` | B, C, EEE |
 
 ## Günlük (kısa)

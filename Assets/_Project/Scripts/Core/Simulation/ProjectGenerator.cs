@@ -234,6 +234,7 @@ namespace CivilJam.Core
                 Date = date,
                 LabName = labName,
                 StampId = LabStamp(labName),
+                StampLabName = labName,
                 SignatureName = engineer
             };
 
@@ -252,6 +253,9 @@ namespace CivilJam.Core
 
         const string MunicipalityStamp = "BELEDİYE · İMAR MÜDÜRLÜĞÜ";
 
+        /// <summary>Sahte kaşelerde kullanılan, akredite listede olmayan laboratuvarlar (kurgusal).</summary>
+        static readonly string[] UnaccreditedLabs = { "Kale Test Lab.", "Güneş Deney Lab.", "Yıldız Malzeme Lab." };
+
         static string LabStamp(string labName) => $"{UpperTr(labName)} · AKREDİTE";
 
         static void ApplyClue(DocumentData doc, ClueType clue, NamePoolSO names, Random rng)
@@ -259,8 +263,13 @@ namespace CivilJam.Core
             switch (clue)
             {
                 case ClueType.ParcelMismatch:
-                    doc.ParcelNo = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}";
+                {
+                    // Gerçek parselle asla aynı olmasın (inceleme modu "uyuşmazlık" diyebilmeli)
+                    string original = doc.ParcelNo, other;
+                    do other = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}"; while (other == original);
+                    doc.ParcelNo = other;
                     break;
+                }
                 case ClueType.DateMismatch:
                     doc.Date = $"{rng.RangeInclusive(1, 28):00}.{rng.RangeInclusive(10, 12):00}.2026";
                     break;
@@ -269,9 +278,18 @@ namespace CivilJam.Core
                     doc.LabName = "Hızlı Sonuç Lab. Ltd.";
                     break;
                 case ClueType.WrongStamp:
-                    // Kaşe başka bir laboratuvarın → başlık/kaşe uyuşmaz
-                    doc.StampId = LabStamp(PickOther(names != null ? names.LabNames : null, doc.LabName, "Kale Test Lab.", rng));
+                {
+                    // Kaşe akredite OLMAYAN başka bir laboratuvarın → başlıkla uyuşmaz ve inceleme modunda
+                    // "kaşe ↔ akredite listesi" uyuşmazlık verir (Ahmet kararı, 17 Ekim akşam).
+                    var accredited = names != null ? names.LabNames : null;
+                    var pool = new List<string>();
+                    foreach (var n in UnaccreditedLabs)
+                        if (n != doc.LabName && (accredited == null || !accredited.Contains(n))) pool.Add(n);
+                    string stampLab = rng.Pick(pool, "Kale Test Lab.");
+                    doc.StampId = LabStamp(stampLab);
+                    doc.StampLabName = stampLab;
                     break;
+                }
                 case ClueType.WrongSignature:
                     // Lab raporunu başvurudakinden farklı bir mühendis imzalamış
                     doc.SignatureName = PickOther(names != null ? names.EngineerNames : null, doc.SignatureName, "Müh. K. Durmaz", rng);
@@ -287,7 +305,7 @@ namespace CivilJam.Core
         }
 
         /// <summary>Kültürden bağımsız Türkçe büyük harf (i → İ, ı → I).</summary>
-        static string UpperTr(string s) => s.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant();
+        internal static string UpperTr(string s) => s.Replace('i', 'İ').Replace('ı', 'I').ToUpperInvariant();
 
         /// <summary>Görsel adres (sokak + kapı no). Mahalle kaldırıldı: oyun kuralını etkileyen bir bilgi taşımaz.</summary>
         static string MakeAddress(NamePoolSO names, Random rng)

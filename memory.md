@@ -145,6 +145,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 **Yalın tutmak için kapsam dışı:** sorgulama / müteahhide soru yok; sonuç kayda geçmez; tablo dışı çiftler için özel mesaj yok.
 
 #### 🛠️ Uygulama notu — Onur ve Oğuzhan (A, onaydan sonra)
+> ✅ **CORE HAZIR (A, push'landı):** `Simulation/Inspection.cs` aşağıdaki API ile birebir; (a) sahte kaşe akredite olmayan lab, (b) sahte parsel hep farklı; `DocumentData.StampLabName` dolu. EditMode 39/39 (7 yeni inceleme testi: tablonun her satırı, sıra önemsiz, 400 oyunda sahte olmayan belgede künye uyuşmazlığı yok ve her sahte belge yakalanabiliyor). **Onur ve Oğuzhan başlayabilir.**
 **Sıra:** Core'u A push'lar ve burada "✅ Core hazır" yazar. Ondan önce arayüz iskeletini (düğme, vurgu, mesaj görünümü) kurabilirsiniz; Core çağrısını Core gelince bağlayın. **Kural kodu yazmayın:** karar her zaman Core'dan gelir, arayüz sadece gösterir.
 
 **1) Core API (A yazıyor; adlar kesin, `CivilJam.Core`):**
@@ -228,7 +229,7 @@ static class Inspection
 - **Bitince:** push'la, burada maddeni `[x]` yap. A Game.unity'de ekran görüntülü otomatik oynanışla kontrol eder ve build alır.
 
 **İş listesi:**
-- [ ] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
+- [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
 - [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama.
 - [ ] Onur: `InspectResultView` (görünüm + ses).
 - [ ] Tarık: 1. gün öğretici kartı ("İNCELE'ye bas, iki belgeden aynı bilgiye tıkla") + README satırı.

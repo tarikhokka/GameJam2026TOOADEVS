@@ -13,6 +13,7 @@ namespace CivilJam.Core
         public string Date;          // Gösterim metni, ör. "12.10.2026"
         public string LabName;       // Sadece LabReport
         public string StampId;       // Kaşe görseli/kimliği
+        public string StampLabName;  // Sadece LabReport: kaşedeki laboratuvar adı (inceleme: akredite listesiyle karşılaştırılır)
         public string SignatureName;
         // Parametre değerleri ProjectData.Params'tadır; LabReport onları Reported olarak gösterir.
 

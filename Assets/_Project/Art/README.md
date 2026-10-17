@@ -31,7 +31,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `daysummary_bg.png` | DaySummary: yeni ofis + masa, akşam mavisi, bulanık (17 Ekim akşam yenilendi) | C | F |
 | `save_bg.png` | Save: yeni ofis + masa, gece, ışıklar sönük (17 Ekim akşam yenilendi). SaveScreen.prefab background | C | F |
 | `payment_bg.png` | Günlük ödeme: yeni ofis + masa, loş sıcak ton, bulanık (17 Ekim akşam yenilendi) | C | F |
-| `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
+| `menu_bg.png`, `logo.png` | MainMenu (poliş T1: çizili 3 tahta düğme yuvası silindi, yeri şehirle dolduruldu; akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
 | `ending_good.png` | Ending İyi "Ayakta Kalanlar": gün batımında düzenli ofis, masada onaylı (✓) dosyalar, pencerede ayakta binalar (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_bad.png` | Ending Kötü "Hüküm": parmaklıklar arkasından hücre, yatakta proje rulolarıyla (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_closed.png` | Ending Orta "Kapanan Kapı" (iflas): mühürlü, şeritli ofis, koliler, devrik çay (ChatGPT, 17 Ekim akşam) | C | F |
@@ -62,7 +62,12 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `tab_beton/donati/yapi/zemin.png` | El Kitabı sekmeleri (120x300; sol kenar defterin altına girer, yazı dikey) | B | F |
 | `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
-| `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
+| `btn_menu.png` | Ana menü ve akış ekranı düğmesi (poliş T1, 520x120: koyu ahşap kahve, ince damar, ikonsuz; ONAY/RED/EK TEST ailesi; yazı kodla). Eskisi menu_bg'deki tahtadan kesilmişti | C | F |
+| `btn_inspect.png` | Poliş T1: İNCELE düğmesi (420x120, koyu kömür, solda büyüteç; yazı kodla). ONAY/RED/EK TEST ailesi | B | F |
+| `btn_help.png` | Poliş T1: NASIL OYNANIR düğmesi (420x100, hardal, solda "?"; yazı kodla) | B | F |
+| `hud_bar.png` | Poliş T1: üst bar şeridi (1920x88, koyu ahşap, alt kontur + gölge; 76 px pano + 12 px gölge) | C | F |
+| `hud_tag.png` | Poliş T1: üst bar kağıt etiketi (256x72, krem, mürekkep kontur). **9-slice, Sprite Border 24** | C | F |
+| `hud_icon_day/money/count.png` | Poliş T1: üst bar ikonları (64x64): takvim yaprağı, banknot + madeni para, klasör | C | F |
 | `bribe_envelope_open.png` | Açık rüşvet zarfı + kurgusal banknotlar (1226x1193 şeffaf; ChatGPT, Tarık; arka planı A sildi). Zarfa tıklanınca BribeEnvelopeView'da; tutar kodla ön banknotun ovaline yazılır | B | F |
 | `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; masadaki İNCELE düğmesinin ilk hali (şimdi btn_menu kullanıyor); şu an kullanılmıyor | B | F |
 | `ui_checkbox.png`, `ui_check.png` | Ödeme ekranı onay kutusu (krem kutu, koyu kontur) ve yeşil tik (işaretli = ödenecek), 96x96 | C | F |

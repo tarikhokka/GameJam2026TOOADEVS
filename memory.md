@@ -24,7 +24,8 @@
 | ZEMİN | Temel derinliği | 1,5 m | 2,0 m | 2,5 m |
 | ZEMİN | Zemin türü (Dolgu / Yumuşak kil / Sert kil / Kaya) | Yumuşak kil | Sert kil | Kaya |
 
-**Belgeler ve ipuçları:** Form (`Documents[0]`) ve lab raporu (`Documents[1]`) beyan değerini (`Reported`) gösterir; gerçek değeri (`Actual`) sadece ücretli **ek test** (300 TL, anında düşer) açar. Sahte belgede değerler temiz görünür; bedava ipuçları iki belgenin farkındadır: parsel, tarih, bilinmeyen laboratuvar (akredite listede yok), kaşedeki lab adı ≠ raporun lab'ı, imzalayan mühendis farklı. Masa hiçbir şeyi "yanlış" diye işaretlemez.
+**Belgeler ve ipuçları:** Form (`Documents[0]`) ve lab raporu (`Documents[1]`) beyan değerini (`Reported`) gösterir; gerçek değeri (`Actual`) sadece ücretli **ek test** (250 TL, anında düşer) açar. Sahte belgede değerler temiz görünür; bedava ipuçları iki belgenin farkındadır: parsel, tarih, bilinmeyen laboratuvar (akredite listede yok), kaşedeki lab adı ≠ raporun lab'ı, imzalayan mühendis farklı. Masa hiçbir şeyi "yanlış" diye işaretlemez.
+**Değer farkı (Tarık önerisi, Ahmet onayı, 17 Ekim gece):** lab raporunun beyanı formdan farklı yazabilir (`ParamEntry.LabDiffers` / `LabReported` / `LabValue`); ikisi de yönetmeliği geçiyor görünür, İNCELE form ↔ lab'da UYUŞMAZLIK der. Sahtelerin %65'inde (gerçek değer kötü; bunların yarısında künye ipucu yok → sadece ek test kanıtlar), uygun projelerin %15'inde masum yazım hatası (gerçek değer iyi, 1. günden). Hangisi olduğunu ek test söyler.
 
 **Proje türleri (gizli `ProjectKind`):** Compliant, Sloppy (rüşvetsiz ama bir değeri eksik; her gün), Bribe, Fake (3. günden), BribeFake. Rüşvet teklif edilen her proje uygunsuzdur.
 
@@ -32,15 +33,15 @@
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner.
 
-**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 2.500 TL; onay ücreti 300-500 TL; her gün kira 600 + kredi 300 (+ cam tamiri). Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
+**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 350-550 TL; her gün kira 700 + kredi 350 (+ cam tamiri); ek test 250; borç limiti 2.500 (17 Ekim gece, Tarık önerisi, Ahmet onayı: eski değerlerde dikkatli oyuncu hiç borca girmiyordu). Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
 
 **Hapis ve sonlar** (günlük ödemeden sonra, öncelik sırasıyla): yıkılan bina JailRisk +0,15, rüşvetle onaylanmış yıkılan bina +0,25; her yıkımdan sonra hapis zarı.
 1. **Kötü** "Hüküm": hapis zarı tuttu.
-2. **Orta** "Kapanan Kapı": borç > 2.000 TL (her gün bakılır).
+2. **Orta** "Kapanan Kapı": borç > 2.500 TL (her gün bakılır).
 3. **Orta** "Enkazın Gölgesi": 10. gün bitti, en az bir bina yıkıldı.
 4. **İyi** "Ayakta Kalanlar": 10. gün bitti, hiç yıkım yok.
 
-Denge (simülasyon, 300 oyun/tip): dikkatli oyuncu %100 İyi; tek zarf ~%45 İyi / %45 Enkazın Gölgesi / %10 hapis; her zarfı alan ~%85+ hapis; her şeyi reddeden ~5. gün ofisi kaybeder.
+Denge (`CivilJam > Core > Balance Report`, 300 oyun/tip, 17 Ekim gece yeni ekonomi + değer farkıyla): dikkatli oyuncu (değer farkında ek test alır) %100 İyi, son kasa ~975 + borç ~240, en dip kasa ~0; saf (test almaz) %6 İyi / %49 Enkazın Gölgesi / %46 hapis; tek zarf %50 İyi / %38 Enkazın Gölgesi / %13 hapis; her zarfı alan %91 hapis; her şeyi reddeden 4. gün ofisi kaybeder.
 
 **Kayıt:** tek slot JSON (`persistentDataPath/save.json`), sadece `GameState`. Gün sonunda gün +1 yapılıp kaydedilir; "Devam Et" yeni günün başını açar. Son ekranına girince kayıt silinir.
 
@@ -358,6 +359,8 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim ~19:20 | Rüşvet uyuşmazlıktan sonra: zarf başta yok; ilk UYUŞMAZLIK'tan sonra denetçi ve müteahhit birer cümle konuşur, rüşvetçi o anda teklif eder (teklif + denetçi tepkisi + kapanış); uyuşmazlık bulunmazsa zarf hiç teklif edilmez; diyalog farklı alan başına bir kez; denetçi cümlesi Core şablonundan; replikleri Tarık yazar | Ahmet kararı. Rüşvet "yakalanan müteahhidin hamlesi" olur; tema ve Papers, Please hissi |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
+| 17 Ekim gece | Yeni ekonomi: başlangıç 1.500, kira 700, kredi 350, ücret 350-550, ek test 250, borç limiti 2.500 | Tarık önerisi, Ahmet onayı. Eski değerlerde dikkatli oyuncu hiç borca girmiyordu; şimdi kıl payı kazanıyor (Balance Report §2) |
+| 17 Ekim gece | Değer farkı: lab beyanı formdan farklı yazabilir (sahtede gerçek kötü, uygun projede masum yazım hatası); bazı sahtelerde künye ipucu yok, sadece ek test kanıtlar | Tarık önerisi, Ahmet onayı: ek testin net bir işi yoktu (her sahtede bedava ipucu vardı). Core + testler EEE yazdı (`ProjectGenerator.AddLabDifference`, `Inspection`, `DialogueSO.FormVsLab`); EditMode yeşil |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

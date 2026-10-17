@@ -16,16 +16,25 @@ namespace CivilJam.Flow
         [SerializeField] Sprite badImage;       // ending_bad
         [SerializeField] Sprite closedImage;    // ending_closed
         [SerializeField] string menuSceneName = "MainMenu";
+        // (EEE, 18 Ekim) Canlandırma (EndingAmbience) ve her sona ayrı müzik.
+        [SerializeField] Sprite glowSprite;     // menu_glow
+        [SerializeField] Sprite dustSprite;     // menu_dust
+        [SerializeField] Sprite blinkSprite;    // menu_redlight
+        [SerializeField] AudioClip musicGood, musicBad, musicClosed, musicCollapsed;
+        [SerializeField] float musicVolume = 0.6f;
 
         public override GamePhase Phase => GamePhase.Ending;
 
+        RectTransform _root;
+        EndingAmbience _ambience;
+        AudioSource _music;
         Image _bg;
         TextMeshProUGUI _title, _body, _stats;
 
         protected override void Build()
         {
-            var root = UiKit.Stretch(transform, "Root");
-            _bg = UiKit.Image(root, "Bg", null, UiKit.Dark, Vector2.zero, Vector2.one);
+            var root = _root = UiKit.Stretch(transform, "Root");
+            _bg =UiKit.Image(root, "Bg", null, UiKit.Dark, Vector2.zero, Vector2.one);
             // (EEE, 17 Ekim) Parlak görselde (İyi son) beyaz yazı okunmuyordu: hafif genel karartma + metnin arkasında koyu panel,
             // krem yazı ve koyu kontur; başlık Paytone (krem→altın), metin Fira Sans.
             UiKit.Image(root, "Shade", null, new Color(0f, 0f, 0f, 0.3f), Vector2.zero, Vector2.one);
@@ -66,6 +75,8 @@ namespace CivilJam.Flow
 
             _bg.sprite = image;
             _bg.color = image != null ? Color.white : UiKit.Dark;
+            StartAmbience(type);
+            StartMusic(type);
             _title.text = title;
             _body.text = body;
             string g = UiKit.GoldHex;
@@ -74,6 +85,45 @@ namespace CivilJam.Flow
                 $"Onaylanan bina: <color={g}>{s.TotalApproved}</color>   Yıkılan bina: <color={g}>{s.TotalCollapses}</color>\n" +
                 $"Alınan rüşvet: <color={g}>{s.TotalBribesTaken}</color>\n" +
                 $"Kasa: <color={g}>{UiKit.Money(s.Money)}</color>   Borç: <color={g}>{UiKit.Money(s.Debt)}</color>";
+        }
+
+        // Arka planın hemen üstüne (Shade ve yazı panelinin altına) kurulur; Refresh tekrar gelirse eskisi silinir.
+        void StartAmbience(EndingType type)
+        {
+            if (_ambience != null) Destroy(_ambience.gameObject);
+            var host = UiKit.Stretch(_root, "AmbienceHost");
+            host.SetSiblingIndex(_bg.transform.GetSiblingIndex() + 1);
+            _ambience = host.gameObject.AddComponent<EndingAmbience>();
+            _ambience.Play(type, host, 0, glowSprite, dustSprite, blinkSprite);
+        }
+
+        void StartMusic(EndingType type)
+        {
+            AudioClip clip = type == EndingType.Good ? musicGood : type == EndingType.Bad ? musicBad
+                : type == EndingType.MiddleClosed ? musicClosed : type == EndingType.MiddleCollapsed ? musicCollapsed : null;
+            if (clip == null) return;
+            if (_music == null)
+            {
+                _music = gameObject.AddComponent<AudioSource>();
+                _music.loop = true;
+                _music.playOnAwake = false;
+            }
+            if (_music.clip == clip && _music.isPlaying) return;
+            _music.clip = clip;
+            _music.volume = 0f;
+            _music.Play();
+            StopAllCoroutines();
+            StartCoroutine(FadeIn());
+        }
+
+        System.Collections.IEnumerator FadeIn()
+        {
+            for (float t = 0f; t < 2f; t += Time.unscaledDeltaTime)
+            {
+                _music.volume = musicVolume * t / 2f;
+                yield return null;
+            }
+            _music.volume = musicVolume;
         }
 
         EndingSO FindEnding(EndingType type)

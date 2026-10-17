@@ -52,6 +52,14 @@ MonoBehaviour:
   badImage: {fileID: 21300000, guid: 838c7f96331014941984e74a3e11e3ff, type: 3}
   closedImage: {fileID: 21300000, guid: 4ed736d1501daa746ab64bdbd6297ce0, type: 3}
   menuSceneName: MainMenu
+  glowSprite: {fileID: 21300000, guid: db42deb825d446dc875ce75375e44eda, type: 3}
+  dustSprite: {fileID: 21300000, guid: 73dc56408b5948719caa166a09b552f2, type: 3}
+  blinkSprite: {fileID: 21300000, guid: 0b43508f079d4885aa6fbe57ced1d51b, type: 3}
+  musicGood: {fileID: 8300000, guid: 98650ad9498f42bdbe4b71ead0f56427, type: 3}
+  musicBad: {fileID: 8300000, guid: 1915e3f2bf4d58a4ea4bdab5a791a311, type: 3}
+  musicClosed: {fileID: 8300000, guid: 37333f8595164fa2b5bdbc8a1e67c9c3, type: 3}
+  musicCollapsed: {fileID: 8300000, guid: 1b34dab98d2e4252832fd29515e96d18, type: 3}
+  musicVolume: 0.6
   buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
   buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
   titleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}

@@ -437,7 +437,7 @@ MonoBehaviour:
   gameSceneName: Game
   logoInBackground: 1
   buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
-  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  buttonFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
   lightLayers:
   - {fileID: 21300000, guid: 941acb55a3cc420a8230054e76675555, type: 3}
   - {fileID: 21300000, guid: 2bceeb81042345b49b110948466a3383, type: 3}

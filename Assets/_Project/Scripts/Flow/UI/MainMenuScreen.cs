@@ -15,11 +15,10 @@ namespace CivilJam.Flow
         [SerializeField] Sprite background;     // menu_bg
         [SerializeField] Sprite logo;           // logo
         [SerializeField] string gameSceneName = "Game";
-        // (EEE, 17 Ekim) menu_bg'de İMZA logosu ve 3 tahta düğme çizili. Gerçek düğmeler btn_menu ile tam üstlerine oturur;
-        // kayıt varsa "Devam Et" en üste girer, diğerleri bir aşağı kayar (resimdeki düğmeler yine kapalı kalır).
+        // T1 menu_bg'de yalnız logo/şehir var; düğmeler kayıt durumuna göre ortalanmış bir sütunda kurulur.
         [SerializeField] bool logoInBackground = true;
         [SerializeField] Sprite buttonSprite;   // btn_menu
-        [SerializeField] TMP_FontAsset buttonFont; // FiraSans-Bold SDF
+        [SerializeField] TMP_FontAsset buttonFont; // PaytoneOne-Regular SDF
         // (EEE, 17 Ekim) Menü canlandırma (MenuAmbience): pencere ışıkları, güneş halesi, toz, açılış.
         [SerializeField] Sprite[] lightLayers;  // menu_lights_0..3 (ilk yarısı söner, ikinci yarısı parlar)
         [SerializeField] Sprite sunGlow;        // menu_glow
@@ -27,8 +26,9 @@ namespace CivilJam.Flow
         [SerializeField] Sprite craneLight;     // menu_redlight (vinç ikaz lambası)
         [SerializeField] Sprite craneLoad;      // menu_load (sallanan kiriş)
 
-        // Resimdeki düğme yuvaları (1600x900 menu_bg'den ölçüldü).
-        const float SlotLeft = 0.389f, SlotRight = 0.6026f, SlotTop = 0.498f, SlotHeight = 0.0878f, SlotGap = 0.0155f;
+        // 1920x1080 referansında yeni 520x120 düğmenin oranı korunur. Üç/dört düğmenin sütun merkezi aynıdır.
+        static readonly Vector2 MenuCenter = new Vector2(0.5f, 0.33f);
+        const float MenuButtonWidth = 440f, MenuButtonHeight = 102f, MenuButtonGap = 14f;
 
         // CREDITS_AND_AI.md "Oyun içi Emeği Geçenler metni" ile aynı tutulur (yeni CC BY asset gelince burayı da güncelle).
         // İki sütun: sol = oyun/ekip/yapay zekâ, sağ = sesler/görseller/yazı tipleri. (EEE, 17 Ekim)
@@ -90,15 +90,16 @@ namespace CivilJam.Flow
                 t.fontStyle = FontStyles.Bold;
             }
 
-            bool slots = buttonSprite != null;
-            float y = slots ? SlotTop : 0.55f;
-            if (SaveSystem.HasSave)
+            bool hasSave = SaveSystem.HasSave;
+            int count = hasSave ? 4 : 3;
+            int index = 0;
+            if (hasSave)
             {
-                MenuButton("Continue", "Devam Et", Continue, ref y);
+                MenuButton("Continue", "Devam Et", Continue, index++, count);
             }
-            MenuButton("New", "Yeni Oyun", NewGame, ref y);
-            MenuButton("Credits", "Emeği Geçenler", () => SetCredits(true), ref y);
-            MenuButton("Quit", "Çıkış", Quit, ref y);
+            MenuButton("New", "Yeni Oyun", NewGame, index++, count);
+            MenuButton("Credits", "Emeği Geçenler", () => SetCredits(true), index++, count);
+            MenuButton("Quit", "Çıkış", Quit, index, count);
 
             BuildCredits(root);
             SetCredits(false);
@@ -109,16 +110,14 @@ namespace CivilJam.Flow
             ambience.PlayIntro(_menuPanel.transform);
         }
 
-        // Düğmeleri yukarıdan aşağı dizer (btn_menu varsa resimdeki yuvalara, yoksa eski düz düğmeler).
-        void MenuButton(string name, string label, System.Action onClick, ref float top)
+        void MenuButton(string name, string label, System.Action onClick, int index, int count)
         {
-            bool slots = buttonSprite != null;
-            float left = slots ? SlotLeft : 0.4f, right = slots ? SlotRight : 0.6f;
-            float height = slots ? SlotHeight : 0.085f, gap = slots ? SlotGap : 0.02f;
             var btn = UiKit.Button(_menuPanel.transform, name, label, onClick,
-                new Vector2(left, top - height), new Vector2(right, top), slots ? 40f : 38f);
+                MenuCenter, MenuCenter, 36f);
+            var rt = (RectTransform)btn.transform;
+            rt.sizeDelta = new Vector2(MenuButtonWidth, MenuButtonHeight);
+            rt.anchoredPosition = new Vector2(0f, ((count - 1) * 0.5f - index) * (MenuButtonHeight + MenuButtonGap));
             Style(btn);
-            top -= height + gap;
         }
 
         void Style(Button btn)
@@ -126,9 +125,19 @@ namespace CivilJam.Flow
             if (buttonSprite != null && btn.targetGraphic is Image img)
             {
                 img.sprite = buttonSprite;
+                img.preserveAspect = true;
                 img.color = Color.white;
             }
-            if (buttonFont != null) btn.GetComponentInChildren<TextMeshProUGUI>().font = buttonFont;
+            var label = btn.GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonFont != null) label.font = buttonFont;
+            label.fontStyle = FontStyles.Normal;
+            label.enableAutoSizing = true;
+            label.fontSizeMax = label.fontSize;
+            label.fontSizeMin = 24f;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+            label.overflowMode = TextOverflowModes.Ellipsis;
+            label.rectTransform.offsetMin = new Vector2(22f, 6f);
+            label.rectTransform.offsetMax = new Vector2(-22f, -6f);
         }
 
         void BuildCredits(Transform root)

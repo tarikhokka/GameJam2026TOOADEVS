@@ -181,8 +181,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
 | 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` |
-| 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | 🟢 başla |
-| 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | 🟢 başla |
+| 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ teslim hazır; hash sonraki notta |
+| 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ teslim hazır; hash sonraki notta |
 | 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
 
 **Faz 0 (bitti, `d0c4e59`):** Plan push'landı.
@@ -258,6 +258,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - Faz 2 dosyalarına dokunmazlar.
 
 **Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
+> **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
 
 **Faz 3 (08:30 → 11:00) — A:**
 - A3: hepsini pull, EditMode + PlayMode testleri, otomatik 7 günlük oynanış, ekran görüntüleri (masa, inceleme modu, El Kitabı, üst bar, ana menü, Esc menüsü), §2-§3 ve README son kontrol, build + ZIP.
@@ -363,9 +364,9 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - "Proje müellifi / Laboratuvar Yetkilisi" maddesi duruyor (vakit kalırsa).
 
 #### Onur (C) — C1, C2
-> **Onur'un kapsam düzeltmesi:** Tarık'ın T1/T2 işleri devralınmıyor; Onur yalnız C1/C2'yi yapacak. T1/T2 teslimleri alındı. C1 hazır; C2 ve C1-K için Faz 2 kapısı beklenir. Plan: `Docs/Onur/Polis_turu_yol_haritasi.md`.
+> **Onur'un kapsam düzeltmesi:** Tarık'ın T1/T2 işleri devralınmıyor; Onur yalnız C1/C2'yi yapacak. T1/T2 teslimleri alındı. C1 hazır; Faz 2 `fac2bae` ile açıldı. C2 ve C1-K tamam; 55/55 EditMode + 10/10 PlayMode, B2 `1c652eb` ile birleşmiş sürümde geçti. Kabul ve görüntüler: `Docs/Onur/Faz2_kabul_notlari.md`. Plan: `Docs/Onur/Polis_turu_yol_haritasi.md`.
 
-- [x] **C1 ✅ `1b47ce6` — `DeskHeaderView` hazır:** T1 görselleri/fontlar, 80 px yükseklik, üç API ve görselsiz yedek görünüm. İzole Unity 6000.6.4f1: 55/55 EditMode + 10/10 PlayMode (6 geçici C1 kontrolü + 4 mevcut Flow testi) ve gerçek render kontrolü geçti. Bağlantı: `Docs/Onur/DeskHeaderView_baglanti.md`; önizleme: `Docs/Onur/DeskHeaderView_onizleme.png`. **B2:** builder/prefab bağlantısı Oğuzhan'da; **C1-K** Faz 2'de ayrıca yapılacak.
+- [x] **C1 ✅ `1b47ce6` — `DeskHeaderView` hazır:** T1 görselleri/fontlar, 80 px yükseklik, üç API ve görselsiz yedek görünüm. İzole Unity 6000.6.4f1: 55/55 EditMode + 10/10 PlayMode (6 geçici C1 kontrolü + 4 mevcut Flow testi) ve gerçek render kontrolü geçti. Bağlantı: `Docs/Onur/DeskHeaderView_baglanti.md`; önizleme: `Docs/Onur/DeskHeaderView_onizleme.png`. **B2:** builder/prefab bağlantısı Oğuzhan'da; **C1-K** aşağıdaki Faz 2 kabulüyle tamamlandı.
   - İlk sözleşme / uygulama ayrıntıları:
   - Yeni dosya `Assets/_Project/Scripts/Desk/UI/DeskHeaderView.cs`: Desk asmdef'inde, `namespace CivilJam.Desk`.
   - `BribeEnvelopeView` gibi Awake'te kendini kurar. `Reset()` fontları (başlıkta Paytone One, metinde Fira Sans) ve T1 sprite'larını bağlar.
@@ -386,18 +387,19 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - sprite yoksa aynı renk dünyasında kodla çizer (kahve şerit, krem etiket, kalın kahve kontur), böylece **T1'i beklemeden bitirilebilir**.
   - İsteğe bağlı: kasa değişince rakam kısa bir süre yeşil (+) ya da kırmızı (−) parlar. Vakit yoksa yapma.
   - Push, "C1 ✅ hash" yaz.
-  - **C1-K, FAZ 2'de (madde 2):** Sandbox_Desk'te `InspectResultView` ve `InspectorBubbleView`'un karartmanın üstünde kaldığını kontrol et. Sorun varsa burada Oğuzhan'a yaz.
-- [ ] **C2 Ana menü düğmeleri (madde 3) — FAZ 2: Faz 1'in hepsi ✅ olmadan başlama:**
+  - **C1-K ✅ teslim hazır (madde 2):** B2 dahil gerçek Sandbox_Desk'te form/El Kitabı beton alanları tıklanarak Core C25/C30 uyuşmazlığı üretildi. Kaşe ve denetçi konuşması karartmanın üstünde, alfa 1; mod kapatılınca geçici katmanlar temizleniyor. Oğuzhan'a düzeltme gerektiren hata yok. Kabul/görüntüler: `Docs/Onur/Faz2_kabul_notlari.md`.
+- [x] **C2 ✅ teslim hazır — ana menü düğmeleri (madde 3):** Yeni `btn_menu` + Paytone One; kayıtlı dört/kayıtsız üç düğme aynı merkezde, credits Geri aynı stilde. Yeni Oyun tek intro, Devam Et kayıtlı gün, hover ve mevcut Settings/Pause testleri geçti. Esc görünümü isteğe bağlıydı; değiştirilmedi. Birleşik taban `d579a84`: 55/55 EditMode + 10/10 PlayMode (4 mevcut + 6 geçici kabul).
   - `MainMenuScreen`: Devam Et / Yeni Oyun / Emeği Geçenler / Çıkış yeni `btn_menu` ile. Tarık aynı adla üzerine yazar, bağlantı korunur.
   - Yazılar kodla, Paytone One; `ButtonHover` aynı kalır.
   - **`menu_bg`'deki çizili 3 tahta yuva kalkıyor (T1).** Düğmeleri yuvalara değil düzgün bir sütuna diz:
     - kayıt varken 4 düğme;
     - kayıt yokken 3 düğme, ortalanmış.
-  - Yuva sabitlerini (`SlotTop`, `SlotLeft`, `SlotRight`, `SlotHeight`, `SlotGap`) yeni görsele göre ayarla.
+  - Eski `Slot*` sabitleri kaldırıldı; 440×102 px, 14 px aralık, kayıt sayısına göre hesaplanan aynı sütun merkezi kullanılıyor.
   - Emeği Geçenler'deki Geri düğmesi de aynı görselle olsun. Vakit varsa Esc menüsü düğmeleri (`UiKit.Button`, `PauseMenu`) de.
   - `SettingsMenuTests` ve `PauseMenuTests` geçmeli. Push, "C2 ✅ hash" yaz.
 
 #### Tarık (EEE) — T1, T2
+- **C2 görsel notu (Onur, 18 Ekim):** Kayıtsız menüde ilk düğmenin hemen üstünde `menu_bg` dolgu/parlama izi açıkta kalıyor. Tarık aynı ad/GUID ile bu bölgeyi rötuşlayabilir; kaynak görsele Onur dokunmadı. Kanıt: `Docs/Onur/Faz2_menu_kayitsiz.png`. A3 son görsel kontrolüne taşınacak.
 - [x] **T1 ✅ `f8842b5`** — Hepsi `Art/`'ta, Sprite (Single), yazısız (kod basar). Notlar:
   - `btn_inspect` 420x120 (koyu kömür, solda büyüteç → yazı x ≈ 120-410), `btn_help` 420x100 (hardal, solda "?" → yazı x ≈ 100-410), `btn_menu` 520x120 (koyu ahşap, ikonsuz; **oran 4,33**, eskisi 4,27 — İNCELE/NASIL OYNANIR/akış düğmeleri B2/C2'ye kadar bunu kullanıyor, sorun değil).
   - `menu_bg`: çizili 3 yuva silindi (x 745-1160, y 540-865 bölgesi şehirle dolduruldu; yakından aynalama izi var, düğme sütunu o bölgeye gelince örtülür). Logo, güneş, vinçler ve `MenuAmbience` katmanları aynı yerde. **Onur:** C2'de düğmeleri bu bölgeye (yaklaşık x 0,39-0,60, y 0,20-0,50) dizersen iz görünmez.

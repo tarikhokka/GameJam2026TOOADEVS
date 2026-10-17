@@ -1,6 +1,6 @@
 # 18 Ekim — Onur poliş turu planı
 
-Güncel taban: `8e8f828` (A1/A2 dahil). Kaynak: `memory.md` §7, Ahmet'in K1–K4 kararları ve faz kapısı. Onur'un son düzeltmesi: Tarık'ın işleri devralınmıyor; **bizim kapsamımız C1 ve C2**. T1/T2 Tarık'ta ve tamamlandı (`f8842b5`, `1dd7870`). C1 hazır; C2 Faz 2 kapısı açılana kadar bekler.
+Kabul tabanı: `d579a84` (B2 ve son ekranlar dahil). Kaynak: `memory.md` §7, Ahmet'in K1–K4 kararları ve faz kapısı. Onur'un son düzeltmesi: Tarık'ın işleri devralınmıyor; **bizim kapsamımız C1 ve C2**. T1/T2 Tarık'ta ve tamamlandı (`f8842b5`, `1dd7870`). C1, C2 ve C1-K hazır. Faz 2 `fac2bae` ile açıldı; birleşmiş sürümde C2/C1-K kabulü 55/55 EditMode + 10/10 PlayMode ile geçti. Teslim ve görüntüler: `Faz2_kabul_notlari.md`. Tarık'a arka plan dolgu izi rötuş notu bırakıldı. Son entegrasyon/build A3 Ahmet'te.
 
 ## Ahmet'in istediği sonuç
 

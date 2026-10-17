@@ -30,9 +30,9 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `save_bg.png` | Save (gün sonu kayıt ekranı): desk_bg gece, ışıklar sönük, ay ışığı. SaveScreen.prefab background alanına bağlı | C | F |
 | `payment_bg.png` | Günlük ödeme (desk_bg bulanık ve loş) | C | F |
 | `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
-| `ending_good.png` | Ending İyi "Ayakta Kalanlar" (desk_bg, altın sabah ışığı) | C | F |
-| `ending_bad.png` | Ending Kötü "Hüküm" (desk_bg, soğuk mavi, karanlık köşeler) | C | F |
-| `ending_closed.png` | Ending Orta "Kapanan Kapı" (desk_bg, solmuş sepya) | C | F |
+| `ending_good.png` | Ending İyi "Ayakta Kalanlar": gün batımında düzenli ofis, masada onaylı (✓) dosyalar, pencerede ayakta binalar (ChatGPT, 17 Ekim akşam) | C | F |
+| `ending_bad.png` | Ending Kötü "Hüküm": parmaklıklar arkasından hücre, yatakta proje rulolarıyla (ChatGPT, 17 Ekim akşam) | C | F |
+| `ending_closed.png` | Ending Orta "Kapanan Kapı" (iflas): mühürlü, şeritli ofis, koliler, devrik çay (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_collapsed.png` | Ending Orta "Enkazın Gölgesi" (desk_bg, neredeyse renksiz gri; MiddleCollapsed.asset'e bağlı) | C | F |
 | `gift_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk: ofis hediyeleri (GiftSO.Sprite), 300x300 şeffaf, konturlu | B | F |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |

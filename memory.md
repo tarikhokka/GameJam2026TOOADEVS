@@ -89,6 +89,56 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
+### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
+> 🚧 **İş başladı.** A, Core'un 1. adımını (yeni alanlar) push'layınca burada "✅ Core 1. adım hazır" yazar; Tarık ve Onur asset'lere o zaman girer (portre çizimi hemen başlayabilir).
+
+**Neden:** 10 gün sıkıcı bulundu; oyun kısalıyor ve iyi/kötü projeler eşitleniyor.
+
+**Kesin kararlar (Ahmet):**
+- **7 gün.** Günlük proje sayısı: **3 · 3 · 4 · 4 · 4 · 5 · 5 = 28**.
+- **Gün planı:**
+  | Gün | Proje | Açılan içerik |
+  |---|---|---|
+  | 1 | 3 | zarf ve sahte belge yok |
+  | 2 | 3 | zarf başlar |
+  | 3 | 4 | sahte belge başlar |
+  | 4 | 4 | kabadayı başlar |
+  | 5–7 | 4, 5, 5 | — |
+- **6 ana müteahhit 3'er kez (18 ziyaret).** Oyun başında rastgele ama sabit bir program kurulur (kayıtla saklanır):
+  - aynı gün iki kez gelmez, arka arkaya da gelmez;
+  - Rüstem sadece 4-7. günlerde gelir;
+  - Selim 1-2. günlerde gelirse dikkatsiz proje getirir, 3. günden sahte belge getirebilir.
+- **10 kişiliksiz karakter (10 ziyaret):** kalan yerleri doldurur. Uygun, dikkatsiz, **zarflı ya da sahte belgeli** proje getirebilir (gün kurallarına uyarak). Her biri oyunda bir kez gelir.
+- **Projeler tam 14 uygun / 14 uygunsuz.** Core dağıtır:
+  - ana karakterler kişiliklerine yakın ama gevşek (Rıfat bazen dikkatsiz, Kemal bazen temiz);
+  - toplam kişiliksizlerle 14 / 14'e tamamlanır;
+  - hiçbir yüz kararı ele vermez.
+- Ekonomi hedefi şimdilik açık; A yeni yapıyla denge raporunu Ahmet'e sunar.
+- **Yedek plan:** portreler yetişmezse Core'daki tek ayarla kişiliksizlerin yerini ana müteahhitler doldurur.
+
+**Core sözleşmesi (A; adlar kesin):**
+- `ClientSO.IsGeneric` (bool): kişiliksiz karakter. Kendi replik listeleri boş bırakılabilir; boşsa ortak havuz kullanılır.
+- Ortak replik havuzu `Data/Dialogue.asset` (`DialogueSO`) içinde: `GenericGreetingLines`, `GenericApproveLines`, `GenericRejectLines`, `GenericMismatchLines`, `GenericBribeLines`, `GenericBribeCloseLines`, `GenericBribeRefusedLines`.
+- Kişiliksizlerin zarf tutarı: `BalanceSO.GenericBribeRange`.
+- Program: `GameState.Schedule` (gün → müteahhit Id listesi). Masa ve akış ekranları bunu okumak zorunda değil; projeler yine `ctx.TodayProjects`'ten gelir.
+- `BalanceSO.TotalDays = 7`; F9 son güne (7) atlar.
+
+**İş bölümü:**
+| Kim | İş | Süre |
+|---|---|---|
+| **A** | **1. adım (hemen):** `IsGeneric`, ortak havuz alanları, `GenericBribeRange`, havuza düşme kuralı; push. **2. adım:** 7 günlük program kurucu, tam 14 / 14, gün kuralları, `Data/Days` (7 gün), `TotalDays` 7, testler, Game.unity bağlantısı (Link Data yeni müteahhitleri de bağlar), denge raporu | ~2 sa |
+| **Onur + Tarık** | 10 kişiliksiz karakter portresi: mevcut tarz, 1000x1000 şeffaf, mevcut portrelerle aynı kadraj (belden yukarı, alta ortalı) → `Art/portrait_g01.png` … `portrait_g10.png` | gece |
+| **Tarık** | 10 `ClientSO` (`Data/Clients/Generic01.asset` … `Generic10.asset`): `Id` `g01`…`g10`, `DisplayName` (kurgusal ad soyad), `Portrait`, `IsGeneric` = true, `IsHonest` = false, `BribeRange` 0-0 (tutar `GenericBribeRange`'ten). Ortak havuzu `Dialogue.asset`'e yaz (her listede 5-6 cümle; parametre adı geçmesin; kişiliksiz, nötr esnaf dili). README "10 gün" → "7 gün". CREDITS | ~1 sa + portreler |
+| **Oğuzhan** | Masada "10 gün" geçen metinler (öğretici kartları, F9 açıklaması); yeni portrelerin masadaki yerleşim kontrolü | ~20 dk |
+| **A (son)** | Uçtan uca otomatik oynanış (7 günde 4 son), build | ~45 dk |
+
+**Sıra:**
+1. A'nın 1. adımı (~23:50) → Tarık ve Onur asset'leri kurar.
+2. A'nın 2. adımı (~01:30) ve içerik paralel ilerler.
+3. Portreler ve asset'ler gelince A bağlar, kontrol eder, build alır (~02:30).
+
+Freeze 12:00'ye kadar sabah hata düzeltmeye kalır.
+
 ### 💬 YENİ ÖZELLİK — Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra (Ahmet kararı, 17 Ekim ~19:20) — ÖNCE BUNU OKU
 > ✅✅ **TAMAMLANDI (A, `12ac4f2` sonrası):** Game.unity'de oynatılarak doğrulandı (5. gün, Kemal): zarf başta gizli → kolon ↔ El Kitabı UYUŞMAZLIK → denetçi "Kolon kalınlığı 23 cm yazıyor; 4-6 katlı binada en az 35 cm olmalı." → Kemal cevap → teklif → denetçi tepki → kapanış → zarf (1.050 TL) ve "ZARFI AL VE ONAYLA" belirdi. EditMode 46/46, Windows build alındı. Küçük görsel notlar §7 Oğuzhan'da.
 >
@@ -357,6 +407,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim akşam | İnceleme modu (Papers, Please tarzı) planlandı: iki ayrı belgeden iki alan → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ; eşik seçili kat grubundan (yanlış grup = ALAKASIZ), künye dahil, kaşe akredite listeyle, İncele modu, bedelsiz; A Core, Oğuzhan masa, Onur mesaj. **Uygulama Ahmet onayından sonra** | Ahmet + Onur fikri; Ahmet kararları. Olasılıklar değişmez |
 | 17 Ekim akşam | İnceleme modu ONAYLANDI + Core düzeltmeleri: (a) başka lab kaşesi ipucunda kaşeye akredite olmayan lab adı, (b) sahte parsel gerçeğiyle asla aynı değil. Onur'un mesaj bileşeni Desk klasöründe (asmdef kuralı) | Ahmet |
 | 17 Ekim ~19:20 | Rüşvet uyuşmazlıktan sonra: zarf başta yok; ilk UYUŞMAZLIK'tan sonra denetçi ve müteahhit birer cümle konuşur, rüşvetçi o anda teklif eder (teklif + denetçi tepkisi + kapanış); uyuşmazlık bulunmazsa zarf hiç teklif edilmez; diyalog farklı alan başına bir kez; denetçi cümlesi Core şablonundan; replikleri Tarık yazar | Ahmet kararı. Rüşvet "yakalanan müteahhidin hamlesi" olur; tema ve Papers, Please hissi |
+| 17 Ekim ~23:30 | **7 gün** (3-3-4-4-4-5-5 = 28 proje); 6 ana müteahhit 3'er kez (oyun başı sabit rastgele program, aynı gün iki kez değil, arka arkaya değil); 10 kişiliksiz karakter kalan 10 ziyaret (zarf/sahte belge getirebilir); projeler tam 14 uygun / 14 uygunsuz; gün planı: 2. gün zarf, 3. gün sahte belge, 4. gün kabadayı | Ahmet kararı: 10 gün sıkıcıydı; yüz kararı ele vermesin |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 | 17 Ekim gece | Yeni ekonomi: başlangıç 1.500, kira 700, kredi 350, ücret 350-550, ek test 250, borç limiti 2.500 | Tarık önerisi, Ahmet onayı. Eski değerlerde dikkatli oyuncu hiç borca girmiyordu; şimdi kıl payı kazanıyor (Balance Report §2) |

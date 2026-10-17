@@ -43,7 +43,7 @@ MonoBehaviour:
   RejectLines:
   - "Yanlış yaptın hocam. Çok yanlış yaptın."
   - "Bu mahallede böyle iş olmaz hocam... Görürsün."
-  - "Peki hocam. Akşama ofisin camlarına bir bak."
+  - "Peki hocam. Akşama ofisine bir bak."
   - "Sen bilirsin hocam. Ben de bildiğimi yaparım."
   - "Bu iş burada bitmez hocam."
   - "Hm. Akşam geç saate kadar çalışıyor musun hocam?"
@@ -58,7 +58,7 @@ MonoBehaviour:
   - "Hocam, geçen sefer {last}. Bugün nasıl biteceği sana bağlı."
   - "Hocam yine geldim. Geçen sefer {last}, unutmadım."
   - "Selam hocam. Geçen sefer {last}. Bugün daha iyi anlaşırız."
-  - "Ben yine buradayım hocam. Geçen sefer {last}; camlar hâlâ yerinde mi?"
+  - "Ben yine buradayım hocam. Geçen sefer {last}; her şey hâlâ yerinde mi?"
   MismatchLines:
   - "Hocam bunu kurcalamasan iyi olur."
   - "Benim projemde sorun olmaz. Bir daha bak istersen."

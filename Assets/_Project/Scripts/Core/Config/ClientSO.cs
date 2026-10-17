@@ -12,7 +12,7 @@ namespace CivilJam.Core
         public Sprite Portrait;
         [Tooltip("Dürüst usta: rüşvet teklif etmez, sahte belge getirmez")]
         public bool IsHonest;
-        public bool IsThug;          // Reddedilirse cam kırar
+        public bool IsThug;          // Reddedilirse hasar verir (cam, masa, kapı ya da araba; masa olayı seçer)
         public Vector2Int BribeRange = new Vector2Int(500, 2000);
 
         [Header("Replikler")]

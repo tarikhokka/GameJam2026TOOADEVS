@@ -42,7 +42,7 @@ namespace CivilJam.Core
                 result.Lines.Add(new ExpenseLine
                 {
                     ExpenseId = WindowRepairId,
-                    DisplayName = $"Cam tamiri x{state.WindowRepairsToday}",
+                    DisplayName = $"Hasar tamiri x{state.WindowRepairsToday}", // kabadayı: cam, masa, kapı ya da araba (EEE)
                     Amount = balance.WindowRepairCost * state.WindowRepairsToday,
                     Mandatory = true
                 });

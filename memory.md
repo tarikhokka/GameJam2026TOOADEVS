@@ -177,7 +177,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | A1 Core: kat grubu Core'da + madde 7 gerçek kadro testi | A | ✅ `fb60575` |
 | 1 | A2 El Kitabı: otomatik kat grubu, RED kutusu, parametreler, sekmeler | A | ✅ `93686f0` |
 | 1 | B1 İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | ✅ `822495c` |
-| 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ✅ C1 teslimi |
+| 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ✅ `1b47ce6` |
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
 | 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | 🔒 Faz 1 bekleniyor |
@@ -320,7 +320,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 #### Onur (C) — C1, C2
 > **Onur'un kapsam düzeltmesi:** Tarık'ın T1/T2 işleri devralınmıyor; Onur yalnız C1/C2'yi yapacak. T1/T2 teslimleri alındı. C1 hazır; C2 ve C1-K için Faz 2 kapısı beklenir. Plan: `Docs/Onur/Polis_turu_yol_haritasi.md`.
 
-- [x] **C1 ✅ — `DeskHeaderView` hazır:** T1 görselleri/fontlar, 80 px yükseklik, üç API ve görselsiz yedek görünüm. İzole Unity 6000.6.4f1: 55/55 EditMode + 10/10 PlayMode (6 geçici C1 kontrolü + 4 mevcut Flow testi) ve gerçek render kontrolü geçti. Bağlantı: `Docs/Onur/DeskHeaderView_baglanti.md`; önizleme: `Docs/Onur/DeskHeaderView_onizleme.png`. **B2:** builder/prefab bağlantısı Oğuzhan'da; **C1-K** Faz 2'de ayrıca yapılacak.
+- [x] **C1 ✅ `1b47ce6` — `DeskHeaderView` hazır:** T1 görselleri/fontlar, 80 px yükseklik, üç API ve görselsiz yedek görünüm. İzole Unity 6000.6.4f1: 55/55 EditMode + 10/10 PlayMode (6 geçici C1 kontrolü + 4 mevcut Flow testi) ve gerçek render kontrolü geçti. Bağlantı: `Docs/Onur/DeskHeaderView_baglanti.md`; önizleme: `Docs/Onur/DeskHeaderView_onizleme.png`. **B2:** builder/prefab bağlantısı Oğuzhan'da; **C1-K** Faz 2'de ayrıca yapılacak.
   - İlk sözleşme / uygulama ayrıntıları:
   - Yeni dosya `Assets/_Project/Scripts/Desk/UI/DeskHeaderView.cs`: Desk asmdef'inde, `namespace CivilJam.Desk`.
   - `BribeEnvelopeView` gibi Awake'te kendini kurar. `Reset()` fontları (başlıkta Paytone One, metinde Fira Sans) ve T1 sprite'larını bağlar.

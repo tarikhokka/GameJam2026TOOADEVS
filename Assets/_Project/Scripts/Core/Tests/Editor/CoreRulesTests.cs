@@ -311,6 +311,34 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void Clients_DoNotComeTwiceInARow()
+        {
+            // EEE isteği: aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonuyla bugünün başı arasında)
+            var clients = TarikClients();
+            _config.ProjectsPerDay = 6;
+            _config.NonCompliantRatio = 0.5f;
+            _config.AllowBribes = true;
+            _config.AllowFakeDocuments = true;
+
+            foreach (bool thugs in new[] { false, true })
+            {
+                _config.AllowThugs = thugs;
+                for (int seed = 0; seed < 300; seed++)
+                {
+                    string previous = seed % 2 == 0 ? "selim" : "rifat";
+                    foreach (var p in ProjectGenerator.Generate(3, _config, _rules, _balance, null, clients,
+                                 new System.Random(seed), null, previous))
+                    {
+                        Assert.AreNotEqual(previous, p.ClientId, $"seed {seed}: {p.Id} bir öncekiyle aynı müteahhit ({p.ClientId})");
+                        previous = p.ClientId;
+                    }
+                }
+            }
+
+            foreach (var c in clients) UnityEngine.Object.DestroyImmediate(c);
+        }
+
+        [Test]
         public void BuildingNames_DoNotRepeatWithinAGame()
         {
             var names = ScriptableObject.CreateInstance<NamePoolSO>();

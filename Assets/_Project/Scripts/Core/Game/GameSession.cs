@@ -57,10 +57,13 @@ namespace CivilJam.Core
             State.ApprovedToday = 0;
             State.WindowRepairsToday = 0;
 
+            // Dünün son müteahhidi bugün ilk gelmesin (yüklemeden sonra liste boş: kısıt yok).
+            var yesterday = Context.TodayProjects;
+            string lastClient = yesterday != null && yesterday.Count > 0 ? yesterday[yesterday.Count - 1].ClientId : null;
             Context.TodayProjects = Context.DayConfig == null || Context.Rules == null
                 ? new List<ProjectData>()
                 : ProjectGenerator.Generate(State.Day, Context.DayConfig, Context.Rules, Balance,
-                    Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames);
+                    Context.Names, Context.Clients, RngFor(1), State.UsedBuildingNames, lastClient);
             ClientReactions.PrepareArrivals(Context, RngFor);
             Context.NotifyStateChanged();
         }

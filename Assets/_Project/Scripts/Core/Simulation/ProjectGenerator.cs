@@ -22,8 +22,10 @@ namespace CivilJam.Core
 
         static readonly string[] BlockLetters = { "A", "B", "C", "D" };
 
+        /// <param name="previousClientId">Dünün son müteahhidi; bugünün ilki o olmasın (null olabilir).</param>
         public static List<ProjectData> Generate(int day, DayConfigSO config, RuleSetSO rules, BalanceSO balance,
-            NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames = null)
+            NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames = null,
+            string previousClientId = null)
         {
             int count = config.ProjectsPerDay;
             int badCount = (int)Math.Round(count * config.NonCompliantRatio);
@@ -34,9 +36,14 @@ namespace CivilJam.Core
 
             usedNames = usedNames ?? new HashSet<string>();
             var result = new List<ProjectData>();
+            string previous = previousClientId;
             for (int i = 0; i < count; i++)
-                result.Add(CreateProject(day, i, compliance[i] ? ProjectKind.Compliant : PickBadKind(config, rng),
-                    config, rules, balance, names, clients, rng, usedNames));
+            {
+                var p = CreateProject(day, i, compliance[i] ? ProjectKind.Compliant : PickBadKind(config, rng),
+                    config, rules, balance, names, clients, rng, usedNames, previous);
+                previous = p.ClientId;
+                result.Add(p);
+            }
             return result;
         }
 
@@ -52,7 +59,8 @@ namespace CivilJam.Core
         }
 
         static ProjectData CreateProject(int day, int index, ProjectKind kind, DayConfigSO config, RuleSetSO rules,
-            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames)
+            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames,
+            string previousClientId)
         {
             var type = config.AllowFactories && rng.Chance(0.3f) ? BuildingType.Factory : BuildingType.Residential;
             bool compliant = kind == ProjectKind.Compliant;
@@ -98,7 +106,7 @@ namespace CivilJam.Core
             }
 
             // Müşteri
-            var client = PickClient(clients, kind, config.AllowThugs, rng);
+            var client = PickClient(clients, kind, config.AllowThugs, rng, previousClientId);
             if (client != null) p.ClientId = client.Id;
 
             if (bribe)
@@ -119,8 +127,12 @@ namespace CivilJam.Core
         ///  - Rüşvetli:     rüşvet veren müteahhit (OffersBribes); kabadayı sadece AllowThugs günlerinde
         ///  - Sahte belge:  %70 rüşvet vermeyen dürüst olmayan (Selim), %30 başka bir dürüst olmayan
         /// Dürüst usta asla rüşvet teklif etmez ve sahte belge getirmez. Uygun müteahhit yoksa null.
+        /// (EEE, 17 Ekim) Aynı müteahhit arka arkaya gelmez: bir önceki (previousClientId) havuzdan çıkarılır; havuz boşalırsa
+        /// bu türe uyan diğer havuza geçilir (ör. Selim az önce geldiyse sahte belgeyi başka bir dürüst olmayan getirir).
+        /// Türe uyan başka kimse yoksa tekrar etmesine izin verilir.
         /// </summary>
-        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, ProjectKind kind, bool allowThugs, Random rng)
+        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, ProjectKind kind, bool allowThugs, Random rng,
+            string previousClientId = null)
         {
             if (clients == null || clients.Count == 0) return null;
             var honest = new List<ClientSO>();
@@ -147,7 +159,28 @@ namespace CivilJam.Core
                 default: pool = rng.Chance(0.7f) ? forgers : dishonest; break;
             }
             if (pool.Count == 0) pool = bribeKind ? bribers : kind == ProjectKind.Compliant ? honest : dishonest;
+
+            if (!string.IsNullOrEmpty(previousClientId))
+            {
+                var fresh = pool.FindAll(c => c.Id != previousClientId);
+                if (fresh.Count == 0)
+                {
+                    // Bu türe uyan diğer havuzlar (sözleşme korunur: dürüst usta rüşvet/sahte almaz, rüşvet sadece rüşvetçiye)
+                    var alternatives = bribeKind ? bribers
+                        : kind == ProjectKind.Compliant || kind == ProjectKind.Sloppy ? Merge(honest, dishonest)
+                        : dishonest;
+                    fresh = alternatives.FindAll(c => c.Id != previousClientId);
+                }
+                if (fresh.Count > 0) pool = fresh;
+            }
             return pool.Count > 0 ? rng.Pick(pool) : null;
+        }
+
+        static List<ClientSO> Merge(List<ClientSO> a, List<ClientSO> b)
+        {
+            var all = new List<ClientSO>(a);
+            all.AddRange(b);
+            return all;
         }
 
         /// <summary>Ç5: bir oyunda aynı bina adı iki kez gelmez; ad kalıpları çeşitlenir.</summary>

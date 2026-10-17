@@ -120,6 +120,13 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] `README.md`: A "Nasıl oynanır"ı yeni arayüze göre güncelledi; son hali, oyun ekran görüntüsü ve video bağlantısı (Pazar).
 - [ ] Pazar: 1 dakikalık video (A ile senaryo).
 
+**Öneri (B, 17 Ekim akşam) — ZORUNLU DEĞİL, karar Ahmet'in / takımın:**
+Jüriden bir hocanın notu ("Aynı Tema, Başka Bir Dünya", Murat Oktay): "Oyuncu neden sizi seçsin, oynadıktan sonra neyi hatırlasın? Oyuncunun konumunu değiştirin: afet, kimin açısından afet?" Bizim oyun ilk bakışta "Papers Please'in deprem versiyonu" gibi duruyor. Ama asıl farkımız oyunda zaten var, sadece oyuncuya gösterilmiyor: imza iki saniyelik sıradan bir hareket, sonucunu ise o binada oturan insanlar yaşıyor. Elimizde "kat başı kişi" verisi de var. Freeze'e sığabilecek ucuz fikirler:
+1. **Afetten sonra sakinin gözünden kısa kart (gazete/sonuç ekranında):** onaylanan binada oturan birinin tek paragraflık notu. Yıkıldıysa "3. kattaydık…", sağlamsa "Sallandı ama ayakta kaldı, çocuklar uyuyordu." Metinler EEE'nin, ekran C'nin.
+2. **"Yeniden bakmak":** afetten sonraki gün masada sakinlerden bir iz kalsın: bir fotoğraf, bir mektup ya da yıkıldıysa bir haber kupürü. Oyuncu sıradaki formu imzalarken o kâğıt masada durur. Hediye slotlarıyla (`OfficeGiftsView`) büyük ölçüde aynı altyapıyla yapılabilir (B).
+3. **İmza anını ağırlaştırmak:** ONAY'a basınca formda kısa bir vurgu çıksın: "Bu imza 48 kişiyi bağlıyor" (kat adedi × kat başı kişi). FormView'de, birkaç saatlik iş (B).
+Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core değişikliği değil. Yapılmazsa da sorun yok; önce açık hatalar biter.
+
 ## 8. Karar günlüğü (güncel kararlar; eski satırlar `f14d2ed`'de)
 | Ne zaman | Karar | Gerekçe |
 |---|---|---|

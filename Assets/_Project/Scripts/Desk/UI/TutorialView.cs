@@ -31,7 +31,7 @@ namespace CivilJam.Desk
                 "Formdaki <b>KAT ADEDİ</b>'ne bak: El Kitabı'nın <b>HIZLI BAKIŞ</b> sayfası doğru kat grubunu kendisi gösterir.\n\n" +
                 "Beyan edilen her değer yeşil alanda olmalı. Tek bir kırmızı bile varsa bina reddedilir."),
             new Card("Belgeler sahte olabilir",
-                "Parsel, tarih ve müellif imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
+                "Parsel, tarih ve mühendis imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
                 "Form ile lab raporunda bir <b>değer farklı</b> yazıyorsa ya yazım hatasıdır ya da biri yalan söylüyordur. " +
                 "Hangisi olduğunu lab raporundaki ücretli <b>EK TEST</b> gösterir: gerçek değerleri ortaya çıkarır."),
             new Card("İmza senin",

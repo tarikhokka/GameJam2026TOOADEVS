@@ -87,6 +87,63 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - Saatler: **feature freeze ve Git desteği 18 Ekim 12:00**; yükleme 15:00-16:30; son teslim 18 Ekim 18:00.
 
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
+
+### 🔎 YENİ ÖZELLİK — İnceleme modu (Papers, Please tarzı) — PLANLAMA AŞAMASI, KOD YAZILMAZ
+> ⛔ **Henüz kimse kod yazmıyor.** Plan Ahmet'in onayını bekliyor. Onay gelince Ahmet (A) Onur ve Oğuzhan için ayrıntılı uygulama notunu buraya yazar; işe ondan sonra başlanır. Ajanlar: bu bölümü okuyup kendi başına uygulamaya geçme.
+
+**Fikir (Ahmet + Onur):**
+- Oyuncu masadaki "İncele" düğmesiyle inceleme moduna geçer.
+- İki **ayrı** belgeden iki alana tıklar; sıra önemli değil. Belgeler: Yapı Denetim Formu, Laboratuvar Raporu, Denetçi El Kitabı.
+- Oyun üç mesajdan birini verir:
+  - **SORUN YOK:** iki alan aynı bilgiye ait ve birbirini tutuyor ya da kurala uyuyor.
+  - **UYUŞMAZLIK SAPTANDI:** aynı bilgiye ait ama tutmuyor ya da kurala uymuyor.
+  - **ALAKASIZ:** farklı bilgiler seçildi.
+- Kontrol ücretsiz ve sınırsız; para, risk ya da karar etkisi yok. Oyuncu yine ONAY / RED'e kendisi basar.
+
+**Kesin kararlar (Ahmet, 17 Ekim akşam):**
+1. El kitabı tarafında eşik, oyuncunun Hızlı Bakış'ta **seçtiği kat grubundan** alınır. Seçilen grup binanın kat grubu değilse (ya da grup seçilmemişse) sonuç **ALAKASIZ** olur.
+2. Künye alanları (parsel, tarih, imza, laboratuvar, kaşe) kapsama **girer**.
+3. Kaşe, el kitabının LAB sekmesindeki **akredite listesiyle** karşılaştırılır (aynı belge içinde karşılaştırma yok).
+4. Masada **"İncele" modu** var. Mod kapalıyken belgeler bugünkü gibi çalışır (sürükleme, ONAY / RED / EK TEST).
+5. Bedeli yok.
+6. İş bölümü:
+   - **A:** kontrol mantığı (Core, saf C#, testli).
+   - **Oğuzhan:** İncele düğmesi, tıklanabilir alanlar, seçim, çizgi (masa / `DeskScreen.prefab`).
+   - **Onur:** sonuç mesajının görünümü ve sesi (ayrı bileşen; masa prefab'ına Oğuzhan bağlar).
+
+**Kural tablosu (tek kaynak; tabloda olmayan her çift = ALAKASIZ, aynı belgeden iki alan = ALAKASIZ):**
+
+| # | 1. alan | 2. alan | Kontrol | Ne zaman uyuşmazlık |
+|---|---|---|---|---|
+| 1 | Form: parametre X | El Kitabı: parametre X (seçili grup) | Formdaki beyan eşiğe yetiyor mu | Uygunsuz proje (rüşvetli, dikkatsiz) |
+| 2 | Lab: beyan X | El Kitabı: parametre X (seçili grup) | Aynısı | Aynısı |
+| 3 | Lab: **ek test** X (test yapıldıysa) | El Kitabı: parametre X (seçili grup) | Gerçek değer eşiğe yetiyor mu | Sahte belge dahil her uygunsuz proje |
+| 4 | Form: parametre X | Lab: **ek test** X (test yapıldıysa) | Beyan = gerçek değer mi | Sahte belge (beyan temiz, gerçek kötü) |
+| 5 | Form: parametre X | Lab: beyan X | Aynı mı | Hiçbir zaman (Core'da iki belge aynı beyanı taşır) |
+| 6 | Form: Ada/Parsel | Lab: Ada/Parsel | Aynı mı | Sahte belge ipucu "parsel farkı" |
+| 7 | Form: Tarih | Lab: Rapor tarihi | Aynı mı | Sahte belge ipucu "tarih farkı" |
+| 8 | Form: Proje müellifi | Lab: Laboratuvar yetkilisi | Aynı kişi mi | Sahte belge ipucu "farklı mühendis imzası" |
+| 9 | Lab: Laboratuvar (başlık) | El Kitabı: LAB listesi | Akredite mi | Sahte belge ipucu "bilinmeyen laboratuvar" |
+| 10 | Lab: kaşe | El Kitabı: LAB listesi | Kaşedeki lab akredite mi | Sahte belge ipucu "başka laboratuvarın kaşesi" (aşağıdaki Core düzeltmesiyle) |
+
+- **Olasılıklar değişmiyor.** Künye uyuşmazlıkları zaten var: sahte belgeler 3. günden itibaren günde ~1 tane geliyor, her birinde 5 ipucundan 1-2'si bulunuyor (parsel / tarih / bilinmeyen lab / başka lab kaşesi / farklı imza).
+- Form ile lab raporunun beyan değerleri her zaman aynı (5. satır). Değer farkı sadece ek testte görünür (3. ve 4. satırlar).
+- **Onay bekleyen küçük Core düzeltmeleri (A):**
+  - (a) "Başka laboratuvarın kaşesi" ipucunda kaşeye akredite **olmayan** bir lab adı yazılsın; yoksa 10. satır bu ipucunu hiç yakalayamaz.
+  - (b) Sahte parsel ve tarih gerçeğiyle asla aynı çıkmasın (şu an rastgele, nadiren aynı çıkabiliyor).
+
+**Yol haritası (onaydan sonra):**
+| Adım | Kim | İş | Süre |
+|---|---|---|---|
+| 0 | Ahmet | Bu planı onayla. A, Onur ve Oğuzhan için ayrıntılı uygulama notunu buraya yazar | 15 dk |
+| 1 | A | Core: alan tanımı, kontrol fonksiyonu (tablo), (a)+(b) düzeltmeleri, her satır için test, `AHMET.md` sözleşme satırı | ~45 dk |
+| 2 | Oğuzhan | İncele modu, tıklanabilir alanlar (vurgu, seçim, iki alan arası çizgi), sağ tık / Esc iptal, yeni müteahhitte sıfırlama. Arayüz kural bilmez, sadece Core'u çağırır | ~2 sa |
+| 3 | Onur | Sonuç mesajı bileşeni: yeşil SORUN YOK / kırmızı UYUŞMAZLIK SAPTANDI / gri ALAKASIZ (kaşe ya da şerit) + kısa ses. Adım 2 ile paralel | ~1 sa |
+| 4 | A | Testler, Game.unity, ekran görüntülü otomatik oynanış (dürüst, uygunsuz, sahte belge, ek test sonrası), Windows build | ~45 dk |
+| 5 | Tarık | 1. gün öğretici kartı + README satırı | ~20 dk |
+
+**Yalın tutmak için kapsam dışı:** sorgulama / müteahhide soru yok; sonuç kayda geçmez; tablo dışı çiftler için özel mesaj yok.
+
 **Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
 
 **A (Ahmet):**
@@ -145,6 +202,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim | El Kitabı sekmeleri BETON / DONATI / YAPI / ZEMİN; ilk sekme "Hızlı Bakış" (oyuncu kat grubunu seçer, otomatik değil) | Ahmet: eski sayfa kullanıcı dostu değildi; zorluk korunur |
 | 17 Ekim | Ödeme önizlemesi ve kayıt sonucu Core'dan (`ExpenseCalculator.Preview`, `ctx.LastSave`, `ctx.RetrySave`) | Onur'un ihtiyacı; ekran ikinci ekonomi hesabı yazmasın |
 | 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
+| 17 Ekim akşam | İnceleme modu (Papers, Please tarzı) planlandı: iki ayrı belgeden iki alan → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ; eşik seçili kat grubundan (yanlış grup = ALAKASIZ), künye dahil, kaşe akredite listeyle, İncele modu, bedelsiz; A Core, Oğuzhan masa, Onur mesaj. **Uygulama Ahmet onayından sonra** | Ahmet + Onur fikri; Ahmet kararları. Olasılıklar değişmez |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 

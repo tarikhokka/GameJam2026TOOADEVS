@@ -21,6 +21,7 @@ namespace CivilJam.Core
         {
             Context = context;
             Context.Actions = this;
+            Context.RetrySaveHandler = SaveNow;
             _dayConfigs = dayConfigs;
             _expenses = expenses;
         }
@@ -111,11 +112,20 @@ namespace CivilJam.Core
             return State.Ending;
         }
 
-        /// <summary>Gün sonu: günü ilerlet ve kaydet (yükleme yeni günün DayIntro'sunu açar).</summary>
+        /// <summary>Gün sonu: günü BİR KEZ ilerlet ve kaydet (yükleme yeni günün DayIntro'sunu açar). Sonuç Context.LastSave'de.
+        /// Kayıt başarısızsa tekrar deneme Context.RetrySave() ile yapılır; o günü tekrar artırmaz.</summary>
         public bool AdvanceDayAndSave()
         {
             State.Day++;
-            return SaveSystem.Save(State);
+            return SaveNow();
+        }
+
+        /// <summary>Mevcut state'i kaydeder (günü değiştirmez).</summary>
+        public bool SaveNow()
+        {
+            bool ok = SaveSystem.Save(State, out string error);
+            Context.LastSave = new SaveResult { Ok = ok, Day = State.Day, Error = error };
+            return ok;
         }
 
         // ---------- IGameActions ----------

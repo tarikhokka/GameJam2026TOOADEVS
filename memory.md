@@ -217,12 +217,37 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
   - [ ] **İsteğe bağlı:** Flow ekranlarını (gazete, gün özeti, ödeme, kayıt) aynı kağıt/belge diline yaklaştır.
   - [ ] **Mevcut işler sürüyor:** ödeme önizlemesi ve kayıt sonucu, A ile (YOL_HARITASI_ONUR 2-3).
 - **Ahmet (A):**
-  - [ ] **El kitabı sekmeleri için `RuleSet` bölümleri:** kolon → YAPI, beton → BETON, demir → DONATI, temel derinliği ve zemin türü → ZEMİN.
+  - [x] **El kitabı sekmeleri için `RuleSet` bölümleri:** kolon → YAPI, beton → BETON, demir → DONATI, temel derinliği ve zemin türü → ZEMİN. ✅ Yapıldı (aşağıda 🔧 Core notu).
   - [ ] **Formun yeni alanları:** Oğuzhan isterse Core'a eklenir (toplam alan, ilçe, lab rapor no, numune tarihi). Şimdilik `Address`, `ParcelNo`, `Floors`, `Fee`, müşteri adı (`GetClient(ClientId).DisplayName`) yeterli.
-  - [ ] **Onur için:** ödeme önizlemesi API'si ve kayıt sonucu / tekrar deneme.
+  - [x] **Onur için:** ödeme önizlemesi API'si ve kayıt sonucu / tekrar deneme. ✅ Yapıldı (aşağıda 🔧 Core notu).
   - [ ] **Yeni masa gelince:** Game.unity kontrolü, Windows build, baştan sona oynanış (4 son).
 
 ### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
+> 🔧 **Core güncellemesi (A, 17 Ekim akşamüstü): el kitabı sekmeleri + ödeme önizlemesi + kayıt sonucu.** Sözleşme sadece EKLENDİ, eski çağrılar aynen çalışıyor. Testler 30/30.
+> - **Oğuzhan (el kitabı sekmeleri):**
+>   - `rule.Section` artık **"BETON" / "DONATI" / "YAPI" / "ZEMİN"** (eski "A · YAPI" / "B · ZEMİN" yok).
+>   - Sekme listesi sırasıyla: `ctx.Rules.SectionsFor(BuildingType.Residential)` → [BETON, DONATI, YAPI, ZEMİN].
+>   - Parametreler: BETON = beton sınıfı, DONATI = demir tipi, YAPI = kolon kalınlığı, ZEMİN = temel derinliği + zemin türü.
+>   - Projelerdeki parametre sırası da bu sıra. `FormView` bölümleri alfabetik sıralıyorsa `SectionsFor` sırasını kullan.
+>   - `HandbookIntro` yeni arayüze göre yeniden yazıldı (formdan kat adedi → sekmede kat grubu sütunu → ek test → iki belgenin künyesi).
+> - **Onur (ödeme ekranı, YOL_HARITASI 2):**
+>   - Ödeme sonrası rakamları kendin çıkarma. Seçim her değiştiğinde şunu çağır: `var pv = ExpenseCalculator.Preview(Context.State, Context.PendingExpenses);`
+>   - Gerçek state'e dokunmaz; `Apply` ile birebir aynı kurallar.
+>   - Göstereceklerin: `pv.MoneyAfter` (ödeme sonrası kasa, asla eksi değil), `pv.DebtAfter`, `pv.PaidTotal` (kasadan gerçekten çıkan), `pv.AddedToDebt` (kasa yetmediği ya da seçilmediği için borca yazılacak zorunlu gider), `pv.DebtPaid` (borç ödemesinden gerçekten ödenen; kısmi olabilir).
+>   - Kalem bazında: `pv.Lines[i].Paid` = gerçekten ödenecek mi.
+>   - İsteğe bağlı borç ödemesini seçmemek yeni borç yaratmaz; `AddedToDebt`'e girmez.
+>   - Test: yeterli kasa / yetersiz kasa / cam tamiri / kısmi borç / borç ödemesi seçilmedi → önizleme = gerçek sonuç.
+> - **Tarık + Onur (kayıt ekranı, YOL_HARITASI 3):**
+>   - `SaveScreen` şu an her zaman "Kaydedildi" yazıyor. Core artık sonucu veriyor: `Context.LastSave` (`Ok`, `Day` = kaydedilen yeni gün, `Error`).
+>   - `Ok` false ise başarı yazma; "Kayıt yapılamadı" + **"Tekrar dene"** düğmesi göster. Düğme `Context.RetrySave()` çağırır (true/false döner, `LastSave`'i günceller, **günü ARTIRMAZ**).
+>   - Oyuncu kaydetmeden de devam edebilir ("Kaydetmeden devam" → `Finish()`).
+>   - Başlıktaki gün: `LastSave.Day - 1` biten gün, `LastSave.Day` yarın.
+> - **Onur (DayIntro, isteğe bağlı):** "Devam Et" seçildiği hâlde kayıt okunamadıysa oyun yeni başlar. `Context.LoadFailed` true olur (`Context.LoadError` teknik metin); gün başı ekranında "Kayıt okunamadı, yeni oyun başladı." yazabilirsin.
+> - **Core içi değişiklikler (bilgi için):**
+>   - Kayıt önce geçici dosyaya yazılıp yerine konuyor; yarıda kalan yazma eski kaydı bozmaz.
+>   - Yetki ya da disk hatası da yakalanıyor.
+>   - Bozuk kayıt `null` döner, oyun çökmez.
+>
 > ⛔ **ESKİDİ (yeni hedef arayüz, masa yeniden kurulacak)** — 🔧 Oğuzhan — A senin dosyana dokundu (17 Ekim öğleden sonra): Ahmet form klasörünün isimliğin arkasındaki yerini ve görünümünü beğenmedi; **YAPI DENETİM FORMU klasörü LAB RAPORU'nun hemen yanına** alındı, LAB RAPORU küçültüldü. Değişen: `Editor/DeskSandboxBuilder.cs` → `BuildProps` (LAB RAPORU 220/868/320 geniş, form 552/905/180 geniş, eğim yok), `BookButton` yedek yazısı otomatik boyut (küçük klasörde taşmasın); `DeskSandboxBuilder.Papers.cs` → form penceresi `fromOffset` (-320, -380) (sol alttan gelir). `DeskScreen.prefab` builder'la yeniden kuruldu (elle değişiklik yok). Masa düzeninde bunun üstüne çalışırsan önce pull'la; konum değiştirmek istersen Ahmet'e sor.
 >
 > ⛔ **İPTAL (yeni hedef arayüz)** ~~🎨 Tarık — form klasörü görseli~~: `Art/form_folder.png` çiz: LAB RAPORU / EL KİTABI ile **aynı tarz** (masada yatan, alçak açı perspektif, kalın kahve kontur, soldan sıcak ışık), krem/hardal renkli manila karton klasör, üstünde etiket "YAPI DENETİM FORMU", kenardan birkaç kağıt ucu görünsün. 640x320 şeffaf, gölge çizme, altta şeffaf boşluk bırakma. Masada LAB RAPORU'nun sağında 180 px genişlikte durur; dosya adı aynı olunca builder kendisi kullanır (Oğuzhan prefab'ı yeniden kurar). CREDITS_AND_AI.md'ye yaz.
@@ -543,6 +568,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim öğleden sonra | YAPI DENETİM FORMU klasörü masada LAB RAPORU'nun yanında (oyuncu tarafı); LAB RAPORU küçültüldü; klasör görseli Tarık'a | Ahmet kararı: isimliğin arkasındaki klasörün yeri ve görünümü beğenilmedi; iki belge birlikte incelendiği için yan yana |
 | 17 Ekim öğleden sonra | Gün sonu kayıt ekranı (SaveScreen, EEE) Game.unity'de; IMGUI yedeği Save fazında artık çıkmaz | A bağladı; 8 fazın hepsinin ekranı var |
 | 17 Ekim ~15:00 | **Yeni hedef arayüz** (`Docs/Tasarim/hedef_arayuz.png`, Onur): üst yarı ofis + müteahhit, alt yarı 3 belge sabit ve yan yana (form / lab raporu / sekmeli el kitabı). Eğimli masa, masadaki kitaplar, kağıt pencereler, piksel tasarım ve Pixelify/VT323 iptal | Ahmet kararı. Kurallar (El Kitabı v2), lab raporunun rolü (beyan + ücretli ek test) ve Core sözleşmesi DEĞİŞMEZ; sadece arayüz. Görseldeki gerçek kurum adı ve standart kodları alınmaz |
+| 17 Ekim akşamüstü | El kitabı bölümleri = sekmeler (BETON / DONATI / YAPI / ZEMİN, `SectionsFor`); ödeme önizlemesi `ExpenseCalculator.Preview`; kayıt sonucu `ctx.LastSave` + `ctx.RetrySave()` (günü artırmaz), `ctx.LoadFailed` | A. Yeni arayüz ve Onur'un YOL_HARITASI 2-3 ihtiyaçları; sözleşmeye sadece ekleme, testler 30/30 |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

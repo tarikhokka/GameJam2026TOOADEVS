@@ -139,14 +139,11 @@ namespace CivilJam.Core.Tests
             }
             Assert.AreEqual(3, rebar.Count, "Demir tipi: kat grubuna göre 3 farklı tür");
 
-            // Tasarım (Yapı Denetim Formu / El Kitabı): her kural bir bölümde, iki bölüm
-            var sections = new HashSet<string>();
+            // Yeni hedef arayüz: her kural bir el kitabı sekmesinde; sekmeler sırayla BETON, DONATI, YAPI, ZEMİN
             foreach (var r in real.RulesFor(BuildingType.Residential))
-            {
                 Assert.IsFalse(string.IsNullOrEmpty(r.Section), $"{r.Param}: bölüm boş");
-                sections.Add(r.Section);
-            }
-            CollectionAssert.AreEquivalent(new[] { "A · YAPI", "B · ZEMİN" }, sections);
+            CollectionAssert.AreEqual(new[] { "BETON", "DONATI", "YAPI", "ZEMİN" }, real.SectionsFor(BuildingType.Residential));
+            Assert.AreEqual("ZEMİN", real.FindRule(BuildingType.Residential, ParamType.FoundationDepth, 5).Section);
             Assert.IsFalse(string.IsNullOrEmpty(real.HandbookIntro));
         }
     }

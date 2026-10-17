@@ -75,9 +75,28 @@ namespace CivilJam.Core
         /// Seçili kalem kasa yetmiyorsa ödenmez (Paid = false olur). Ödenmeyen zorunlu kalem borca yazılır.
         /// Kasa hiçbir zaman eksiye düşmez.
         /// </summary>
+        /// <summary>
+        /// Ödeme ekranı için önizleme: oyuncunun şu anki seçimi onaylansa ne olurdu? Gerçek state'e ve pending'e dokunmaz;
+        /// Apply ile birebir aynı sıra ve kurallar (zorunlular önce, borç ödemesi kalanla kısmen). Sonuçta
+        /// MoneyAfter, DebtAfter, PaidTotal, AddedToDebt, DebtPaid ve her kalemin gerçekten ödenip ödenmediği (Lines[i].Paid) var.
+        /// Seçim her değiştiğinde yeniden çağır.
+        /// </summary>
+        public static DailyExpenseResult Preview(GameState state, DailyExpenseResult pending)
+        {
+            if (pending == null) return null;
+            if (pending.Applied) return pending.Clone();
+            var copy = pending.Clone();
+            var scratch = new GameState { Money = state.Money, Debt = state.Debt };
+            Apply(scratch, copy);
+            return copy;
+        }
+
         public static void Apply(GameState state, DailyExpenseResult result)
         {
             if (result == null || result.Applied) return;
+            int moneyStart = state.Money;
+            result.AddedToDebt = 0;
+            result.DebtPaid = 0;
 
             // Önce zorunlular, sonra isteğe bağlılar (borç ödemesi en sonda kalanla yapılır).
             foreach (bool mandatoryPass in new[] { true, false })
@@ -94,6 +113,7 @@ namespace CivilJam.Core
                         state.Debt -= pay;
                         line.Amount = pay;
                         line.Paid = pay > 0;
+                        result.DebtPaid = pay;
                         continue;
                     }
 
@@ -104,11 +124,16 @@ namespace CivilJam.Core
                     else
                     {
                         line.Paid = false;
-                        if (line.Mandatory) state.Debt += line.Amount;
+                        if (line.Mandatory)
+                        {
+                            state.Debt += line.Amount;
+                            result.AddedToDebt += line.Amount;
+                        }
                     }
                 }
             }
 
+            result.PaidTotal = moneyStart - state.Money;
             result.MoneyAfter = state.Money;
             result.DebtAfter = state.Debt;
             result.Applied = true;

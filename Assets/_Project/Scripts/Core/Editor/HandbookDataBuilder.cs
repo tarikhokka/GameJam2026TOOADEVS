@@ -23,24 +23,27 @@ namespace CivilJam.Core.Editor
             public float[] Required;   // kat grubu sırasıyla: 1-3, 4-6, 7+
         }
 
+        // Sıra = el kitabı sekme sırası (yeni hedef arayüz, Ahmet kararı 17 Ekim): BETON, DONATI, YAPI, ZEMİN.
+        public static readonly string[] SectionOrder = { "BETON", "DONATI", "YAPI", "ZEMİN" };
+
         static readonly Spec[] Specs =
         {
-            new Spec { Param = ParamType.ColumnThickness, Section = "A · YAPI", Name = "Kolon kalınlığı", Unit = "cm",
-                Description = "Binayı taşıyan kolonların en ince kenarı. Kat arttıkça kolon kalınlaşmalı.",
-                Required = new float[] { 30, 35, 40 } },
-            new Spec { Param = ParamType.FoundationDepth, Section = "B · ZEMİN", Name = "Temel derinliği", Unit = "m",
-                Description = "Temelin toprağın içine ne kadar indiği. Yüksek bina daha derin temel ister.",
-                Required = new float[] { 1.5f, 2.0f, 2.5f } },
-            new Spec { Param = ParamType.ConcreteGrade, Section = "A · YAPI", Name = "Beton sınıfı",
+            new Spec { Param = ParamType.ConcreteGrade, Section = "BETON", Name = "Beton sınıfı",
                 Labels = new List<string> { "C16", "C20", "C25", "C30", "C35" },
                 Description = "Betonun dayanımı. Sayı büyüdükçe beton sağlamlaşır; belirtilen sınıf ve üstü kabul edilir.",
                 Required = new float[] { 1, 2, 3 } },                 // C20 / C25 / C30
-            new Spec { Param = ParamType.RebarType, Section = "A · YAPI", Name = "Demir tipi",
+            new Spec { Param = ParamType.RebarType, Section = "DONATI", Name = "Demir tipi",
                 Labels = new List<string> { "B220 (düz)", "B420", "B500", "B500S" },
                 Description = "Betonun içindeki demirin sınıfı. B220 düz demirdir, hiçbir binada kabul edilmez. " +
                               "Nervürlü demirlerde sayı büyüdükçe demir güçlenir; S harfi depreme dayanıklı sınıf demektir.",
                 Required = new float[] { 1, 2, 3 } },                 // B420 / B500 / B500S (Ahmet kararı: kat grubuna göre 3 farklı tür)
-            new Spec { Param = ParamType.SoilType, Section = "B · ZEMİN", Name = "Zemin türü",
+            new Spec { Param = ParamType.ColumnThickness, Section = "YAPI", Name = "Kolon kalınlığı", Unit = "cm",
+                Description = "Binayı taşıyan kolonların en ince kenarı. Kat arttıkça kolon kalınlaşmalı.",
+                Required = new float[] { 30, 35, 40 } },
+            new Spec { Param = ParamType.FoundationDepth, Section = "ZEMİN", Name = "Temel derinliği", Unit = "m",
+                Description = "Temelin toprağın içine ne kadar indiği. Yüksek bina daha derin temel ister.",
+                Required = new float[] { 1.5f, 2.0f, 2.5f } },
+            new Spec { Param = ParamType.SoilType, Section = "ZEMİN", Name = "Zemin türü",
                 Labels = new List<string> { "Dolgu", "Yumuşak kil", "Sert kil", "Kaya" },
                 Description = "Binanın oturduğu toprak. Dolgu en zayıf, kaya en sağlam zemindir.",
                 Required = new float[] { 1, 2, 3 } },                 // Yumuşak kil / Sert kil / Kaya
@@ -91,10 +94,11 @@ namespace CivilJam.Core.Editor
             Undo.RecordObject(rules, "Rebuild Handbook Rules");
             rules.Rules = newRules;
             rules.HandbookIntro =
-                "Bu el kitabı, yapı ruhsatı başvurularında aranacak en düşük değerleri içerir.\n\n" +
-                "1. Başvurudan binanın kat sayısını oku.\n" +
-                "2. Tabloda o kat sayısının sütununu bul.\n" +
-                "3. Laboratuvar raporundaki beş değeri o sütunla karşılaştır.\n\n" +
+                "Bu el kitabı, Yapı Denetim Formu'nda aranacak en düşük değerleri içerir.\n\n" +
+                "1. Formdan binanın kat adedini oku.\n" +
+                "2. Sekmelerde (BETON, DONATI, YAPI, ZEMİN) o kat grubunun sütununu bul.\n" +
+                "3. Formdaki beş değeri o sütunla karşılaştır; şüphelenirsen laboratuvardan ek test iste.\n" +
+                "4. Form ile laboratuvar raporunun parsel, tarih, laboratuvar, kaşe ve imzası birbirini tutmalı.\n\n" +
                 "Tek bir değer bile yetersizse yapı onaylanamaz.";
             EditorUtility.SetDirty(rules);
             AssetDatabase.SaveAssets();

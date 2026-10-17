@@ -30,6 +30,18 @@ namespace CivilJam.Core
         /// <summary>Bugünün gider kalemleri; DailyExpenses ekranı bunu gösterir.</summary>
         public DailyExpenseResult PendingExpenses;
 
+        /// <summary>Gün sonu kaydının sonucu (Save fazına girerken dolar). Ok = false ise ekran "Kaydedildi" yazmaz.</summary>
+        public SaveResult LastSave;
+
+        /// <summary>"Devam Et" istendi ama kayıt okunamadı; oyun yeni başladı. Ekran (DayIntro) oyuncuya söyleyebilir.</summary>
+        public bool LoadFailed;
+        public string LoadError;
+
+        /// <summary>Kaydı aynı günle yeniden yazmayı dener (günü ilerletmez). Sonuç LastSave'e de yazılır.
+        /// Kayıt state'i değiştirmediği için Actions dışında; GameSession bağlar.</summary>
+        public Func<bool> RetrySaveHandler;
+        public bool RetrySave() => RetrySaveHandler != null && RetrySaveHandler();
+
         /// <summary>Para/borç/risk değiştiğinde tetiklenir (HUD yenilemesi için).</summary>
         public event Action StateChanged;
         public void NotifyStateChanged() => StateChanged?.Invoke();
@@ -49,5 +61,16 @@ namespace CivilJam.Core
             foreach (var g in Gifts) if (g != null && g.Id == id) return g;
             return null;
         }
+    }
+}
+
+namespace CivilJam.Core
+{
+    /// <summary>Gün sonu kaydının sonucu. Day = kaydedilen gün (Devam Et bu günün başını açar).</summary>
+    public class SaveResult
+    {
+        public bool Ok;
+        public int Day;
+        public string Error;   // Ok = false ise teknik hata metni (oyuncuya gösterilmesi şart değil)
     }
 }

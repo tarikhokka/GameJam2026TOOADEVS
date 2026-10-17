@@ -66,9 +66,9 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 
 ### Yeni hedef arayüz (Ahmet kararı, 17 Ekim ~15:00): ayrıntı memory.md "🧭"
 Görsel `Docs/Tasarim/hedef_arayuz.png`. Sadece arayüz değişir; kurallar, lab raporunun rolü ve Core sözleşmesi aynı.
-- [ ] RuleSet bölümleri → el kitabı sekmeleri: YAPI (kolon), BETON (beton sınıfı), DONATI (demir tipi), ZEMİN (temel derinliği, zemin türü); `HandbookDataBuilder` + test.
+- [x] RuleSet bölümleri → el kitabı sekmeleri: YAPI (kolon), BETON (beton sınıfı), DONATI (demir tipi), ZEMİN (temel derinliği, zemin türü); `HandbookDataBuilder` + `RuleSetSO.SectionsFor` + test.
 - [ ] Oğuzhan isterse form/lab için yeni Core alanları (toplam alan, ilçe, rapor no, numune tarihi).
-- [ ] Onur: ödeme önizlemesi API'si (state'i değiştirmeden, `ExpenseCalculator` ile aynı sıra) + kayıt sonucu / tekrar denemede gün ikinci kez artmasın.
+- [x] Onur: ödeme önizlemesi `ExpenseCalculator.Preview` (+ `PaidTotal` / `AddedToDebt` / `DebtPaid`), kayıt sonucu `ctx.LastSave` + `ctx.RetrySave()` (gün artmaz), `ctx.LoadFailed`; atomik kayıt. Testler 30/30.
 - [ ] Yeni DeskScreen gelince: Game.unity kontrolü, testler, Windows build.
 
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
@@ -123,6 +123,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 | Ç4 mantığı | `ClientRecord` + `GameState.ClientHistory`; `ClientReactions.RecordOf(state, id)` (okuma) | B ("tekrar geldi" göstergesi isterse) |
 | El kitabı v2 | KALDIRILDI: `RuleSetSO.Zones`/`ZoneEntry`/`ZoneOf`, `ParamRule.Zone`, `ProjectData.Neighborhood`/`Zone`. DEĞİŞTİ: `RulesFor(tür, kat)`, `FindRule(tür, parametre, kat)`. YENİ: `ParamRule.FloorsLabel`, `ParamType` ColumnThickness/FoundationDepth/RebarType/SoilType, `ParamEntry.LabelStepPenalty` | B (el kitabı tablosu), EEE (metinler) |
 | Belge tasarımı | YENİ: `ParamRule.Section`, `ProjectData.FileNo`, `PeoplePerFloor`, `HeightMeters`; `Documents[0].Title` = "Yapı Denetim Formu". KALDIRILDI: geçici uyumluluk (`RuleSetSO.Zones`, `ZoneEntry`, 4 parametreli `FindRule`; Oğuzhan `255b24e`'de kendi tarafını temizledi) | B, EEE |
+| Yeni arayüz + Onur | YENİ: `RuleSetSO.SectionsFor`, `ExpenseCalculator.Preview`, `DailyExpenseResult.PaidTotal/AddedToDebt/DebtPaid/Clone`, `GameContext.LastSave/RetrySave/LoadFailed/LoadError`, `SaveResult`, `GameSession.SaveNow`, `SaveSystem.Save(state, out error)`, `SaveSystem.LastLoadError`. DEĞİŞTİ: `ParamRule.Section` değerleri BETON/DONATI/YAPI/ZEMİN | B, C, EEE |
 
 ## Yapılan değişiklikler günlüğü
 - `7545c64` — Core Faz 0 push'u: `Assets/_Project/Scripts/Core/**` (+ .meta), `AHMET.md`, `memory.md` (dosya haritası, durum, karar satırı), `CREDITS_AND_AI.md` (Claude Code satırı).

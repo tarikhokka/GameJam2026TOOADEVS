@@ -420,5 +420,65 @@ namespace CivilJam.Core.Tests
 
             UnityEngine.Object.DestroyImmediate(expense);
         }
+
+        // Onur (YOL_HARITASI_ONUR 2): ödeme ekranının önizlemesi gerçek ödemeyle her durumda aynı çıkmalı.
+        [TestCase(5000, 0, 0, true, TestName = "Preview_YeterliKasa")]
+        [TestCase(500, 0, 0, true, TestName = "Preview_YetersizKasa")]
+        [TestCase(2000, 0, 2, true, TestName = "Preview_CamTamiri")]
+        [TestCase(1000, 2000, 0, true, TestName = "Preview_BorcKismenOdenir")]
+        [TestCase(1000, 2000, 0, false, TestName = "Preview_BorcOdemesiSecilmedi")]
+        public void ExpensePreview_MatchesApply(int money, int debt, int windows, bool payDebt)
+        {
+            var rent = Expense("rent", 600, true);
+            var loan = Expense("loan", 300, true);
+            var state = new GameState { Day = 3, Money = money, Debt = debt, WindowRepairsToday = windows };
+            var r = ExpenseCalculator.Build(state, new[] { rent, loan }, _balance);
+            foreach (var l in r.Lines) if (l.ExpenseId == ExpenseCalculator.DebtPaymentId) l.Paid = payDebt;
+
+            var preview = ExpenseCalculator.Preview(state, r);
+            Assert.AreEqual(money, state.Money, "Önizleme kasaya dokunmamalı");
+            Assert.AreEqual(debt, state.Debt, "Önizleme borca dokunmamalı");
+            Assert.IsFalse(r.Applied, "Önizleme pending'i uygulanmış saymamalı");
+
+            ExpenseCalculator.Apply(state, r);
+            Assert.AreEqual(state.Money, preview.MoneyAfter);
+            Assert.AreEqual(state.Debt, preview.DebtAfter);
+            Assert.AreEqual(r.PaidTotal, preview.PaidTotal);
+            Assert.AreEqual(r.AddedToDebt, preview.AddedToDebt);
+            Assert.AreEqual(r.DebtPaid, preview.DebtPaid);
+            Assert.GreaterOrEqual(preview.MoneyAfter, 0);
+            for (int i = 0; i < r.Lines.Count; i++) Assert.AreEqual(r.Lines[i].Paid, preview.Lines[i].Paid, r.Lines[i].ExpenseId);
+
+            UnityEngine.Object.DestroyImmediate(rent);
+            UnityEngine.Object.DestroyImmediate(loan);
+        }
+
+        // Onur (YOL_HARITASI_ONUR 3): kayıt sonucu ekrana gelir; tekrar deneme günü ikinci kez artırmaz.
+        [Test]
+        public void Save_ResultReported_RetryDoesNotAdvanceDay()
+        {
+            string path = SaveSystem.FilePath;
+            string backup = System.IO.File.Exists(path) ? System.IO.File.ReadAllText(path) : null;
+            try
+            {
+                var ctx = new GameContext { Balance = _balance, Rules = _rules };
+                var session = new GameSession(ctx, new[] { _config }, new ExpenseSO[0]);
+                session.NewGame(5);
+                Assert.IsTrue(session.AdvanceDayAndSave());
+                Assert.AreEqual(2, ctx.State.Day);
+                Assert.IsTrue(ctx.LastSave.Ok);
+                Assert.AreEqual(2, ctx.LastSave.Day);
+
+                Assert.IsTrue(ctx.RetrySave());
+                Assert.IsTrue(ctx.RetrySave());
+                Assert.AreEqual(2, ctx.State.Day, "Tekrar deneme günü artırmamalı");
+                Assert.AreEqual(2, SaveSystem.Load().Day);
+            }
+            finally
+            {
+                if (backup != null) System.IO.File.WriteAllText(path, backup);
+                else SaveSystem.Delete();
+            }
+        }
     }
 }

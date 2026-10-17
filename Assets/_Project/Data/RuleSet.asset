@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1265a5273cde724e916bb10d80f617d, type: 3}
   m_Name: RuleSet
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.RuleSetSO
-  HandbookIntro: "Bu el kitab\u0131, yap\u0131 ruhsat\u0131 ba\u015Fvurular\u0131nda aranacak en d\xFC\u015F\xFCk de\u011Ferleri i\xE7erir.\n\n1. Ba\u015Fvurudan binan\u0131n kat say\u0131s\u0131n\u0131 oku.\n2. Tabloda o kat say\u0131s\u0131n\u0131n s\xFCtununu bul.\n3. Laboratuvar raporundaki be\u015F de\u011Feri o s\xFCtunla kar\u015F\u0131la\u015Ft\u0131r.\n\nTek bir de\u011Fer bile yetersizse yap\u0131 onaylanamaz."
+  HandbookIntro: "Bu el kitab\u0131, Yap\u0131 Denetim Formu'nda aranacak en d\xFC\u015F\xFCk de\u011Ferleri i\xE7erir.\n\n1. Formdan binan\u0131n kat adedini oku.\n2. Sekmelerde (BETON, DONATI, YAPI, ZEM\u0130N) o kat grubunun s\xFCtununu bul.\n3. Formdaki be\u015F de\u011Feri o s\xFCtunla kar\u015F\u0131la\u015Ft\u0131r; \u015F\xFCphelenirsen laboratuvardan ek test iste.\n4. Form ile laboratuvar raporunun parsel, tarih, laboratuvar, ka\u015Fe ve imzas\u0131 birbirini tutmal\u0131.\n\nTek bir de\u011Fer bile yetersizse yap\u0131 onaylanamaz."
   Rules:
   - BuildingType: 1
     Param: 0
@@ -59,13 +59,106 @@ MonoBehaviour:
     Description: 
     FailRatioRange: {x: 0.55, y: 0.9}
   - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 1
+    MinFloors: 1
+    MaxFloors: 3
+    Section: BETON
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 2
+    MinFloors: 4
+    MaxFloors: 6
+    Section: BETON
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
+    Param: 5
+    DisplayName: "Beton s\u0131n\u0131f\u0131"
+    Unit: 
+    Required: 3
+    MinFloors: 7
+    MaxFloors: 0
+    Section: BETON
+    Labels:
+    - C16
+    - C20
+    - C25
+    - C30
+    - C35
+    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
+    Param: 12
+    DisplayName: Demir tipi
+    Unit: 
+    Required: 1
+    MinFloors: 1
+    MaxFloors: 3
+    Section: DONATI
+    Labels:
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
+    Param: 12
+    DisplayName: Demir tipi
+    Unit: 
+    Required: 2
+    MinFloors: 4
+    MaxFloors: 6
+    Section: DONATI
+    Labels:
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
+    Param: 12
+    DisplayName: Demir tipi
+    Unit: 
+    Required: 3
+    MinFloors: 7
+    MaxFloors: 0
+    Section: DONATI
+    Labels:
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
+    FailRatioRange: {x: 0.6, y: 0.9}
+  - BuildingType: 0
     Param: 10
     DisplayName: "Kolon kal\u0131nl\u0131\u011F\u0131"
     Unit: cm
     Required: 30
     MinFloors: 1
     MaxFloors: 3
-    Section: "A \xB7 YAPI"
+    Section: YAPI
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -76,7 +169,7 @@ MonoBehaviour:
     Required: 35
     MinFloors: 4
     MaxFloors: 6
-    Section: "A \xB7 YAPI"
+    Section: YAPI
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -87,7 +180,7 @@ MonoBehaviour:
     Required: 40
     MinFloors: 7
     MaxFloors: 0
-    Section: "A \xB7 YAPI"
+    Section: YAPI
     Labels: []
     Description: "Binay\u0131 ta\u015F\u0131yan kolonlar\u0131n en ince kenar\u0131. Kat artt\u0131k\xE7a kolon kal\u0131nla\u015Fmal\u0131."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -98,7 +191,7 @@ MonoBehaviour:
     Required: 1.5
     MinFloors: 1
     MaxFloors: 3
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -109,7 +202,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
@@ -120,111 +213,18 @@ MonoBehaviour:
     Required: 2.5
     MinFloors: 7
     MaxFloors: 0
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels: []
     Description: "Temelin topra\u011F\u0131n i\xE7ine ne kadar indi\u011Fi. Y\xFCksek bina daha derin temel ister."
     FailRatioRange: {x: 0.6, y: 0.9}
   - BuildingType: 0
-    Param: 5
-    DisplayName: "Beton s\u0131n\u0131f\u0131"
-    Unit: 
-    Required: 1
-    MinFloors: 1
-    MaxFloors: 3
-    Section: "A \xB7 YAPI"
-    Labels:
-    - C16
-    - C20
-    - C25
-    - C30
-    - C35
-    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
-    Param: 5
-    DisplayName: "Beton s\u0131n\u0131f\u0131"
-    Unit: 
-    Required: 2
-    MinFloors: 4
-    MaxFloors: 6
-    Section: "A \xB7 YAPI"
-    Labels:
-    - C16
-    - C20
-    - C25
-    - C30
-    - C35
-    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
-    Param: 5
-    DisplayName: "Beton s\u0131n\u0131f\u0131"
-    Unit: 
-    Required: 3
-    MinFloors: 7
-    MaxFloors: 0
-    Section: "A \xB7 YAPI"
-    Labels:
-    - C16
-    - C20
-    - C25
-    - C30
-    - C35
-    Description: "Betonun dayan\u0131m\u0131. Say\u0131 b\xFCy\xFCd\xFCk\xE7e beton sa\u011Flamla\u015F\u0131r; belirtilen s\u0131n\u0131f ve \xFCst\xFC kabul edilir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
-    Param: 12
-    DisplayName: Demir tipi
-    Unit: 
-    Required: 1
-    MinFloors: 1
-    MaxFloors: 3
-    Section: "A \xB7 YAPI"
-    Labels:
-    - "B220 (d\xFCz)"
-    - B420
-    - B500
-    - B500S
-    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
-    Param: 12
-    DisplayName: Demir tipi
-    Unit: 
-    Required: 2
-    MinFloors: 4
-    MaxFloors: 6
-    Section: "A \xB7 YAPI"
-    Labels:
-    - "B220 (d\xFCz)"
-    - B420
-    - B500
-    - B500S
-    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
-    Param: 12
-    DisplayName: Demir tipi
-    Unit: 
-    Required: 3
-    MinFloors: 7
-    MaxFloors: 0
-    Section: "A \xB7 YAPI"
-    Labels:
-    - "B220 (d\xFCz)"
-    - B420
-    - B500
-    - B500S
-    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
-    FailRatioRange: {x: 0.6, y: 0.9}
-  - BuildingType: 0
     Param: 13
     DisplayName: "Zemin t\xFCr\xFC"
     Unit: 
     Required: 1
     MinFloors: 1
     MaxFloors: 3
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"
@@ -239,7 +239,7 @@ MonoBehaviour:
     Required: 2
     MinFloors: 4
     MaxFloors: 6
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"
@@ -254,7 +254,7 @@ MonoBehaviour:
     Required: 3
     MinFloors: 7
     MaxFloors: 0
-    Section: "B \xB7 ZEM\u0130N"
+    Section: "ZEM\u0130N"
     Labels:
     - Dolgu
     - "Yumu\u015Fak kil"

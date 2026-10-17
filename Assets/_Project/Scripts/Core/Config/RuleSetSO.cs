@@ -64,6 +64,15 @@ namespace CivilJam.Core
             return value.ToString("0.##", CultureInfo.GetCultureInfo("tr-TR"));
         }
 
+        /// <summary>El kitabı sekmeleri: bölümler kurallardaki ilk görünme sırasıyla (BETON, DONATI, YAPI, ZEMİN).</summary>
+        public List<string> SectionsFor(BuildingType type)
+        {
+            var list = new List<string>();
+            foreach (var r in RulesFor(type))
+                if (!string.IsNullOrEmpty(r.Section) && !list.Contains(r.Section)) list.Add(r.Section);
+            return list;
+        }
+
         /// <summary>Parametrenin görünen adı (ilk kuraldan); yoksa enum adı.</summary>
         public string DisplayNameOf(ParamType param)
         {
@@ -88,7 +97,7 @@ namespace CivilJam.Core
         [Tooltip("0 = üst sınır yok")] public int MaxFloors;
 
         [Header("El kitabı")]
-        [Tooltip("El kitabı ve formdaki bölüm başlığı, ör. \"A · YAPI\", \"B · ZEMİN\". Aynı bölümdeki kurallar birlikte gösterilir.")]
+        [Tooltip("El kitabı ve formdaki bölüm başlığı, ör. \"BETON\", \"ZEMİN\" (el kitabı sekmesi). Aynı bölümdeki kurallar birlikte gösterilir.")]
         public string Section;
         [Tooltip("Seçenekli parametre için kötüden iyiye sıra (ör. B220 (düz), B420...). Boşsa sayısal.")]
         public List<string> Labels = new List<string>();

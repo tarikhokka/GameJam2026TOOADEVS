@@ -63,8 +63,12 @@ namespace CivilJam.Core
 
         void Start()
         {
-            GameState loaded = GameLaunch.ContinueFromSave ? SaveSystem.Load() : null;
+            bool wantedContinue = GameLaunch.ContinueFromSave;
+            GameState loaded = wantedContinue ? SaveSystem.Load() : null;
             GameLaunch.ContinueFromSave = false;
+            // Kayıt okunamadıysa yeni oyun açılır ama sessizce değil: DayIntro ctx.LoadFailed'ı gösterebilir.
+            _session.Context.LoadFailed = wantedContinue && loaded == null;
+            _session.Context.LoadError = _session.Context.LoadFailed ? (SaveSystem.LastLoadError ?? "Kayıt bulunamadı.") : null;
 
             if (loaded != null) _session.LoadGame(loaded);
             else _session.NewGame(fixedSeed != 0 ? fixedSeed : System.Environment.TickCount);

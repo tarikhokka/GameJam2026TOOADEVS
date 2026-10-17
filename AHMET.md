@@ -132,6 +132,7 @@ Kesinleşenler (17 Ekim): 10 gün, kota yok, ek test parası anında düşer. H�
 - (`0916894` öncesi) Ahmet'in Unity testi: gün döngüsü, gazete verisi, dürüst bina kuralı ve save.json doğrulandı. Sorun: Flow (Onur, `ebe816d`) prefab'ları üretilmemiş → Game.unity'de gazete yok, mavi yedek arayüz. Kararlar: Flow prefab'larını Onur üretip push'layacak (A sonra Game.unity'ye ekler); DayIntro/Construction/Save ekranları Onur'a verildi. Not: memory.md → Onur maddeleri.
 - `0bebf9b` / `a7a733c` — Flow ekranları Game.unity'de; `LinkData` artık `Data/Endings/` EndingSO'larını da bağlar (Tarık'a not). memory.md temizlendi: Durum yeniden yazıldı (Bilinen sorunlar: EndingSO yok, Unity 6.5 uyarısı, Game.unity'yi Editor'den kaydetmeme), eski entegrasyon bölümü silindi, Onur listesi tek öncelikli listeye indi, dosya haritası tamamlandı.
   - Pull'u engelleyen Unity oto-değişiklikleri stash'lendi (`Game.unity`'de DeskScreen anchor'larını 0'layan kayıt dahil). Game.unity'yi Editor'den kaydetme.
+- Masa düzeni (Ahmet kararı, B'nin builder'ı): YAPI DENETİM FORMU klasörü LAB RAPORU'nun yanına alındı, LAB RAPORU küçültüldü; `DeskScreen.prefab` builder'la yeniden kuruldu. Oğuzhan'a ve Tarık'a (form_folder.png) not memory.md "Ekibe notlar"da.
 
 ## Oturum notu
 - 2026-10-16 21:20 (UTC+3): AHMET.md oluşturuldu. Faz 0: Core veri sözleşmesi yazıldı, Unity'de hatasız derlendi, push'landı. Desk (B) kendi modelleriyle ilerliyor; Core'a adapter ile bağlanacak.

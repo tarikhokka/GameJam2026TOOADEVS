@@ -37,7 +37,7 @@ namespace CivilJam.Desk.Editor
         private static PaperWindow BuildFormWindow(Transform papers, out FormView formView)
         {
             var window = BuildPaperWindow(papers, "FormWindow", FormFolderColor, FormShadowColor, "DOSYA · 2026-0000",
-                new Vector2(40, -240), out var content, out var paper, out var fileTab); // masadaki form klasörü (isimliğin arkası)
+                new Vector2(-320, -380), out var content, out var paper, out var fileTab); // masadaki form klasörü (LAB RAPORU'nun sağı)
 
             var date = Header(content, "AFET KONTROL BÜROSU", "YAPI DENETİM FORMU");
 

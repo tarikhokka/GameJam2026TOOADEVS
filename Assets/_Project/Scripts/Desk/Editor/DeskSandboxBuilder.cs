@@ -468,8 +468,8 @@ namespace CivilJam.Desk.Editor
         }
 
         // Masadaki eşyalar (odanın içinde, desk_bg px'leriyle; EEE'nin sade masası, 17 Ekim öğleden sonra):
-        // oyuncu tarafında LAB RAPORU (kupa/kalemlik ile isimlik arası) ve EL KİTABI (sağdaki boş alan) — EEE'nin önerdiği yer/boyut;
-        // müteahhit tarafında (isimliğin arkası, masanın uzak kenarı) YAPI DENETİM FORMU klasörü ve zarf: müteahhit getirip bırakır.
+        // oyuncu tarafında, kupa/kalemlik ile isimlik arasında yan yana LAB RAPORU (küçültüldü) ve YAPI DENETİM FORMU klasörü
+        // (Ahmet kararı, 17 Ekim öğleden sonra); EL KİTABI sağdaki boş alanda (EEE önerisi). Zarf müteahhit tarafında (isimliğin arkası).
         // Gün bitince boş koltuğun önünde "Mesaiyi bitir" (müteahhit / proje adı üst barda).
         private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook,
             out OfficeGiftsView officeGifts)
@@ -480,14 +480,14 @@ namespace CivilJam.Desk.Editor
             officeGifts = BuildOfficeGifts(root);
 
             // Kitaplar görselde perspektifle çizildi: eğim yok. Konum/boyut EEE önerisi (sol-üst x,y + genişlik; yükseklik görselden).
-            var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), 238, 0f, out var labBookRoot,
-                width: 480, top: 815);
+            var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), 220, 0f, out var labBookRoot,
+                width: 320, top: 868);
             handbookBook = BookButton("HandbookBook", root, "book_rules", new Color(0.33f, 0.6f, 0.33f), 1320, 0f, out _,
                 width: 500, top: 812);
-            // Form klasörü: EEE görseli (Art/form_folder.png) yoksa tasarım renginde çerçeveli klasör + yazı. Görselin altında
-            // şeffaf boşluk yok (artBottom 0).
-            var formFolder = BookButton("FormFolder", root, "form_folder", FormFolderColor, 1002 - 115, -1f,
-                out var formFolderRoot, width: 230, top: 752, fallbackLabel: "YAPI DENETİM\nFORMU", artBottom: 0f);
+            // Form klasörü LAB RAPORU'nun hemen sağında (Ahmet kararı): EEE görseli (Art/form_folder.png) yoksa tasarım renginde
+            // çerçeveli klasör + yazı. Görselin altında şeffaf boşluk yok (artBottom 0).
+            var formFolder = BookButton("FormFolder", root, "form_folder", FormFolderColor, 552, 0f,
+                out var formFolderRoot, width: 180, top: 905, fallbackLabel: "YAPI DENETİM\nFORMU", artBottom: 0f);
 
             var envelope = TopLeft(NewRect("Envelope", root), new Vector2(150, 80), 1135, 778); // form klasörünün yanı, müteahhit tarafı
             AddImage(envelope, EnvelopeColor).raycastTarget = false;
@@ -553,6 +553,10 @@ namespace CivilJam.Desk.Editor
                 Stretch(label.rectTransform);
                 label.font = TitleFont;
                 label.characterSpacing = 4;
+                label.enableAutoSizing = true; // küçük klasörde taşmasın
+                label.fontSizeMin = 12;
+                label.fontSizeMax = 26;
+                label.margin = new Vector4(8, 6, 8, 6);
             }
 
             var prop = root.gameObject.AddComponent<DeskBookProp>();

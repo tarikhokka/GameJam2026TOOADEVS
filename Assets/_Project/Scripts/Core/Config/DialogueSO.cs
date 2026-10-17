@@ -15,6 +15,7 @@ namespace CivilJam.Core
         [TextArea] public string ParamBelowRule = DefaultParamBelowRule;
         [TextArea] public string TestBelowRule = DefaultTestBelowRule;
         [TextArea] public string ReportedVsTest = DefaultReportedVsTest;
+        [TextArea] public string FormVsLab = DefaultFormVsLab; // değer farkı: formdaki beyan ↔ lab raporundaki beyan
         [TextArea] public string ParcelMismatch = DefaultParcelMismatch;
         [TextArea] public string DateMismatch = DefaultDateMismatch;
         [TextArea] public string SignatureMismatch = DefaultSignatureMismatch;
@@ -27,6 +28,7 @@ namespace CivilJam.Core
         public const string DefaultParamBelowRule = "{param} {value} yazıyor; {group}lı binada en az {required} olmalı.";
         public const string DefaultTestBelowRule = "Ek testte {param} {value} çıktı; {group}lı binada en az {required} olmalı.";
         public const string DefaultReportedVsTest = "Formda {param} {reported} yazıyor ama ek test {actual} gösteriyor.";
+        public const string DefaultFormVsLab = "Formda {param} {form}, laboratuvar raporunda {lab} yazıyor. Hangisi doğru?";
         public const string DefaultParcelMismatch = "Formdaki parsel {form}, raporda {lab} yazıyor.";
         public const string DefaultDateMismatch = "Formun tarihi {form}, raporun tarihi {lab}.";
         public const string DefaultSignatureMismatch = "Formu {form} imzalamış, raporu {lab}.";

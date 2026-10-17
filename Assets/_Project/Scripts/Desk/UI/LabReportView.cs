@@ -72,7 +72,7 @@ namespace CivilJam.Desk
                 var p = project.Params[i];
                 rows[i].Bind(
                     DeskFormat.ParamName(ctx.Rules, project.BuildingType, p.Type),
-                    DeskFormat.Value(ctx.Rules, p.Type, p.Reported),
+                    DeskFormat.Value(ctx.Rules, p.Type, p.LabValue), // lab beyanı formdan farklı olabilir (değer farkı, Core)
                     p.Tested ? DeskFormat.Value(ctx.Rules, p.Type, p.Actual) : null);
                 InspectSpot.Mark(rows[i].ReportedCell, InspectTarget.OfParam(InspectDoc.Lab, p.Type));
                 var test = InspectTarget.OfTest(p.Type);

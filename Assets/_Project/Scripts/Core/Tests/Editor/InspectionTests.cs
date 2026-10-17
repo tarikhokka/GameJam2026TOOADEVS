@@ -82,10 +82,18 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
-        public void Row5_FormVsLabDeclared_AlwaysSame()
+        public void Row5_FormVsLabDeclared_MatchUnlessLabDiffers()
         {
             var p = Project();
             Assert.AreEqual(InspectVerdict.Match, V(p, FormP(ParamType.ColumnThickness), LabP(ParamType.ColumnThickness)));
+
+            // Değer farkı: lab raporu formdan farklı beyan yazar → UYUŞMAZLIK; lab ↔ El Kitabı lab'daki değere bakar
+            var e = p.GetParam(ParamType.ColumnThickness);
+            e.LabDiffers = true;
+            e.LabReported = 36;
+            Assert.AreEqual(InspectVerdict.Mismatch, V(p, FormP(ParamType.ColumnThickness), LabP(ParamType.ColumnThickness)));
+            Assert.AreEqual(InspectVerdict.Match, V(p, LabP(ParamType.ColumnThickness), BookP(ParamType.ColumnThickness)), "Lab 36 ≥ 35");
+            Assert.AreEqual(InspectVerdict.Mismatch, V(p, FormP(ParamType.ColumnThickness), BookP(ParamType.ColumnThickness)), "Form 33 < 35");
         }
 
         [Test]
@@ -135,9 +143,11 @@ namespace CivilJam.Core.Tests
             Assert.AreEqual(InspectVerdict.Unrelated, V(p, F(InspectField.Signature), BookP(ParamType.ConcreteGrade)));
         }
 
-        // Üretilen projelerde: sahte olmayan belgede künye hiç uyuşmazlık vermez; her sahte belgede en az bir künye uyuşmazlığı yakalanır.
+        // Üretilen projelerde: sahte olmayan belgede künye hiç uyuşmazlık vermez; dürüst projedeki değer farkı sadece uygun projede
+        // masum yazım hatasıdır (gerçek değerler iyi); her sahte belge künye ya da değer farkıyla yakalanabilir; bazı sahtelerde
+        // künye ipucu hiç yoktur (sadece değer farkı → ancak ek test kanıtlar).
         [Test]
-        public void GeneratedProjects_KunyeMismatchOnlyOnFakes_AndEveryFakeIsCatchable()
+        public void GeneratedProjects_KunyeMismatchOnlyOnFakes_ValueDiffInnocentOnHonest_AndEveryFakeIsCatchable()
         {
             var config = ScriptableObject.CreateInstance<DayConfigSO>();
             var balance = ScriptableObject.CreateInstance<BalanceSO>();
@@ -150,18 +160,36 @@ namespace CivilJam.Core.Tests
                 (L(InspectField.LabName), Labs),
                 (L(InspectField.LabStamp), Labs),
             };
-            int fakes = 0;
+            int fakes = 0, valueOnlyFakes = 0, typos = 0;
             for (int seed = 0; seed < 400; seed++)
                 foreach (var p in ProjectGenerator.Generate(3, config, _rules, balance, _names, null, new System.Random(seed)))
                 {
                     bool fake = p.Kind == ProjectKind.Fake || p.Kind == ProjectKind.BribeFake;
-                    int mismatches = 0;
+                    int mismatches = 0, valueDiffs = 0;
                     foreach (var (a, b) in pairs)
                         if (Inspection.Check(_ctx, p, a, b, Inspection.NoFloorGroup).Verdict == InspectVerdict.Mismatch) mismatches++;
-                    if (fake) { fakes++; Assert.Greater(mismatches, 0, $"Sahte belge yakalanabilmeli ({string.Join(",", p.Documents[1].Clues)})"); }
-                    else Assert.AreEqual(0, mismatches, "Sahte olmayan belgede künye uyuşmazlığı çıkmamalı");
+                    foreach (var e in p.Params)
+                    {
+                        if (Inspection.Check(_ctx, p, FormP(e.Type), LabP(e.Type), Inspection.NoFloorGroup).Verdict != InspectVerdict.Mismatch) continue;
+                        valueDiffs++;
+                        Assert.IsTrue(e.ReportedPasses && e.LabValue >= e.Required, "Değer farkında iki beyan da yönetmeliği geçiyor görünmeli");
+                        Assert.AreEqual(fake, !e.ActualPasses, "Değer farkı: sahtede gerçek değer kötü, dürüstte iyi");
+                    }
+                    if (fake)
+                    {
+                        fakes++;
+                        Assert.Greater(mismatches + valueDiffs, 0, $"Sahte belge yakalanabilmeli ({string.Join(",", p.Documents[1].Clues)})");
+                        if (mismatches == 0) valueOnlyFakes++;
+                    }
+                    else
+                    {
+                        Assert.AreEqual(0, mismatches, "Sahte olmayan belgede künye uyuşmazlığı çıkmamalı");
+                        if (valueDiffs > 0) { typos++; Assert.AreEqual(ProjectKind.Compliant, p.Kind, "Masum değer farkı sadece uygun projede"); }
+                    }
                 }
             Assert.Greater(fakes, 50);
+            Assert.Greater(valueOnlyFakes, 10, "Bazı sahtelerde künye ipucu olmamalı (sadece ek test kanıtlar)");
+            Assert.Greater(typos, 10, "Uygun projelerde masum yazım hatası da çıkmalı");
             Object.DestroyImmediate(config);
             Object.DestroyImmediate(balance);
         }

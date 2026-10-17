@@ -15,6 +15,7 @@ MonoBehaviour:
   ParamBelowRule: "{param} {value} yaz\u0131yor; {group}l\u0131 binada en az {required} olmal\u0131."
   TestBelowRule: "Ek testte {param} {value} \xE7\u0131kt\u0131; {group}l\u0131 binada en az {required} olmal\u0131."
   ReportedVsTest: "Formda {param} {reported} yaz\u0131yor ama ek test {actual} g\xF6steriyor."
+  FormVsLab: "Formda {param} {form}, laboratuvar raporunda {lab} yazıyor. Hangisi doğru?"
   ParcelMismatch: "Formdaki parsel {form}, raporda {lab} yaz\u0131yor."
   DateMismatch: Formun tarihi {form}, raporun tarihi {lab}.
   SignatureMismatch: "Formu {form} imzalam\u0131\u015F, raporu {lab}."

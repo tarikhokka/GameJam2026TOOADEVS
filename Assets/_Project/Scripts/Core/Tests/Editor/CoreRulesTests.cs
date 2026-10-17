@@ -381,7 +381,8 @@ namespace CivilJam.Core.Tests
                         Assert.IsTrue(p.Params.Exists(x => !x.ReportedPasses), "Dikkatsiz projenin eksik değeri belgede görünür");
                     }
                     if (p.Kind == ProjectKind.Fake || p.Kind == ProjectKind.BribeFake)
-                        Assert.Greater(p.Documents[1].Clues.Count, 0, "Sahte belgede en az bir ipucu olmalı");
+                        Assert.IsTrue(p.Documents[1].Clues.Count > 0 || p.Params.Exists(x => x.LabDiffers),
+                            "Sahte belgede künye ipucu ya da form ↔ lab değer farkı olmalı");
                 }
             foreach (var k in new[] { ProjectKind.Sloppy, ProjectKind.Bribe, ProjectKind.Fake, ProjectKind.BribeFake })
                 Assert.IsTrue(seen.Contains(k), $"{k} türü hiç üretilmedi");

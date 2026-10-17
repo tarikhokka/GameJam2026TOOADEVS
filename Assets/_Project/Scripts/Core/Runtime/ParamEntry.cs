@@ -12,8 +12,14 @@ namespace CivilJam.Core
     {
         public ParamType Type;
         public float Required; // Yönetmelik değeri (kat grubuna göre)
-        public float Reported; // Belgede yazan değer
+        public float Reported; // Belgede yazan değer (formda; lab raporunda da LabDiffers değilse)
         public float Actual;   // Gerçek değer (gizli)
+        // Değer farkı (EEE önerisi, Ahmet onayı, 17 Ekim gece): lab raporunun beyan sütunu formdan farklı yazabilir.
+        // Sahte belgede gerçek değer kötüdür; dürüst projede masum yazım hatasıdır (gerçek değer iyi). Ayırt etmenin yolu ek test.
+        public bool LabDiffers;
+        public float LabReported;
+        /// <summary>Lab raporunun beyan sütununda yazan değer.</summary>
+        public float LabValue => LabDiffers ? LabReported : Reported;
         public bool Tested;    // Ek test yapıldı mı (Actual görünür mü)
         public bool Labeled;   // Seçenekli parametre mi (değerler seçenek sıra numarası)
 

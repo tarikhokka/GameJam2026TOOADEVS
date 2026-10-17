@@ -67,9 +67,12 @@ namespace CivilJam.Core
                     var rule = rules != null ? rules.FindRule(p.BuildingType, a.Param, p.Floors) : null;
                     bool test = a.Field == InspectField.ExtraTest;
                     return Fill(Pick(test ? d?.TestBelowRule : d?.ParamBelowRule, test ? DialogueSO.DefaultTestBelowRule : DialogueSO.DefaultParamBelowRule),
-                        ("param", name), ("value", Fmt(test ? e.Actual : e.Reported)),
+                        ("param", name), ("value", Fmt(test ? e.Actual : a.Doc == InspectDoc.Lab ? e.LabValue : e.Reported)),
                         ("required", rule != null ? Fmt(rule.Required) : ""), ("group", rule != null ? rule.FloorsLabel : ""));
                 }
+                if (b.Field != InspectField.ExtraTest) // form ↔ lab beyanı (değer farkı)
+                    return Fill(Pick(d?.FormVsLab, DialogueSO.DefaultFormVsLab),
+                        ("param", name), ("form", Fmt(e.Reported)), ("lab", Fmt(e.LabValue)));
                 return Fill(Pick(d?.ReportedVsTest, DialogueSO.DefaultReportedVsTest),
                     ("param", name), ("reported", Fmt(e.Reported)), ("actual", Fmt(e.Actual)));
             }

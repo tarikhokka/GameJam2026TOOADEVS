@@ -112,7 +112,7 @@ namespace CivilJam.Core
                 var actual = ctx.Rules.FindRule(project.BuildingType, a.Param, project.Floors);
                 if (selected == null || selected != actual) return Unrelated();
 
-                float value = a.Field == InspectField.ExtraTest ? e.Actual : e.Reported;
+                float value = a.Field == InspectField.ExtraTest ? e.Actual : a.Doc == InspectDoc.Lab ? e.LabValue : e.Reported;
                 string what = a.Field == InspectField.ExtraTest ? $"{name} (ek test)" : name;
                 return value >= selected.Required
                     ? Result(InspectVerdict.Match, $"{what}: {Fmt(value)}, {selected.FloorsLabel} için uygun")
@@ -121,7 +121,7 @@ namespace CivilJam.Core
 
             // Form ↔ Lab (beyan ya da ek test)
             float left = e.Reported;                                             // form her zaman beyanı gösterir
-            float right = b.Field == InspectField.ExtraTest ? e.Actual : e.Reported;
+            float right = b.Field == InspectField.ExtraTest ? e.Actual : e.LabValue; // lab beyanı formdan farklı olabilir
             string rightName = b.Field == InspectField.ExtraTest ? "ek test" : "rapordaki beyan";
             return Math.Abs(left - right) < 1e-4f
                 ? Result(InspectVerdict.Match, $"{name}: beyan ile {rightName} aynı ({Fmt(left)})")

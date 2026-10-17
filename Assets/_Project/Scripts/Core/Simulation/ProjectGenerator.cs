@@ -8,7 +8,9 @@ namespace CivilJam.Core
     /// Uygunsuz proje türleri (ProjectKind; DayConfig'in açtıklarından eşit ağırlıkla seçilir):
     ///  - Sloppy: rüşvetsiz, bir değeri gerekenin biraz altında (%85-95); belgeler tutarlı. Her gün gelebilir.
     ///  - Bribe: rüşvet teklif eder, değerleri belirgin yetersiz. (AllowBribes)
-    ///  - Fake: rüşvetsiz, sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır, belgelerde ipucu var. (AllowFakeDocuments)
+    ///  - Fake: rüşvetsiz, sahte belge: kötü değer yönetmeliği geçiyor gibi yazılır; belgelerde künye ipucu ve/veya form ↔ lab
+    ///    değer farkı var (değer farkı olanların yarısında künye ipucu yok: sadece ek test kanıtlar). (AllowFakeDocuments)
+    ///  - Uygun projelerin %15'inde masum değer farkı (yazım hatası; gerçek değer iyi). Oyuncu farkı ek testle çözer.
     ///  - BribeFake: rüşvetli projelerin %25'i, sahte belge açıksa, aynı zamanda sahte belgelidir.
     /// Müteahhit seçimi türü ağırlıkla etkiler ama ele vermez (Ç3): dürüst usta da dikkatsiz olabilir, rüşvetçi de temiz proje getirebilir.
     /// </summary>
@@ -19,6 +21,12 @@ namespace CivilJam.Core
         const float SloppyRatioMin = 0.85f;
         const float SloppyRatioMax = 0.95f;
         const float BribeAlsoFakeChance = 0.25f;
+        // Değer farkı (EEE önerisi, Ahmet onayı, 17 Ekim gece): lab raporunun beyan sütununda bir değer formdan farklı yazar,
+        // ikisi de yönetmeliği geçiyor görünür. Sahtede gerçek değer kötü, dürüst projede masum yazım hatası (gerçek iyi).
+        // Oyuncu İNCELE ile farkı bulur ama hangisi olduğunu ancak ek testle bilir.
+        const float TypoChance = 0.15f;              // uygun projede masum yazım hatası
+        const float FakeValueDiffChance = 0.65f;     // sahte belgede değer farkı
+        const float FakeOnlyValueDiffChance = 0.5f;  // değer farkı olan sahtede künye ipucu hiç olmasın (sadece ek test kanıtlar)
 
         static readonly string[] BlockLetters = { "A", "B", "C", "D" };
 
@@ -116,8 +124,54 @@ namespace CivilJam.Core
                 p.BribeAmount = Math.Max(50, RoundTo(rng.RangeInclusive(range.x, range.y), 50));
             }
 
-            CreateDocuments(p, day, fake, names, rng);
+            // Değer farkı: sahtede kötü (yalan yazılmış) parametrelerden birinde, uygun projede rastgele bir parametrede.
+            bool kunyeClues = fake;
+            if (fake && rng.Chance(FakeValueDiffChance) && AddLabDifference(p, selected, failing, rng))
+                kunyeClues = !rng.Chance(FakeOnlyValueDiffChance);
+            else if (compliant && rng.Chance(TypoChance))
+                AddLabDifference(p, selected, null, rng);
+
+            CreateDocuments(p, day, fake, kunyeClues, names, rng);
             return p;
+        }
+
+        /// <summary>
+        /// Adaylardan (null: hepsi) birinde lab raporunun beyanını formdan farklı ama yönetmeliği geçen bir değere çevirir.
+        /// Uygun değer bulunamazsa (ör. seçenekli parametre zaten en üst kademede) false.
+        /// </summary>
+        static bool AddLabDifference(ProjectData p, List<ParamRule> rules, HashSet<int> candidates, Random rng)
+        {
+            var order = new List<int>();
+            for (int i = 0; i < p.Params.Count; i++) if (candidates == null || candidates.Contains(i)) order.Add(i);
+            rng.Shuffle(order);
+            foreach (int i in order)
+            {
+                var e = p.Params[i];
+                var options = new List<float>();
+                if (e.Labeled)
+                {
+                    int max = rules[i].Labels.Count - 1;
+                    foreach (int d in new[] { -1, 1 })
+                    {
+                        int v = (int)Math.Round(e.Reported) + d;
+                        if (v >= e.Required && v <= max) options.Add(v);
+                    }
+                }
+                else
+                {
+                    float step = StepFor(e.Required);
+                    foreach (int k in new[] { -2, -1, 1, 2 })
+                    {
+                        float v = Snap(e.Reported + k * step, step);
+                        if (v >= e.Required && Math.Abs(v - e.Reported) > 1e-4f) options.Add(v);
+                    }
+                }
+                if (options.Count == 0) continue;
+                e.LabDiffers = true;
+                e.LabReported = options[rng.Next(options.Count)];
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -209,7 +263,7 @@ namespace CivilJam.Core
             return fallback;
         }
 
-        static void CreateDocuments(ProjectData p, int day, bool fake, NamePoolSO names, Random rng)
+        static void CreateDocuments(ProjectData p, int day, bool fake, bool kunyeClues, NamePoolSO names, Random rng)
         {
             string parcel = $"{rng.RangeInclusive(100, 999)}/{rng.RangeInclusive(1, 40)}";
             string date = $"{rng.RangeInclusive(1, 28):00}.{rng.RangeInclusive(1, 9):00}.2026";
@@ -238,9 +292,9 @@ namespace CivilJam.Core
                 SignatureName = engineer
             };
 
-            if (fake)
+            if (fake && kunyeClues)
             {
-                // 1-2 bedava ipucu: lab raporu başvuruyla ya da kendi başlığıyla tutarsız
+                // 1-2 bedava ipucu: lab raporu başvuruyla ya da kendi başlığıyla tutarsız (sadece değer farkı olan sahtede yok)
                 var clueTypes = new List<ClueType>((ClueType[])Enum.GetValues(typeof(ClueType)));
                 rng.Shuffle(clueTypes);
                 int clueCount = rng.RangeInclusive(1, 2);

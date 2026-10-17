@@ -18,7 +18,7 @@ namespace CivilJam.Core.Editor
 
         static readonly (string name, Strategy play)[] Strategies =
         {
-            ("Dikkatli (ipucu + değer, zarf yok)", ctx => Decide(ctx, p => Looks(p).ok && !p.OffersBribe, false)),
+            ("Dikkatli (ipucu + değer + değer farkında ek test, zarf yok)", ctx => { TestValueDiffs(ctx); Decide(ctx, p => Looks(p).ok && !p.OffersBribe, false); }),
             ("Saf (sadece değer, zarf yok)",        ctx => Decide(ctx, p => Looks(p).valuesOk && !p.OffersBribe, false)),
             ("Rüşvetçi (her şeyi onayla + zarf)",   ctx => { RevealBribes(ctx); Decide(ctx, p => true, true); }),
             ("Reddeci (her şeyi reddet)",           ctx => Decide(ctx, p => false, false)),
@@ -38,9 +38,23 @@ namespace CivilJam.Core.Editor
         /// <summary>Oyuncunun masada görebildikleri: belgedeki değerler ve iki belge arasındaki tutarsızlıklar.</summary>
         static (bool valuesOk, bool ok) Looks(ProjectData p)
         {
-            bool valuesOk = p.Params.TrueForAll(x => x.ReportedPasses);
+            bool valuesOk = p.Params.TrueForAll(x => x.ReportedPasses && x.LabValue >= x.Required);
             bool clue = p.Documents.Count > 1 && p.Documents[1].Clues.Count > 0;
-            return (valuesOk, valuesOk && !clue);
+            // Değer farkı (form ↔ lab beyanı): dikkatli oyuncu ek testle çözer; test yoksa riske girmez
+            bool diff = p.Params.Exists(x => x.LabDiffers);
+            bool diffResolved = !diff || (p.ExtraTestBought && p.Params.TrueForAll(x => x.ActualPasses));
+            return (valuesOk, valuesOk && !clue && diffResolved);
+        }
+
+        /// <summary>Değer farkı görülen (başka ipucu olmayan) projelerde kasa yetiyorsa ek test alınır.</summary>
+        static void TestValueDiffs(GameContext ctx)
+        {
+            foreach (var p in ctx.TodayProjects)
+            {
+                bool clue = p.Documents.Count > 1 && p.Documents[1].Clues.Count > 0;
+                if (!p.ExtraTestBought && !clue && p.Params.Exists(x => x.LabDiffers) && p.Params.TrueForAll(x => x.ReportedPasses))
+                    ctx.Actions.BuyExtraTest(p.Id); // para yetmezse alınamaz → proje reddedilir
+            }
         }
 
         /// <summary>
@@ -62,7 +76,10 @@ namespace CivilJam.Core.Editor
                     (InspectTarget.Of(InspectDoc.Lab, InspectField.LabStamp), InspectTarget.Of(InspectDoc.Handbook, InspectField.AccreditedLabs)),
                 };
                 foreach (var e in p.Params)
+                {
                     pairs.Add((InspectTarget.OfParam(InspectDoc.Form, e.Type), InspectTarget.OfParam(InspectDoc.Handbook, e.Type)));
+                    pairs.Add((InspectTarget.OfParam(InspectDoc.Form, e.Type), InspectTarget.OfParam(InspectDoc.Lab, e.Type))); // değer farkı
+                }
                 foreach (var (a, b) in pairs)
                 {
                     if (p.BribeRevealed) break;

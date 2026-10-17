@@ -30,6 +30,9 @@ namespace CivilJam.Desk
         [Tooltip("Yeni hedef arayüzde belgeler masada sabit: sürükleme kapalı (açılış/kapanış hareketi kalır)")]
         [SerializeField] private bool draggable = true;
 
+        // İnceleme modu açıkken sürükleme kilitli (InspectController → DeskScreen); tıklama ve öne alma sürer.
+        public bool Locked { get; set; }
+
         public event Action Grabbed;
         public event Action Dropped;
 
@@ -63,7 +66,7 @@ namespace CivilJam.Desk
         // birkaç piksel kayınca Unity sürüklemeyi başlatıp tıklamayı iptal eder (düğme "2-3 tıklamada bir" çalışır).
         public void OnInitializePotentialDrag(PointerEventData eventData)
         {
-            if (!draggable || PressedOnSelectable(eventData)) eventData.pointerDrag = null;
+            if (!draggable || Locked || PressedOnSelectable(eventData)) eventData.pointerDrag = null;
         }
 
         private bool PressedOnSelectable(PointerEventData eventData)
@@ -80,7 +83,7 @@ namespace CivilJam.Desk
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (canvas == null) canvas = GetComponentInParent<Canvas>().rootCanvas;
-            if (tweening || !draggable) return; // kapanırken tutulmaz; sabit belgede hiç
+            if (tweening || !draggable || Locked) return; // kapanırken tutulmaz; sabit belgede hiç
             dragging = true;
             posVel = Vector2.zero;
             dragVel = Vector2.zero;

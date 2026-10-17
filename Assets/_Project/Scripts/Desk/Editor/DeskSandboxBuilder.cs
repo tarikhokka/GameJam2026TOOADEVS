@@ -166,10 +166,13 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "labWindow", BuildLabWindow(papers, out var labView));
             Wire(screen, "labView", labView);
             Wire(screen, "rulebook", BuildRulebook(papers, handbookBook));
+            Wire(screen, "inspect", BuildInspect(root, papers)); // İnceleme modu: düğme, çizgi katmanı (belgelerin üstünde)
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "giftOffer", BuildGiftOffer(root));
             Wire(screen, "deskAudio", BuildAudio(root));
+            Wire(screen, "shiftTitleFont", TitleFont); // EEE: MESAİ BİTTİ geçiş ekranı
+            Wire(screen, "shiftInfoFont", BoldFont);
 
             EnsureFolder(PrefabFolder);
             var prefab = PrefabUtility.SaveAsPrefabAsset(root.gameObject, PrefabPath);
@@ -207,6 +210,7 @@ namespace CivilJam.Desk.Editor
             Wire(audio, "paper", FindClip("sfx_paper"));
             Wire(audio, "stamp", FindClip("sfx_stamp"));
             Wire(audio, "glassBreak", FindClip("sfx_glass_break"));
+            Wire(audio, "shiftEnd", FindClip("sfx_shift_end")); // EEE: mesai zili
             Wire(audio, "officeMusic", FindClip("mus_office_ambient"));
             return audio;
         }

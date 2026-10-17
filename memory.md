@@ -230,7 +230,7 @@ static class Inspection
 
 **İş listesi:**
 - [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
-- [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama.
+- [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama. — (B) Adım 1 yapıldı: İNCELE düğmesi (form ile lab arası, `btn_wood`), mod kilidi (sürükleme + ONAY/RED/ZARF/EK TEST), vurgu/seçim/çizgi, sağ tık ve boş masa iptali, sıfırlama (`InspectController`, `InspectSpot`, `InspectCatcher`). Sonuç şimdilik geçici kart; sıradaki: tüm alanlar + Core bağlantısı.
 - [ ] Onur: `InspectResultView` (görünüm + ses).
 - [ ] Tarık: 1. gün öğretici kartı metni + README satırı (ayrıntı §7 "Tarık (EEE)" ilk madde).
 

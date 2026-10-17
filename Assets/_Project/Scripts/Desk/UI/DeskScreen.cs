@@ -28,6 +28,7 @@ namespace CivilJam.Desk
         [SerializeField] private EventCardView eventCard;
         [SerializeField] private GiftOfferView giftOffer;   // onaydan sonra hediye kartı (sadece "Kabul et")
         [SerializeField] private OfficeGiftsView officeGifts; // kabul edilen hediyeler masada
+        [SerializeField] private InspectController inspect; // İnceleme modu: İNCELE düğmesi, tıklanabilir alanlar, çizgi
 
         [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -66,6 +67,11 @@ namespace CivilJam.Desk
             if (rulebook != null) rulebook.Toggled += PlayPaper;
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
             if (deskAudio != null) scene.CharTyped += deskAudio.PlayTyping; // konuşma balonu harf harf yazarken
+            if (inspect != null)
+            {
+                inspect.ModeChanged += OnInspectMode;
+                inspect.Clicked += PlayClick;
+            }
         }
 
         // Yeni hedef arayüz: bekleyen bir dosya varken form ve lab raporu masada açık (sabit yerlerinde, yan yana);
@@ -115,6 +121,7 @@ namespace CivilJam.Desk
         public void Hide()
         {
             Unsubscribe();
+            if (inspect != null) inspect.SetMode(false);
             StopAllCoroutines();
             stamping = false;
             endingShift = false;
@@ -138,13 +145,14 @@ namespace CivilJam.Desk
         private void Select(string projectId)
         {
             selectedId = projectId;
+            if (inspect != null) inspect.SetMode(false); // yeni müteahhit: inceleme modu kapanır, seçim temizlenir
             if (rulebook != null) rulebook.ResetFloorGroup(); // yeni müteahhit: kat grubunu oyuncu yeniden seçer (Ahmet kararı)
             Redraw();
         }
 
         private void BuyExtraTest()
         {
-            if (stamping) return;
+            if (stamping || Inspecting) return;
             if (deskAudio != null) deskAudio.PlayClick();
             context.Actions.BuyExtraTest(selectedId);
             Redraw();
@@ -154,7 +162,7 @@ namespace CivilJam.Desk
         // müteahhit tepki verir, sıradaki gelir. Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı.
         private void Decide(Action decision)
         {
-            if (stamping) return;
+            if (stamping || Inspecting) return;
             stamping = true;
 
             int repairsBefore = context.State.WindowRepairsToday;
@@ -262,6 +270,24 @@ namespace CivilJam.Desk
                    $"<color={gold}>{approved}</color> onay  ·  <color={gold}>{rejected}</color> ret";
         }
 
+        private bool Inspecting => inspect != null && inspect.IsOn;
+
+        // İnceleme modu açıkken belgeler sürüklenmez, ONAY / RED / ZARF / EK TEST pasif (El Kitabı sekmeleri ve kat grubu çalışır).
+        private void OnInspectMode(bool on)
+        {
+            formWindow.Sheet.Locked = on;
+            labWindow.Sheet.Locked = on;
+            if (rulebook != null && rulebook.Window != null) rulebook.Window.Sheet.Locked = on;
+            formView.SetLocked(on);
+            labView.SetLocked(on);
+            PlayClick();
+        }
+
+        private void PlayClick()
+        {
+            if (deskAudio != null) deskAudio.PlayClick();
+        }
+
         private void PlayPaper()
         {
             if (deskAudio != null) deskAudio.PlayPaper();
@@ -305,6 +331,7 @@ namespace CivilJam.Desk
                 scene.Leave(); // son müteahhit sola çıkar, koltuk boş kalır
                 props.ShowEmpty(AllDecided());
                 SyncDocuments(null);
+                if (inspect != null) inspect.SetAvailable(false);
                 if (AllDecided() && !completed && !endingShift && !stamping) StartCoroutine(EndShift());
                 return;
             }
@@ -316,6 +343,7 @@ namespace CivilJam.Desk
             labView.Show(context, project, CanBuyExtraTest(project),
                 context.Balance != null ? context.Balance.ExtraTestCost : 0);
             SyncDocuments(project);
+            if (inspect != null) inspect.SetAvailable(!stamping && project.Verdict == ProjectVerdict.Pending);
         }
     }
 }

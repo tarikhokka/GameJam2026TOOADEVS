@@ -49,12 +49,27 @@ namespace CivilJam.Desk
 
         private readonly List<DottedRowView> infoRows = new List<DottedRowView>();
         private readonly List<DottedRowView> techRows = new List<DottedRowView>();
+        private bool pending, locked;
 
         private void Awake()
         {
             approveButton.onClick.AddListener(() => ApproveClicked?.Invoke());
             rejectButton.onClick.AddListener(() => RejectClicked?.Invoke());
             takeBribeButton.onClick.AddListener(() => TakeBribeClicked?.Invoke());
+        }
+
+        // İnceleme modu açıkken ONAY / RED / ZARF pasif.
+        public void SetLocked(bool on)
+        {
+            locked = on;
+            ApplyButtons();
+        }
+
+        private void ApplyButtons()
+        {
+            approveButton.interactable = pending && !locked;
+            rejectButton.interactable = pending && !locked;
+            takeBribeButton.interactable = pending && !locked;
         }
 
         public void AnimateDecisionStamp() => decisionStamp.Animate();
@@ -81,6 +96,11 @@ namespace CivilJam.Desk
                 ("Onay ücreti", DeskFormat.Money(project.Fee)),
             });
 
+            // İnceleme modunda tıklanabilir alanlar (Core hedefleri adım 3'te).
+            InspectSpot.Mark(dateText, "Form: Tarih");
+            InspectSpot.Mark(infoRows[1], "Form: Ada / Parsel");
+            InspectSpot.Mark(infoRows[8], "Form: Proje müellifi");
+
             int group = project.Floors <= 3 ? 0 : project.Floors <= 6 ? 1 : 2;
             var sprite = buildingSprites != null && group < buildingSprites.Length ? buildingSprites[group] : null;
             buildingImage.sprite = sprite;
@@ -99,9 +119,8 @@ namespace CivilJam.Desk
             municipalStamp.SetActive(hasStamp);
             if (hasStamp && municipalStampText != null) municipalStampText.text = doc.StampId;
 
-            bool pending = project.Verdict == ProjectVerdict.Pending;
-            approveButton.interactable = pending;
-            rejectButton.interactable = pending;
+            pending = project.Verdict == ProjectVerdict.Pending;
+            ApplyButtons();
             bribeRoot.SetActive(pending && project.OffersBribe);
             if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict);

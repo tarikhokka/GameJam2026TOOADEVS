@@ -8,7 +8,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Görsel
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
-| Kenney "Modular Characters" parçaları (ten, saç, yüz, gömlek) — 6 müteahhit portresi bu parçalardan birleştirildi | `Assets/_Project/Art/portrait_*.png` (masa, müteahhit) | https://kenney.nl/assets/modular-characters | CC0 1.0 | Tarık | 2026-10-17 |
+| Kenney "Modular Characters" parçaları — (KULLANILMIYOR: 17 Ekim gece ChatGPT portreleriyle değiştirildi; git geçmişinde duruyor) | — | https://kenney.nl/assets/modular-characters | CC0 1.0 | Tarık | 2026-10-17 |
 
 ## Ses / Müzik
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -44,7 +44,9 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | ChatGPT / Codex (OpenAI) | Gün başı ve inşaat ekranlarının Unity UI kurulumu, Core verilerini gösteren script'ler, prefab ve sandbox bağlantıları; inşaat ekranı için 0/2 onay ve devam butonu Play testi | `Assets/_Project/Scripts/Flow/UI/DayIntroScreen.cs`, `Assets/_Project/Scripts/Flow/UI/ConstructionScreen.cs`, `Assets/_Project/Scripts/Flow/Editor/ConstructionSetup.cs`, `Assets/_Project/Scripts/Flow/Editor/FlowBuilder.cs`, `Assets/_Project/Scripts/Flow/Sandbox/FlowSandboxBootstrap.cs`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Prefabs/Flow/ConstructionScreen.prefab`, `Assets/_Project/Scenes/Sandbox_Flow.unity`, `ONUR.md` | Onur Kabadayılar | 2026-10-17 |
 | Claude (Anthropic) | Proje hafıza dokümanı, iş planı, bu dosyanın şablonu | `memory.md`, `CLAUDE.md`, `CREDITS_AND_AI.md` | Tarık | 2026-10-16 |
 | Claude (Anthropic) | Geçici placeholder görselleri üreten script (düz renk + dosya adı yazısı); finalde değiştirilecek | `Assets/_Project/Art/*.png` | Tarık | 2026-10-16 |
-| Claude (Anthropic) | Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
+| ChatGPT (OpenAI) | 6 müteahhit karakter görselinin üretimi (Rıfat, Sevim, Kemal, Nuri, Selim, Rüstem) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | ChatGPT portrelerinin beyaz arka planını silip şeffaf 600x600 PNG'ye çeviren script | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Masa arka planı (ofis, inşaat resimli çerçeveler, aksesuarlar) ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Ana menü arka planı (akşam şehir, vinçler) ve "İMZA" logosunu çizen script (flat) | `Assets/_Project/Art/menu_bg.png`, `logo.png` | Tarık | 2026-10-17 |
@@ -86,7 +88,7 @@ Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 
 GÖRSELLER
-Müteahhit karakterleri: "Modular Characters" — Kenney (kenney.nl), CC0
+Müteahhit karakterleri: yapay zekâ (ChatGPT) ile üretildi
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1

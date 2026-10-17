@@ -29,7 +29,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_good.png` | Ending (İyi) | C | P |
 | `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
-| `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (Kenney Modular Characters parçalarından birleştirildi, 400x460 şeffaf) |
+| `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | Desk (müteahhitin arkasındaki koltuk, 320x360 şeffaf) | B | F (script ile çizildi, flat) — yerleşim: portre ile yatayda ortalı, koltuk üstü portre üstünden 90 px aşağıda; çizim sırası koltuk → portre → masa |
 | `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler", masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
 | `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler", müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |

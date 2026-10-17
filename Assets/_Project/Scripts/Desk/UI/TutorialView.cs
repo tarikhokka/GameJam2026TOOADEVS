@@ -31,14 +31,15 @@ namespace CivilJam.Desk
                 "Formdaki <b>KAT ADEDİ</b>'ni oku, El Kitabı'nın <b>HIZLI BAKIŞ</b> sayfasında kat grubunu seç.\n\n" +
                 "Beyan edilen her değer yeşil alanda olmalı. Tek bir kırmızı bile varsa bina reddedilir."),
             new Card("Belgeler sahte olabilir",
-                "Parsel, tarih ve müellif imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar, raporun başındakiyle aynı olmalı ve El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
-                "Beyana güvenmiyorsan lab raporundan ücretli <b>EK TEST</b> iste: gerçek değerleri gösterir."),
+                "Parsel, tarih ve müellif imzası formda ve lab raporunda aynı olmalı. Kaşedeki laboratuvar El Kitabı'nın <b>LAB</b> sekmesindeki akredite listede bulunmalı.\n\n" +
+                "Form ile lab raporunda bir <b>değer farklı</b> yazıyorsa ya yazım hatasıdır ya da biri yalan söylüyordur. " +
+                "Hangisi olduğunu lab raporundaki ücretli <b>EK TEST</b> gösterir: gerçek değerleri ortaya çıkarır."),
             new Card("İmza senin",
                 "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın.\n\n" +
                 "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan sağdaki <b>EL KİTABI</b>'na bak."),
             new Card("İncele ve karşılaştır", // EEE metni (ICERIK_TASLAK.md "Öğretici: İnceleme kartı")
                 "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, " +
-                "<b>UYUŞMAZLIK</b> ya da <b>ALAKASIZ</b> der.\n\n" +
+                "<b>UYUŞMAZLIK SAPTANDI</b> ya da <b>ALAKASIZ</b> der.\n\n" +
                 "El Kitabı'yla karşılaştırmadan önce doğru <b>kat grubunu</b> seçmeyi unutma. Bir uyuşmazlık bulursan müteahhide söylersin."),
         };
 

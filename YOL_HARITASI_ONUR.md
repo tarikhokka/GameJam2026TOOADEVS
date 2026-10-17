@@ -1,5 +1,7 @@
 # İmza — Onur ve ekip için güncel yol haritası
 
+> ⚠️ **TARİHSEL (A, 17 Ekim ~17:30):** Bu belge 17 Ekim sabahki durumun analizidir ve büyük kısmı eskidi (Ç1/Ç4 yapıldı, ekranlar Game.unity'de, yeni hedef arayüz kuruldu). Güncel durum ve açık işler: **memory.md §7**. Buradaki 2. (ödeme önizlemesi) ve 3. (kayıt sonucu) maddelerin Core kısmı hazır; ekran kısmı memory.md §7'de Onur'da.
+
 Tarih: 17 Ekim 2026. İncelenen kod: `5f4a49a`. Uzak dal kontrol edildi; inceleme sırasında yeni commit yoktu.
 
 Bu belge mevcut durum analizi ve önerilen iş sırasıdır. Yeni oyun kuralı veya ekip adına verilmiş karar değildir. Tahmini süreler geliştirme ve ilk kontrol içindir; entegrasyon bekleme süresi hariçtir.

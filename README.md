@@ -2,7 +2,7 @@
 
 **CIVIL GAME JAM 2026** · Tema: *Afete Hazırlık ve Farkındalık* · Takım: **TOOADEVS**
 
-Bir şehrin yapı denetim mühendisisin. Her sabah masana yeni bina projeleri geliyor: başvuru dosyası, laboratuvar raporu ve bazen de masaya "unutulmuş" bir zarf. İmzanı attığın her bina şehirde yükseliyor. Ve her gece bir deprem olabilir.
+Bir şehrin yapı denetim mühendisisin. Her gün masana yeni bina projeleri geliyor: yapı denetim formu, laboratuvar raporu ve bazen de masaya "unutulmuş" bir zarf. İmzanı attığın her bina şehirde yükseliyor. Ve her gece bir deprem olabilir.
 
 Ertesi sabah gazete, imzanın neye mal olduğunu yazıyor.
 
@@ -22,9 +22,9 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 
 ## Nasıl oynanır
 
-- **Masa:** Her projede belgedeki değerleri yönetmelikteki en düşük değerle karşılaştır. Değeri yetmeyen bina güvenli değildir.
-- **Belgeleri karşılaştır:** Başvuru dosyası ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporun başlığındaki laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
-- **El Kitabı:** Kuralları, yönetmelikteki alt sınırları ve akredite laboratuvarların listesini masadaki **El Kitabı** butonuyla istediğin an açabilirsin. İlk gün masaya oturduğunda kısa bir anlatım seni karşılar.
+- **Masa:** Müteahhitler sırayla karşına oturur. Önünde üç belge durur: **Yapı Denetim Formu**, **Laboratuvar Raporu** ve **Denetçi El Kitabı**. Kararını formdaki **ONAY** ya da **RED** ile verirsin.
+- **El Kitabı:** Formdan binanın kat adedini oku, El Kitabı'nın **Hızlı Bakış** sayfasında o kat grubunu seç. Beş değerin (beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü) hepsi yeşil bölgede olmalı; tek bir kırmızı, binanın güvenli olmadığı demektir. Sekmelerde parametrelerin açıklamaları ve akredite laboratuvarların listesi var. İlk gün kısa bir anlatım seni karşılar.
+- **Belgeleri karşılaştır:** Form ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporu yazan laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar.
 - **Zarf:** Bazı müteahhitler rüşvet teklif eder. Rüşvet teklif edilen her proje kurallara aykırıdır.
 - **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen ofisinin camı kırılabilir; tamiri sana kalır.

@@ -3,14 +3,8 @@
 Bu dosya Oğuzhan'ın görev ve oturum takibi içindir. Ortak proje kararları `memory.md` içindedir. Repo ile push edildiğinde ekip tarafından da okunabilir; gizli belge değildir.
 
 ## Mevcut durum
-- Desk Core tiplerini doğrudan kullanıyor: `DeskScreen` = `IGameScreen` (Phase = Desk), projeler `ctx.TodayProjects`, kararlar `ctx.Actions`, HUD `ctx.StateChanged`.
-- Gün sistemine uygun: başlık "Gün N", kota yok (HUD: "Bugün onaylanan: N").
-- DeskScreen Game.unity'de (A ekledi, `3a0d58d`); gerçek GameSession ile test edildi. Sandbox_Desk sahte `IGameActions` (`FakeGameActions`) ve sahte günle (`SandboxDeskContext`) çalışıyor.
-- Sesler + ONAYLANDI/REDDEDİLDİ kaşe animasyonu var.
-- Y1 (analiz raporu) masada bitti: "El Kitabı" penceresi (kontrol listesi, yönetmelik, akredite lab listesi), lab raporunda başvuru değerleri yan yana, 1. gün 4 öğretici kart. Kart metinleri Tarık'ın onayını bekliyor.
-- O4 bitti: kabadayı reddedilince cam sesi + "Camın kırıldı!" kartı (`EventCardView`).
-- Sırada: O6 görseller (Adım 10), intro kararı (Onur).
-- Desk placeholder görselleri Tarık tarafından eklendi: `desk_bg`, `doc_paper`, `stamp_approve`, `stamp_reject`, `signature` (henüz prefab'a takılmadı).
+- (A, 17 Ekim ~17:30 temizledi; eski hâli `f14d2ed`.) Yeni hedef arayüz kuruldu ve push'landı (`f14d2ed`): üst yarı ofis + müteahhit + balon, masada üç sabit belge (Yapı Denetim Formu, Laboratuvar Raporu, El Kitabı "Hızlı Bakış"), zarf, hediyeler, öğretici ve olay kartları. A Game.unity'de oynatarak kontrol etti.
+- Açık işler: memory.md §7 "Oğuzhan (B)" (öğretici kartı taşması, El Kitabı satır boşluğu ve küçük çipler, üst bar, kurum adı, müellif/yetkili imza satırı).
 
 ## Benim alanım
 - `Assets/_Project/Scripts/Desk/`
@@ -42,7 +36,7 @@ Desk parayı değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları sa
 - [x] Adım 7: Kabadayı olayının masadaki kısmı (O4: Rüstem reddedilince "camın kırıldı" kartı + `sfx_glass_break`). Sahte belgeleri Core üretiyor; masa ipuçlarını zaten gösteriyor.
 - [-] Adım 8: Fabrika / yangın — **kapsam dışı** (A kararı, 17 Ekim). Masada iş yok.
 - [x] Adım 9: His katmanı: karar kaşesi animasyonu + `sfx_paper`, `sfx_stamp`, `sfx_click`, `mus_office_ambient` tetikleri. (Kağıt kayma animasyonu yapılmadı; gerekirse cila adımında.)
-- [ ] Adım 10: Placeholder → final görsellerin prefab'a takılması.
+- [x] Adım 10: Placeholder → final görsellerin prefab'a takılması (yeni hedef arayüz, `f14d2ed`).
 - [ ] Adım 11: Denge, metinler, hassasiyet kontrolü (kurgusal isimler, ton), hata temizliği. Pazar 12:00 freeze.
 
 ## Sahte veri senaryoları (Sandbox_Desk)
@@ -51,17 +45,7 @@ Desk parayı değiştirmez, gün ilerletmez, afet sonucu üretmez; kararları sa
 3. Sahte belgeli (Menekşe): beyan temiz görünüyor; lab raporunda parsel 87/41 (başvuruda 87/14), tarih farklı, başlıktaki "Hızlı Sonuç Lab. Ltd." akredite listede yok ve kaşedeki lab'la uyuşmuyor, imza başka mühendisin; ek test gerçek değerlerin düşük olduğunu gösteriyor → reddedilmeli.
 
 ## Açık noktalar
-**A'ya:**
-- (Şu an açık soru yok.) Prefab yeniden kurulunca Game.unity'deki masa kendiliğinden güncellenir.
-
-**Onur'a (C):**
-- Kabadayı olayı masada gösterilecek (analiz raporu O4); bilgin olsun.
-- `Assets/Scripts/Intro/IntroSequence.cs` akışın parçası; senin alanına taşıyalım mı? ("Office" sahnesini yüklüyor, öyle bir sahne yok.)
-
-**EEE'ye:**
-- 1. gün öğretici kart metinleri (`Desk/UI/TutorialView.cs`) ve El Kitabı kontrol listesi (`Desk/UI/RulebookView.cs`) taslak; onaylar ya da düzeltir misin?
-- Müteahhit portreleri. (`sfx_glass_break` geldi, teşekkürler — `7243543`.)
-- Kaşe/imza görsellerinin boyutu ve belge kağıdının kenar boşluğu; zarf görseli (`envelope.png`) listeye eklenebilir mi?
+- Açık soru yok. Eski sorular cevaplandı (intro Flow'a taşındı, metinler Tarık'ta onaylandı, portreler ve görseller geldi). Güncel işler: memory.md §7.
 
 ## Çalışma kuralı
 - Adım adım ilerle; her adım Unity'de test edilmeden commit'lenmez.

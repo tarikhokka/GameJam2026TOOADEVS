@@ -11,13 +11,13 @@ Bu klasöre sadece EEE yazar.
 ## İhtiyaç listesi
 | Dosya | Nerede | Durum |
 |---|---|---|
-| `sfx_paper.wav` | Desk, belge açma | P |
-| `sfx_stamp.ogg` | Desk, onay/red | P |
-| `sfx_click.ogg` | Tüm butonlar | P |
-| `sfx_glass_break.wav` | Kabadayı olayı (masada cam kırıldı kartı, B) | P |
-| `mus_office_ambient.wav` | Desk (loop) | P |
-| `mus_menu.wav` | MainMenu (loop) | P |
-| `mus_ending_sad.mp3` | Kötü ve Orta sonlar (Hüküm, Enkazın Gölgesi, Kapanan Kapı) | P |
+| `sfx_paper.wav` | Desk, belge açma | F |
+| `sfx_stamp.ogg` | Desk, onay/red | F |
+| `sfx_click.ogg` | Tüm butonlar | F |
+| `sfx_glass_break.wav` | Kabadayı olayı (masada cam kırıldı kartı, B) | F |
+| `mus_office_ambient.wav` | Desk (loop) | F |
+| `mus_menu.wav` | MainMenu (loop) | F (dosya hazır; oyunda henüz bağlı değil → Onur, memory.md §7) |
+| `mus_ending_sad.mp3` | Kötü ve Orta sonlar (Hüküm, Enkazın Gölgesi, Kapanan Kapı) | F (dosya hazır; oyunda henüz bağlı değil → Onur, memory.md §7) |
 | `sfx_typing.ogg` | Konuşma balonu: harf harf yazarken döngüde çalan blip (Freesound #468927, CC0, 8,8 sn). Yeni harf gelmezse 0,25 sn sonra durur. Karaktere özel ses yok | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

@@ -202,8 +202,8 @@ Yer tutucular:
 ## Sonlar (EndingSO)
 
 Ton: ciddi ve duygusal; mizah yok. Oyuncuya "sen" denir. Gerçek olay/yer adı yok.
-Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`.
-Kural (01:30 düzeltme): Metinler sonun kod koşuluyla çelişmez. İyi son şu an "hapse girmeden son güne ulaştı" (yıkım olmuş olabilir) → "binaların hepsi ayaktaydı" denmez. Kötü son rüşvetsiz yıkımla da gelebilir → zarf/rüşvet varsayılmaz. Orta son dürüstlük varsaymaz.
+Görseller (EEE): `ending_good.png`, `ending_bad.png`, `ending_closed.png`, `ending_collapsed.png`.
+Kural (güncel, 17 Ekim): metinler sonun kod koşuluyla çelişmez. İyi son = 10. gün bitti ve **hiç bina yıkılmadı** ("binaların hepsi ayaktaydı" denebilir). Kötü son rüşvet varsaymaz (rüşvetsiz yıkımla da hapis çıkabilir). Enkazın Gölgesi = yıkım oldu, hapis yok. Kapanan Kapı = borç 2.000 TL'yi aştı.
 Esas kaynak: `Data/Endings/*.asset`. Bu dosya taslak/arşivdir; düzeltme önce asset'te yapılır, sonra buraya işlenir.
 
 ### Good — İyi son

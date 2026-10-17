@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.BalanceSO
   TotalDays: 10
   StartMoney: 1500
-  DebtLimit: 2500
-  ExtraTestCost: 250
-  WindowRepairCost: 200
+  DebtLimit: 2000
+  ExtraTestCost: 400
+  WindowRepairCost: 600
   ApprovalFeeRange: {x: 350, y: 550}
   DisasterChanceStart: 0.2
   DisasterChanceIncrement: 0.15

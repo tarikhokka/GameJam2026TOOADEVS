@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ExpenseSO
   Id: loan
   DisplayName: Kredi taksiti
-  Amount: 350
+  Amount: 400
   Mandatory: 1

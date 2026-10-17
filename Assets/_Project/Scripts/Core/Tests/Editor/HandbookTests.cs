@@ -115,6 +115,19 @@ namespace CivilJam.Core.Tests
             CollectionAssert.IsSupersetOf(seenGroups, new[] { "1-3 kat", "4-6 kat", "7+ kat" }, "Üç kat grubu da gelmeli");
         }
 
+        // Form, lab raporu ve El Kitabı satırları aynı sırada olmalı (oyuncu satır satır karşılaştırıyor).
+        [Test]
+        public void GeneratedParams_FollowHandbookTabOrder()
+        {
+            var real = AssetDatabase.LoadAssetAtPath<RuleSetSO>("Assets/_Project/Data/RuleSet.asset");
+            Assume.That(real, Is.Not.Null);
+            var expected = new[] { ParamType.ConcreteGrade, ParamType.RebarType, ParamType.ColumnThickness, ParamType.FoundationDepth, ParamType.SoilType };
+            _config.ProjectsPerDay = 6;
+            for (int seed = 0; seed < 50; seed++)
+                foreach (var p in ProjectGenerator.Generate(1, _config, real, _balance, null, null, new System.Random(seed)))
+                    CollectionAssert.AreEqual(expected, p.Params.ConvertAll(x => x.Type), "Parametre sırası = El Kitabı sekme sırası");
+        }
+
         [Test]
         public void RealRuleSet_IsHandbookV2()
         {

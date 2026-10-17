@@ -90,7 +90,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 **Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**; şimdi sadece aşağıdaki hata/eksik listesi ve teslim hazırlığı. Yeni özellik yok.
 
 **A (Ahmet):**
-- [ ] Core: projelerdeki parametre sırası El Kitabı sekme sırasıyla aynı olsun (beton, demir, kolon, temel, zemin). Şu an form/lab "beton, kolon, temel, demir, zemin" sırasında, El Kitabı farklı → oyuncu satır eşleştirirken şaşırıyor.
+- [x] (A, yapıldı, testli) Core: projelerdeki parametre sırası El Kitabı sekme sırasıyla aynı olsun (beton, demir, kolon, temel, zemin). Şu an form/lab "beton, kolon, temel, demir, zemin" sırasında, El Kitabı farklı → oyuncu satır eşleştirirken şaşırıyor.
 - [ ] Windows build + baştan sona oynanış (F9/F10 ile 4 son), bulunan hataları sahiplerine yaz.
 - [ ] Teslim: final build, ZIP, README kontrolü, video planı.
 

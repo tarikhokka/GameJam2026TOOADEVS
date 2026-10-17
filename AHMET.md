@@ -16,7 +16,7 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 - [x] Oynanış testi işleri: proje türleri, gevşek roller, tekrarsız adlar, El Kitabı v2, demir tipleri, tepki/hafıza/hediye (sadece dürüst ustalar).
 - [x] Yeni hedef arayüz için Core: el kitabı sekmeleri (`SectionsFor`), ödeme önizlemesi, kayıt sonucu + tekrar deneme. Testler 30/30.
 - [x] Oğuzhan'ın yeni masası (`f14d2ed`) Game.unity'de oynatılarak kontrol edildi (PlayMode ekran görüntüleri).
-- [ ] **Şimdi:** parametre sırası = El Kitabı sekme sırası (ProjectGenerator).
+- [x] Parametre sırası = El Kitabı sekme sırası (ProjectGenerator, test `GeneratedParams_FollowHandbookTabOrder`). Testler 31/31.
 - [ ] Windows build + baştan sona oynanış (4 son, F9/F10); hataları memory.md §7'ye.
 - [ ] Paz 12:00 freeze → final build, ZIP, README kontrolü, video (Tarık ile), yükleme 15:00-16:30.
 

@@ -75,9 +75,10 @@ namespace CivilJam.Core
                 Fee = rng.RangeInclusive(balance.ApprovalFeeRange.x, balance.ApprovalFeeRange.y)
             };
 
-            // Parametreler: bu kat grubuna uyan kuralların hepsi (el kitabı v2: 5 parametre), belgede sabit sırayla.
+            // Parametreler: bu kat grubuna uyan kuralların hepsi (el kitabı v2: 5 parametre). Sıra = RuleSet'teki sıra
+            // = El Kitabı sekme sırası (beton, demir, kolon, temel, zemin); form, lab raporu ve El Kitabı satırları aynı sırada.
             var selected = rules.RulesFor(type, floors);
-            selected.Sort((a, b) => a.Param.CompareTo(b.Param));
+            selected.Sort((a, b) => FirstIndexOf(rules, a.Param).CompareTo(FirstIndexOf(rules, b.Param)));
 
             var failing = new HashSet<int>();
             if (!compliant && selected.Count > 0)
@@ -301,6 +302,13 @@ namespace CivilJam.Core
         static float Snap(float v, float step) => (float)Math.Round(Math.Round(v / step) * step, 2);
 
         static float Round1(float v) => (float)Math.Round(v, 1);
+
+        static int FirstIndexOf(RuleSetSO rules, ParamType param)
+        {
+            for (int i = 0; i < rules.Rules.Count; i++)
+                if (rules.Rules[i].Param == param) return i;
+            return int.MaxValue;
+        }
         static int RoundTo(int v, int step) => (v / step) * step;
     }
 }

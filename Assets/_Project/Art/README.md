@@ -26,9 +26,9 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `newspaper_bg.png` | Result | C | F |
 | `dayintro_bg.png` | DayIntro (gün başı): yeni ofis + masa (office_bg, desk_surface, desk_edge) birleşimi, hafif bulanık ve loş, ortadaki beyaz yazı okunsun diye. DayIntroScreen.prefab kök Image sprite'ına bağlı | C | F |
 | `construction_bg.png` | Construction (inşaat ekranı): ofis penceresinden görünen vinçli şantiye manzarası (desk_bg kaynağından kırpılıp büyütüldü, bulanık, gün batımı tonu). ConstructionScreen.prefab kök Image sprite'ına bağlı | C | F |
-| `daysummary_bg.png` | DaySummary (desk_bg'nin gece hali: mavi ton + lamba ışığı) | C | F |
-| `save_bg.png` | Save (gün sonu kayıt ekranı): desk_bg gece, ışıklar sönük, ay ışığı. SaveScreen.prefab background alanına bağlı | C | F |
-| `payment_bg.png` | Günlük ödeme (desk_bg bulanık ve loş) | C | F |
+| `daysummary_bg.png` | DaySummary: yeni ofis + masa, akşam mavisi, bulanık (17 Ekim akşam yenilendi) | C | F |
+| `save_bg.png` | Save: yeni ofis + masa, gece, ışıklar sönük (17 Ekim akşam yenilendi). SaveScreen.prefab background | C | F |
+| `payment_bg.png` | Günlük ödeme: yeni ofis + masa, loş sıcak ton, bulanık (17 Ekim akşam yenilendi) | C | F |
 | `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
 | `ending_good.png` | Ending İyi "Ayakta Kalanlar": gün batımında düzenli ofis, masada onaylı (✓) dosyalar, pencerede ayakta binalar (ChatGPT, 17 Ekim akşam) | C | F |
 | `ending_bad.png` | Ending Kötü "Hüküm": parmaklıklar arkasından hücre, yatakta proje rulolarıyla (ChatGPT, 17 Ekim akşam) | C | F |
@@ -61,7 +61,8 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
-| `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; şu an kullanılmıyor ("Mesaiyi bitir" kaldırıldı), ileride masa düğmeleri için | B | F |
+| `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; masadaki İNCELE düğmesinin ilk hali (şimdi btn_menu kullanıyor); şu an kullanılmıyor | B | F |
+| `ui_checkbox.png`, `ui_check.png` | Ödeme ekranı onay kutusu (krem kutu, koyu kontur) ve yeşil tik (işaretli = ödenecek), 96x96 | C | F |
 
 Yazı tipleri `Assets/_Project/Fonts/`: başlık **Paytone One**, metin **Fira Sans** (Regular/Bold), TMP asset'leri `* SDF.asset` (Türkçe set önceden yüklü, Static).
 

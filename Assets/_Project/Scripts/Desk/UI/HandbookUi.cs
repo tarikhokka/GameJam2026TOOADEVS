@@ -141,7 +141,7 @@ namespace CivilJam.Desk
             private readonly string[] labels;
             private readonly float[] required; // grup başına eşik (Labels içindeki sıra)
 
-            public Chips(Transform parent, ParamRule anyRule, float[] required, TMP_FontAsset bold, float height)
+            public Chips(Transform parent, ParamRule anyRule, float[] required, TMP_FontAsset bold, float height, float k = 1f)
             {
                 labels = anyRule.Labels.ToArray();
                 this.required = required;
@@ -163,12 +163,12 @@ namespace CivilJam.Desk
                     outlines[i].effectDistance = new Vector2(2, -2);
                     // (EEE) Çok kelimeli seçenek iki satıra bölünür ("Yumuşak\nkil", "B220\n(düz)"): satır daha az genişlik ister,
                     // satırın ortak boyu (ChipFontEqualizer) büyük kalır. Sığmazsa biraz küçülür.
-                    texts[i] = Text("Label", chip, labels[i].Replace(" ", "\n"), 15, bold, Ink, TextAlignmentOptions.Center);
+                    texts[i] = Text("Label", chip, labels[i].Replace(" ", "\n"), 15 * k, bold, Ink, TextAlignmentOptions.Center);
                     texts[i].enableAutoSizing = true;
                     texts[i].textWrappingMode = TextWrappingModes.NoWrap;
                     texts[i].lineSpacing = -18;
                     texts[i].fontSizeMin = 9;
-                    texts[i].fontSizeMax = 15 * FontScale;
+                    texts[i].fontSizeMax = 15 * FontScale * k;
                     Stretch(texts[i].rectTransform).offsetMin = new Vector2(1, 0);
                     texts[i].rectTransform.offsetMax = new Vector2(-1, 0);
 
@@ -177,9 +177,9 @@ namespace CivilJam.Desk
                     tag.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
                     tag.anchorMin = tag.anchorMax = new Vector2(0.5f, 1f);
                     tag.pivot = new Vector2(0.5f, 0.5f);
-                    tag.sizeDelta = new Vector2(40 * FontScale, 13 * FontScale);
+                    tag.sizeDelta = new Vector2(40 * FontScale * k, 13 * FontScale * k);
                     Img(tag, Ok);
-                    var tagText = Text("Text", tag, "en az", 9, bold, Color.white, TextAlignmentOptions.Center);
+                    var tagText = Text("Text", tag, "en az", 9 * k, bold, Color.white, TextAlignmentOptions.Center);
                     Stretch(tagText.rectTransform);
                     minTags[i] = tag.gameObject;
                 }
@@ -195,7 +195,8 @@ namespace CivilJam.Desk
                     bool neutral = group < 0, bad = !neutral && i < req, atMin = !neutral && i == req;
                     backs[i].color = neutral ? Paper2 : bad ? BadBg : OkBg;
                     texts[i].color = neutral ? Ink : bad ? Bad : Ok;
-                    texts[i].text = bad ? $"<s>{labels[i]}</s>" : labels[i];
+                    string label = labels[i].Replace(" ", "\n"); // kurulumdaki gibi iki satır (yoksa ChipFontEqualizer satırı küçültüyor)
+                    texts[i].text = bad ? $"<s>{label}</s>" : label;
                     outlines[i].enabled = atMin;
                     minTags[i].SetActive(atMin);
                 }
@@ -212,7 +213,7 @@ namespace CivilJam.Desk
             private readonly TextMeshProUGUI markerLabel, badZone, okZone;
             private readonly Func<float, string> format;
 
-            public Ruler(Transform parent, float[] required, Func<float, string> format, TMP_FontAsset text, TMP_FontAsset bold, float height)
+            public Ruler(Transform parent, float[] required, Func<float, string> format, TMP_FontAsset text, TMP_FontAsset bold, float height, float k = 1f)
             {
                 this.required = required;
                 this.format = format;
@@ -229,8 +230,8 @@ namespace CivilJam.Desk
                 bar.anchorMin = new Vector2(0, 1);
                 bar.anchorMax = new Vector2(1, 1);
                 bar.pivot = new Vector2(0.5f, 1f);
-                bar.sizeDelta = new Vector2(0, 14 * FontScale);
-                bar.anchoredPosition = new Vector2(0, -14 * FontScale); // üstteki "en az" etiketi büyüdü
+                bar.sizeDelta = new Vector2(0, 14 * FontScale * k);
+                bar.anchoredPosition = new Vector2(0, -14 * FontScale * k); // üstteki "en az" etiketi büyüdü
 
                 badBar = Rect("Bad", bar);
                 badImage = Img(badBar, BadBg);
@@ -242,33 +243,33 @@ namespace CivilJam.Desk
                     float t = (v - lo) / (hi - lo);
                     var tick = Rect("Tick", bar);
                     tick.anchorMin = tick.anchorMax = new Vector2(t, 0.5f);
-                    tick.sizeDelta = new Vector2(1, 14 * FontScale);
+                    tick.sizeDelta = new Vector2(1, 14 * FontScale * k);
                     Img(tick, new Color(Ink.r, Ink.g, Ink.b, 0.25f));
-                    var lbl = Text("TickLabel", bar, v.ToString("0.#", Tr), 12, bold, Ink, TextAlignmentOptions.Top); // EEE: büyük, kalın, koyu
+                    var lbl = Text("TickLabel", bar, v.ToString("0.#", Tr), 12 * k, bold, Ink, TextAlignmentOptions.Top); // EEE: büyük, kalın, koyu
                     lbl.rectTransform.anchorMin = lbl.rectTransform.anchorMax = new Vector2(t, 0f);
                     lbl.rectTransform.pivot = new Vector2(0.5f, 1f);
-                    lbl.rectTransform.sizeDelta = new Vector2(40 * FontScale, 15 * FontScale);
+                    lbl.rectTransform.sizeDelta = new Vector2(40 * FontScale * k, 15 * FontScale * k);
                     lbl.rectTransform.anchoredPosition = new Vector2(0, -1);
                 }
 
-                badZone = Text("BadZone", bar, "YETERSİZ", 9, bold, Bad, TextAlignmentOptions.MidlineLeft);
+                badZone = Text("BadZone", bar, "YETERSİZ", 9 * k, bold, Bad, TextAlignmentOptions.MidlineLeft);
                 Stretch(badZone.rectTransform).offsetMin = new Vector2(6, 0);
-                okZone = Text("OkZone", bar, "UYGUN", 9, bold, Ok, TextAlignmentOptions.MidlineRight);
+                okZone = Text("OkZone", bar, "UYGUN", 9 * k, bold, Ok, TextAlignmentOptions.MidlineRight);
                 Stretch(okZone.rectTransform).offsetMax = new Vector2(-6, 0);
 
                 // Eşik işareti: dikey çizgi + üstte "en az …"
                 marker = Rect("Marker", bar);
                 marker.anchorMin = new Vector2(0, 0);
                 marker.anchorMax = new Vector2(0, 1);
-                marker.sizeDelta = new Vector2(3, 8 * FontScale);
+                marker.sizeDelta = new Vector2(3, 8 * FontScale * k);
                 Img(marker, Ok);
                 var tagRect = Rect("Label", marker);
                 tagRect.anchorMin = tagRect.anchorMax = new Vector2(0.5f, 1f);
                 tagRect.pivot = new Vector2(0.5f, 0f);
-                tagRect.sizeDelta = new Vector2(84 * FontScale, 14 * FontScale);
+                tagRect.sizeDelta = new Vector2(84 * FontScale * k, 14 * FontScale * k);
                 tagRect.anchoredPosition = new Vector2(0, 2);
                 Img(tagRect, Ok);
-                markerLabel = Text("Text", tagRect, "en az", 10, bold, Color.white, TextAlignmentOptions.Center);
+                markerLabel = Text("Text", tagRect, "en az", 10 * k, bold, Color.white, TextAlignmentOptions.Center);
                 Stretch(markerLabel.rectTransform);
             }
 
@@ -306,11 +307,12 @@ namespace CivilJam.Desk
         }
 
         // Kural verisinden ölçek: seçenekli → çip, sayısal → cetvel. required[i] = i. kat grubunun eşiği.
+        // k: yazı ve çizim büyütme katsayısı (poliş madde 5: Hızlı Bakış 1,25).
         public static Scale BuildScale(Transform parent, RuleSetSO rules, ParamType param, ParamRule anyRule, float[] required,
-            TMP_FontAsset text, TMP_FontAsset bold, float height)
+            TMP_FontAsset text, TMP_FontAsset bold, float height, float k = 1f)
         {
-            if (anyRule.IsLabeled) return new Chips(parent, anyRule, required, bold, height);
-            return new Ruler(parent, required, v => rules.FormatValue(param, v), text, bold, height);
+            if (anyRule.IsLabeled) return new Chips(parent, anyRule, required, bold, height, k);
+            return new Ruler(parent, required, v => rules.FormatValue(param, v), text, bold, height, k);
         }
 
         // Kat grubu: kurallardaki aralıklar (1-3 / 4-6 / 7+). temsilci kat = grubun ortası (ör. 1-3 → 2, 7+ → 8).

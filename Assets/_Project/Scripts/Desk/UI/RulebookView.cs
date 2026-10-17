@@ -9,20 +9,13 @@ using UnityEngine.UI;
 namespace CivilJam.Desk
 {
     // Denetçi El Kitabı — "Hızlı Bakış" tasarımı (Ahmet onayı, Docs/Tasarim/el_kitabi_hizli_bakis.html; içerik El Kitabı v2).
-    // Sağ kenarda sekmeler: HIZLI BAKIŞ · BETON · DONATI · YAPI · ZEMİN (ctx.Rules.SectionsFor) · LAB.
-    // Hızlı Bakış: oyuncu kat grubunu seçer (formdan otomatik seçilmez, Ahmet kararı); 5 parametre kırmızı/yeşil çip ya da cetvel
-    // olarak o grubun eşiğine göre boyanır. Yeni müteahhit gelince seçim sıfırlanır (ResetFloorGroup); seçim yokken nötr.
-    // Bölüm sekmeleri: parametre başına üç kat grubu alt alta + Description + afet bilgisi cümlesi (EEE, Inspector'dan).
+    // Sağ kenarda sekmeler: HIZLI BAKIŞ · LAB. (Poliş, Ahmet kararı 18 Ekim: BETON / DONATI / YAPI / ZEMİN sekmeleri ve sayfaları kalktı.)
+    // Hızlı Bakış: kat grubu formdaki kat adedinden kendiliğinden seçilir (ShowProject, Core Inspection.FloorGroupOf; poliş K1);
+    // 1-3 / 4-6 / 7+ düğmeleri sadece gösterge, tıklanmaz. 5 parametre kırmızı/yeşil çip ya da cetvel olarak o grubun eşiğine göre
+    // boyanır; müteahhit yokken nötr. Alttaki "Tek bir kırmızı yeter" kutusu kalktı, satırlar sayfayı doldurur (poliş madde 5).
     // Sayfalar çalışırken kurallardan kurulur (HandbookUi); kural değeri kodda yazılmaz, hiçbir şey "bu projede yanlış" diye işaretlenmez.
     public class RulebookView : MonoBehaviour
     {
-        [Serializable]
-        private class SectionNote
-        {
-            public string Section;
-            [TextArea(2, 4)] public string Text;
-        }
-
         [SerializeField] private Button openButton; // masadaki EL KİTABI
         [SerializeField] private PaperWindow window;
         [SerializeField] private RectTransform pageRoot; // kağıdın içi: sayfalar burada (biri açık)
@@ -36,36 +29,31 @@ namespace CivilJam.Desk
         [Tooltip("Kat grubu düğmelerindeki bina simgeleri: alçak, orta, yüksek (Art/bld_low, bld_mid, bld_high)")]
         [SerializeField] private Sprite[] floorIcons;
 
-        [Tooltip("Sekme görselleri (EEE: tab_beton/donati/yapi/zemin, yazı görselde). Adı tab_<bölüm> olan sekme bunu kullanır; " +
-                 "görseli olmayan sekme (HIZLI BAKIŞ, LAB) aynı renkte kodla çizilir.")]
+        [Tooltip("Sekme görselleri (tab_<sekme>, yazı görselde). Bölüm sekmeleri kalktığı için şu an kullanılan yok (tab_beton/donati/" +
+                 "yapi/zemin artık gösterilmez); görseli olmayan sekme (HIZLI BAKIŞ, LAB) kodla çizilir.")]
         [SerializeField] private Sprite[] tabSprites;
-
-        [Tooltip("Bölüm sekmelerinin afet farkındalık cümlesi (EEE yazar, ICERIK_TASLAK.md). Boşsa gösterilmez.")]
-        [SerializeField] private List<SectionNote> sectionNotes = new List<SectionNote>
-        {
-            new SectionNote { Section = "BETON" }, new SectionNote { Section = "DONATI" },
-            new SectionNote { Section = "YAPI" }, new SectionNote { Section = "ZEMİN" },
-        };
 
         private const BuildingType Type = BuildingType.Residential;
         private const float RowHeight = 44f; // (EEE, 18 Ekim) 30 → 44: yazılar 1,35 kat büyüdü (HandbookUi.FontScale)
+        // (Poliş madde 5) RED kutusu kalkınca Hızlı Bakış satırları ve içindeki çip / cetvel / yazılar bu kadar büyür.
+        private const float QuickScale = 1.25f;
 
         public event Action Toggled; // açma/kapama ve sekme değişimi (kağıt sesi)
 
         public PaperWindow Window => window;
 
-        // İnceleme modu: El Kitabı eşiği oyuncunun Hızlı Bakış'ta seçtiği kat grubundan (0 = 1-3, 1 = 4-6, 2 = 7+; seçim yoksa
-        // Inspection.NoFloorGroup). Gruplar küçükten büyüğe sıralı (HandbookUi.FloorGroups), Core'un sırasıyla aynı.
+        // Gösterilen kat grubu (0 = 1-3, 1 = 4-6, 2 = 7+; müteahhit yoksa Inspection.NoFloorGroup). Gruplar küçükten büyüğe sıralı
+        // (HandbookUi.FloorGroups), Core'un sırasıyla aynı. İnceleme bunu kullanmaz: Core binanın grubunu kendisi bulur (poliş K1).
         public int SelectedFloorGroup => floorGroup < 0 ? Inspection.NoFloorGroup : floorGroup;
 
         private GameContext context;
         private bool built;
-        private int floorGroup = -1; // seçili kat grubu; -1 = seçilmedi (nötr)
+        private int floorGroup = -1; // binanın kat grubu; -1 = müteahhit yok (nötr)
         private int page;
         private readonly List<GameObject> pages = new List<GameObject>();
         private readonly List<(Image image, Color color)> tabs = new List<(Image, Color)>();
         private readonly List<HandbookUi.Scale> quickScales = new List<HandbookUi.Scale>();
-        private readonly List<(Image back, TextMeshProUGUI label)> floorButtons = new List<(Image, TextMeshProUGUI)>();
+        private readonly List<(Image back, TextMeshProUGUI label, Image icon)> floorButtons = new List<(Image, TextMeshProUGUI, Image)>();
 
         private TMP_FontAsset Title => titleFont != null ? titleFont : textFont;
         private TMP_FontAsset Bold => boldFont != null ? boldFont : textFont;
@@ -87,11 +75,12 @@ namespace CivilJam.Desk
 
         public void Close(bool instant = false) => window.Close(instant);
 
-        // Yeni müteahhit: oyuncu kat grubunu yeniden seçer (zorluk korunur).
-        public void ResetFloorGroup()
+        // Yeni müteahhit (ya da müteahhit yok: null): Hızlı Bakış binanın kat grubunu kendiliğinden gösterir (poliş K1, Ahmet kararı).
+        public void ShowProject(ProjectData project)
         {
-            if (floorGroup < 0) return;
-            floorGroup = -1;
+            int group = project != null ? Inspection.FloorGroupOf(context, project) : Inspection.NoFloorGroup;
+            if (group == floorGroup) return;
+            floorGroup = group;
             PaintQuick();
         }
 
@@ -142,9 +131,7 @@ namespace CivilJam.Desk
             var sections = rules.SectionsFor(Type);
 
             AddPage("HIZLI BAKIŞ", HandbookUi.General, BuildQuickPage(rules, groups, sections));
-            foreach (var section in sections)
-                AddPage(section, HandbookUi.SectionColor(section), BuildSectionPage(rules, groups, section));
-            AddPage("LAB", HandbookUi.InkSoft, BuildLabPage(ctx));
+            AddPage("LAB", HandbookUi.InkSoft, BuildLabPage(ctx)); // (poliş madde 6) bölüm sayfaları kalktı
             PaintQuick();
         }
 
@@ -230,41 +217,38 @@ namespace CivilJam.Desk
             var steps = HandbookUi.Rect("Steps", page.transform);
             HandbookUi.HL(steps, 6, null, expandWidth: true);
             HandbookUi.Size(steps, prefH: 60);
-            Step(steps, "1", "Formda <b>KAT ADEDİ</b>'ni oku");
-            Step(steps, "2", "Aşağıdan kat grubunu seç");
+            Step(steps, "1", "Formda <b>KAT ADEDİ</b>'ne bak");
+            Step(steps, "2", "Kat grubu <b>otomatik</b>");
             Step(steps, "3", "Her değeri bul: hepsi yeşil mi?");
 
-            // Kat grubu düğmeleri (oyuncu seçer)
+            // Kat grubu göstergesi (poliş K1): binanın grubu koyu, diğerleri soluk; tıklanmaz.
             var floors = HandbookUi.Rect("Floors", page.transform);
             HandbookUi.HL(floors, 8, null, expandWidth: true);
-            HandbookUi.Size(floors, prefH: 56);
+            HandbookUi.Size(floors, prefH: 60);
             for (int i = 0; i < groups.Count; i++)
             {
-                int index = i;
                 var b = HandbookUi.Rect("Floor" + i, floors);
-                HandbookUi.Size(b, prefW: 0, flexW: 1, prefH: 56);
-                var back = HandbookUi.Img(b, HandbookUi.NoteBg, raycast: true);
+                HandbookUi.Size(b, prefW: 0, flexW: 1, prefH: 60);
+                var back = HandbookUi.Img(b, HandbookUi.NoteBg);
                 HandbookUi.Border(back, HandbookUi.Ink, 3);
-                var button = b.gameObject.AddComponent<Button>();
-                button.targetGraphic = back;
-                button.transition = Selectable.Transition.None;
-                button.onClick.AddListener(() => SelectFloorGroup(index));
                 HandbookUi.HL(b, 8, new RectOffset(8, 8, 4, 4), align: TextAnchor.MiddleCenter);
+                Image img = null;
                 if (floorIcons != null && i < floorIcons.Length && floorIcons[i] != null)
                 {
                     var icon = HandbookUi.Rect("Icon", b);
-                    HandbookUi.Size(icon, prefW: 30, prefH: 40);
-                    var img = HandbookUi.Img(icon, Color.white);
+                    HandbookUi.Size(icon, prefW: 32, prefH: 44);
+                    img = HandbookUi.Img(icon, Color.white);
                     img.sprite = floorIcons[i];
                     img.preserveAspect = true;
                 }
-                var label = HandbookUi.Text("Label", b, groups[i].label, 17, Title, HandbookUi.Ink, TextAlignmentOptions.Center);
-                floorButtons.Add((back, label));
+                var label = HandbookUi.Text("Label", b, groups[i].label, 19, Title, HandbookUi.Ink, TextAlignmentOptions.Center);
+                floorButtons.Add((back, label, img));
             }
 
-            // 5 satır (sekme sırasıyla)
+            // 5 satır (kural sırasıyla); RED kutusu kalktığı için sayfanın kalanını doldurur (poliş madde 5)
             var rows = HandbookUi.Rect("Rows", page.transform);
             HandbookUi.VL(rows, 8);
+            HandbookUi.Size(rows, flexH: 1);
             foreach (var section in sections)
                 foreach (var param in ParamsIn(rules, section))
                 {
@@ -272,7 +256,7 @@ namespace CivilJam.Desk
                     var color = HandbookUi.SectionColor(section);
                     var row = HandbookUi.Rect("Row_" + param, rows);
                     InspectSpot.Mark(row, InspectTarget.OfParam(InspectDoc.Handbook, param)); // inceleme modunda tıklanabilir
-                    HandbookUi.Size(row, prefH: 64);
+                    HandbookUi.Size(row, prefH: 64 * QuickScale, flexH: 1);
                     HandbookUi.Img(row, new Color(1f, 1f, 1f, 0.35f));
                     HandbookUi.HL(row, 10, new RectOffset(14, 8, 7, 7));
                     var stripe = HandbookUi.Rect("Stripe", row);
@@ -283,74 +267,10 @@ namespace CivilJam.Desk
                     stripe.pivot = new Vector2(0, 0.5f);
                     HandbookUi.Img(stripe, color);
 
-                    NameBlock(row, section, DeskFormat.ParamName(rules, Type, param), color, 116);
-                    quickScales.Add(HandbookUi.BuildScale(row, rules, param, any, Required(rules, param, groups), textFont, Bold, RowHeight));
+                    NameBlock(row, section, DeskFormat.ParamName(rules, Type, param), color, 128);
+                    quickScales.Add(HandbookUi.BuildScale(row, rules, param, any, Required(rules, param, groups), textFont, Bold,
+                        RowHeight * QuickScale, QuickScale));
                 }
-
-            HandbookUi.Size(HandbookUi.Rect("Spacer", page.transform), flexH: 1);
-
-            // "Tek bir kırmızı yeter" kutusu
-            var foot = HandbookUi.Rect("Foot", page.transform);
-            var footBack = HandbookUi.Img(foot, HandbookUi.NoteBg);
-            HandbookUi.Border(footBack, HandbookUi.Ink, 3);
-            HandbookUi.HL(foot, 12, new RectOffset(12, 12, 8, 8));
-            var stamp = HandbookUi.Text("Stamp", foot, "RED", 20, Title, HandbookUi.Bad, TextAlignmentOptions.Center);
-            HandbookUi.Size(stamp, prefW: 78, prefH: 40);
-            stamp.rectTransform.localRotation = Quaternion.Euler(0, 0, 6);
-            var p = HandbookUi.Text("Text", foot,
-                "<b>Tek bir kırmızı yeter.</b> Değer tutuyor ama belge şüpheliyse: laboratuvardan <b>ek test</b> iste, " +
-                "form ile raporun parsel, tarih, kaşe ve imzasını karşılaştır.", 13, textFont, HandbookUi.Ink, TextAlignmentOptions.MidlineLeft, wrap: true);
-            HandbookUi.Size(p, flexW: 1);
-            return page;
-        }
-
-        private GameObject BuildSectionPage(RuleSetSO rules, List<(ParamRule rep, int floors, string label)> groups, string section)
-        {
-            var page = NewPage("Section_" + section);
-            var color = HandbookUi.SectionColor(section);
-            Header(page.transform, section, "En az değerler\nkat grubuna göre");
-
-            foreach (var param in ParamsIn(rules, section))
-            {
-                var any = FirstRule(rules, param);
-                var block = HandbookUi.Rect("Param_" + param, page.transform);
-                HandbookUi.VL(block, 6, new RectOffset(14, 6, 8, 8));
-                HandbookUi.Img(block, new Color(1f, 1f, 1f, 0.35f));
-                var stripe = HandbookUi.Rect("Stripe", block);
-                stripe.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
-                stripe.anchorMin = Vector2.zero;
-                stripe.anchorMax = new Vector2(0, 1);
-                stripe.sizeDelta = new Vector2(6, 0);
-                stripe.pivot = new Vector2(0, 0.5f);
-                HandbookUi.Img(stripe, color);
-
-                HandbookUi.Text("Name", block, DeskFormat.ParamName(rules, Type, param), 17, Bold, HandbookUi.Ink);
-                var required = Required(rules, param, groups);
-                for (int g = 0; g < groups.Count; g++)
-                {
-                    var line = HandbookUi.Rect("Group" + g, block);
-                    HandbookUi.HL(line, 10);
-                    HandbookUi.Size(line, prefH: RowHeight + 4);
-                    var lbl = HandbookUi.Text("Floors", line, groups[g].label, 13, Title, HandbookUi.Ink);
-                    HandbookUi.Size(lbl, prefW: 70);
-                    HandbookUi.BuildScale(line, rules, param, any, required, textFont, Bold, RowHeight).Paint(g);
-                }
-                if (any != null && !string.IsNullOrWhiteSpace(any.Description))
-                    HandbookUi.Text("Description", block, any.Description.Trim(), 13, textFont, HandbookUi.InkSoft, wrap: true);
-            }
-
-            string note = NoteFor(section);
-            if (!string.IsNullOrWhiteSpace(note))
-            {
-                var box = HandbookUi.Rect("Note", page.transform);
-                var back = HandbookUi.Img(box, HandbookUi.NoteBg);
-                HandbookUi.Border(back, color, 3);
-                HandbookUi.VL(box, 2, new RectOffset(12, 12, 8, 8));
-                var head = HandbookUi.Text("Head", box, "AFETE HAZIRLIK", 11, Bold, color);
-                head.characterSpacing = 4;
-                HandbookUi.Text("Text", box, note.Trim(), 14, textFont, HandbookUi.Ink, wrap: true);
-            }
-            HandbookUi.Size(HandbookUi.Rect("Spacer", page.transform), flexH: 1);
             return page;
         }
 
@@ -416,24 +336,17 @@ namespace CivilJam.Desk
             // çipler daralıp yazıları küçülüyordu — EEE)
             HandbookUi.Size(block, prefW: width, flexW: 0);
             var ico = HandbookUi.Rect("Icon", block);
-            HandbookUi.Size(ico, prefW: 36, prefH: 36);
+            HandbookUi.Size(ico, prefW: 40, prefH: 40);
             HandbookUi.Img(ico, color);
-            var letter = HandbookUi.Text("Letter", ico, section.Substring(0, 1), 15, Title, Color.white, TextAlignmentOptions.Center);
+            var letter = HandbookUi.Text("Letter", ico, section.Substring(0, 1), 17, Title, Color.white, TextAlignmentOptions.Center);
             HandbookUi.Stretch(letter.rectTransform);
             var texts = HandbookUi.Rect("Texts", block);
             HandbookUi.VL(texts, 0);
             HandbookUi.Size(texts, flexW: 1);
-            var sec = HandbookUi.Text("Section", texts, section, 9, Bold, color);
+            var sec = HandbookUi.Text("Section", texts, section, 10, Bold, color);
             sec.characterSpacing = 3;
-            var n = HandbookUi.Text("Param", texts, name, 13, Bold, HandbookUi.Ink, wrap: true);
+            var n = HandbookUi.Text("Param", texts, name, 15, Bold, HandbookUi.Ink, wrap: true);
             n.lineSpacing = -20;
-        }
-
-        private void SelectFloorGroup(int index)
-        {
-            floorGroup = floorGroup == index ? -1 : index; // aynı düğme seçimi kaldırır
-            PaintQuick();
-            Toggled?.Invoke();
         }
 
         private void PaintQuick()
@@ -442,8 +355,12 @@ namespace CivilJam.Desk
             for (int i = 0; i < floorButtons.Count; i++)
             {
                 bool on = i == floorGroup;
-                floorButtons[i].back.color = on ? HandbookUi.Ink : HandbookUi.NoteBg;
-                floorButtons[i].label.color = on ? HandbookUi.Paper : HandbookUi.Ink;
+                var (back, label, icon) = floorButtons[i];
+                back.color = on ? HandbookUi.Ink : new Color(HandbookUi.NoteBg.r, HandbookUi.NoteBg.g, HandbookUi.NoteBg.b, 0.45f);
+                label.color = on ? HandbookUi.Paper : new Color(HandbookUi.Ink.r, HandbookUi.Ink.g, HandbookUi.Ink.b, 0.35f);
+                if (icon != null) icon.color = new Color(1f, 1f, 1f, on ? 1f : 0.35f);
+                var outline = back.GetComponent<Outline>();
+                if (outline != null) outline.effectColor = new Color(HandbookUi.Ink.r, HandbookUi.Ink.g, HandbookUi.Ink.b, on ? 1f : 0.3f);
             }
         }
 
@@ -475,13 +392,6 @@ namespace CivilJam.Desk
                 values[i] = rule != null ? rule.Required : 0f;
             }
             return values;
-        }
-
-        private string NoteFor(string section)
-        {
-            foreach (var n in sectionNotes)
-                if (n != null && string.Equals(n.Section, section, StringComparison.OrdinalIgnoreCase)) return n.Text;
-            return null;
         }
     }
 }

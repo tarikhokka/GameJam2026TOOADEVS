@@ -162,7 +162,7 @@ namespace CivilJam.Desk
             if (dialogue != null) dialogue.Stop(); // yeni müteahhit: diyalog sıfırlanır
             CloseEnvelope();
             holdEnvelope = false;
-            if (rulebook != null) rulebook.ResetFloorGroup(); // yeni müteahhit: kat grubunu oyuncu yeniden seçer (Ahmet kararı)
+            if (rulebook != null) rulebook.ShowProject(context.GetTodayProject(projectId)); // (A, poliş K1) kat grubu otomatik
             Redraw();
         }
 

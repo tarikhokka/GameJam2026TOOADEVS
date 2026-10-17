@@ -87,7 +87,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - Saatler: **feature freeze ve Git desteği 18 Ekim 12:00**; yükleme 15:00-16:30; son teslim 18 Ekim 18:00.
 
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
-**Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**; şimdi sadece aşağıdaki hata/eksik listesi ve teslim hazırlığı. Yeni özellik yok.
+**Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
 
 **A (Ahmet):**
 - [x] (A, yapıldı, testli) Core: projelerdeki parametre sırası El Kitabı sekme sırasıyla aynı olsun (beton, demir, kolon, temel, zemin). Şu an form/lab "beton, kolon, temel, demir, zemin" sırasında, El Kitabı farklı → oyuncu satır eşleştirirken şaşırıyor.
@@ -137,7 +137,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 17 Ekim ~15:00 | **Yeni hedef arayüz:** üst yarı ofis + müteahhit, alt yarı 3 sabit belge. Kurallar, lab raporunun rolü ve Core sözleşmesi değişmez. Eğimli masa, masadaki kitaplar, piksel tasarım iptal | Ahmet |
 | 17 Ekim | El Kitabı sekmeleri BETON / DONATI / YAPI / ZEMİN; ilk sekme "Hızlı Bakış" (oyuncu kat grubunu seçer, otomatik değil) | Ahmet: eski sayfa kullanıcı dostu değildi; zorluk korunur |
 | 17 Ekim | Ödeme önizlemesi ve kayıt sonucu Core'dan (`ExpenseCalculator.Preview`, `ctx.LastSave`, `ctx.RetrySave`) | Onur'un ihtiyacı; ekran ikinci ekonomi hesabı yazmasın |
-| 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Freeze'e kadar sadece hata/eksik ve teslim | Ahmet |
+| 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
 
 ## Güncelleme kuralı
 - Karar, mimari değişiklik, yeni kural ya da biten büyük iş olunca ilgili bölümü güncelle ve §8'e satır ekle.

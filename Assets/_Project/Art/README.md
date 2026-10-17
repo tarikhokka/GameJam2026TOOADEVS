@@ -25,7 +25,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `newspaper_bg.png` | Result | C | F |
 | `daysummary_bg.png` | DaySummary | C | P |
 | `payment_bg.png` | Günlük ödeme | C | P |
-| `menu_bg.png`, `logo.png` | MainMenu | C | P |
+| `menu_bg.png`, `logo.png` | MainMenu (akşam şehir + vinçler; "İMZA" logosu, Lilita One + imza kıvrımı, 900x330 şeffaf) | C | F |
 | `ending_good.png` | Ending (İyi) | C | P |
 | `ending_bad.png` | Ending (Kötü, mahkeme) | C | P |
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |

@@ -29,6 +29,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Font
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
+| Lilita One (Juan Montoreano) — sadece logo görselinde yazı olarak kullanıldı, font dosyası repoda yok | `Assets/_Project/Art/logo.png` | https://fonts.google.com/specimen/Lilita+One | SIL OFL 1.1 | Tarık | 2026-10-17 |
 
 ## Diğer
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -46,6 +47,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Masa arka planı (ofis, inşaat resimli çerçeveler, aksesuarlar) ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | Ana menü arka planı (akşam şehir, vinçler) ve "İMZA" logosunu çizen script (flat) | `Assets/_Project/Art/menu_bg.png`, `logo.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Müteahhit karakter taslakları (isimler, selamlama ve rüşvet replikleri), gazete manşet ve son metni taslakları; EEE inceleyip onayladı. Müteahhit metinlerinden ClientSO asset dosyalarını üreten script; manşetlerin Headlines.asset dosyasına taşınması; son metinlerinin kod koşullarıyla tutarlılık düzeltmesi, EndingSO asset'leri ve "Enkazın Gölgesi" son metninin son hali; README son düzenlemesi (ekip, kabadayı, sonlar, jüri kısayolları); oyun içi Emeği Geçenler metni | `ICERIK_TASLAK.md`, `Assets/_Project/Data/Clients/*.asset`, `Assets/_Project/Data/Headlines.asset`, `Assets/_Project/Data/Endings/*.asset` | Tarık | 2026-10-16 |
 | Claude Code (Anthropic) | Core veri sözleşmesi kodu, deprem simülatörü, A rolü çalışma planı | `Assets/_Project/Scripts/Core/**`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
 | Claude Code (Anthropic) | Core Faz 1: proje üretici, afet sistemi, oyun oturumu/yöneticisi, kayıt, debug arayüzü, testler, veri asset ve Game sahnesi kurulum aracı; kurgusal isim listeleri | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `Assets/_Project/Scenes/Game.unity`, `AHMET.md`, `memory.md` | Ahmet İlman | 2026-10-16 |
@@ -88,6 +90,7 @@ Müteahhit karakterleri: "Modular Characters" — Kenney (kenney.nl), CC0
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1
+Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1
 
 YAPAY ZEKÂ
 Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları

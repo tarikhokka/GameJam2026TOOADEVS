@@ -195,7 +195,7 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
     - üst yarı ofis + portre + balon, alt yarı 3 sabit belge;
     - `FormView`, `LabReportView` ve `RulebookView` içerikleri yeniden kullanılır, kabuk değişir;
     - el kitabı sekmeleri `rule.Section`'dan gelir.
-  - [ ] 📖 **El kitabı = "Hızlı Bakış" tasarımı (Ahmet onayladı, 17 Ekim akşam).** Referans: **`Docs/Tasarim/el_kitabi_hizli_bakis.html`** (tarayıcıda aç, tıklanabilir; kat grubu düğmeleri ve "Örnek dosyayı göster" çalışıyor). Eski numaralı kural satırları ("1.1 Kolon kalınlığı en az: 1-3 kat 30 cm · …") **kalkıyor**.
+  - [x] 📖 **El kitabı = "Hızlı Bakış" tasarımı (Ahmet onayladı, 17 Ekim akşam).** Referans: **`Docs/Tasarim/el_kitabi_hizli_bakis.html`** (tarayıcıda aç, tıklanabilir; kat grubu düğmeleri ve "Örnek dosyayı göster" çalışıyor). Eski numaralı kural satırları ("1.1 Kolon kalınlığı en az: 1-3 kat 30 cm · …") **kalkıyor**.
     - **Sekmeler (sağ kenar, dikey):** HIZLI BAKIŞ (ilk açılan) · BETON · DONATI · YAPI · ZEMİN (+ istersen LAB: akredite laboratuvarlar ve belge kontrolü).
       - Renkler: Hızlı Bakış mor `#7a5ea8`, BETON `#c4553f`, DONATI `#3f7cb3`, YAPI `#d18a25`, ZEMİN `#5d9152`.
       - Sıra: `ctx.Rules.SectionsFor(BuildingType.Residential)`.
@@ -225,6 +225,7 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
       - Hiçbir bilgi "bu projede şu yanlış" demez, işaretlemez; formdaki değeri oyuncu kendisi bulur.
       - Sandbox ve Game.unity'de denendi.
     - Bitince A'ya haber ver; A Game.unity'de kontrol eder.
+    - (B, 17 Ekim ~15:40) ✅ Yapıldı, Sandbox'ta test edildi. **Ahmet: Game.unity kontrolün bekleniyor.** `UI/RulebookView.cs` (sekmeler, sayfalar, kat grubu seçimi, `ResetFloorGroup` — DeskScreen yeni müteahhitte çağırır) + `UI/HandbookUi.cs` (çip / cetvel, kat grupları). Sayfalar çalışırken `RuleSet`'ten kurulur: çipler `rule.Labels`, eşik `FindRule(Residential, param, temsilciKat)` (1-3 → 2, 4-6 → 5, 7+ → 8), cetvel aralığı eşiklerden (en küçük × 0,6 … en büyük × 1,3; kolon 18-52, temel 0,9-3,25). Fontlarda ✓/✕ yok (EEE): yetersiz kademe kırmızı + **üstü çizili**, en az olan yeşil çerçeve + "en az" etiketi. Sekmeler: HIZLI BAKIŞ · `SectionsFor` · LAB (belge kontrolü + akredite lab'lar). Bölüm sekmelerindeki afet cümleleri `RulebookView` → `sectionNotes` (Inspector; Tarık'ın metni gelince yazılır, boşken görünmez). Şimdilik mevcut El Kitabı penceresinin içinde; yeni masa düzeninde sadece kabuk değişir. Builder fontları Paytone One + Fira Sans'a geçirdi (form ve lab raporu da).
   - [ ] **Zarf:**
     - Formun yanında masada görünür (ya da müteahhidin elinde).
     - "ZARFI AL VE ONAYLA" düğmesi formda.

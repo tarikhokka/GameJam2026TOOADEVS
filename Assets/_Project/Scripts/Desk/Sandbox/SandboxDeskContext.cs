@@ -239,8 +239,9 @@ namespace CivilJam.Desk
             MinFloors = minFloors,
             MaxFloors = maxFloors,
             Labels = labels != null ? new List<string>(labels) : new List<string>(),
-            // El Kitabı v2 bölümleri (RuleSet.asset ile aynı): temel ve zemin "B · ZEMİN", diğerleri "A · YAPI".
-            Section = type == ParamType.FoundationDepth || type == ParamType.SoilType ? "B · ZEMİN" : "A · YAPI",
+            // El Kitabı sekmeleri (RuleSet.asset ile aynı, Ahmet f583077): beton → BETON, demir → DONATI, kolon → YAPI, temel ve zemin → ZEMİN.
+            Section = type == ParamType.ConcreteGrade ? "BETON" : type == ParamType.RebarType ? "DONATI"
+                : type == ParamType.ColumnThickness ? "YAPI" : "ZEMİN",
         };
 
         private static ClientSO Client(string id, string name, bool honest, string[] greetings, string[] bribes = null,

@@ -142,6 +142,7 @@ namespace CivilJam.Desk
         private void Select(string projectId)
         {
             selectedId = projectId;
+            if (rulebook != null) rulebook.ResetFloorGroup(); // yeni müteahhit: kat grubunu oyuncu yeniden seçer (Ahmet kararı)
             Redraw();
         }
 

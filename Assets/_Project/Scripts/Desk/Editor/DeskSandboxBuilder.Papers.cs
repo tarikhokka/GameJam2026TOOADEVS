@@ -8,7 +8,7 @@ namespace CivilJam.Desk.Editor
     // Kağıt pencereler (Yapı Denetim Formu, Lab Raporu, Denetçi El Kitabı): Ahmet'in piksel tasarımı
     // (Docs/Tasarim/*_GORUNUM.html): klasör rengi + 3 px koyu çerçeve, üstte sekme, içinde krem kağıt ve düz gölge,
     // noktalı satırlar, kutulu bölüm harfleri, kesik çizgili karar kutuları (burada düz çerçeve). İçerik El Kitabı v2.
-    // Fontlar: başlık/etiket Pixelify Sans, değerler VT323 (EEE ekleyince adlarıyla bulunur; yoksa varsayılan font).
+    // Fontlar: başlık Paytone One, metin Fira Sans (EEE, adlarıyla bulunur; yoksa varsayılan font).
     public static partial class DeskSandboxBuilder
     {
         // Tasarım renkleri
@@ -25,12 +25,14 @@ namespace CivilJam.Desk.Editor
         private const float SheetW = 680f, SheetH = 990f, Border = 3f, FolderPad = 22f, PaperPad = 24f, TabH = 46f;
         private const float ContentW = SheetW - 2 * (Border + FolderPad + Border + PaperPad); // 576
         private const float RowH = 30f;
+        private const float HandbookTabW = 32f; // El Kitabı sağ kenar sekmeleri
 
-        private static TMP_FontAsset titleFont, valueFont;
+        private static TMP_FontAsset titleFont, valueFont, boldFont;
         private static bool paperFontsResolved;
 
         private static TMP_FontAsset TitleFont { get { ResolvePaperFonts(); return titleFont; } }
         private static TMP_FontAsset ValueFont { get { ResolvePaperFonts(); return valueFont; } }
+        private static TMP_FontAsset BoldFont { get { ResolvePaperFonts(); return boldFont; } }
 
         // ---------- Pencereler ----------
 
@@ -154,73 +156,45 @@ namespace CivilJam.Desk.Editor
             return window;
         }
 
+        // Denetçi El Kitabı ("Hızlı Bakış", Ahmet onayı): sayfalar ve sekmeler çalışırken kurallardan kurulur (RulebookView + HandbookUi).
+        // Builder sadece kabuğu kurar: kağıt pencere, sayfa alanı, sağ kenarda sekme şeridi; fontlar ve bina simgeleri bağlanır.
         private static RulebookView BuildRulebook(Transform papers, Button openButton)
         {
             var window = BuildPaperWindow(papers, "RulebookWindow", HandbookFolderColor, HandbookShadowColor, "EL KİTABI · BASKI 3",
-                new Vector2(600, -380), out var content, out _, out _); // EL KİTABI (sağ)
+                new Vector2(600, -380), out var content, out var paper, out _); // EL KİTABI (sağ)
 
-            var titles = NewRect("Titles", content);
-            VLayout(titles, 2, new RectOffset(0, 0, 0, 8));
-            Small(titles, "AFET KONTROL BÜROSU");
-            Title(titles, "DENETÇİ EL KİTABI");
-            var subtitle = NewText("Subtitle", titles, "Formdaki değerleri bu kurallarla karşılaştır.", 24, PaperInk, TextAlignmentOptions.TopLeft);
-            subtitle.font = ValueFont;
-            Divider(content, Border);
+            // Sayfa alanı sekmelere yer açar (sayfalar esnek yükseklikle alanı doldurur).
+            content.offsetMax = new Vector2(-PaperPad - HandbookTabW - 6, -PaperPad);
 
-            // Sayfa 1: bölümler + GENEL KURAL
-            var rulesPage = NewRect("RulesPage", content);
-            VLayout(rulesPage, 16, new RectOffset(0, 0, 0, 0));
-            Layout(rulesPage, flexH: 1);
-            var sections = NewRect("Sections", rulesPage);
-            VLayout(sections, 18, new RectOffset(0, 0, 0, 0));
-            var sectionTemplate = SectionBlock("SectionTemplate", sections, RuleRow("RuleTemplate", null));
-            Layout(NewRect("Spacer", rulesPage), flexH: 1);
-            var general = NewRect("GeneralRule", rulesPage);
-            var generalInner = Bordered(general, PaperCream);
-            VLayout(generalInner, 2, new RectOffset(16, 16, 10, 12));
-            Layout(general, prefH: 84);
-            var generalTitle = NewText("Title", generalInner, "GENEL KURAL", 18, PaperInk, TextAlignmentOptions.TopLeft, FontStyles.Bold);
-            generalTitle.font = TitleFont;
-            generalTitle.characterSpacing = 6;
-            var generalBody = NewText("Body", generalInner, "Tek bir kurala uymayan bina REDDEDİLİR.", 26, PaperInk, TextAlignmentOptions.TopLeft);
-            generalBody.font = ValueFont;
-
-            // Sayfa 2: nasıl kullanılır + belge kontrolü + akredite laboratuvarlar
-            var notesPage = NewRect("NotesPage", content);
-            VLayout(notesPage, 0, new RectOffset(0, 0, 0, 0));
-            Layout(notesPage, flexH: 1);
-            var notes = NewText("Notes", notesPage, "Notlar", 22, PaperInk, TextAlignmentOptions.TopLeft);
-            notes.font = TitleFont;
-            notes.enableAutoSizing = true;
-            notes.fontSizeMin = 14;
-            notes.fontSizeMax = 22;
-            Layout(notes, flexH: 1);
-            notesPage.gameObject.SetActive(false);
-
-            // Sayfa çevirme
-            var footer = NewRect("Footer", content);
-            var footerLayout = HLayout(footer, 12, new RectOffset(0, 0, 0, 0));
-            footerLayout.childAlignment = TextAnchor.MiddleCenter;
-            Layout(footer, prefH: 44);
-            var prev = BorderedButton("PrevButton", footer, PaperCream, "<", 24, out _);
-            Layout(prev, prefW: 64, prefH: 44);
-            var page = NewText("Page", footer, "1 / 2", 24, PaperInk, TextAlignmentOptions.Center);
-            page.font = ValueFont;
-            Layout(page, prefW: 120, prefH: 44);
-            var next = BorderedButton("NextButton", footer, PaperCream, ">", 24, out _);
-            Layout(next, prefW: 64, prefH: 44);
+            // Sekmeler: kağıdın sağ iç kenarında, üstten aşağı
+            var tabs = NewRect("Tabs", paper);
+            tabs.anchorMin = new Vector2(1, 0);
+            tabs.anchorMax = new Vector2(1, 1);
+            tabs.pivot = new Vector2(1, 0.5f);
+            tabs.sizeDelta = new Vector2(HandbookTabW, -2 * (Border + 18));
+            tabs.anchoredPosition = new Vector2(-Border, 0);
+            var tabsLayout = tabs.gameObject.AddComponent<VerticalLayoutGroup>();
+            tabsLayout.spacing = 6;
+            tabsLayout.childAlignment = TextAnchor.UpperCenter;
+            tabsLayout.childControlWidth = tabsLayout.childControlHeight = true;
+            tabsLayout.childForceExpandWidth = true;
+            tabsLayout.childForceExpandHeight = false;
 
             var view = window.gameObject.AddComponent<RulebookView>();
             Wire(view, "openButton", openButton);
             Wire(view, "window", window);
-            Wire(view, "rulesPage", rulesPage.gameObject);
-            Wire(view, "sectionsContainer", sections);
-            Wire(view, "sectionTemplate", sectionTemplate);
-            Wire(view, "notesPage", notesPage.gameObject);
-            Wire(view, "notesText", notes);
-            Wire(view, "pageText", page);
-            Wire(view, "prevButton", prev);
-            Wire(view, "nextButton", next);
+            Wire(view, "pageRoot", content);
+            Wire(view, "tabsRoot", tabs);
+            Wire(view, "titleFont", TitleFont);
+            Wire(view, "textFont", ValueFont);
+            Wire(view, "boldFont", BoldFont);
+
+            var so = new SerializedObject(view);
+            var icons = so.FindProperty("floorIcons");
+            string[] names = { "bld_low", "bld_mid", "bld_high" };
+            icons.arraySize = names.Length;
+            for (int i = 0; i < names.Length; i++) icons.GetArrayElementAtIndex(i).objectReferenceValue = FindSprite(names[i]);
+            so.ApplyModifiedPropertiesWithoutUndo();
             return view;
         }
 
@@ -589,13 +563,14 @@ namespace CivilJam.Desk.Editor
             return inner;
         }
 
-        // EEE'nin TMP font asset'leri (Pixelify Sans, VT323) adlarıyla bulunur; yoksa varsayılan font.
+        // EEE'nin TMP font asset'leri adlarıyla bulunur (17 Ekim: başlık Paytone One, metin Fira Sans; Pixelify/VT323 iptal); yoksa varsayılan font.
         private static void ResolvePaperFonts()
         {
             if (paperFontsResolved) return;
             paperFontsResolved = true;
-            titleFont = FindFont("Pixelify") ?? font;
-            valueFont = FindFont("VT323") ?? font;
+            titleFont = FindFont("PaytoneOne") ?? font;
+            valueFont = FindFont("FiraSans-Regular") ?? font;
+            boldFont = FindFont("FiraSans-Bold") ?? valueFont;
         }
 
         private static TMP_FontAsset FindFont(string namePart)

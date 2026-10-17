@@ -19,5 +19,6 @@ Bu klasöre sadece EEE yazar.
 | `mus_menu.wav` | MainMenu (loop) | F (dosya hazır; oyunda henüz bağlı değil → Onur, memory.md §7) |
 | `mus_ending_sad.mp3` | Kötü ve Orta sonlar (Hüküm, Enkazın Gölgesi, Kapanan Kapı) | F (dosya hazır; oyunda henüz bağlı değil → Onur, memory.md §7) |
 | `sfx_typing.ogg` | Konuşma balonu: harf harf yazarken döngüde çalan blip (Freesound #468927, CC0, 8,8 sn). Yeni harf gelmezse 0,25 sn sonra durur. Karaktere özel ses yok | F |
+| `sfx_shift_end.wav` | Masa: mesai bitince (son müteahhitten sonra) "MESAİ BİTTİ" geçiş ekranıyla çalan iki notalı zil. Kodla sentezlendi (ekibin kendi eseri), 2,4 sn. DeskAudio.shiftEnd | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

@@ -149,15 +149,88 @@
   - Unity'yi **6000.6.5f1 ile açmayın** (proje sürümünü yükseltiyor; ekip 6000.6.4f1). `ProjectVersion.txt` değişirse commit'lemeyin.
   - Game.unity Editor'den kaydedilirse ekran anchor'ları bozulabiliyor (bir kez oldu); kaydetmeyin.
 
+### 🧭 YENİ HEDEF ARAYÜZ (Ahmet kararı, 17 Ekim ~15:00) — HERKES EN ÖNCE BUNU OKUSUN
+Referans görsel: **`Docs/Tasarim/hedef_arayuz.png`** (Onur hazırladı). Oyunun bitmiş hali bu yönde olacak; **birebir kopya şart değil, yön bu.** Eski "eğimli masa + masada yatan kitaplar + açılan kağıt pencereler" tasarımı **kalktı**.
+
+**Ekran düzeni (1920x1080):**
+- **Üst yarı, ofis sahnesi:** müteahhit portresi masanın arkasında, yanında konuşma balonu (harf harf yazı ve yazı sesi aynen kalır). Arka planda ofis: raflar, dolap, pencere, duvarda "İMZA" logosu.
+- **Alt yarı, masa yüzeyi:** üç belge **her zaman açık, düz ve yan yana** duruyor. Sürükleme, kitaba tıklayıp pencere açma ve eğim yok.
+  1. **Sol: YAPI DENETİM FORMU** (`Documents[0]`). İki bölüm var:
+     - Proje bilgileri: proje adı, ada/parsel, adres, yapı sınıfı, kat adedi, müteahhit, toplam alan; sağda küçük bina resmi.
+     - Teknik bilgiler: tablo "Özellik | Beyan değeri | Birim".
+     - En altta büyük **✔ ONAY** ve **✖ RED** düğmeleri. Zarf varsa "ZARFI AL VE ONAYLA" düğmesi formun yanında ya da üstünde.
+  2. **Orta: LABORATUVAR RAPORU** (`Documents[1]`):
+     - Rapor no, tarih, laboratuvar adı, numune yeri ve tarihi.
+     - Tablo "Parametre | Beyan | Ek test".
+     - Değerlendirme cümlesi, yetkili adı ve imzası, kırmızı yuvarlak lab kaşesi, **EK TEST** düğmesi.
+  3. **Sağ: DENETÇİ EL KİTABI:**
+     - Sağ kenarda renkli sekmeler: **BETON / DONATI / YAPI / ZEMİN** (ve isteğe bağlı GENEL: nasıl kullanılır, akredite laboratuvarlar).
+     - Her sekmede tablo "Parametre | 1-3 kat | 4-6 kat | 7+ kat".
+     - Altta "Tek bir kurala uymayan bina REDDEDİLİR."
+
+**DEĞİŞMEYENLER (Ahmet kararı):**
+- **Kurallar ve içerik:** El Kitabı v2 aynen geçerli. 5 parametre (kolon kalınlığı, temel derinliği, beton sınıfı, demir tipi, zemin türü), değer kat grubuna göre. Görseldeki örnek parametreler (basınç dayanımı MPa, su emme, C30/37, B420C vb.) **kullanılmaz**.
+- **Lab raporunun rolü aynı:**
+  - Formdaki beyan değerlerini gösterir.
+  - Gerçek değeri sadece ücretli **EK TEST** açar.
+  - Sahte belge, iki belgenin parsel, tarih, lab, kaşe ve imza farkından anlaşılır.
+- **Core sözleşmesi aynı** (`ctx.TodayProjects`, `ctx.Actions`, `GreetingText` / `ReactionText`, `GiftId` / `AcceptGift`). Akış, ekonomi, afet, sonlar ve ekranların sırası değişmez.
+
+**Görseldeki şunlar ALINMAZ (hassasiyet / kurgu kuralı):**
+- "T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı" gibi gerçek kurum adları ve logoları. Yerine kurgusal **"Afet Kontrol Bürosu"** ya da İMZA yazılır.
+- Gerçek standart kodları (TS EN 12390). Gerekirse kurgusal ya da hiç yazılmaz.
+- Lab raporundaki "değerler … uygundur" cümlesi **karar vermez.** Her lab bunu yazar; oyuncu el kitabıyla kendisi karşılaştırır.
+
+**Geçersiz kalanlar:**
+- `Docs/Tasarim/*_GORUNUM.html` piksel tasarımlar ve Pixelify Sans / VT323 font isteği.
+- `Art/form_folder.png` isteği.
+- Masada yatan kitap ve klasör yerleşimi ve kağıt pencerelerin sürüklenmesi / klasörün müteahhide verilmesi animasyonu.
+- A'nın "form klasörü LAB RAPORU'nun yanında" düzenlemesi.
+
+Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (Oğuzhan karar verir).
+
+**Kim ne yapacak:**
+- **Oğuzhan (B, ana iş):**
+  - [ ] `DeskScreen`'i yeni düzene göre yeniden kur:
+    - üst yarı ofis + portre + balon, alt yarı 3 sabit belge;
+    - `FormView`, `LabReportView` ve `RulebookView` içerikleri yeniden kullanılır, kabuk değişir;
+    - el kitabı sekmeleri `rule.Section`'dan gelir.
+  - [ ] **Zarf:**
+    - Formun yanında masada görünür (ya da müteahhidin elinde).
+    - "ZARFI AL VE ONAYLA" düğmesi formda.
+  - [ ] **Hediyeler:** Üst yarıdaki ofis rafında ya da masa kenarında kalıcı dursun. Hediye kartı (`GiftOfferView`) aynen kalır.
+  - [ ] **Diğer kartlar:** Olay kartı (cam kırıldı) ve 1. gün öğretici kartları yeni düzene göre. Öğretici metinlerini güncelle: "üç belge önünde, soldan sağa karşılaştır".
+  - [ ] **Bitince:** DeskScreen.prefab'ı push'la, A'ya haber ver. A Game.unity'de kontrol eder (prefab örneği kendiliğinden güncellenir).
+- **Tarık (EEE):**
+  - [ ] **Üst yarı için ofis arka planı:** müteahhidin arkasındaki oda + masanın üst kenarı, portrenin önünde masa kenarı katmanı. Mevcut `desk_bg` kırpılabilir.
+  - [ ] **Alt yarı için masa yüzeyi dokusu.**
+  - [ ] **Kağıt dokusu** (eskimiş krem kağıt, ataç/zımba isteğe bağlı).
+  - [ ] **Belge başlık ikonları:** bina, deney tüpü, kitap.
+  - [ ] **Kaşe:** kırmızı yuvarlak lab kaşesi ve belediye kaşesi.
+  - [ ] **Formdaki bina resmi:** 3 adet, kat grubuna göre alçak / orta / yüksek. Desk `Floors`'a göre seçer, Core'a alan gerekmez.
+  - [ ] **Yazı tipi:**
+    - Başlıklar için kalın yuvarlak bir font (ör. **Lilita One**, OFL; kitaplarda zaten kullandın).
+    - Metin için okunaklı bir sans. Pixelify / VT323 **iptal**.
+  - [ ] **Lisans:** Her yeni font, görsel ve ses için `CREDITS_AND_AI.md` satırı.
+- **Onur (C):**
+  - [ ] **Kaynak kaydı:** `hedef_arayuz.png`'yi hangi araçla ürettiğini `CREDITS_AND_AI.md` → "Yapay zekâ kullanımı" tablosuna yaz.
+  - [ ] **İsteğe bağlı:** Flow ekranlarını (gazete, gün özeti, ödeme, kayıt) aynı kağıt/belge diline yaklaştır.
+  - [ ] **Mevcut işler sürüyor:** ödeme önizlemesi ve kayıt sonucu, A ile (YOL_HARITASI_ONUR 2-3).
+- **Ahmet (A):**
+  - [ ] **El kitabı sekmeleri için `RuleSet` bölümleri:** kolon → YAPI, beton → BETON, demir → DONATI, temel derinliği ve zemin türü → ZEMİN.
+  - [ ] **Formun yeni alanları:** Oğuzhan isterse Core'a eklenir (toplam alan, ilçe, lab rapor no, numune tarihi). Şimdilik `Address`, `ParcelNo`, `Floors`, `Fee`, müşteri adı (`GetClient(ClientId).DisplayName`) yeterli.
+  - [ ] **Onur için:** ödeme önizlemesi API'si ve kayıt sonucu / tekrar deneme.
+  - [ ] **Yeni masa gelince:** Game.unity kontrolü, Windows build, baştan sona oynanış (4 son).
+
 ### Ekibe notlar (A / Ahmet'ten, 2026-10-16 22:20)
-> 🔧 **Oğuzhan — A senin dosyana dokundu (17 Ekim öğleden sonra, Ahmet kararı):** Ahmet form klasörünün isimliğin arkasındaki yerini ve görünümünü beğenmedi; **YAPI DENETİM FORMU klasörü LAB RAPORU'nun hemen yanına** alındı, LAB RAPORU küçültüldü. Değişen: `Editor/DeskSandboxBuilder.cs` → `BuildProps` (LAB RAPORU 220/868/320 geniş, form 552/905/180 geniş, eğim yok), `BookButton` yedek yazısı otomatik boyut (küçük klasörde taşmasın); `DeskSandboxBuilder.Papers.cs` → form penceresi `fromOffset` (-320, -380) (sol alttan gelir). `DeskScreen.prefab` builder'la yeniden kuruldu (elle değişiklik yok). Masa düzeninde bunun üstüne çalışırsan önce pull'la; konum değiştirmek istersen Ahmet'e sor.
+> ⛔ **ESKİDİ (yeni hedef arayüz, masa yeniden kurulacak)** — 🔧 Oğuzhan — A senin dosyana dokundu (17 Ekim öğleden sonra): Ahmet form klasörünün isimliğin arkasındaki yerini ve görünümünü beğenmedi; **YAPI DENETİM FORMU klasörü LAB RAPORU'nun hemen yanına** alındı, LAB RAPORU küçültüldü. Değişen: `Editor/DeskSandboxBuilder.cs` → `BuildProps` (LAB RAPORU 220/868/320 geniş, form 552/905/180 geniş, eğim yok), `BookButton` yedek yazısı otomatik boyut (küçük klasörde taşmasın); `DeskSandboxBuilder.Papers.cs` → form penceresi `fromOffset` (-320, -380) (sol alttan gelir). `DeskScreen.prefab` builder'la yeniden kuruldu (elle değişiklik yok). Masa düzeninde bunun üstüne çalışırsan önce pull'la; konum değiştirmek istersen Ahmet'e sor.
 >
-> 🎨 **Tarık — form klasörü görseli (Ahmet: mevcut görünüm beğenilmedi):** `Art/form_folder.png` çiz: LAB RAPORU / EL KİTABI ile **aynı tarz** (masada yatan, alçak açı perspektif, kalın kahve kontur, soldan sıcak ışık), krem/hardal renkli manila karton klasör, üstünde etiket "YAPI DENETİM FORMU", kenardan birkaç kağıt ucu görünsün. 640x320 şeffaf, gölge çizme, altta şeffaf boşluk bırakma. Masada LAB RAPORU'nun sağında 180 px genişlikte durur; dosya adı aynı olunca builder kendisi kullanır (Oğuzhan prefab'ı yeniden kurar). CREDITS_AND_AI.md'ye yaz.
+> ⛔ **İPTAL (yeni hedef arayüz)** ~~🎨 Tarık — form klasörü görseli~~: `Art/form_folder.png` çiz: LAB RAPORU / EL KİTABI ile **aynı tarz** (masada yatan, alçak açı perspektif, kalın kahve kontur, soldan sıcak ışık), krem/hardal renkli manila karton klasör, üstünde etiket "YAPI DENETİM FORMU", kenardan birkaç kağıt ucu görünsün. 640x320 şeffaf, gölge çizme, altta şeffaf boşluk bırakma. Masada LAB RAPORU'nun sağında 180 px genişlikte durur; dosya adı aynı olunca builder kendisi kullanır (Oğuzhan prefab'ı yeniden kurar). CREDITS_AND_AI.md'ye yaz.
 >
 > 📋 **Tarık — şu an yapılacaklar (özet, Oğuzhan derledi, 17 Ekim ~14:40).** Yeni karar değil: aşağıdaki dağınık maddelerin öncelik sırasıyla toplu hali; repoda kontrol edildi. Biten maddeyi kendi yerinde de işaretle.
-> 1. 🔴 **Fontlar (Ahmet kararı, masa bunları bekliyor):** `Pixelify Sans` (başlık/etiket) + `VT323` (değerler), Google Fonts, SIL OFL 1.1 → **TMP font asset** yap. Asset adında `Pixelify` / `VT323` geçsin (builder adıyla bulur). `OFL.txt` font dosyalarıyla repoda dursun; `CREDITS_AND_AI.md` → Font tablosu + Emeği Geçenler satırı. Bitince Oğuzhan'a haber ver → builder'ı çalıştırıp form, lab raporu ve El Kitabı'nı yeni fontlara geçirir. *(Repoda şu an font yok.)*
+> 1. ⛔ **İPTAL (yeni hedef arayüz; yerine Lilita One + okunaklı sans, bkz. 🧭)** ~~Fontlar~~: `Pixelify Sans` (başlık/etiket) + `VT323` (değerler), Google Fonts, SIL OFL 1.1 → **TMP font asset** yap. Asset adında `Pixelify` / `VT323` geçsin (builder adıyla bulur). `OFL.txt` font dosyalarıyla repoda dursun; `CREDITS_AND_AI.md` → Font tablosu + Emeği Geçenler satırı. Bitince Oğuzhan'a haber ver → builder'ı çalıştırıp form, lab raporu ve El Kitabı'nı yeni fontlara geçirir. *(Repoda şu an font yok.)*
 > 2. 🔴 **Lisans / AI kaydı kontrolü (jam kuralı):** eklediğin her görsel ve ses `CREDITS_AND_AI.md`'de mi? Özellikle AI görselleri (kitaplar, portreler, hediye görselleri, gün başı / kayıt / son arka planları) "Yapay zekâ kullanımı" tablosunda olsun.
-> 3. 🎨 **`Art/form_folder.png`** (Ahmet isteği, tarif hemen yukarıda). *(Repoda şu an yok; masada kodla çizilmiş yer tutucu duruyor.)*
+> 3. ⛔ **İPTAL** ~~`Art/form_folder.png`~~ (Ahmet isteği, tarif hemen yukarıda). *(Repoda şu an yok; masada kodla çizilmiş yer tutucu duruyor.)*
 > 4. ✍️ **Metin onayları (taslaklar sende bekliyor):** 1. gün 4 öğretici kart (`Desk/UI/TutorialView.cs`; Oğuzhan 17 Ekim'de yeni masaya göre güncelledi: form / lab raporu / El Kitabı), intro hikâye metni (`Flow/UI/IntroSequence.cs`, Onur'da), "Enkazın Gölgesi" son metni (`Data/Endings/MiddleCollapsed.asset`, A taslağı), El Kitabı metinleri (`RuleSet.asset` → `HandbookIntro` + 5 parametrenin `Description`'ı, Inspector'dan; masada El Kitabı'nın 2. sayfası ve kural altı açıklamalarında görünür).
 > 5. 👥 **Yeni müteahhitler (Ç3):** 6 → 10-12 (`Data/Clients/`, replikleri sen yaz; A "Link Data" ile bağlar). *(Şu an 6.)* Not: hediye artık sadece dürüst ustalar (Rıfat, Sevim) verir; yeni dürüst usta eklersen ona da `Gift` bağlanabilir.
 > 6. ✅ İşaretlenmeyi bekleyenler (repoda bitmiş): **bina adları 36** (Ç5) ve **6 hediye asset'i** (`Data/Gifts/`, A Game.unity'ye bağladı) → aşağıdaki iki `[ ]` maddeyi işaretle.
@@ -170,7 +243,8 @@
 >
 > ⚠️ **Tarık — (A, `cbd8587`):** `4f33750`'daki yeni modele uyarlamalar da geri alındı: Selim ("sahte belgeci" tekrar), Sevim replikleri, Headlines.asset (deprem / "Belgeler sahte, imza gerçek" tekrar), ICERIK_TASLAK.md'deki son metinleri (lab raporu / ruhsat tekrar). **Kalanlar:** credits çözüldü notu, piksel art stil kararı (Art/README; silinen `Docs/Tasarim` atfı düzeltildi), Selim "A onayladı" notu. Oyunda sel yok; manşet/sonlarda "deprem" dili geçerli.
 
-### 🎨 Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı (Ahmet kararı, 17 Ekim öğleden sonra) — ÖNCE BUNU OKU
+### ⛔ GEÇERSİZ (yerine yukarıdaki 🧭 Yeni hedef arayüz) — Belge tasarımı: Yapı Denetim Formu + Denetçi El Kitabı (17 Ekim öğleden sonra)
+> Görünüm kısmı (piksel tasarım, Pixelify/VT323, masada yatan nesneler) iptal. **Hâlâ geçerli olan:** Core alan eşlemesi tablosu (FileNo, HeightMeters, PeoplePerFloor, Section, FormatValue) ve "form + lab raporu iki ayrı belge" kararı.
 Ahmet iki görsel tasarım verdi: `Docs/Tasarim/yapi_denetim_formu_GORUNUM.html` ve `Docs/Tasarim/denetci_el_kitabi_GORUNUM.html`.
 - **Karar: GÖRÜNÜM tasarımdan, İÇERİK El Kitabı v2'den.** Tasarımlardaki örnek içerik (YANGIN, SEL, kaçak kat, DSİ, sabit "en az 30 cm", tek tip nervürlü demir) **kullanılmaz**; bunlar reddedilen eski modelin içeriği. Dosyaların başında bu not var.
 - **Belgeler: Form + lab raporu.** "Yapı Ruhsatı Başvurusu"nun yerine **Yapı Denetim Formu** gelir (Core'da `Documents[0].Title` artık bu). **Lab raporu ayrı belge olarak kalır**: sahte belge ipuçları (iki belge arasında parsel/tarih/kaşe/imza/lab uyuşmazlığı) ve ek test aynen çalışır.
@@ -200,7 +274,7 @@ Ahmet iki görsel tasarım verdi: `Docs/Tasarim/yapi_denetim_formu_GORUNUM.html`
   - (B, 17 Ekim öğleden sonra) ✅ Yapıldı (`b658b47`): masada ortada form klasörü (müteahhit tarafı), solda LAB RAPORU, sağda EL KİTABI; üç ayrı kağıt pencere (sekme yok, perde yok, sürüklenir, yan yana dizilir); piksel tasarım. Fontlar Tarık eklediğinde builder adlarıyla bulur (bir kez `CivilJam > Desk > Build Sandbox_Desk Scene`).
 - **Tarık (EEE):**
   - [ ] 🔴 **LİSANS KAYDINI UNUTMA (Ahmet hatırlatması, jam kuralı = ihlal diskalifiye):** eklediğin her font, görsel ve ses **eklendiği anda** `CREDITS_AND_AI.md`'ye yazılır. Fontlar için → "Font" tablosuna: `Pixelify Sans` ve `VT323` · kaynak Google Fonts linki · **SIL Open Font License 1.1** · ekleyen · tarih. OFL lisans metni font dosyalarıyla birlikte repoda dursun (`OFL.txt`). Oyun içi "Emeği Geçenler"e de font satırı eklensin (Onur'un `MainMenuScreen` metni + `CREDITS_AND_AI.md` sonundaki blok). AI ile üretilen görseller (ChatGPT/Gemini kitapları, portreler) de "Yapay zekâ kullanımı" tablosunda olmalı; eksik varsa tamamla.
-  - [ ] ⚠️ **Yazı tipi / tarz:** tasarımlar **Pixelify Sans** + **VT323** (Google Fonts, ikisi de SIL OFL) kullanıyor; bu sabahki "piksel art yok, düz çizgi film" kararınla çelişiyor. Ahmet'in kararı tasarımın görünümünü almak → bu iki fontu **TMP font asset** olarak ekle (`CREDITS_AND_AI.md` → Font, OFL), Oğuzhan'a haber ver. Masa/portre görsellerinin bu fontlarla uyumuna bak; uyumsuzsa Ahmet'le konuş.
+  - [x] ⛔ **İPTAL (yeni hedef arayüz)** ~~Yazı tipi / tarz~~: tasarımlar **Pixelify Sans** + **VT323** (Google Fonts, ikisi de SIL OFL) kullanıyor; bu sabahki "piksel art yok, düz çizgi film" kararınla çelişiyor. Ahmet'in kararı tasarımın görünümünü almak → bu iki fontu **TMP font asset** olarak ekle (`CREDITS_AND_AI.md` → Font, OFL), Oğuzhan'a haber ver. Masa/portre görsellerinin bu fontlarla uyumuna bak; uyumsuzsa Ahmet'le konuş.
 
 ### 🎮 Oynanış testi → yeni işler (Ahmet oynadı, 17 Ekim gece) — ÖNCE BUNU OKU
 Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler aşağıda. **Hepsi onaylı (Ahmet), sırayla yapılacak.** Kodlar: Ç1-Ç5.
@@ -468,6 +542,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim öğleden sonra | Hediyeyi sadece dürüst ustalar verir (Core: `IsHonest`) | Ahmet kararı: rüşvetçinin hediyesi zarfla karışıyordu. Tarık'ın 6 GiftSO'su Game.unity'de; rüşvetçilerinkiler kullanılmaz |
 | 17 Ekim öğleden sonra | YAPI DENETİM FORMU klasörü masada LAB RAPORU'nun yanında (oyuncu tarafı); LAB RAPORU küçültüldü; klasör görseli Tarık'a | Ahmet kararı: isimliğin arkasındaki klasörün yeri ve görünümü beğenilmedi; iki belge birlikte incelendiği için yan yana |
 | 17 Ekim öğleden sonra | Gün sonu kayıt ekranı (SaveScreen, EEE) Game.unity'de; IMGUI yedeği Save fazında artık çıkmaz | A bağladı; 8 fazın hepsinin ekranı var |
+| 17 Ekim ~15:00 | **Yeni hedef arayüz** (`Docs/Tasarim/hedef_arayuz.png`, Onur): üst yarı ofis + müteahhit, alt yarı 3 belge sabit ve yan yana (form / lab raporu / sekmeli el kitabı). Eğimli masa, masadaki kitaplar, kağıt pencereler, piksel tasarım ve Pixelify/VT323 iptal | Ahmet kararı. Kurallar (El Kitabı v2), lab raporunun rolü (beyan + ücretli ek test) ve Core sözleşmesi DEĞİŞMEZ; sadece arayüz. Görseldeki gerçek kurum adı ve standart kodları alınmaz |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

@@ -64,6 +64,13 @@ Kaynak: analiz raporu (artifact). Kararlar: borç → ofis kapanır (2.500 / 2.0
 - [x] El kitabı v2 (Ahmet kararı): mahalle/bölge kaldırıldı, 5 parametre × 3 kat grubu (15 kural), her projede 5 parametre, binalar 2-9 kat, seçenekli kademe cezası %25 (simülasyonla). Testler 23/23.
 - [x] Onur'un DayIntro / Construction ekranları (`8c05324`) Game.unity'de; sahne testi 7 fazı kontrol ediyor.
 
+### Yeni hedef arayüz (Ahmet kararı, 17 Ekim ~15:00): ayrıntı memory.md "🧭"
+Görsel `Docs/Tasarim/hedef_arayuz.png`. Sadece arayüz değişir; kurallar, lab raporunun rolü ve Core sözleşmesi aynı.
+- [ ] RuleSet bölümleri → el kitabı sekmeleri: YAPI (kolon), BETON (beton sınıfı), DONATI (demir tipi), ZEMİN (temel derinliği, zemin türü); `HandbookDataBuilder` + test.
+- [ ] Oğuzhan isterse form/lab için yeni Core alanları (toplam alan, ilçe, rapor no, numune tarihi).
+- [ ] Onur: ödeme önizlemesi API'si (state'i değiştirmeden, `ExpenseCalculator` ile aynı sıra) + kayıt sonucu / tekrar denemede gün ikinci kez artmasın.
+- [ ] Yeni DeskScreen gelince: Game.unity kontrolü, testler, Windows build.
+
 ### Faz 4-6 — MVP, cila, teslim (Cts 20 → Paz 18)
 - [ ] Baştan sona oynanış, 4 son erişilebilir (F9/F10 ile de).
 - [ ] Paz 12:00 freeze → final build, ZIP, video, README, yükleme.

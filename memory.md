@@ -89,7 +89,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
 ### 🔎 YENİ ÖZELLİK — İnceleme modu (Papers, Please tarzı) — PLANLAMA AŞAMASI, KOD YAZILMAZ
-> ⛔ **Henüz kimse kod yazmıyor.** Plan Ahmet'in onayını bekliyor. Onay gelince Ahmet (A) Onur ve Oğuzhan için ayrıntılı uygulama notunu buraya yazar; işe ondan sonra başlanır. Ajanlar: bu bölümü okuyup kendi başına uygulamaya geçme.
+> ✅ **ONAYLANDI (Ahmet, 17 Ekim akşam): plan + Core düzeltmeleri (a) ve (b).** A Core'u yazıyor; Onur ve Oğuzhan'ın uygulama notu bu bölümün sonunda ("🛠️ Uygulama notu"). Core push'lanınca A memory.md'de haber verir.
 
 **Fikir (Ahmet + Onur):**
 - Oyuncu masadaki "İncele" düğmesiyle inceleme moduna geçer.
@@ -128,14 +128,14 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 - **Olasılıklar değişmiyor.** Künye uyuşmazlıkları zaten var: sahte belgeler 3. günden itibaren günde ~1 tane geliyor, her birinde 5 ipucundan 1-2'si bulunuyor (parsel / tarih / bilinmeyen lab / başka lab kaşesi / farklı imza).
 - Form ile lab raporunun beyan değerleri her zaman aynı (5. satır). Değer farkı sadece ek testte görünür (3. ve 4. satırlar).
-- **Onay bekleyen küçük Core düzeltmeleri (A):**
+- **Core düzeltmeleri (A, onaylandı):**
   - (a) "Başka laboratuvarın kaşesi" ipucunda kaşeye akredite **olmayan** bir lab adı yazılsın; yoksa 10. satır bu ipucunu hiç yakalayamaz.
   - (b) Sahte parsel ve tarih gerçeğiyle asla aynı çıkmasın (şu an rastgele, nadiren aynı çıkabiliyor).
 
 **Yol haritası (onaydan sonra):**
 | Adım | Kim | İş | Süre |
 |---|---|---|---|
-| 0 | Ahmet | Bu planı onayla. A, Onur ve Oğuzhan için ayrıntılı uygulama notunu buraya yazar | 15 dk |
+| 0 | Ahmet | ✅ Onaylandı; uygulama notu aşağıda | — |
 | 1 | A | Core: alan tanımı, kontrol fonksiyonu (tablo), (a)+(b) düzeltmeleri, her satır için test, `AHMET.md` sözleşme satırı | ~45 dk |
 | 2 | Oğuzhan | İncele modu, tıklanabilir alanlar (vurgu, seçim, iki alan arası çizgi), sağ tık / Esc iptal, yeni müteahhitte sıfırlama. Arayüz kural bilmez, sadece Core'u çağırır | ~2 sa |
 | 3 | Onur | Sonuç mesajı bileşeni: yeşil SORUN YOK / kırmızı UYUŞMAZLIK SAPTANDI / gri ALAKASIZ (kaşe ya da şerit) + kısa ses. Adım 2 ile paralel | ~1 sa |
@@ -143,6 +143,95 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 5 | Tarık | 1. gün öğretici kartı + README satırı | ~20 dk |
 
 **Yalın tutmak için kapsam dışı:** sorgulama / müteahhide soru yok; sonuç kayda geçmez; tablo dışı çiftler için özel mesaj yok.
+
+#### 🛠️ Uygulama notu — Onur ve Oğuzhan (A, onaydan sonra)
+**Sıra:** Core'u A push'lar ve burada "✅ Core hazır" yazar. Ondan önce arayüz iskeletini (düğme, vurgu, mesaj görünümü) kurabilirsiniz; Core çağrısını Core gelince bağlayın. **Kural kodu yazmayın:** karar her zaman Core'dan gelir, arayüz sadece gösterir.
+
+**1) Core API (A yazıyor; adlar kesin, `CivilJam.Core`):**
+```
+enum InspectDoc   { Form, Lab, Handbook }
+enum InspectField { Param, ExtraTest, Parcel, Date, Signature, LabName, LabStamp, AccreditedLabs }
+struct InspectTarget { InspectDoc Doc; InspectField Field; ParamType Param; }   // Param sadece Param/ExtraTest için
+   kısayollar: InspectTarget.Of(doc, field) ve InspectTarget.OfParam(doc, paramType) / InspectTarget.OfTest(paramType)
+enum InspectVerdict { Match, Mismatch, Unrelated }
+class InspectResult { InspectVerdict Verdict; string Title; string Detail; }
+   Title: "SORUN YOK" / "UYUŞMAZLIK SAPTANDI" / "ALAKASIZ"; Detail: kısa açıklama (ör. "Ada/Parsel farklı: 561/8 ↔ 123/4")
+static class Inspection
+   InspectResult Check(GameContext ctx, ProjectData project, InspectTarget a, InspectTarget b, int handbookFloorGroup)
+   bool IsAvailable(ProjectData project, InspectTarget t)   // ör. ek test hücresi sadece test yapıldıysa true
+   const int NoFloorGroup = -1                              // grup indeksi: 0 = 1-3 kat, 1 = 4-6 kat, 2 = 7+ kat
+```
+- Sıra önemsiz (a, b ↔ b, a aynı sonucu verir). Aynı belgeden iki alan, tablo dışı çift, seçilmemiş ya da binaya ait olmayan kat grubu → `Unrelated`.
+- `Check` oyunun durumunu değiştirmez (para, risk, gün, karar yok); istediğiniz kadar çağırın.
+- `DocumentData.StampLabName` (yeni): kaşedeki laboratuvar adı. Kaşenin altına bunu yazın (`StampId` aynen kalır).
+
+**2) Tıklanabilir alanlar (Oğuzhan) — sadece bunlar, başka hiçbir yer:**
+| Belge | Ekrandaki yer | InspectTarget |
+|---|---|---|
+| Form | Teknik Bilgiler'de her parametre satırı (beyan değeri) | `OfParam(Form, p.Type)` |
+| Form | Ada / Parsel | `Of(Form, Parcel)` |
+| Form | Başlıktaki Tarih | `Of(Form, Date)` |
+| Form | Proje müellifi | `Of(Form, Signature)` |
+| Lab | Test Sonuçları'nda Beyan hücresi | `OfParam(Lab, p.Type)` |
+| Lab | Ek test hücresi (**sadece** `IsAvailable` true, yani test yapıldıysa) | `OfTest(p.Type)` |
+| Lab | Ada / Parsel | `Of(Lab, Parcel)` |
+| Lab | Rapor tarihi | `Of(Lab, Date)` |
+| Lab | Laboratuvar yetkilisi (imza) | `Of(Lab, Signature)` |
+| Lab | Laboratuvar (künye satırı) | `Of(Lab, LabName)` |
+| Lab | Lab kaşesi (+ altındaki lab adı) | `Of(Lab, LabStamp)` |
+| El Kitabı | Hızlı Bakış'taki 5 parametre satırı | `OfParam(Handbook, type)` |
+| El Kitabı | LAB sekmesindeki akredite laboratuvar listesi (tek alan) | `Of(Handbook, AccreditedLabs)` |
+- Tıklanamaz: proje adı, adres, yapı sınıfı, kat adedi, yükseklik, kat başı kişi, müteahhit, ücret, değerlendirme metni, bölüm sekmelerindeki (BETON…) satırlar.
+- `RulebookView`'a okunabilir `SelectedFloorGroup` (0/1/2, seçim yoksa `Inspection.NoFloorGroup`) ekle; `Check`'e bunu ver.
+
+**3) Etkileşim (Oğuzhan):**
+- **İNCELE düğmesi** masada sabit (ör. form ile lab raporu arasında, masa kenarına yakın; büyüteç simgesi + "İNCELE"). Tıklayınca mod açılır/kapanır; açıkken düğme basılı görünür.
+- **Mod açıkken:**
+  - Tıklanabilir alanlar fare üstüne gelince ince sarı çerçeve alır.
+  - Belgeler sürüklenmez; ONAY / RED / EK TEST / ZARF düğmeleri pasiftir.
+  - El Kitabı sekmeleri ve kat grubu düğmeleri çalışır (LAB sekmesine ve grup seçimine ulaşmak için).
+- **1. tıklama:** alan sarı dolgulu çerçeveyle seçili kalır. Aynı alana tekrar tıklamak seçimi kaldırır.
+- **2. tıklama:** `Inspection.Check(...)` çağır.
+  - İki alanın arasına ince bir çizgi çek.
+  - Onur'un mesajını çizginin ortasında göster.
+  - ~1,6 sn sonra (ya da tıklayınca) çizgi, mesaj ve seçim temizlenir; mod açık kalır.
+- **İptal:** sağ tık ya da belgelerin dışına boş masaya tıklamak seçimi temizler. **Esc kullanma** (Onur'un Esc menüsü).
+- **Sıfırlama:** karar verilince, yeni müteahhit gelince ve gün bitince mod kapanır, seçim temizlenir.
+- `DeskScreen.prefab` ve builder Oğuzhan'ın. Onur'un bileşenini prefab'a Oğuzhan bağlar.
+
+**4) Sonuç mesajı (Onur) — yeni dosya `Assets/_Project/Scripts/Desk/UI/InspectResultView.cs`:**
+- Desk ve Flow birbirini göremediği için bu dosya **Desk klasöründe** durur. Onur yazar; Oğuzhan prefab'a bağlar. Başka Desk dosyasına dokunma.
+- API: `public void Show(InspectResult r, Vector2 anchoredPosition)` ve `public void Hide()`.
+- Görünüm, kaşe tarzı ve hafif eğik:
+  - `Match` → yeşil (`#3f8a4f`) "SORUN YOK";
+  - `Mismatch` → kırmızı (`#c2412f`) "UYUŞMAZLIK SAPTANDI";
+  - `Unrelated` → gri-kahve (`#7a6650`) "ALAKASIZ".
+  - Başlık Paytone One, altında `Detail` küçük Fira Sans.
+- Açılış: `PopupMotion` / `DeskMotion` sürelerini kullan, kendi süreni uydurma.
+- Ses: `Match` / `Unrelated` için `sfx_click`, `Mismatch` için `sfx_stamp`. Klip alanı Inspector'dan bağlanır, yeni ses dosyası gerekmez.
+
+**5) Nasıl test edilir:**
+- **Sandbox_Desk** (Oğuzhan'ın 4 sahte projesi):
+  - dürüst proje: form parametresi ↔ El Kitabı (doğru grup) → SORUN YOK;
+  - aynı çift yanlış grupla ya da grupsuz → ALAKASIZ;
+  - rüşvetçinin eksik parametresi ↔ El Kitabı → UYUŞMAZLIK;
+  - sahte belgeli proje: parsel ↔ parsel, tarih ↔ tarih, müellif ↔ yetkili, lab adı ↔ akredite listesi → hangi ipucu varsa UYUŞMAZLIK, yoksa SORUN YOK;
+  - ek testten sonra: form ↔ ek test ve ek test ↔ El Kitabı → UYUŞMAZLIK;
+  - form beton ↔ El Kitabı demir → ALAKASIZ.
+- **Kontrol listesi:**
+  - mod kapalıyken her şey eskisi gibi;
+  - mod açıkken ONAY / RED basılmıyor;
+  - yeni müteahhitte mod kapanıyor;
+  - aynı alana iki tık seçimi kaldırıyor;
+  - sağ tık iptal ediyor;
+  - Esc menüsü hâlâ açılıyor.
+- **Bitince:** push'la, burada maddeni `[x]` yap. A Game.unity'de ekran görüntülü otomatik oynanışla kontrol eder ve build alır.
+
+**İş listesi:**
+- [ ] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
+- [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama.
+- [ ] Onur: `InspectResultView` (görünüm + ses).
+- [ ] Tarık: 1. gün öğretici kartı ("İNCELE'ye bas, iki belgeden aynı bilgiye tıkla") + README satırı.
 
 **Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
 
@@ -203,6 +292,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim | Ödeme önizlemesi ve kayıt sonucu Core'dan (`ExpenseCalculator.Preview`, `ctx.LastSave`, `ctx.RetrySave`) | Onur'un ihtiyacı; ekran ikinci ekonomi hesabı yazmasın |
 | 17 Ekim 16:10 → ~17:30 | Yeni arayüz bitene kadar yeni iş yok (bitti, kalktı). Yeni özellikler Ahmet'in kararıyla eklenebilir | Ahmet |
 | 17 Ekim akşam | İnceleme modu (Papers, Please tarzı) planlandı: iki ayrı belgeden iki alan → SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ; eşik seçili kat grubundan (yanlış grup = ALAKASIZ), künye dahil, kaşe akredite listeyle, İncele modu, bedelsiz; A Core, Oğuzhan masa, Onur mesaj. **Uygulama Ahmet onayından sonra** | Ahmet + Onur fikri; Ahmet kararları. Olasılıklar değişmez |
+| 17 Ekim akşam | İnceleme modu ONAYLANDI + Core düzeltmeleri: (a) başka lab kaşesi ipucunda kaşeye akredite olmayan lab adı, (b) sahte parsel gerçeğiyle asla aynı değil. Onur'un mesaj bileşeni Desk klasöründe (asmdef kuralı) | Ahmet |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 

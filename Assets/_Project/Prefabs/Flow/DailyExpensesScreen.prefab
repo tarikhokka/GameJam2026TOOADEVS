@@ -49,3 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CivilJam.Flow::CivilJam.Flow.DailyExpensesScreen
   background: {fileID: 21300000, guid: dfd1af006cdd52241ac397dd5ae7d2a3, type: 3}
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  titleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
+  infoFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  bodyFont: {fileID: 11400000, guid: 8af5995d193981a4797d0ddd25143df8, type: 2}
+  paperSprite: {fileID: 21300000, guid: 9c8d9b1b996ff334e9117cb256043efe, type: 3}
+  checkboxSprite: {fileID: 21300000, guid: 45f21cadadc44d3c81890c3387efcbc5, type: 3}
+  checkSprite: {fileID: 21300000, guid: 59d9fcc6915541afb76150f23bbc4e13, type: 3}

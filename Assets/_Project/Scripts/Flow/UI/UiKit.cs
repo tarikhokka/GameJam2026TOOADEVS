@@ -97,11 +97,34 @@ namespace CivilJam.Flow
         public const string GoldHex = "#FFD27A";
         public const string RedHex = "#FF9A8A";
 
+        // Kağıt kart (paper.png, 9-slice); sprite yoksa eski düz kağıt rengi.
+        public static Image Card(Transform parent, string name, Sprite paper, Vector2 anchorMin, Vector2 anchorMax)
+        {
+            var img = Image(parent, name, paper, paper != null ? Color.white : new Color(Paper.r, Paper.g, Paper.b, 0.95f),
+                anchorMin, anchorMax);
+            if (paper != null) img.type = UnityEngine.UI.Image.Type.Sliced;
+            return img;
+        }
+
+        // Kağıt üstündeki yazı: sadece font (renk Ink kalır, kontur yok).
+        public static void StyleInk(TMP_Text text, TMP_FontAsset font)
+        {
+            if (text == null) return;
+            if (font != null) text.font = font;
+            text.fontStyle = FontStyles.Normal;
+        }
+
+        static void SetSize(TMP_Text text, float size)
+        {
+            text.fontSize = size;
+            if (text.enableAutoSizing) text.fontSizeMax = size;
+        }
+
         public static void StyleTitle(TMP_Text text, TMP_FontAsset font, float size)
         {
             if (text == null) return;
             if (font != null) text.font = font;
-            text.fontSize = size;
+            SetSize(text, size);
             text.fontStyle = FontStyles.Normal;
             text.textWrappingMode = TextWrappingModes.NoWrap;
             text.color = Color.white;
@@ -114,7 +137,7 @@ namespace CivilJam.Flow
         {
             if (text == null) return;
             if (font != null) text.font = font;
-            text.fontSize = size;
+            SetSize(text, size);
             text.fontStyle = FontStyles.Normal;
             text.color = Cream;
             Decorate(text, 0.18f, 0.7f);

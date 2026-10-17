@@ -52,3 +52,9 @@ MonoBehaviour:
   badImage: {fileID: 21300000, guid: 838c7f96331014941984e74a3e11e3ff, type: 3}
   closedImage: {fileID: 21300000, guid: 4ed736d1501daa746ab64bdbd6297ce0, type: 3}
   menuSceneName: MainMenu
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  titleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
+  infoFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  bodyFont: {fileID: 11400000, guid: 8af5995d193981a4797d0ddd25143df8, type: 2}
+  paperSprite: {fileID: 21300000, guid: 9c8d9b1b996ff334e9117cb256043efe, type: 3}

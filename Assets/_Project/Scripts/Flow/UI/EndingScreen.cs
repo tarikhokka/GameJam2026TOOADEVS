@@ -26,15 +26,22 @@ namespace CivilJam.Flow
         {
             var root = UiKit.Stretch(transform, "Root");
             _bg = UiKit.Image(root, "Bg", null, UiKit.Dark, Vector2.zero, Vector2.one);
-            UiKit.Image(root, "Shade", null, new Color(0f, 0f, 0f, 0.55f), Vector2.zero, Vector2.one);
+            // (EEE, 17 Ekim) Parlak görselde (İyi son) beyaz yazı okunmuyordu: hafif genel karartma + metnin arkasında koyu panel,
+            // krem yazı ve koyu kontur; başlık Paytone (krem→altın), metin Fira Sans.
+            UiKit.Image(root, "Shade", null, new Color(0f, 0f, 0f, 0.3f), Vector2.zero, Vector2.one);
+            UiKit.Image(root, "TextPanel", null, new Color(0.06f, 0.045f, 0.035f, 0.78f),
+                new Vector2(0.14f, 0.17f), new Vector2(0.86f, 0.9f));
 
             _title = UiKit.Text(root, "Title", "", 84, UiKit.Paper, TextAlignmentOptions.Center,
-                new Vector2(0.15f, 0.72f), new Vector2(0.85f, 0.88f), true, 40);
-            _title.fontStyle = FontStyles.Bold;
-            _body = UiKit.Text(root, "Body", "", 42, UiKit.Paper, TextAlignmentOptions.Top,
-                new Vector2(0.2f, 0.42f), new Vector2(0.8f, 0.7f), true, 24);
+                new Vector2(0.15f, 0.74f), new Vector2(0.85f, 0.88f), true, 40);
+            UiKit.StyleTitle(_title, titleFont, 84);
+            _body = UiKit.Text(root, "Body", "", 40, UiKit.Paper, TextAlignmentOptions.Top,
+                new Vector2(0.18f, 0.36f), new Vector2(0.82f, 0.73f), true, 26);
+            UiKit.StyleInfo(_body, bodyFont, 40);
+            _body.lineSpacing = 8;
             _stats = UiKit.Text(root, "Stats", "", 32, new Color(UiKit.Paper.r, UiKit.Paper.g, UiKit.Paper.b, 0.85f),
-                TextAlignmentOptions.Top, new Vector2(0.25f, 0.2f), new Vector2(0.75f, 0.4f), true, 20);
+                TextAlignmentOptions.Top, new Vector2(0.25f, 0.19f), new Vector2(0.75f, 0.35f), true, 20);
+            UiKit.StyleInfo(_stats, infoFont, 32);
 
             UiKit.Button(root, "Menu", "Ana menüye dön", () => SceneManager.LoadScene(menuSceneName),
                 new Vector2(0.4f, 0.07f), new Vector2(0.6f, 0.14f), 32f);
@@ -61,11 +68,12 @@ namespace CivilJam.Flow
             _bg.color = image != null ? Color.white : UiKit.Dark;
             _title.text = title;
             _body.text = body;
+            string g = UiKit.GoldHex;
             _stats.text =
-                $"Geçen gün: {s.Day}\n" +
-                $"Onaylanan bina: {s.TotalApproved}   Yıkılan bina: {s.TotalCollapses}\n" +
-                $"Alınan rüşvet: {s.TotalBribesTaken}\n" +
-                $"Kasa: {UiKit.Money(s.Money)}   Borç: {UiKit.Money(s.Debt)}";
+                $"Geçen gün: <color={g}>{s.Day}</color>\n" +
+                $"Onaylanan bina: <color={g}>{s.TotalApproved}</color>   Yıkılan bina: <color={g}>{s.TotalCollapses}</color>\n" +
+                $"Alınan rüşvet: <color={g}>{s.TotalBribesTaken}</color>\n" +
+                $"Kasa: <color={g}>{UiKit.Money(s.Money)}</color>   Borç: <color={g}>{UiKit.Money(s.Debt)}</color>";
         }
 
         EndingSO FindEnding(EndingType type)

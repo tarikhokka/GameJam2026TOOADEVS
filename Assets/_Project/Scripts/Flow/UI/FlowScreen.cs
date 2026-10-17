@@ -16,13 +16,15 @@ namespace CivilJam.Flow
         public abstract GamePhase Phase { get; }
         public event Action Completed;
 
-        // (EEE, 17 Ekim) Prefab'taki düz düğmeler ana menüdeki tahta düğme gibi görünsün ve fare üstündeyken vurgulansın.
-        // Boşsa sadece vurgu eklenir. Kodla (UiKit) kurulan düğmelerde zaten ButtonHover var; onlara dokunulmaz.
+        // (EEE, 17 Ekim) Ekrandaki düğmeler ana menüdeki tahta düğme gibi görünsün ve fare üstündeyken vurgulansın.
+        // Boşsa sadece vurgu eklenir (UiKit düğmelerinde vurgu zaten var).
         [SerializeField] Sprite buttonSprite;       // btn_menu
         [SerializeField] TMP_FontAsset buttonFont;  // FiraSans-Bold SDF
         // Başlık / bilgi yazıları için (UiKit.StyleTitle / StyleInfo). Boşsa prefab fontu kalır.
         [SerializeField] protected TMP_FontAsset titleFont; // PaytoneOne-Regular SDF
         [SerializeField] protected TMP_FontAsset infoFont;  // FiraSans-Bold SDF
+        [SerializeField] protected TMP_FontAsset bodyFont;  // FiraSans-Regular SDF
+        [SerializeField] protected Sprite paperSprite;      // paper (9-slice kağıt kart)
 
         protected GameContext Context { get; private set; }
         bool _built;
@@ -44,9 +46,9 @@ namespace CivilJam.Flow
 
         void StylePrefabButtons()
         {
+            // buttonSprite bağlıysa ekrandaki tüm düğmeler (prefab'taki de UiKit'le kurulan da) tahta düğme olur.
             foreach (var button in GetComponentsInChildren<Button>(true))
             {
-                if (button.GetComponent<ButtonHover>() != null) continue;
                 if (buttonSprite != null && button.targetGraphic is Image image)
                 {
                     image.sprite = buttonSprite;
@@ -58,7 +60,7 @@ namespace CivilJam.Flow
                         if (buttonFont != null) label.font = buttonFont;
                     }
                 }
-                button.gameObject.AddComponent<ButtonHover>();
+                if (button.GetComponent<ButtonHover>() == null) button.gameObject.AddComponent<ButtonHover>();
             }
         }
 

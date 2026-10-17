@@ -17,14 +17,18 @@ namespace CivilJam.Flow
         {
             var root = UiKit.Stretch(transform, "Root");
             UiKit.Image(root, "Bg", background, background != null ? Color.white : UiKit.Dark, Vector2.zero, Vector2.one);
-            UiKit.Image(root, "Panel", null, new Color(UiKit.Paper.r, UiKit.Paper.g, UiKit.Paper.b, 0.94f),
-                new Vector2(0.27f, 0.2f), new Vector2(0.73f, 0.84f));
+            // (EEE, 17 Ekim) Kağıt kart (paper.png) + Paytone başlık + Fira Sans metin; düğme FlowScreen'de tahta olur.
+            UiKit.Card(root, "Panel", paperSprite, new Vector2(0.27f, 0.2f), new Vector2(0.73f, 0.84f));
 
             _title = UiKit.Text(root, "Title", "", 60, UiKit.Ink, TextAlignmentOptions.Center,
                 new Vector2(0.29f, 0.72f), new Vector2(0.71f, 0.82f), true, 30);
             _title.fontStyle = FontStyles.Bold;
+            UiKit.StyleInk(_title, titleFont);
+            UiKit.Image(root, "Rule", null, new Color(UiKit.Ink.r, UiKit.Ink.g, UiKit.Ink.b, 0.3f),
+                new Vector2(0.33f, 0.712f), new Vector2(0.67f, 0.715f));
             _body = UiKit.Text(root, "Body", "", 38, UiKit.Ink, TextAlignmentOptions.TopLeft,
-                new Vector2(0.30f, 0.30f), new Vector2(0.70f, 0.70f), true, 22);
+                new Vector2(0.31f, 0.31f), new Vector2(0.69f, 0.69f), true, 22);
+            UiKit.StyleInk(_body, bodyFont);
 
             UiKit.Button(root, "Continue", "Günlük hesaplaşmaya geç  →", Finish,
                 new Vector2(0.38f, 0.22f), new Vector2(0.62f, 0.29f), 30f);
@@ -39,10 +43,10 @@ namespace CivilJam.Flow
             _title.text = $"{s.Day}. Gün Sona Erdi";
             _body.text =
                 "Şehir bugün sakin geçti.\n\n" +
-                $"Bugün onaylanan: {s.ApprovedToday}\n" +
-                $"Ayakta duran bina: {standing}\n" +
-                $"Kasa: {UiKit.Money(s.Money)}\n" +
-                $"Borç: {UiKit.Money(s.Debt)}";
+                $"Bugün onaylanan: <b>{s.ApprovedToday}</b>\n" +
+                $"Ayakta duran bina: <b>{standing}</b>\n" +
+                $"Kasa: <b>{UiKit.Money(s.Money)}</b>\n" +
+                $"Borç: <b>{UiKit.Money(s.Debt)}</b>";
         }
     }
 }

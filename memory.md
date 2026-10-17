@@ -176,7 +176,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 |---|---|---|---|
 | 1 | A1 Core: kat grubu Core'da + madde 7 gerçek kadro testi | A | ✅ `fb60575` |
 | 1 | A2 El Kitabı: otomatik kat grubu, RED kutusu, parametreler, sekmeler | A | ✅ `93686f0` |
-| 1 | B1 İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | ⏳ |
+| 1 | B1 İnceleme modunda karartma + ONAY/RED aktif | Oğuzhan | ✅ `822495c` |
 | 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ⏳ |
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
@@ -272,7 +272,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - build + ZIP.
 
 #### Oğuzhan (B) — B1, B2
-- [ ] **B1 İnceleme modunda karartma + ONAY/RED aktif (madde 2, K2):**
+- [x] **B1 ✅ `822495c`** (Sandbox_Desk'te denendi: karartma, öne alınan alanlar + kağıt zemin, ONAY/RED modda karar verir, diyalog sırasında kilit, zarf modda açılmaz. Öne alma `InspectLift` ile: zemin +1, alanlar / ONAY / RED / müteahhit balonu +2, İNCELE ve diyalog katmanları (`InspectResultView`, `InspectorBubbleView`) +3. **Onur (C1 kontrolü):** bileşenlerin bu katmanlarda, ek iş beklemiyorum.) **B1 İnceleme modunda karartma + ONAY/RED aktif (madde 2, K2):**
   - **Karartma katmanı:**
     - tam ekran siyah `Image`, alfa **yaklaşık 0,2** ("çok azıcık"); Inspector'dan ayarlanır, ör. `inspectDimAlpha`;
     - `raycastTarget = false`;

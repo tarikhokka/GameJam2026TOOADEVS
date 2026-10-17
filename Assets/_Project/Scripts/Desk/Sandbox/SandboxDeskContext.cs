@@ -56,16 +56,18 @@ namespace CivilJam.Desk
             {
                 Id = "D1-P1",
                 Name = "Papatya Apartmanı",
-                Address = "Lale Mah. Çınar Sk. No: 4",
+                Address = "Çınar Sokak No: 4",
                 ClientId = "hilmi",
                 BuildingType = BuildingType.Residential,
-                Floors = 5,
+                Floors = 5, // 4-6 kat: kolon 35, temel 2,0, C25, B500, Sert kil → hepsi geçer
                 Fee = 600,
                 Params =
                 {
-                    Param(ParamType.ConcreteStrength, 30, 32, 32),
-                    Param(ParamType.RebarRatio, 1.0f, 1.1f, 1.1f),
-                    Param(ParamType.SoilQuality, 200, 220, 215),
+                    Labeled(ParamType.ConcreteGrade, C25, C30, C30),
+                    Param(ParamType.ColumnThickness, 35, 40, 40),
+                    Param(ParamType.FoundationDepth, 2.0f, 2.0f, 2.0f),
+                    Labeled(ParamType.RebarType, B500, B500, B500),
+                    Labeled(ParamType.SoilType, StiffClay, StiffClay, StiffClay),
                 },
                 Documents =
                 {
@@ -82,18 +84,20 @@ namespace CivilJam.Desk
             {
                 Id = "D1-P2",
                 Name = "Lale Sitesi B Blok",
-                Address = "Gül Mah. Köprü Cd. No: 18",
+                Address = "Köprü Caddesi No: 18",
                 ClientId = "cevdet",
                 BuildingType = BuildingType.Residential,
-                Floors = 8,
+                Floors = 8, // 7+ kat: beyanda bile beton C25 (C30 gerekli) ve demir B500 (B500S gerekli)
                 Fee = 900,
                 OffersBribe = true,
                 BribeAmount = 1500,
                 Params =
                 {
-                    Param(ParamType.ConcreteStrength, 30, 20, 19),
-                    Param(ParamType.RebarRatio, 1.0f, 1.0f, 0.8f),
-                    Param(ParamType.SoilQuality, 200, 180, 175),
+                    Labeled(ParamType.ConcreteGrade, C30, C25, C20),
+                    Param(ParamType.ColumnThickness, 40, 40, 40),
+                    Param(ParamType.FoundationDepth, 2.5f, 2.5f, 2.5f),
+                    Labeled(ParamType.RebarType, B500S, B500, B420),
+                    Labeled(ParamType.SoilType, Rock, Rock, Rock),
                 },
                 Documents =
                 {
@@ -114,16 +118,18 @@ namespace CivilJam.Desk
             {
                 Id = "D1-P3",
                 Name = "Menekşe Konutları",
-                Address = "Yeni Mah. Sahil Yolu No: 2",
+                Address = "Sahil Yolu No: 2",
                 ClientId = "nurettin",
                 BuildingType = BuildingType.Residential,
-                Floors = 6,
+                Floors = 6, // 4-6 kat: beyan temiz, ek test beton/kolon/demir/zeminde eksik çıkarır
                 Fee = 700,
                 Params =
                 {
-                    Param(ParamType.ConcreteStrength, 30, 31, 18),
-                    Param(ParamType.RebarRatio, 1.0f, 1.05f, 0.7f),
-                    Param(ParamType.SoilQuality, 200, 210, 160),
+                    Labeled(ParamType.ConcreteGrade, C25, C25, C16),
+                    Param(ParamType.ColumnThickness, 35, 35, 30),
+                    Param(ParamType.FoundationDepth, 2.0f, 2.0f, 2.0f),
+                    Labeled(ParamType.RebarType, B500, B500, B220),
+                    Labeled(ParamType.SoilType, StiffClay, StiffClay, SoftClay),
                 },
                 Documents =
                 {
@@ -141,18 +147,20 @@ namespace CivilJam.Desk
             {
                 Id = "D1-P4",
                 Name = "Yıldız Pasajı",
-                Address = "Çarşı Mah. Demirci Sk. No: 11",
+                Address = "Demirci Sokak No: 11",
                 ClientId = "rustem",
                 BuildingType = BuildingType.Residential,
-                Floors = 4,
+                Floors = 4, // 4-6 kat: beton C20 (C25 gerekli) ve kolon 30 cm (35 gerekli)
                 Fee = 500,
                 OffersBribe = true,
                 BribeAmount = 2000,
                 Params =
                 {
-                    Param(ParamType.ConcreteStrength, 30, 22, 21),
-                    Param(ParamType.RebarRatio, 1.0f, 0.8f, 0.8f),
-                    Param(ParamType.SoilQuality, 200, 210, 205),
+                    Labeled(ParamType.ConcreteGrade, C25, C20, C20),
+                    Param(ParamType.ColumnThickness, 35, 30, 30),
+                    Param(ParamType.FoundationDepth, 2.0f, 2.0f, 2.0f),
+                    Labeled(ParamType.RebarType, B500, B500, B500),
+                    Labeled(ParamType.SoilType, StiffClay, StiffClay, StiffClay),
                 },
                 Documents =
                 {
@@ -162,12 +170,30 @@ namespace CivilJam.Desk
             };
         }
 
+        // Seçenekli parametrelerde değer = seçenek sıra numarası (RuleSet.asset'teki Labels ile aynı sıra, kötüden iyiye).
+        private const int C16 = 0, C20 = 1, C25 = 2, C30 = 3;
+        private const int B220 = 0, B420 = 1, B500 = 2, B500S = 3;     // demir: B220 düz, hiçbir binada kabul edilmez
+        private const int SoftClay = 1, StiffClay = 2, Rock = 3;        // (Dolgu = 0), Yumuşak kil, Sert kil, Kaya
+        private static readonly string[] ConcreteLabels = { "C16", "C20", "C25", "C30", "C35" };
+        private static readonly string[] RebarLabels = { "B220 (düz)", "B420", "B500", "B500S" };
+        private static readonly string[] SoilLabels = { "Dolgu", "Yumuşak kil", "Sert kil", "Kaya" };
+
+        // Yedek yönetmelik (Data/RuleSet.asset bağlı değilse): el kitabı v2 ile aynı 5 parametre × 3 kat grubu.
         private static RuleSetSO CreateRules()
         {
             var rules = ScriptableObject.CreateInstance<RuleSetSO>();
-            rules.Rules.Add(Rule(ParamType.ConcreteStrength, "Beton basınç dayanımı", "MPa", 30));
-            rules.Rules.Add(Rule(ParamType.RebarRatio, "Donatı oranı", "%", 1.0f));
-            rules.Rules.Add(Rule(ParamType.SoilQuality, "Zemin taşıma gücü", "kPa", 200));
+            var groups = new[] { (1, 3), (4, 6), (7, 0) };
+            float[] column = { 30, 35, 40 }, depth = { 1.5f, 2.0f, 2.5f };
+            int[] concrete = { C20, C25, C30 }, rebar = { B420, B500, B500S }, soil = { SoftClay, StiffClay, Rock };
+            for (int i = 0; i < groups.Length; i++)
+            {
+                var (min, max) = groups[i];
+                rules.Rules.Add(Rule(ParamType.ConcreteGrade, "Beton sınıfı", "", concrete[i], min, max, ConcreteLabels));
+                rules.Rules.Add(Rule(ParamType.ColumnThickness, "Kolon kalınlığı", "cm", column[i], min, max));
+                rules.Rules.Add(Rule(ParamType.FoundationDepth, "Temel derinliği", "m", depth[i], min, max));
+                rules.Rules.Add(Rule(ParamType.RebarType, "Demir tipi", "", rebar[i], min, max, RebarLabels));
+                rules.Rules.Add(Rule(ParamType.SoilType, "Zemin türü", "", soil[i], min, max, SoilLabels));
+            }
             return rules;
         }
 
@@ -179,13 +205,17 @@ namespace CivilJam.Desk
             return names;
         }
 
-        private static ParamRule Rule(ParamType type, string name, string unit, float required) => new ParamRule
+        private static ParamRule Rule(ParamType type, string name, string unit, float required, int minFloors, int maxFloors,
+            string[] labels = null) => new ParamRule
         {
             BuildingType = BuildingType.Residential,
             Param = type,
             DisplayName = name,
             Unit = unit,
             Required = required,
+            MinFloors = minFloors,
+            MaxFloors = maxFloors,
+            Labels = labels != null ? new List<string>(labels) : new List<string>(),
         };
 
         private static ClientSO Client(string id, string name, bool honest, string[] greetings, string[] bribes = null,
@@ -203,6 +233,10 @@ namespace CivilJam.Desk
 
         private static ParamEntry Param(ParamType type, float required, float reported, float actual) =>
             new ParamEntry { Type = type, Required = required, Reported = reported, Actual = actual };
+
+        // Seçenekli parametre: değerler seçenek sıra numarası (ParamEntry.Labeled → dayanım kademe cezasıyla hesaplanır).
+        private static ParamEntry Labeled(ParamType type, int required, int reported, int actual) =>
+            new ParamEntry { Type = type, Required = required, Reported = reported, Actual = actual, Labeled = true };
 
         private static DocumentData Application(string parcel, string date, string signature) => new DocumentData
         {

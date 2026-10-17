@@ -9,13 +9,11 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Sayfalı "Denetçi El Kitabı" (Ç1): masadaki EL KİTABI kitabıyla (ya da açık dosyadaki butonla) açılır.
-    // Sayfalar: giriş + kontrol listesi → mahalle → bölge tablosu → parametreler → bölge 1-4 → akredite laboratuvarlar.
-    // Bölge sayfası her parametre ve kat grubu için Core'un uyguladığı kuralı gösterir (ctx.Rules.FindRule). Sadece gösterir.
+    // Sayfalı "Denetçi El Kitabı" (el kitabı v2): masadaki EL KİTABI kitabıyla (ya da açık dosyadaki butonla) açılır.
+    // Sayfalar: giriş + belge kontrolü → yönetmelik tablosu (5 parametre × kat grubu, altında açıklamalar) → akredite laboratuvarlar.
+    // Tablo her hücrede Core'un uyguladığı kuralı gösterir (ctx.Rules.FindRule). Sadece gösterir.
     public class RulebookView : MonoBehaviour
     {
-        private const int ZoneCount = 4;
-
         // 1920x1080 tuval: tek başına ortada; dosya da açıksa sağ kenara yaslanır (dosya sola kayar).
         private static readonly Vector2 CenterPos = new Vector2(0, -40);
         private static readonly Vector2 DockedPos = new Vector2(560, -40);
@@ -127,17 +125,11 @@ namespace CivilJam.Desk
             var rules = ctx.Rules;
 
             pages.Add(("Denetçi El Kitabı", IntroPage(ctx)));
-            if (rules != null && rules.Zones.Count > 0) pages.Add(("Mahalleler ve deprem bölgeleri", ZonesPage(rules)));
 
             foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
             {
                 if (rules == null || !IsRelevant(ctx, type) || !HasRules(rules, type)) continue;
-                string building = DeskFormat.BuildingName(type);
-                pages.Add(($"Parametreler · {building}", ParamsPage(rules, type)));
-
-                if (rules.Zones.Count == 0) pages.Add(($"Yönetmelik · {building}", ZonePage(rules, type, 0)));
-                else for (int zone = 1; zone <= ZoneCount; zone++)
-                        pages.Add(($"{zone}. Bölge · {building}", ZonePage(rules, type, zone)));
+                pages.Add(($"Yönetmelik · {DeskFormat.BuildingName(type)}", RulesPage(rules, type)));
             }
 
             pages.Add(("Akredite laboratuvarlar", LabsPage(ctx)));
@@ -153,66 +145,38 @@ namespace CivilJam.Desk
                 sb.AppendLine();
             }
 
+            // Okuma adımları HandbookIntro'da (A); burada belgelerin kendisine dair kontroller.
             int testCost = ctx.Balance != null ? ctx.Balance.ExtraTestCost : 0;
-            sb.AppendLine("<b>Kontrol listesi</b>");
-            sb.AppendLine("1. Adresteki mahalleyi \"Mahalleler\" sayfasında bul, deprem bölgesine bak.");
-            sb.AppendLine("2. O bölgenin sayfasında yapının kat sayısına uyan sütunu bul; beyan edilen değerleri oradaki en düşük değerlerle karşılaştır.");
-            sb.AppendLine("3. Başvuru ile lab raporunda parsel no, tarih ve imza aynı olmalı.");
-            sb.AppendLine("4. Raporun başlığındaki laboratuvar ile kaşedeki aynı olmalı ve akredite listesinde bulunmalı.");
-            sb.AppendLine($"5. Beyana güvenmiyorsan ek test iste ({DeskFormat.Money(testCost)}): gerçek değerleri gösterir.");
+            sb.AppendLine("<b>Belge kontrolü</b>");
+            sb.AppendLine("• Başvuru ile lab raporunda parsel no, tarih ve imza aynı olmalı.");
+            sb.AppendLine("• Raporun başlığındaki laboratuvar ile kaşedeki aynı olmalı ve akredite listesinde bulunmalı.");
+            sb.AppendLine($"• Beyana güvenmiyorsan ek test iste ({DeskFormat.Money(testCost)}): gerçek değerleri gösterir.");
             sb.AppendLine();
             sb.Append("<i>Sayfaları alttaki oklarla çevir.</i>");
             return sb.ToString();
         }
 
-        private static string ZonesPage(RuleSetSO rules)
-        {
-            var zones = new List<ZoneEntry>(rules.Zones);
-            var tr = CultureInfo.GetCultureInfo("tr-TR");
-            zones.Sort((a, b) => string.Compare(a.Neighborhood, b.Neighborhood, tr, CompareOptions.None));
-
-            var sb = new StringBuilder();
-            sb.AppendLine("<b>Mahalle<pos=55%>Deprem bölgesi</b>");
-            foreach (var z in zones) sb.AppendLine($"{z.Neighborhood}<pos=55%>{z.Zone}. bölge");
-            sb.AppendLine();
-            sb.Append("<i>1. bölge en riskli bölgedir.</i>");
-            return sb.ToString();
-        }
-
-        private static string ParamsPage(RuleSetSO rules, BuildingType type)
-        {
-            var sb = new StringBuilder();
-            foreach (var param in ParamsOf(rules, type))
-            {
-                string description = null;
-                foreach (var r in rules.RulesFor(type))
-                    if (r.Param == param && !string.IsNullOrWhiteSpace(r.Description)) { description = r.Description.Trim(); break; }
-
-                sb.AppendLine($"<b>{DeskFormat.ParamName(rules, type, param)}</b>");
-                if (description != null) sb.AppendLine($"<size=85%>{description}</size>");
-            }
-            return sb.ToString().TrimEnd();
-        }
-
-        // Tablo: satır = parametre, sütun = kat grubu; hücre = bu bölge ve kat grubunda aranan en düşük değer.
-        private static string ZonePage(RuleSetSO rules, BuildingType type, int zone)
+        // El kitabı v2 (A): tek tablo. Satır = parametre (lab raporuyla aynı sıra), sütun = kat grubu (FloorsLabel),
+        // hücre = o kat grubunda kabul edilen en düşük değer (FindRule = Core'un projeye uyguladığı kural). Altında açıklamalar.
+        private static string RulesPage(RuleSetSO rules, BuildingType type)
         {
             var groups = FloorGroups(rules, type);
-            const float firstCol = 54f; // kitap dar (yan yana modda ekranın sağ yarısı): parametre adı + 2 kısa sütun
+            const float firstCol = 34f; // kitap dar (yan yana modda ekranın sağ kısmı): parametre adı + 3 kısa sütun
             float colWidth = (100f - firstCol) / groups.Count;
+            var parameters = ParamsOf(rules, type);
 
             var sb = new StringBuilder();
             sb.Append("<b>Parametre");
-            for (int i = 0; i < groups.Count; i++) sb.Append($"<pos={Pos(firstCol + i * colWidth)}%>{FloorLabel(groups[i])}");
+            for (int i = 0; i < groups.Count; i++) sb.Append($"<pos={Pos(firstCol + i * colWidth)}%>{groups[i].FloorsLabel}");
             sb.AppendLine("</b>");
 
-            foreach (var param in ParamsOf(rules, type))
+            foreach (var param in parameters)
             {
                 sb.Append(DeskFormat.ParamName(rules, type, param));
                 for (int i = 0; i < groups.Count; i++)
                 {
-                    int floors = groups[i].min > 0 ? groups[i].min : 1;
-                    var rule = rules.FindRule(type, param, zone, floors);
+                    int floors = groups[i].MinFloors > 0 ? groups[i].MinFloors : 1;
+                    var rule = rules.FindRule(type, param, floors);
                     string cell = rule != null ? DeskFormat.Value(rules, param, rule.Required) : "—";
                     sb.Append($"<pos={Pos(firstCol + i * colWidth)}%>{cell}");
                 }
@@ -220,8 +184,18 @@ namespace CivilJam.Desk
             }
 
             sb.AppendLine();
-            sb.Append("<i>Değerler kabul edilen en düşük değerlerdir; beyan bunun altındaysa uygunsuz. \"—\": bu kat grubunda aranmaz.</i>");
-            return sb.ToString();
+            sb.AppendLine("<i>En düşük kabul edilen değerler. Seçenekli parametrelerde sağdaki seçenek daha iyidir; tablodakinden kötüsü uygunsuz.</i>");
+
+            foreach (var param in parameters)
+            {
+                var rule = FirstRule(rules, type, param);
+                if (rule == null || string.IsNullOrWhiteSpace(rule.Description)) continue;
+                sb.AppendLine();
+                sb.Append($"<size=85%><b>{DeskFormat.ParamName(rules, type, param)}</b>");
+                if (rule.IsLabeled) sb.Append($" ({string.Join(" < ", rule.Labels)})");
+                sb.Append($": {rule.Description.Trim()}</size>");
+            }
+            return sb.ToString().TrimEnd();
         }
 
         private static string LabsPage(GameContext ctx)
@@ -235,7 +209,14 @@ namespace CivilJam.Desk
             return sb.ToString().TrimEnd();
         }
 
-        // Kural listesinde ilk geçiş sırasıyla parametreler.
+        private static ParamRule FirstRule(RuleSetSO rules, BuildingType type, ParamType param)
+        {
+            foreach (var r in rules.RulesFor(type))
+                if (r.Param == param) return r;
+            return null;
+        }
+
+        // Parametreler lab raporundaki sırayla (Core belgede ParamType sırasını kullanır).
         private static List<ParamType> ParamsOf(RuleSetSO rules, BuildingType type)
         {
             var list = new List<ParamType>();
@@ -245,26 +226,21 @@ namespace CivilJam.Desk
             return list;
         }
 
-        // Kurallarda geçen kat aralıkları (ör. 1-4, 5+); hiç yoksa tek sütun "Tüm katlar".
-        private static List<(int min, int max)> FloorGroups(RuleSetSO rules, BuildingType type)
+        // Kurallarda geçen kat grupları (ör. 1-3, 4-6, 7+), her gruptan bir temsilci kural (başlık: FloorsLabel).
+        // Hiç kat koşulu yoksa tek sütun ("Tüm binalar").
+        private static List<ParamRule> FloorGroups(RuleSetSO rules, BuildingType type)
         {
-            var groups = new List<(int min, int max)>();
+            var groups = new List<ParamRule>();
+            ParamRule any = null;
             foreach (var r in rules.RulesFor(type))
             {
+                any ??= r;
                 if (r.MinFloors == 0 && r.MaxFloors == 0) continue;
-                var g = (r.MinFloors, r.MaxFloors);
-                if (!groups.Contains(g)) groups.Add(g);
+                if (!groups.Exists(g => g.MinFloors == r.MinFloors && g.MaxFloors == r.MaxFloors)) groups.Add(r);
             }
-            if (groups.Count == 0) groups.Add((0, 0));
-            groups.Sort((a, b) => a.min.CompareTo(b.min));
+            if (groups.Count == 0 && any != null) groups.Add(any);
+            groups.Sort((a, b) => a.MinFloors.CompareTo(b.MinFloors));
             return groups;
-        }
-
-        private static string FloorLabel((int min, int max) g)
-        {
-            if (g.min == 0 && g.max == 0) return "Tüm katlar";
-            if (g.max == 0) return $"{g.min}+ kat";
-            return $"{Math.Max(1, g.min)}-{g.max} kat";
         }
 
         private static string Pos(float percent) => percent.ToString("0.#", CultureInfo.InvariantCulture);

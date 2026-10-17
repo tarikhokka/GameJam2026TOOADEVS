@@ -40,6 +40,10 @@ namespace CivilJam.Desk
                 ParamType.ColumnSection => "Kolon kesiti",
                 ParamType.SoilClass => "Zemin sınıfı",
                 ParamType.ShearWallRatio => "Perde duvar oranı",
+                ParamType.ColumnThickness => "Kolon kalınlığı",
+                ParamType.FoundationDepth => "Temel derinliği",
+                ParamType.RebarType => "Demir tipi",
+                ParamType.SoilType => "Zemin türü",
                 _ => type.ToString(),
             };
         }

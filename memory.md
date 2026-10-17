@@ -202,16 +202,15 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
   - [ ] **Diğer kartlar:** Olay kartı (cam kırıldı) ve 1. gün öğretici kartları yeni düzene göre. Öğretici metinlerini güncelle: "üç belge önünde, soldan sağa karşılaştır".
   - [ ] **Bitince:** DeskScreen.prefab'ı push'la, A'ya haber ver. A Game.unity'de kontrol eder (prefab örneği kendiliğinden güncellenir).
 - **Tarık (EEE):**
-  - [ ] **Üst yarı için ofis arka planı:** müteahhidin arkasındaki oda + masanın üst kenarı, portrenin önünde masa kenarı katmanı. Mevcut `desk_bg` kırpılabilir.
-  - [ ] **Alt yarı için masa yüzeyi dokusu.**
-  - [ ] **Kağıt dokusu** (eskimiş krem kağıt, ataç/zımba isteğe bağlı).
-  - [ ] **Belge başlık ikonları:** bina, deney tüpü, kitap.
-  - [ ] **Kaşe:** kırmızı yuvarlak lab kaşesi ve belediye kaşesi.
-  - [ ] **Formdaki bina resmi:** 3 adet, kat grubuna göre alçak / orta / yüksek. Desk `Floors`'a göre seçer, Core'a alan gerekmez.
-  - [ ] **Yazı tipi:**
-    - Başlıklar için kalın yuvarlak bir font (ör. **Lilita One**, OFL; kitaplarda zaten kullandın).
-    - Metin için okunaklı bir sans. Pixelify / VT323 **iptal**.
-  - [ ] **Lisans:** Her yeni font, görsel ve ses için `CREDITS_AND_AI.md` satırı.
+  - ✅ **(EEE, 17 Ekim ~15:30) Hepsi hazır, `Art/` altında. Oğuzhan için kullanım notları:**
+  - [x] **Üst yarı ofis:** `office_bg.png` 1920x540 (desk_bg'nin 150-690 satırları; masa görünmez, koltuk ortada). Portre koltuğun önüne. **`desk_edge.png`** 1920x110: düz ahşap masa kenarı (üstte kontur, altta ön yüz + yumuşak gölge); portrenin ÖNÜNE, ofisin alt kenarına bindirerek koy (örnek: y≈500, portre alt kenarını kapatır).
+  - [x] **Alt yarı masa yüzeyi:** `desk_surface.png` 1920x540, ahşap (ofis masasıyla aynı ton), soldan ışık; desk_edge'in altından başlar.
+  - [x] **Kağıt dokusu:** `paper.png` 600x800, eskimiş krem, ince kahve kontur, köşeler yuvarlak. **9-slice**: sprite border 32 px tanımlı; her boyuta gerilebilir (Image Type = Sliced).
+  - [x] **Başlık ikonları:** `icon_building.png` (form), `icon_tube.png` (lab raporu), `icon_book.png` (El Kitabı); 160x160 şeffaf, konturlu.
+  - [x] **Kaşeler:** `stamp_lab.png` (kırmızı, halka yazısı "AKREDİTE LABORATUVAR · DENEY RAPORU", ortada yıldız) ve `stamp_municipal.png` (mavi, "BETONYA BELEDİYESİ · İMAR MÜDÜRLÜĞÜ", ortada "YAPI DENETİM"); 400x400 şeffaf, mürekkep dokulu. İstersen hafif döndür (±8°). Lab adı gerekiyorsa kaşenin altına metin olarak yaz (sahte belge ipucu lab adı karşılaştırması aynen çalışsın).
+  - [x] **Formdaki bina resmi:** `bld_low.png` (3 kat, öneri 1-3 kat), `bld_mid.png` (5 kat, 4-6 kat), `bld_high.png` (9 kat, 7+ kat); 300x360 şeffaf, zemin çizgisi altta.
+  - [x] **Yazı tipi:** Başlık **Paytone One** (`Fonts/PaytoneOne-Regular SDF`), metin **Fira Sans** (`Fonts/FiraSans-Regular SDF`, `FiraSans-Bold SDF`). Lilita One yerine Paytone seçildi: Lilita'da ğ/ş/İ yok ("DENETİM" bozuk çıkıyordu), Paytone aynı kalın-yuvarlak tarzda ve Türkçe tam. Asset'ler Türkçe karakter seti önceden yüklenmiş, Static (oyunda kendiliğinden değişmez). ✔/✖ simgeleri fontlarda yok: düğmelerde ikon ya da "ONAY"/"RED" yazısı kullan. Üretici menü: CivilJam > EEE > Create Font Assets.
+  - [x] **Lisans:** hepsi `CREDITS_AND_AI.md`'de (font tablosu, yapay zekâ tablosu, Emeği Geçenler metni ve MainMenuScreen'deki kopyası).
 - **Onur (C):**
   - [ ] **Kaynak kaydı:** `hedef_arayuz.png`'yi hangi araçla ürettiğini `CREDITS_AND_AI.md` → "Yapay zekâ kullanımı" tablosuna yaz.
   - [ ] **İsteğe bağlı:** Flow ekranlarını (gazete, gün özeti, ödeme, kayıt) aynı kağıt/belge diline yaklaştır.
@@ -256,9 +255,9 @@ Bu işler yapılmaz; yapılmış kod silinebilir ya da yeniden kullanılabilir (
 > 1. ⛔ **İPTAL (yeni hedef arayüz; yerine Lilita One + okunaklı sans, bkz. 🧭)** ~~Fontlar~~: `Pixelify Sans` (başlık/etiket) + `VT323` (değerler), Google Fonts, SIL OFL 1.1 → **TMP font asset** yap. Asset adında `Pixelify` / `VT323` geçsin (builder adıyla bulur). `OFL.txt` font dosyalarıyla repoda dursun; `CREDITS_AND_AI.md` → Font tablosu + Emeği Geçenler satırı. Bitince Oğuzhan'a haber ver → builder'ı çalıştırıp form, lab raporu ve El Kitabı'nı yeni fontlara geçirir. *(Repoda şu an font yok.)*
 > 2. 🔴 **Lisans / AI kaydı kontrolü (jam kuralı):** eklediğin her görsel ve ses `CREDITS_AND_AI.md`'de mi? Özellikle AI görselleri (kitaplar, portreler, hediye görselleri, gün başı / kayıt / son arka planları) "Yapay zekâ kullanımı" tablosunda olsun.
 > 3. ⛔ **İPTAL** ~~`Art/form_folder.png`~~ (Ahmet isteği, tarif hemen yukarıda). *(Repoda şu an yok; masada kodla çizilmiş yer tutucu duruyor.)*
-> 4. ✍️ **Metin onayları (taslaklar sende bekliyor):** 1. gün 4 öğretici kart (`Desk/UI/TutorialView.cs`; Oğuzhan 17 Ekim'de yeni masaya göre güncelledi: form / lab raporu / El Kitabı), intro hikâye metni (`Flow/UI/IntroSequence.cs`, Onur'da), "Enkazın Gölgesi" son metni (`Data/Endings/MiddleCollapsed.asset`, A taslağı), El Kitabı metinleri (`RuleSet.asset` → `HandbookIntro` + 5 parametrenin `Description`'ı, Inspector'dan; masada El Kitabı'nın 2. sayfası ve kural altı açıklamalarında görünür).
-> 5. 👥 **Yeni müteahhitler (Ç3):** 6 → 10-12 (`Data/Clients/`, replikleri sen yaz; A "Link Data" ile bağlar). *(Şu an 6.)* Not: hediye artık sadece dürüst ustalar (Rıfat, Sevim) verir; yeni dürüst usta eklersen ona da `Gift` bağlanabilir.
-> 6. ✅ İşaretlenmeyi bekleyenler (repoda bitmiş): **bina adları 36** (Ç5) ve **6 hediye asset'i** (`Data/Gifts/`, A Game.unity'ye bağladı) → aşağıdaki iki `[ ]` maddeyi işaretle.
+> 4. ✅ **(EEE, 17 Ekim) Onaylandı.** Değişenler: öğretici 1. kart başlığı "Ulusal Yapı Denetim Kurumu'na hoş geldin"; `HandbookIntro` Ahmet'in yeni sekmeli metni aynen onaylandı; "Enkazın Gölgesi" `166166d`'de bitti; intro ve parametre açıklamaları aynen kaldı. ~~**Metin onayları (taslaklar sende bekliyor):** 1. gün 4 öğretici kart (`Desk/UI/TutorialView.cs`; Oğuzhan 17 Ekim'de yeni masaya göre güncelledi: form / lab raporu / El Kitabı), intro hikâye metni (`Flow/UI/IntroSequence.cs`, Onur'da), "Enkazın Gölgesi" son metni (`Data/Endings/MiddleCollapsed.asset`, A taslağı), El Kitabı metinleri (`RuleSet.asset` → `HandbookIntro` + 5 parametrenin `Description`'ı, Inspector'dan; masada El Kitabı'nın 2. sayfası ve kural altı açıklamalarında görünür).~~
+> 5. ⛔ **İPTAL (EEE kararı, 17 Ekim): yeni müteahhit eklenmeyecek, 6 kalır.** ~~**Yeni müteahhitler (Ç3):** 6 → 10-12 (`Data/Clients/`, replikleri sen yaz; A "Link Data" ile bağlar). *(Şu an 6.)* Not: hediye artık sadece dürüst ustalar (Rıfat, Sevim) verir; yeni dürüst usta eklersen ona da `Gift` bağlanabilir.~~
+> 6. ✅ **(işaretlendi)** İşaretlenmeyi bekleyenler (repoda bitmiş): **bina adları 36** (Ç5) ve **6 hediye asset'i** (`Data/Gifts/`, A Game.unity'ye bağladı) → aşağıdaki iki `[ ]` maddeyi işaretle.
 > 7. 📅 **Pazar:** `README.md` son hali (video linki + oyun ekran görüntüsü), O6'da kalan final görseller (gazete vb.) kontrolü.
 >
 > ⚠️ **Oğuzhan — ÖNCE BUNU OKU (A, `61353fd`):** `62165c0`'daki "yeni kural modeli" (Yapı Denetim Formu + Denetçi El Kitabı, tek ihlal = RED, ek test/lab raporu/sahte belge ipuçlarının kaldırılması, sel afeti) **Ahmet tarafından onaylanmadı**; notta yazan "Ahmet onayladı" yanlıştı. Commit geri alındı (`git revert`): memory.md eski kurallara döndü, `Docs/Tasarim/*.png` kaldırıldı (geçmişte duruyor).
@@ -338,9 +337,9 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - Sahte belge 3. günden başlar. Rüşvetsiz ama bir değeri yetersiz proje **her gün** gelir (Ç1 ile ancak el kitabıyla fark edilir). Bazı rüşvetçiler sahte belge de getirir.
 - B: künyede yan yana başvuru değerini kaldır (oyuncu sekmeler arasında gidip gelsin).
 
-**Ç3 — Gevşek roller (şikayet 1'in kökü). A ✅ yapıldı; EEE'nin yeni müteahhitleri bekleniyor.**
+**Ç3 — Gevşek roller (şikayet 1'in kökü). A ✅ yapıldı. Yeni müteahhit İPTAL (EEE kararı): 6 kalır.**
 - Dürüst usta çoğunlukla uygun ama %15-20 ihtimalle dikkatsizlikten bir değeri eksik getirir; rüşvetçi bazen temiz proje getirir ve zarf vermez; Selim çoğunlukla (her zaman değil) sahte belge. İsim tek başına türü ele vermez.
-- EEE: müteahhit sayısını 6'dan **10-12**'ye çıkar (yeni ClientSO'lar, aynı alanlar).
+- ~~EEE: müteahhit sayısını 6'dan **10-12**'ye çıkar (yeni ClientSO'lar, aynı alanlar).~~ ⛔ İptal: 6 müteahhit kalır.
 
 **Ç4 — Tepkiler ve hafıza (şikayet 1). A ✅ Core kısmı yapıldı; replikler/hediyeler (EEE) ve balon/hediye kartı (B) bekleniyor. Derinlik: metin + birkaç etki.**
 - (A) Core artık: `GreetingText`'i doldurur (daha önce karar verilen müteahhit `ReturnLines`, değilse `GreetingLines`), karardan sonra `ReactionText`'i doldurur (onay → `ApproveLines`; ret → zarf geri çevrildiyse `BribeRefusedLines`, değilse `RejectLines`), onayda hediye çıkarır (`ClientSO.Gift` + `GiftChance`; aynı hediye oyunda bir kez), Nuri'nin zarfını her retten sonra büyütür (`BribeRaiseOnReject` = 250, A ayarladı). Müteahhit geçmişi `GameState.ClientHistory`'de, kayıtla saklanır. Replik listesi boşsa metin boş gelir → masa balon göstermesin.
@@ -396,13 +395,13 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
   - [x] (EEE, 17 Ekim — Tarık kararı) **Karaktere özel konuşma sesi YOK.** Yerine: konuşma balonundaki yazı **harf harf** çıkar (daktilo efekti), arkasında **tek bir yazı sesi** çalar (Among Us tarzı kısa "bip"). Ses hazır: `Audio/sfx_typing.wav` (75 ms, özgün, script ile üretildi). Karaktere göre perde/ton ayrımı yapılmayacak; `ClientSO`'ya ses alanı gerekmez. Uygulama B'de (bkz. Oğuzhan bölümü).
   - [~] ~~🔊 **Konuşma sesi (Ahmet isteği, 17 Ekim):**~~ (yerine yukarıdaki karar) müteahhitler konuştuğunda (konuşma balonu açıldığında: gelişte `GreetingText` / zarf repliği, karardan sonra `ReactionText`) **ses çıkarsın.** Öneri: gerçek konuşma değil, kısa "mırıltı / bip" sesleri (Animal Crossing tarzı; harf başına ya da balon başına), **her karaktere farklı ton** (Rıfat kalın ve sakin, Nuri tiz ve hızlı, Rüstem boğuk...). CC0 kaynak + `CREDITS_AND_AI.md`. Hassasiyet: çığlık/ağlama yok.
     - Çalınması masa tarafında (Oğuzhan, `ClientSceneView` balonu). Karaktere göre ses seçmek için `ClientSO`'ya bir ses alanı gerekirse (ör. `Voice` klibi, `VoicePitch`) A'ya söyleyin, A ekler; sesleri ilgili müteahhit asset'ine Tarık bağlar.
-  - [ ] El kitabı metinleri: `HandbookIntro` ve 5 parametrenin `Description`'ı (A'nın sade taslağı var, istersen düzelt). ~~Mahalle adları~~ gerekmiyor (mahalle kaldırıldı).
+  - [x] El kitabı metinleri: `HandbookIntro` ve 5 parametrenin `Description`'ı (A'nın sade taslağı var, istersen düzelt). ~~Mahalle adları~~ gerekmiyor (mahalle kaldırıldı).
   - [x] ~~Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).~~ **→ Ahmet devraldı (Ahmet kararı, Tarık görselle meşgul).** 6 müteahhit için 56 replik yazıldı: okunur kopyası `ICERIK_TASLAK.md` → "Tepki replikleri (Ç4) — A taslağı"; asset'lere `CivilJam > Core > Fill Empty Client Lines` ile yazılır.
     - ⚠️ **Tarık:** bu replikleri **yeniden yazmana gerek yok**; istersen ton/üslup düzeltmesi yap. Düzeltmeyi doğrudan `Data/Clients/*.asset`'te (Inspector) yap ve `ICERIK_TASLAK.md`'deki kopyayı da güncelle. Araç sadece **boş** listeleri doldurur, senin düzeltmelerinin üzerine yazmaz. Yeni müteahhit eklersen onun repliklerini sen yaz (araç sadece bu 6 kişiyi bilir).
     - Kural: `ReturnLines`'taki `{last}` hem "onaylamıştınız" hem "reddetmiştiniz" ile okunur; cümleyi ikisine de uyacak kur. Dürüst ustalar ve Selim rüşvet vermediği için `BribeRefusedLines` boş.
     - [x] Hediye asset'leri (`Data/Gifts/`) ve hangi müteahhidin vereceği **hâlâ sende**. — (EEE, 17 Ekim) 6 `GiftSO` (`Data/Gifts/Gift_<Ad>.asset`), her müteahhide bir tane bağlandı (`ClientSO.Gift`, `GiftChance` 0.3 varsayılan): Rıfat → ahşap bina maketi, Sevim → saksıda kaktüs, Kemal → altın masa saati, Nuri → altın çerçeveli tablo, Selim → dolma kalem seti, Rüstem → balyoz biblosu. Görseller `Art/gift_*.png` (300x300, şeffaf, alta oturan, konturlu).
-  - [ ] Hediye asset'leri: `Assets/_Project/Data/Gifts/` → Create → CivilJam → Gift (saat, tablo, masa isimliği...; `Id`, `DisplayName`, `Sprite`, `Note`) ve hangi müteahhidin vereceği (`ClientSO.Gift`). Bitince haber ver → A "Link Data" ile bağlar.
-  - [ ] Yeni müteahhitler (10-12'ye) ve ~30 bina adı (Ç3, Ç5).
+  - [x] Hediye asset'leri: `Assets/_Project/Data/Gifts/` → Create → CivilJam → Gift (saat, tablo, masa isimliği...; `Id`, `DisplayName`, `Sprite`, `Note`) ve hangi müteahhidin vereceği (`ClientSO.Gift`). Bitince haber ver → A "Link Data" ile bağlar.
+  - [x] ~~Yeni müteahhitler (10-12'ye)~~ (iptal, 6 kalır) ve ~30 bina adı (Ç3, Ç5; 36 ad `NamePool`'da).
 
 ### 📌 Analiz sonrası işler (A, 17 Ekim gece) — ÖNCE BUNU OKU
 Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet paylaşır). Kararlar §2'de. Kodlar: K = kritik, Y = yüksek, O = orta, D = düşük.
@@ -568,6 +567,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | 17 Ekim öğleden sonra | YAPI DENETİM FORMU klasörü masada LAB RAPORU'nun yanında (oyuncu tarafı); LAB RAPORU küçültüldü; klasör görseli Tarık'a | Ahmet kararı: isimliğin arkasındaki klasörün yeri ve görünümü beğenilmedi; iki belge birlikte incelendiği için yan yana |
 | 17 Ekim öğleden sonra | Gün sonu kayıt ekranı (SaveScreen, EEE) Game.unity'de; IMGUI yedeği Save fazında artık çıkmaz | A bağladı; 8 fazın hepsinin ekranı var |
 | 17 Ekim ~15:00 | **Yeni hedef arayüz** (`Docs/Tasarim/hedef_arayuz.png`, Onur): üst yarı ofis + müteahhit, alt yarı 3 belge sabit ve yan yana (form / lab raporu / sekmeli el kitabı). Eğimli masa, masadaki kitaplar, kağıt pencereler, piksel tasarım ve Pixelify/VT323 iptal | Ahmet kararı. Kurallar (El Kitabı v2), lab raporunun rolü (beyan + ücretli ek test) ve Core sözleşmesi DEĞİŞMEZ; sadece arayüz. Görseldeki gerçek kurum adı ve standart kodları alınmaz |
+| 17 Ekim ~15:30 | Yeni müteahhit eklenmeyecek, 6 kalır; karaktere özel ses yok (sadece harf harf yazı sesi). Yazı tipleri: başlık Paytone One, metin Fira Sans (ikisi de OFL) | Tarık kararı. Lilita One'da ğ/ş/İ yok, Türkçe başlıklar bozuluyordu; Lilita sadece logoda (görsel içinde) kalır |
 | 17 Ekim akşamüstü | El kitabı bölümleri = sekmeler (BETON / DONATI / YAPI / ZEMİN, `SectionsFor`); ödeme önizlemesi `ExpenseCalculator.Preview`; kayıt sonucu `ctx.LastSave` + `ctx.RetrySave()` (günü artırmaz), `ctx.LoadFailed` | A. Yeni arayüz ve Onur'un YOL_HARITASI 2-3 ihtiyaçları; sözleşmeye sadece ekleme, testler 30/30 |
 
 ## Güncelleme kuralı

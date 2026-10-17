@@ -40,4 +40,19 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (script ile sıfırdan çizildi, masada yatan 3B kitap, 640x320 şeffaf; gölge kodda), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
 | `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (script ile sıfırdan çizildi, masada yatan halkalı klasör, 640x320 şeffaf; gölge kodda), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
+### Yeni masa arayüzü (17 Ekim ~15:30, Ahmet kararı: üst yarı ofis, alt yarı 3 sabit belge)
+| Dosya | Ne | Kim kullanıyor | Durum |
+|---|---|---|---|
+| `office_bg.png` | Üst yarı ofis (1920x540, desk_bg'den kırpıldı; koltuk ortada). Portre bunun önüne | B | F |
+| `desk_edge.png` | Düz ahşap masa kenarı (1920x110, şeffaf). Portrenin ÖNÜNE, ofisin alt kenarına bindirilir | B | F |
+| `desk_surface.png` | Alt yarı masa yüzeyi, ahşap (1920x540) | B | F |
+| `paper.png` | Eskimiş krem kağıt (600x800). **9-slice**, border 32 px: Image Type = Sliced | B | F |
+| `icon_building/tube/book.png` | Belge başlık ikonları: form / lab raporu / El Kitabı (160x160 şeffaf) | B | F |
+| `stamp_lab.png`, `stamp_municipal.png` | Kırmızı lab kaşesi ("AKREDİTE LABORATUVAR"), mavi belediye kaşesi ("BETONYA BELEDİYESİ · YAPI DENETİM"); 400x400 şeffaf | B | F |
+| `bld_low/mid/high.png` | Formdaki bina resmi: 3 / 5 / 9 kat (öneri 1-3 / 4-6 / 7+ kat), 300x360 şeffaf | B | F |
+
+Yazı tipleri `Assets/_Project/Fonts/`: başlık **Paytone One**, metin **Fira Sans** (Regular/Bold), TMP asset'leri `* SDF.asset` (Türkçe set önceden yüklü, Static).
+
+Eski masa (desk_bg/desk_front/book_*) yeni arayüzde kullanılmıyor; referans kırılmasın diye silinmedi.
+
 Durum: `-` yok, `P` placeholder, `F` final.

@@ -44,7 +44,9 @@ namespace CivilJam.Flow
             "Gazete şablonu: yapay zekâ (Gemini)\n\n" +
             "<b>YAZI TİPLERİ</b>\n" +
             "Liberation Sans — SIL Open Font License 1.1\n" +
-            "Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1";
+            "Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1\n" +
+            "Paytone One — The Paytone Project Authors, SIL OFL 1.1\n" +
+            "Fira Sans — Mozilla Foundation / Telefonica, SIL OFL 1.1";
 
         GameObject _menuPanel, _creditsPanel;
         Transform _root;

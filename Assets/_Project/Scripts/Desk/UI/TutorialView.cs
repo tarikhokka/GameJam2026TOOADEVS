@@ -19,7 +19,7 @@ namespace CivilJam.Desk
 
         [SerializeField] private Card[] cards =
         {
-            new Card("İmar Müdürlüğü'ne hoş geldin",
+            new Card("Ulusal Yapı Denetim Kurumu'na hoş geldin",
                 "Müteahhitler sırayla gelip karşına oturacak. Senin imzan olmadan hiçbir bina yükselmez.\n\n" +
                 "Müteahhit masaya ortadaki <b>YAPI DENETİM FORMU</b>'nu ve soldaki mavi <b>LAB RAPORU</b>'nu bırakır. " +
                 "Tıklayınca açılırlar; kağıtları sürükleyip yan yana koyabilirsin. Kararı formdaki <b>ONAY / RED</b> kutularıyla verirsin."),

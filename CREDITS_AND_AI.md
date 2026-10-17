@@ -30,7 +30,9 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 ## Font
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
-| Lilita One (Juan Montoreano) — sadece logo görselinde yazı olarak kullanıldı, font dosyası repoda yok | `Assets/_Project/Art/logo.png` | https://fonts.google.com/specimen/Lilita+One | SIL OFL 1.1 | Tarık | 2026-10-17 |
+| Lilita One (Juan Montoreano) — sadece görsellerde yazı olarak kullanıldı (logo ve eski kitap etiketleri), font dosyası repoda yok | `Assets/_Project/Art/logo.png`, `book_*.png` | https://fonts.google.com/specimen/Lilita+One | SIL OFL 1.1 | Tarık | 2026-10-17 |
+| Paytone One (The Paytone Project Authors) — TTF + TMP font asset (`PaytoneOne-Regular SDF`) | Masa belgeleri: başlıklar (Lilita One Türkçe ğ/ş/İ desteklemediği için yerine seçildi) | https://fonts.google.com/specimen/Paytone+One (lisans: `Assets/_Project/Fonts/OFL_PaytoneOne.txt`) | SIL OFL 1.1 | Tarık | 2026-10-17 |
+| Fira Sans (Mozilla Foundation, Telefonica S.A.) — Regular + Bold TTF ve TMP font asset (`FiraSans-Regular SDF`, `FiraSans-Bold SDF`) | Masa belgeleri: metin ve değerler | https://fonts.google.com/specimen/Fira+Sans (lisans: `Assets/_Project/Fonts/OFL_FiraSans.txt`) | SIL OFL 1.1 | Tarık | 2026-10-17 |
 
 ## Diğer
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
@@ -56,6 +58,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Harf harf yazı sesini (kısa "bip") sentezleyen script; yerine Freesound #468927 geldi. Yeni sesin döngüde çalması için DeskAudio.PlayTyping düzenlemesi (Oğuzhan'ın dosyası, ekip onayıyla) | `Assets/_Project/Scripts/Desk/UI/DeskAudio.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Gün başı (dayintro_bg) ve inşaat ekranı (construction_bg, pencere manzarasından) arka planlarını ChatGPT ofis görselinden türeten script; ConstructionScreen.prefab kök görseline bağlama; ana menü Emeği Geçenler panelinin iki sütunlu yeniden düzeni ve güncel metni (MainMenuScreen.cs, Onur'un dosyası, ekip onayıyla) | `Assets/_Project/Art/dayintro_bg.png`, `Assets/_Project/Prefabs/Flow/DayIntroScreen.prefab`, `Assets/_Project/Scripts/Flow/UI/MainMenuScreen.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | Gün sonu kayıt ekranı: SaveScreen.cs (kodla kurulan arayüz, "KAYDEDİLDİ" kaşesi), SaveScreen.prefab, save_bg görseli (ChatGPT ofis görselinden türetildi); CoreSetupBuilder ekran listesine ekleme | `Assets/_Project/Scripts/Flow/UI/SaveScreen.cs`, `Assets/_Project/Prefabs/Flow/SaveScreen.prefab`, `Assets/_Project/Art/save_bg.png`, `Assets/_Project/Scripts/Core/Editor/CoreSetupBuilder.cs` | Tarık | 2026-10-17 |
+| Claude (Anthropic) | Yeni masa arayüzü görselleri: üst yarı ofis (office_bg, desk_bg kırpımı), düz masa kenarı (desk_edge), ahşap masa yüzeyi (desk_surface), kağıt dokusu (paper, 9-slice), başlık ikonları (bina, deney tüpü, kitap), mürekkep dokulu kaşeler (lab: "AKREDİTE LABORATUVAR", belediye: "BETONYA BELEDİYESİ"), form bina resimleri (alçak/orta/yüksek) çizen script; font asset üreticisi (FontAssetCreator.cs) | `Assets/_Project/Art/office_bg.png`, `desk_edge.png`, `desk_surface.png`, `paper.png`, `icon_*.png`, `stamp_lab.png`, `stamp_municipal.png`, `bld_low/mid/high.png`, `Assets/_Project/Fonts/Editor/FontAssetCreator.cs` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT masa görselini arka/ön katmana (desk_bg / desk_front) ayıran, kitapların ve portrelerin beyaz arka planını (saç aralarındaki boşluklar dahil) silen script | `Assets/_Project/Art/desk_*.png`, `book_*.png`, `portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (KULLANILMIYOR) Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Masa arka planı ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
@@ -107,6 +110,8 @@ Gazete şablonu: yapay zekâ (Gemini)
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1
 Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1
+Paytone One — The Paytone Project Authors, SIL Open Font License 1.1
+Fira Sans — Mozilla Foundation / Telefonica, SIL Open Font License 1.1
 
 YAPAY ZEKÂ
 Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları

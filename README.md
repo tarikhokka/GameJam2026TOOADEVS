@@ -29,7 +29,7 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 - **İncele:** **İNCELE** düğmesine bas, iki ayrı belgeden aynı bilgiye tıkla (ör. formdaki ve rapordaki parsel ya da formdaki bir değer ile El Kitabı'ndaki satırı). Oyun **SORUN YOK**, **UYUŞMAZLIK SAPTANDI** ya da **ALAKASIZ** der. El Kitabı'yla karşılaştırırken önce doğru kat grubunu seç. Uyuşmazlık bulursan müteahhide söylersin, o da cevap verir. İnceleme ücretsiz ve sınırsızdır; kararı yine sen verirsin.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar. Sahte belgede kâğıttaki beyan temiz görünür, gerçek değer ancak ek testte görünür. Form ile lab raporunda bir değer farklı yazıyorsa ya masum bir yazım hatasıdır ya da biri yalan söylüyordur; hangisi olduğunu ek test gösterir. Ama her test kasadan çıkar.
 - **Zarf:** Rüşvetçi müteahhit, sen bir uyuşmazlık bulunca masaya zarf bırakır. Zarfı alıp onaylamak da reddetmek de senin kararın. Rüşvet teklif edilen her proje kurallara aykırıdır.
-- **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen ofisinin camı kırılabilir; tamiri sana kalır.
+- **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen camın kırılabilir, masana tekme atılabilir, kapının kilidi ya da arabanın lastikleri gidebilir; tamiri sana kalır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.
 

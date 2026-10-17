@@ -63,6 +63,9 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
 | `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; masadaki İNCELE düğmesinin ilk hali (şimdi btn_menu kullanıyor); şu an kullanılmıyor | B | F |
 | `ui_checkbox.png`, `ui_check.png` | Ödeme ekranı onay kutusu (krem kutu, koyu kontur) ve yeşil tik (işaretli = ödenecek), 96x96 | C | F |
+| `menu_lights_0..3.png` | Ana menü pencere ışıkları: menu_bg'deki sarı pencerelerden çıkarılmış 4 şeffaf katman (1920x1080; 0-1 "söner", 2-3 "parlar"). MenuAmbience yanıp söndürür | C | F |
+| `menu_glow.png`, `menu_dust.png` | Ana menü güneş halesi (256 radyal) ve havadaki toz zerresi (32 radyal) | C | F |
+| `menu_redlight.png`, `menu_load.png` | Ana menü vinç ikaz lambası (kırmızı radyal) ve sol vinçten sarkan çelik kiriş (halat + kanca + I-kiriş siluet, pivot üstte) | C | F |
 
 Yazı tipleri `Assets/_Project/Fonts/`: başlık **Paytone One**, metin **Fira Sans** (Regular/Bold), TMP asset'leri `* SDF.asset` (Türkçe set önceden yüklü, Static).
 

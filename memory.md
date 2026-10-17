@@ -317,7 +317,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
       - ikonlar (yaklaşık 64x64): `hud_icon_day.png` (takvim yaprağı), `hud_icon_money.png` (kasa/para), `hud_icon_count.png` (klasör).
   - Her görsel için `CREDITS_AND_AI.md` "Yapay zekâ kullanımı" satırı ve `Art/README.md` satırı (sahip B/C, durum F).
   - Hepsini **tek push'ta** at, "T1 ✅ hash" yaz.
-- [ ] **T2 Metinler (madde 1, 5, 6):**
+- [x] **T2 ✅ `1dd7870`** — `TutorialView.cs` 2. kart ("Formdaki KAT ADEDİ'ne bak: El Kitabı'nın HIZLI BAKIŞ sayfası doğru kat grubunu kendisi gösterir.") ve 5. kart ("kat grubunu seçmeyi unutma" çıktı); README 27 ve 29, ICERIK_TASLAK, Art/README (`tab_*` artık kullanılmıyor, silinmedi). RED kutusundaki bilgi öğretici kartlarda zaten var (2. kart "tek bir kırmızı", 3. kart parsel/tarih/imza/kaşe + ek test) → ekleme gerekmedi. ⚠️ **Oğuzhan:** kart metinleri prefab'a da kayıtlı; B1/B2'de builder'la kurunca koddaki yeni metinler gelir (ayrı iş yok).
+- ~~T2 Metinler (madde 1, 5, 6):~~ (yapıldı, yukarıda)
   - `TutorialView.cs` (sadece metin dizeleri, satır ~31 ve ~43) ve `ICERIK_TASLAK.md`'deki aynı metinler:
     - "kat grubunu seç" → kat grubu kendiliğinden seçilir (ör. "El Kitabı'nın HIZLI BAKIŞ sayfası formdaki kat adedine göre doğru kat grubunu kendisi gösterir.");
     - "doğru kat grubunu seçmeyi unutma" cümlesi çıkar.

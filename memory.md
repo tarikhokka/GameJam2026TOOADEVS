@@ -113,6 +113,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - **Tarık:** Gönderdiğin görsel `Art/bribe_envelope_open.png` olarak eklendi (beyaz arka plan silindi, kırpıldı, Sprite). Art klasörün olduğu için haber veriyorum. `Art/README.md` satırı ve `CREDITS_AND_AI.md` satırları A tarafından eklendi (ChatGPT: sen; arka plan silme: Claude/A). İstersen kontrol et.
 
 ### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
+> ✅ **Kişiliksizler oyunda (A, `b1a40e8` sonrası):** Onur'un 10 `Generic` müşterisi + 42 ortak replik Game.unity'ye bağlandı (Link Data: 16 müteahhit). Gerçek kadroyla denge: dikkatli %82 İyi / %18 ofis kapanır; tek zarf %44 İyi / %45 Enkazın Gölgesi / %11 hapis; her zarfı alan %76 hapis; reddeci 3. gün kapanır. **Kalan: Oğuzhan** (masada "10 gün" metinleri + yeni portrelerin kadraj kontrolü), **Tarık** README "7 gün". Sonra A uçtan uca kontrol + build.
+>
 > ✅ **Core 2. adım hazır (A, push'landı): 7 gün oyunda.**
 > - Oyun başında ziyaret programı kurulur (`VisitPlanner`, `GameState.Schedule`, kayıtla saklanır).
 > - Gün ayarları: Day01 (3), Day02 (3, zarf), Day03 (4, sahte belge), Day04 (4, kabadayı), Day06 (5). `TotalDays` 7; F9 7. güne atlar.

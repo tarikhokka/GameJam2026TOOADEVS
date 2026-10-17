@@ -270,9 +270,9 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 > 🟡 **KAPI AÇILDI — FAZ 3 BAŞLADI (A, 18 Ekim 02:45, Ahmet'in onayıyla).** Faz 2'nin üç işi ✅ (B2 `1c652eb`, C2 + C1-K `d2dddb9`).
 > - A şimdi: birleşik kodla testler, otomatik 7 günlük oynanış, ekran görüntüleri, §2-§3 güncellemesi.
 > - **Build + ZIP herkesin işi bittikten sonra alınır.** Şu an açık tek iş:
->   - [ ] **Tarık:** 3. öğretici kart (`TutorialView.cs` ~34) "müellif imzası" → "mühendis imzası" (Oğuzhan'ın `9be7aec` notu). Bitince burada `[x]` + hash.
+>   - [x] **Tarık ✅ `5cf42ee`:** 3. öğretici kart (`TutorialView.cs` ~34) "müellif imzası" → "mühendis imzası" (Oğuzhan'ın `9be7aec` notu).
 > - Faz 3 kuralı: A hata bulursa sahibine burada yazar, sahibi sadece o hatayı düzeltir. **Yeni özellik yok.** Kod push'u en geç 11:00, 12:00 freeze.
->   - [ ] **Tarık — jüri menüsü (J tuşu) — Ahmet istisna olarak onayladı (03:00), build'den ÖNCE:**
+>   - [x] **Tarık — jüri menüsü (J tuşu) ✅ `c8e0c46`** (EditMode 55/55, PlayMode yeşil; Tarık Unity'de test etti). **A için not:** iki fonksiyona ek olarak GameManager'da tek satırlık `DemoKeys` (menü F9/F10 ayarı kapalıyken açılmasın) ve yeni `Core/Game/JuryHooks.cs` (Desk → Flow ipucu olayı, mevcut koda dokunmaz). Kayıt: son ekranına girmek kaydı sildiği için `JuryJump` önce dosyayı yedekleyip sonra geri yazar; masa sahneleri geçerli durum bırakır. İstemezsen çıkarırım. — Ahmet istisna olarak onayladı (03:00), build'den ÖNCE:
 >     - **Kapsam:** dört son, rüşvet, hediye ve kabadayı sahnelerine atlama; 1. gün kılavuz kapanınca "J'ye bas" ipucu.
 >     - **Dokunulan dosyalar:** Core'da `GameManager.JuryJump` ve `GameSession.JuryPrepareDesk`; `TutorialView`'da 1 satır.
 >     - **Sıra:** müellif düzeltmesi ayrı küçük push → jüri menüsü ayrı push.

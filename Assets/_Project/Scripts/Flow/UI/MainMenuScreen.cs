@@ -38,7 +38,7 @@ namespace CivilJam.Flow
             "Kağıt sesi: \"paper5\" — florian_reinke (freesound.org), CC0\n" +
             "Cam kırılma sesi: \"Breaking Glass\" — hifijohn (freesound.org), CC0\n" +
             "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0\n" +
-            "Yazı sesi: ekip tarafından üretildi\n\n" +
+            "Yazı sesi: \"Medium Text Blip\" — malakme (freesound.org), CC0\n\n" +
             "<b>GÖRSELLER</b>\n" +
             "Müteahhit karakterleri ve ofis: yapay zekâ (ChatGPT)\n" +
             "Gazete şablonu: yapay zekâ (Gemini)\n\n" +

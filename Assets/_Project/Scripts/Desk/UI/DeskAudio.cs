@@ -18,7 +18,7 @@ namespace CivilJam.Desk
         [SerializeField] private AudioClip stamp;
         [SerializeField] private AudioClip glassBreak;
         [SerializeField] private AudioClip officeMusic;
-        [SerializeField] private AudioClip typing; // EEE: sfx_typing.wav (75 ms "bip"), karaktere özel ses yok
+        [SerializeField] private AudioClip typing; // EEE: sfx_typing.ogg (malakme "Medium Text Blip", CC0; döngüde çalar), karaktere özel ses yok
 
         [Header("Seviye")]
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.8f;
@@ -40,11 +40,29 @@ namespace CivilJam.Desk
         public void PlayStamp() => Play(stamp);
         public void PlayGlassBreak() => Play(glassBreak);
 
+        // EEE (17 Ekim): sfx_typing artık 8,8 sn'lik blip dizisi. Her harfte baştan çalmak yerine harfler akarken
+        // döngüde çalar; typingStopDelay boyunca yeni harf gelmezse (yazı bitti / cümle duraklaması) kendiliğinden durur.
+        [SerializeField] private float typingStopDelay = 0.25f;
+        private float lastTypedTime = -1f;
+
         public void PlayTyping()
         {
             if (typing == null || typingSource == null) return;
+            lastTypedTime = Time.unscaledTime;
+            if (typingSource.isPlaying) return;
+            typingSource.clip = typing;
+            typingSource.loop = true;
+            typingSource.volume = typingVolume;
             typingSource.pitch = Random.Range(typingPitch.x, typingPitch.y);
-            typingSource.PlayOneShot(typing, typingVolume);
+            typingSource.time = Random.Range(0f, Mathf.Max(0f, typing.length - 0.5f)); // her seferinde farklı yerden
+            typingSource.Play();
+        }
+
+        private void Update()
+        {
+            if (typingSource != null && typingSource.isPlaying && typingSource.clip == typing
+                && Time.unscaledTime - lastTypedTime > typingStopDelay)
+                typingSource.Stop();
         }
 
         public void StartMusic()

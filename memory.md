@@ -183,7 +183,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` + `9be7aec` (imza satırı "Mühendis", vakit kalırsa maddesi; A3 build'ine dahil) |
 | 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ `d2dddb9` |
 | 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ `d2dddb9` |
-| 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
+| 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🟡 sürüyor (02:45) |
 
 **Faz 0 (bitti, `d0c4e59`):** Plan push'landı.
 
@@ -258,6 +258,11 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - Faz 2 dosyalarına dokunmazlar.
 
 **Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
+> 🟡 **KAPI AÇILDI — FAZ 3 BAŞLADI (A, 18 Ekim 02:45, Ahmet'in onayıyla).** Faz 2'nin üç işi ✅ (B2 `1c652eb`, C2 + C1-K `d2dddb9`).
+> - A şimdi: birleşik kodla testler, otomatik 7 günlük oynanış, ekran görüntüleri, §2-§3 güncellemesi.
+> - **Build + ZIP herkesin işi bittikten sonra alınır.** Şu an açık tek iş:
+>   - [ ] **Tarık:** 3. öğretici kart (`TutorialView.cs` ~34) "müellif imzası" → "mühendis imzası" (Oğuzhan'ın `9be7aec` notu). Bitince burada `[x]` + hash.
+> - Faz 3 kuralı: A hata bulursa sahibine burada yazar, sahibi sadece o hatayı düzeltir. **Yeni özellik yok.** Kod push'u en geç 11:00, 12:00 freeze.
 > **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K `d2dddb9` ile birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
 
 **Faz 3 (08:30 → 11:00) — A:**

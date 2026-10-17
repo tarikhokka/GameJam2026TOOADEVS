@@ -51,6 +51,17 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `stamp_lab.png`, `stamp_municipal.png` | Kırmızı lab kaşesi ("AKREDİTE LABORATUVAR"), mavi belediye kaşesi ("BETONYA BELEDİYESİ · YAPI DENETİM"); 400x400 şeffaf | B | F |
 | `bld_low/mid/high.png` | Formdaki bina resmi: 3 / 5 / 9 kat (öneri 1-3 / 4-6 / 7+ kat), 300x360 şeffaf | B | F |
 
+**17 Ekim akşam görsel yenileme (ChatGPT, düzen aynı):** `office_bg`, `desk_surface`, `desk_edge`, `portrait_*` (artık 1000x1000, aynı yerleşim oranı), `menu_bg` aynı adlarla yenilendi. Yeniler:
+| Dosya | Ne | Kim kullanıyor | Durum |
+|---|---|---|---|
+| `doc_form.png` | Yapı Denetim Formu: klasörlü, ataçlı boş kağıt (1065x1307 şeffaf); yazılar kodla | B | F |
+| `doc_lab.png` | Laboratuvar Raporu: boş kağıt destesi (1057x1295) | B | F |
+| `doc_handbook.png` | Denetçi El Kitabı: solda spiralli boş defter (1093x1279) | B | F |
+| `tab_beton/donati/yapi/zemin.png` | El Kitabı sekmeleri (120x300; sol kenar defterin altına girer, yazı dikey) | B | F |
+| `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
+| `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
+| `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
+
 Yazı tipleri `Assets/_Project/Fonts/`: başlık **Paytone One**, metin **Fira Sans** (Regular/Bold), TMP asset'leri `* SDF.asset` (Türkçe set önceden yüklü, Static).
 
 Eski masa (desk_bg/desk_front/book_*) yeni arayüzde kullanılmıyor; referans kırılmasın diye silinmedi.

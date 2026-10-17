@@ -158,6 +158,12 @@
 > - Değişecek ekranlara (masa, belgeler, el kitabı) ayrı tasarım, özellik ya da cila eklenmez. Ajanlar da önermez.
 > - Sadece kendi zincir halkanı yap. Bozuk bir şey görürsen düzeltme, Ahmet'e haber ver.
 > - Bilgi: El kitabı "Hızlı Bakış" sayfası (`RulebookView` + `HandbookUi`) yeni düzende sağdaki belgenin içine aynen taşınır; sadece dışındaki pencere değişir.
+>
+> ✅ **Tarık halkası tamam (17 Ekim ~16:30) → sıra Oğuzhan'da.** Yeni görseller `Art/`'ta, hepsi şeffaf, Sprite (Single). Ayrıntı `Art/README.md` "17 Ekim akşam görsel yenileme":
+> - Aynı adla yenilendi (referanslar korunur): `office_bg` (1920x540 üst yarı), `desk_surface` (1920x540 alt yarı), `desk_edge` (1920x110, portrenin önüne), `portrait_*` (artık 1000x1000; yerleşim oranı aynı, 600'lük kutuda aynı durur).
+> - Yeni: `doc_form` (klasörlü form), `doc_lab` (kağıt destesi), `doc_handbook` (solda spiralli defter); üçü de boş, yazılar kodla. `tab_beton/donati/yapi/zemin` (120x300, sol kenarı defterin altına girer). `btn_approve` / `btn_reject` (440x150, kaşe tarzı ONAY/RED), `btn_test` (420x120, mavi EK TEST).
+> - Masa (`DeskScreen.prefab`) hâlâ eski `desk_bg` / `desk_front` / `book_*`'u kullanıyor; yenilerini Oğuzhan bağlar.
+> - Ana menü (Onur'un ekranı, EEE değiştirdi): yeni `menu_bg` (logo ve 3 tahta düğme resmin içinde). `MainMenuScreen` gerçek düğmeleri `btn_menu` ile resimdeki yuvalara oturtur; kayıt varsa "Devam Et" en üste girer. Ayrı logo kapalı (`logoInBackground`). Düğme yazısı Fira Sans Bold.
 
 Referans görsel: **`Docs/Tasarim/hedef_arayuz.png`** (Onur hazırladı). Oyunun bitmiş hali bu yönde olacak; **birebir kopya şart değil, yön bu.** Eski "eğimli masa + masada yatan kitaplar + açılan kağıt pencereler" tasarımı **kalktı**.
 

@@ -283,7 +283,7 @@ Tam analiz ve yol haritası Ahmet'te (claude.ai artifact; bağlantıyı Ahmet pa
 Ajanlar: oturum başında bu bölümü oku; ilgili maddeyi tamamlayınca kendi kişisel dosyana not düş ve buradaki maddeyi `[x]` yap. Ayrıntılı Core kullanım rehberi: `AHMET.md` → "B ve C için Core kullanım rehberi".
 
 **Oğuzhan (B / Masa) için:**
-- [ ] **(EEE → B, 17 Ekim) Kitaplar yenilendi:** `book_rules.png` (600x577) ve `book_lab.png` (600x546) Gemini ile yeniden üretildi, şeffaf, aynı dosya adları (eski 600x400'tü, artık daha kare). İki istek:
+- [ ] **(EEE → B, 17 Ekim) Kitaplar yenilendi:** `book_rules.png` (600x577) ve `book_lab.png` (600x546) ChatGPT ile yeniden üretildi, şeffaf, aynı dosya adları (eski 600x400'tü, artık daha kare). İki istek:
   1. **Boyut:** masadaki kitap butonlarının boyutunu yeni orana göre ayarla (preserveAspect açık, basıklık yok ama kutu boyu artık fazla/eksik olabilir). Masanın köşelerinde, masa eşyalarıyla (kupa, kalemlik, kaşe) orantılı dursunlar.
   2. **Fiziksel görünüm:** kitaplar masaya konmuş gibi dursun, ekrana yapıştırılmış UI gibi değil: altına yumuşak bir gölge (yarı saydam koyu elips/blur, kitabın altında biraz sağa-aşağı), masanın perspektifine uygun hafif eğim/döndürme (sol kitap hafif saat yönü tersine, sağ kitap hafif saat yönü), üzerine gelince hafif kalkma (scale/offset) tıklanabilir olduğunu belli etsin.
 - [x] `CivilJam.Desk.asmdef` referanslarına `CivilJam.Core` ekle.

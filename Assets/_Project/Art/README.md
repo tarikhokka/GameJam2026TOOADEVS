@@ -32,7 +32,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |
-| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (Gemini, 600x577 şeffaf; masada gölgeli ve hafif eğik durmalı), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
-| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (Gemini, 600x546 şeffaf; masada gölgeli ve hafif eğik durmalı), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT, 600x577 şeffaf; masada gölgeli ve hafif eğik durmalı), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT, 600x546 şeffaf; masada gölgeli ve hafif eğik durmalı), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

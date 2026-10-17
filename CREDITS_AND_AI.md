@@ -47,8 +47,8 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Kenney Modular Characters parçalarını birleştirip 6 müteahhit portresi üreten script (parça seçimi ve yüz ifadeleri; Rıfat'ın parçalarını Tarık seçti) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | ChatGPT (OpenAI) | 6 müteahhit karakter görselinin üretimi (Rıfat, Sevim, Kemal, Nuri, Selim, Rüstem) | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT portrelerinin beyaz arka planını silip şeffaf 600x600 PNG'ye çeviren script | `Assets/_Project/Art/portrait_*.png` | Tarık | 2026-10-17 |
-| ChatGPT (OpenAI) | Masa ekranı arka planı (ofis, koltuk, masa, aksesuarlar); prompt'lar Claude ile yazıldı. (İlk kitap görselleri de ChatGPT idi, 17 Ekim öğlen Gemini ile değiştirildi) | `Assets/_Project/Art/desk_bg.png`, `desk_front.png` | Tarık | 2026-10-17 |
-| Gemini (Google) | İki kitap görseli: EL KİTABI ve LAB RAPORU (ortak tarz prompt'u Claude ile yazıldı); beyaz arka planı Claude script'i ile silindi | `Assets/_Project/Art/book_rules.png`, `book_lab.png` | Tarık | 2026-10-17 |
+| ChatGPT (OpenAI) | Masa ekranı arka planı (ofis, koltuk, masa, aksesuarlar); prompt'lar Claude ile yazıldı. (Kitapların ilk sürümü de ChatGPT idi; 17 Ekim öğlen yine ChatGPT ile yenilendi, bkz. alt satır) | `Assets/_Project/Art/desk_bg.png`, `desk_front.png` | Tarık | 2026-10-17 |
+| ChatGPT (OpenAI) | İki kitap görselinin yeni sürümü: EL KİTABI ve LAB RAPORU (ortak tarz prompt'u Claude ile yazıldı); beyaz arka planı Claude script'i ile silindi | `Assets/_Project/Art/book_rules.png`, `book_lab.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | ChatGPT masa görselini arka/ön katmana (desk_bg / desk_front) ayıran, kitapların ve portrelerin beyaz arka planını (saç aralarındaki boşluklar dahil) silen script | `Assets/_Project/Art/desk_*.png`, `book_*.png`, `portrait_*.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (KULLANILMIYOR) Müteahhit koltuğu arkalığı görselini çizen script (flat, kontursuz) | `Assets/_Project/Art/chair_back.png` | Tarık | 2026-10-17 |
 | Claude (Anthropic) | (DEĞİŞTİRİLDİ, kullanılmıyor) Masa arka planı ve iki kitap görselini çizen script (flat) | `Assets/_Project/Art/desk_bg.png`, `book_lab.png`, `book_rules.png` | Tarık | 2026-10-17 |
@@ -91,7 +91,7 @@ Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 
 GÖRSELLER
-Müteahhit karakterleri ve masa ekranı görselleri: yapay zekâ (ChatGPT, Gemini) ile üretildi
+Müteahhit karakterleri ve masa ekranı görselleri: yapay zekâ (ChatGPT) ile üretildi
 
 YAZI TİPİ
 Liberation Sans — SIL Open Font License 1.1

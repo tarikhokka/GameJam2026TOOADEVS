@@ -17,7 +17,7 @@ namespace CivilJam.Desk
 
         // Tasarım renkleri
         public static readonly Color Paper = Hex(0xf4ead6), Paper2 = Hex(0xeadcc0), Line = Hex(0xcdb994);
-        public static readonly Color Ink = Hex(0x3b2f22), InkSoft = Hex(0x7a6650), NoteBg = Hex(0xfffaf0);
+        public static readonly Color Ink = Hex(0x1f1810), InkSoft = Hex(0x4a3a28), NoteBg = Hex(0xfffaf0); // (EEE, 18 Ekim) koyulaştırıldı: uzaktan okunsun
         public static readonly Color Ok = Hex(0x3f8a4f), OkBg = Hex(0xdcebd3), Bad = Hex(0xc2412f), BadBg = Hex(0xf3d3cb);
         public static readonly Color General = Hex(0x7a5ea8);
 
@@ -61,13 +61,17 @@ namespace CivilJam.Desk
             return image;
         }
 
+        // (EEE, 18 Ekim) El Kitabı yazıları masada okunmuyordu (tasarım sayfası ~%80'e küçülüyor): tüm yazılar bu kadar büyür.
+        // Satır yükseklikleri RulebookView'da buna göre büyütüldü; sayfanın boş alt yarısı bu büyümeyi karşılar.
+        public const float FontScale = 1.35f;
+
         public static TextMeshProUGUI Text(string name, Transform parent, string text, float size, TMP_FontAsset font, Color color,
             TextAlignmentOptions align = TextAlignmentOptions.MidlineLeft, bool wrap = false)
         {
             var t = Rect(name, parent).gameObject.AddComponent<TextMeshProUGUI>();
             if (font != null) t.font = font;
             t.text = text;
-            t.fontSize = size;
+            t.fontSize = size * FontScale;
             t.color = color;
             t.alignment = align;
             t.raycastTarget = false;
@@ -142,7 +146,7 @@ namespace CivilJam.Desk
                 labels = anyRule.Labels.ToArray();
                 this.required = required;
                 var row = Rect("Chips", parent);
-                HL(row, 4, null, expandWidth: true);
+                HL(row, 3, null, expandWidth: true);
                 Size(row, prefH: height, flexW: 1);
 
                 backs = new Image[labels.Length];
@@ -157,24 +161,30 @@ namespace CivilJam.Desk
                     outlines[i] = chip.gameObject.AddComponent<Outline>();
                     outlines[i].effectColor = Ok;
                     outlines[i].effectDistance = new Vector2(2, -2);
-                    texts[i] = Text("Label", chip, labels[i], 14, bold, Ink, TextAlignmentOptions.Center);
+                    // (EEE) Çok kelimeli seçenek iki satıra bölünür ("Yumuşak\nkil", "B220\n(düz)"): satır daha az genişlik ister,
+                    // satırın ortak boyu (ChipFontEqualizer) büyük kalır. Sığmazsa biraz küçülür.
+                    texts[i] = Text("Label", chip, labels[i].Replace(" ", "\n"), 15, bold, Ink, TextAlignmentOptions.Center);
                     texts[i].enableAutoSizing = true;
+                    texts[i].textWrappingMode = TextWrappingModes.NoWrap;
+                    texts[i].lineSpacing = -18;
                     texts[i].fontSizeMin = 9;
-                    texts[i].fontSizeMax = 14;
-                    Stretch(texts[i].rectTransform).offsetMin = new Vector2(2, 0);
-                    texts[i].rectTransform.offsetMax = new Vector2(-2, 0);
+                    texts[i].fontSizeMax = 15 * FontScale;
+                    Stretch(texts[i].rectTransform).offsetMin = new Vector2(1, 0);
+                    texts[i].rectTransform.offsetMax = new Vector2(-1, 0);
 
                     // "en az" etiketi çipin üst kenarında (yerleşim dışı)
                     var tag = Rect("MinTag", chip);
                     tag.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
                     tag.anchorMin = tag.anchorMax = new Vector2(0.5f, 1f);
                     tag.pivot = new Vector2(0.5f, 0.5f);
-                    tag.sizeDelta = new Vector2(40, 13);
+                    tag.sizeDelta = new Vector2(40 * FontScale, 13 * FontScale);
                     Img(tag, Ok);
                     var tagText = Text("Text", tag, "en az", 9, bold, Color.white, TextAlignmentOptions.Center);
                     Stretch(tagText.rectTransform);
                     minTags[i] = tag.gameObject;
                 }
+                // (EEE) Satırdaki bütün çipler aynı boyda yazılsın: en uzun seçeneğe sığan boy hepsine uygulanır
+                row.gameObject.AddComponent<ChipFontEqualizer>().Texts = texts;
             }
 
             public override void Paint(int group)
@@ -219,8 +229,8 @@ namespace CivilJam.Desk
                 bar.anchorMin = new Vector2(0, 1);
                 bar.anchorMax = new Vector2(1, 1);
                 bar.pivot = new Vector2(0.5f, 1f);
-                bar.sizeDelta = new Vector2(0, 14);
-                bar.anchoredPosition = new Vector2(0, -14);
+                bar.sizeDelta = new Vector2(0, 14 * FontScale);
+                bar.anchoredPosition = new Vector2(0, -14 * FontScale); // üstteki "en az" etiketi büyüdü
 
                 badBar = Rect("Bad", bar);
                 badImage = Img(badBar, BadBg);
@@ -232,12 +242,12 @@ namespace CivilJam.Desk
                     float t = (v - lo) / (hi - lo);
                     var tick = Rect("Tick", bar);
                     tick.anchorMin = tick.anchorMax = new Vector2(t, 0.5f);
-                    tick.sizeDelta = new Vector2(1, 14);
+                    tick.sizeDelta = new Vector2(1, 14 * FontScale);
                     Img(tick, new Color(Ink.r, Ink.g, Ink.b, 0.25f));
-                    var lbl = Text("TickLabel", bar, v.ToString("0.#", Tr), 10, text, InkSoft, TextAlignmentOptions.Top);
+                    var lbl = Text("TickLabel", bar, v.ToString("0.#", Tr), 12, bold, Ink, TextAlignmentOptions.Top); // EEE: büyük, kalın, koyu
                     lbl.rectTransform.anchorMin = lbl.rectTransform.anchorMax = new Vector2(t, 0f);
                     lbl.rectTransform.pivot = new Vector2(0.5f, 1f);
-                    lbl.rectTransform.sizeDelta = new Vector2(36, 12);
+                    lbl.rectTransform.sizeDelta = new Vector2(40 * FontScale, 15 * FontScale);
                     lbl.rectTransform.anchoredPosition = new Vector2(0, -1);
                 }
 
@@ -250,12 +260,12 @@ namespace CivilJam.Desk
                 marker = Rect("Marker", bar);
                 marker.anchorMin = new Vector2(0, 0);
                 marker.anchorMax = new Vector2(0, 1);
-                marker.sizeDelta = new Vector2(3, 8);
+                marker.sizeDelta = new Vector2(3, 8 * FontScale);
                 Img(marker, Ok);
                 var tagRect = Rect("Label", marker);
                 tagRect.anchorMin = tagRect.anchorMax = new Vector2(0.5f, 1f);
                 tagRect.pivot = new Vector2(0.5f, 0f);
-                tagRect.sizeDelta = new Vector2(84, 14);
+                tagRect.sizeDelta = new Vector2(84 * FontScale, 14 * FontScale);
                 tagRect.anchoredPosition = new Vector2(0, 2);
                 Img(tagRect, Ok);
                 markerLabel = Text("Text", tagRect, "en az", 10, bold, Color.white, TextAlignmentOptions.Center);

@@ -48,7 +48,7 @@ namespace CivilJam.Desk
         };
 
         private const BuildingType Type = BuildingType.Residential;
-        private const float RowHeight = 30f;
+        private const float RowHeight = 44f; // (EEE, 18 Ekim) 30 → 44: yazılar 1,35 kat büyüdü (HandbookUi.FontScale)
 
         public event Action Toggled; // açma/kapama ve sekme değişimi (kağıt sesi)
 
@@ -176,8 +176,8 @@ namespace CivilJam.Desk
                 lr.sizeDelta = new Vector2(TabHeight - 8, TabWidth);
                 lr.localRotation = Quaternion.Euler(0, 0, -90); // dikey yazı
                 label.enableAutoSizing = true;
-                label.fontSizeMin = 8;
-                label.fontSizeMax = 12;
+                label.fontSizeMin = 8 * HandbookUi.FontScale;
+                label.fontSizeMax = 12 * HandbookUi.FontScale;
                 label.characterSpacing = 2;
             }
             tabs.Add((image, sprite != null ? Color.white : color));
@@ -229,7 +229,7 @@ namespace CivilJam.Desk
             // 3 adım
             var steps = HandbookUi.Rect("Steps", page.transform);
             HandbookUi.HL(steps, 6, null, expandWidth: true);
-            HandbookUi.Size(steps, prefH: 36);
+            HandbookUi.Size(steps, prefH: 60);
             Step(steps, "1", "Formda <b>KAT ADEDİ</b>'ni oku");
             Step(steps, "2", "Aşağıdan kat grubunu seç");
             Step(steps, "3", "Her değeri bul: hepsi yeşil mi?");
@@ -237,12 +237,12 @@ namespace CivilJam.Desk
             // Kat grubu düğmeleri (oyuncu seçer)
             var floors = HandbookUi.Rect("Floors", page.transform);
             HandbookUi.HL(floors, 8, null, expandWidth: true);
-            HandbookUi.Size(floors, prefH: 42);
+            HandbookUi.Size(floors, prefH: 56);
             for (int i = 0; i < groups.Count; i++)
             {
                 int index = i;
                 var b = HandbookUi.Rect("Floor" + i, floors);
-                HandbookUi.Size(b, prefW: 0, flexW: 1, prefH: 42);
+                HandbookUi.Size(b, prefW: 0, flexW: 1, prefH: 56);
                 var back = HandbookUi.Img(b, HandbookUi.NoteBg, raycast: true);
                 HandbookUi.Border(back, HandbookUi.Ink, 3);
                 var button = b.gameObject.AddComponent<Button>();
@@ -253,7 +253,7 @@ namespace CivilJam.Desk
                 if (floorIcons != null && i < floorIcons.Length && floorIcons[i] != null)
                 {
                     var icon = HandbookUi.Rect("Icon", b);
-                    HandbookUi.Size(icon, prefW: 24, prefH: 30);
+                    HandbookUi.Size(icon, prefW: 30, prefH: 40);
                     var img = HandbookUi.Img(icon, Color.white);
                     img.sprite = floorIcons[i];
                     img.preserveAspect = true;
@@ -272,7 +272,7 @@ namespace CivilJam.Desk
                     var color = HandbookUi.SectionColor(section);
                     var row = HandbookUi.Rect("Row_" + param, rows);
                     InspectSpot.Mark(row, InspectTarget.OfParam(InspectDoc.Handbook, param)); // inceleme modunda tıklanabilir
-                    HandbookUi.Size(row, prefH: 46);
+                    HandbookUi.Size(row, prefH: 64);
                     HandbookUi.Img(row, new Color(1f, 1f, 1f, 0.35f));
                     HandbookUi.HL(row, 10, new RectOffset(14, 8, 7, 7));
                     var stripe = HandbookUi.Rect("Stripe", row);
@@ -283,7 +283,7 @@ namespace CivilJam.Desk
                     stripe.pivot = new Vector2(0, 0.5f);
                     HandbookUi.Img(stripe, color);
 
-                    NameBlock(row, section, DeskFormat.ParamName(rules, Type, param), color, 118);
+                    NameBlock(row, section, DeskFormat.ParamName(rules, Type, param), color, 116);
                     quickScales.Add(HandbookUi.BuildScale(row, rules, param, any, Required(rules, param, groups), textFont, Bold, RowHeight));
                 }
 
@@ -295,7 +295,7 @@ namespace CivilJam.Desk
             HandbookUi.Border(footBack, HandbookUi.Ink, 3);
             HandbookUi.HL(foot, 12, new RectOffset(12, 12, 8, 8));
             var stamp = HandbookUi.Text("Stamp", foot, "RED", 20, Title, HandbookUi.Bad, TextAlignmentOptions.Center);
-            HandbookUi.Size(stamp, prefW: 58, prefH: 30);
+            HandbookUi.Size(stamp, prefW: 78, prefH: 40);
             stamp.rectTransform.localRotation = Quaternion.Euler(0, 0, 6);
             var p = HandbookUi.Text("Text", foot,
                 "<b>Tek bir kırmızı yeter.</b> Değer tutuyor ama belge şüpheliyse: laboratuvardan <b>ek test</b> iste, " +
@@ -368,8 +368,8 @@ namespace CivilJam.Desk
             var text = HandbookUi.Text("Text", page.transform, sb.ToString().TrimEnd(), 16, textFont, HandbookUi.Ink,
                 TextAlignmentOptions.TopLeft, wrap: true);
             text.enableAutoSizing = true;
-            text.fontSizeMin = 11;
-            text.fontSizeMax = 16;
+            text.fontSizeMin = 11 * HandbookUi.FontScale;
+            text.fontSizeMax = 16 * HandbookUi.FontScale;
 
             // Akredite liste ayrı blok: inceleme modunda tek tıklanabilir alan (lab adı / kaşe bununla karşılaştırılır).
             var list = new StringBuilder();
@@ -394,11 +394,16 @@ namespace CivilJam.Desk
             HandbookUi.HL(box, 7, new RectOffset(7, 7, 4, 4));
             HandbookUi.Size(box, prefW: 0, flexW: 1);
             var dot = HandbookUi.Rect("Number", box);
-            HandbookUi.Size(dot, prefW: 22, prefH: 22);
+            HandbookUi.Size(dot, prefW: 28, prefH: 28);
             HandbookUi.Img(dot, HandbookUi.Ink);
             var n = HandbookUi.Text("Text", dot, number, 13, Title, HandbookUi.Paper, TextAlignmentOptions.Center);
             HandbookUi.Stretch(n.rectTransform);
-            var t = HandbookUi.Text("Text", box, text, 12, textFont, HandbookUi.Ink, wrap: true);
+            // (EEE) Adım yazıları kalın ve büyük; kutuya sığmazsa biraz küçülür
+            var t = HandbookUi.Text("Text", box, text, 15, Bold, HandbookUi.Ink, wrap: true);
+            t.enableAutoSizing = true;
+            t.fontSizeMin = 11;
+            t.fontSizeMax = 15 * HandbookUi.FontScale;
+            t.lineSpacing = -10;
             HandbookUi.Size(t, flexW: 1);
         }
 
@@ -407,9 +412,11 @@ namespace CivilJam.Desk
         {
             var block = HandbookUi.Rect("Name", row);
             HandbookUi.HL(block, 7);
-            HandbookUi.Size(block, prefW: width);
+            // flexW 0: blok sabit genişlikte kalsın (yoksa içindeki esnek yazı yüzünden kalan yeri çiplerle yarı yarıya paylaşıyor,
+            // çipler daralıp yazıları küçülüyordu — EEE)
+            HandbookUi.Size(block, prefW: width, flexW: 0);
             var ico = HandbookUi.Rect("Icon", block);
-            HandbookUi.Size(ico, prefW: 28, prefH: 28);
+            HandbookUi.Size(ico, prefW: 36, prefH: 36);
             HandbookUi.Img(ico, color);
             var letter = HandbookUi.Text("Letter", ico, section.Substring(0, 1), 15, Title, Color.white, TextAlignmentOptions.Center);
             HandbookUi.Stretch(letter.rectTransform);

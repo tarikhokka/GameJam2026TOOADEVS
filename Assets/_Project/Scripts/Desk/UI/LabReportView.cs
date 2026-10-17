@@ -89,6 +89,7 @@ namespace CivilJam.Desk
             canBuy = canBuyTest;
             extraTestButton.interactable = canBuy && !locked;
             extraTestLabel.text = project.ExtraTestBought ? "YAPILDI" : DeskFormat.Money(testCost);
+            DocTextBoost.Apply(transform, 1.4f); // (EEE) yazılar sığdığı kadar %40 büyük, koyu ve kalın
         }
     }
 }

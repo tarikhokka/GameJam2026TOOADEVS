@@ -128,6 +128,7 @@ namespace CivilJam.Desk
             bribeRoot.SetActive(false);
             if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict);
+            DocTextBoost.Apply(transform, 1.4f); // (EEE) yazılar sığdığı kadar %40 büyük, koyu ve kalın
         }
 
         private static void Fill(List<DottedRowView> rows, DottedRowView template, Transform container, (string, string)[] lines)

@@ -169,7 +169,10 @@ Ahmet iki görsel tasarım verdi: `Docs/Tasarim/yapi_denetim_formu_GORUNUM.html`
 
 **El kitabı → Core:** başlık "DENETÇİ EL KİTABI", alt satır "Formdaki değerleri bu kurallarla karşılaştır." Bölümler `rule.Section`; kural satırı numarası (1.1, 1.2, 2.1...) masada üretilir; satır metni örneği: **"Kolon kalınlığı en az: 1-3 kat 30 cm · 4-6 kat 35 cm · 7+ kat 40 cm"** (`rule.FloorsLabel` + `FormatValue(Param, Required)`); istersen altında `Description`. Demir satırına "B220 (düz) hiçbir binada kabul edilmez." "GENEL KURAL: Tek bir kurala uymayan bina REDDEDİLİR." kutusu aynen. Akredite laboratuvarlar sayfası kalır.
 
-- **Oğuzhan (B):**
+- **Oğuzhan (B) — 🔴 ÖNCELİK 1 (Ahmet oynadı, 13:15):** Şu an "LAB RAPORU" kitabına tıklayınca form ve lab raporu **aynı pencerede sekme** olarak açılıyor ve piksel tasarım uygulanmamış. İstenen:
+  - [ ] **İki ayrı belge, masada iki ayrı nesne, iki ayrı pencere:** (1) **Yapı Denetim Formu** (müteahhidin getirdiği dosya/klasör; `Documents[0]`), (2) **Lab Raporu** (lab raporu kitabı/kâğıdı; `Documents[1]` + parametre tablosu ve ek test). Sekme yok. Oyuncu ikisini ayrı ayrı açıp gerekirse yan yana koyar (sahte belge ipuçları iki belge karşılaştırmasıyla bulunur).
+  - [ ] Her biri **kendi piksel tasarımıyla** (`Docs/Tasarim/*_GORUNUM.html`): renkler, çerçeve, noktalı satırlar, bölüm kutuları (A/B), ONAY/RED kutuları formda. Fontlar Tarık'tan (Pixelify Sans + VT323); gelene kadar mevcut fontla yerleşimi kur.
+  - [ ] El kitabı da kendi tasarımına göre (aşağıda).
   - [ ] Yapı Denetim Formu'nu tasarıma göre kur (başvuru sekmesinin yerine), yukarıdaki alan eşlemesiyle.
   - [ ] Lab raporunu aynı görsel dile uydur (ayrı belge; renk/kâğıt farkı olabilir).
   - [ ] El kitabını tasarıma göre kur (bölüm kutuları, numaralı kurallar, kat grubu değerleri tek satırda, GENEL KURAL kutusu).

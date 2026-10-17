@@ -89,6 +89,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
 ### 💬 YENİ ÖZELLİK — Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra (Ahmet kararı, 17 Ekim ~19:20) — ÖNCE BUNU OKU
+> ✅✅ **TAMAMLANDI (A, `12ac4f2` sonrası):** Game.unity'de oynatılarak doğrulandı (5. gün, Kemal): zarf başta gizli → kolon ↔ El Kitabı UYUŞMAZLIK → denetçi "Kolon kalınlığı 23 cm yazıyor; 4-6 katlı binada en az 35 cm olmalı." → Kemal cevap → teklif → denetçi tepki → kapanış → zarf (1.050 TL) ve "ZARFI AL VE ONAYLA" belirdi. EditMode 46/46, Windows build alındı. Küçük görsel notlar §7 Oğuzhan'da.
+>
 > ✅ **CORE HAZIR (A, push'landı).** `ctx.Actions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, `ClientSO.MismatchLines` / `BribeCloseLines`, `Data/Dialogue.asset` (`DialogueSO`: denetçi şablonları + rüşvete tepki havuzu, Game.unity'ye bağlı). Teklif edilmemiş zarf alınamaz, geri çevrilmiş de sayılmaz. EditMode 46/46. Denge: tek zarf %50 İyi / %39 Enkazın Gölgesi / %11 hapis, her zarfı alan %89 hapis (öncekiyle aynı bant). **Başkasının dosyasına dokundum:** `Desk/Sandbox/FakeGameActions.cs` (Oğuzhan) ve `Flow/Sandbox/FlowSandboxBootstrap.cs` (Onur) → `Inspect` eklendi (yoksa derlenmezdi); Desk sandbox'ı gerçek diyalog kuralını kullanır.
 >
 > **Kim kimi bekliyor:** Onur bağımsız (balon Core'a bağlı değil, istediği an push'lar). Oğuzhan artık Core'u beklemiyor; Onur'un balonunu takmak için onun push'unu bekler (önce Onur, sonra Oğuzhan tek commit). Tarık asset'lere şimdi girebilir. A en son Game.unity kontrolü + build.
@@ -297,6 +299,7 @@ static class Inspection
 - [ ] Teslim: final build, ZIP, README kontrolü, video planı.
 
 **Oğuzhan (B):**
+- [ ] (A, diyalog kontrolü) Denetçi balonu formun başlığını ve İNCELE düğmesinin solunu kapatıyor; İNCELE düğmesi (Tarık'ın yeni yeri) müteahhit portresinin gövdesinin üstüne biniyor. Balonu biraz sola/aşağı, düğmeyi portreden uzağa al (küçük cila).
 - [x] 1. gün öğretici kartı: başlık iki satıra taşınca altındaki metnin üstüne biniyor ("…hoş geldin" satırı metinle çakışıyor). Atla / İleri düğmeleri de çok büyük, yeni görsel dile uymuyor. — (EEE yaptı) `TutorialView.StyleCard`: başlık tek satır + otomatik küçülme (Paytone), metin Fira Sans, alt satır 64 px, düğmeler 150/190 px (Fira Bold). Fontlar prefab'a ve builder'a (`Wire titleFont/bodyFont/boldFont`) bağlı; prefab yeniden üretilmedi.
 - [ ] El Kitabı Hızlı Bakış: 5 satır üstte toplanıyor, alt yarı boş; "B220 (düz)" ve "Yumuşak kil" çipleri okunmayacak kadar küçük. Satırlar sayfayı doldursun, çipler/cetvel daha geniş olsun.
 - [ ] Üst bar (Gün / müteahhit · proje / Kasa / Onaylanan · Bekleyen) eski koyu bant ve eski font; yeni görsel dile (Paytone/Fira, kağıt/ahşap) uydur.

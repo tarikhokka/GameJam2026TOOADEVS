@@ -122,6 +122,7 @@ namespace CivilJam.Core.Tests
         [Test]
         public void RefusedBribe_HasOwnReaction_AndNextBribeGrows()
         {
+            _session.NewGame(12); // 1. ve 2. günde rüşvetli proje var (seed 11'de 1. gün hiç yok)
             _session.BeginDay();
             var p = _ctx.TodayProjects.Find(x => x.ClientId == "nuri" && x.OffersBribe && x.Params.Exists(e => !e.ReportedPasses));
             Assume.That(p, Is.Not.Null);

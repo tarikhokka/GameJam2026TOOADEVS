@@ -43,7 +43,8 @@ namespace CivilJam.Core.Tests
 
             _ctx = new GameContext { Balance = _balance, Rules = _rules, Clients = new List<ClientSO> { _briber }, Dialogue = _dialogue };
             _session = new GameSession(_ctx, new[] { _config }, new ExpenseSO[0]);
-            _session.NewGame(5);
+            // Seed 7: 1. günün 6 kötü projesinin 4'ü rüşvetli (müteahhit ataması günlük yapılınca seed 5'te hepsi dikkatsiz çıkıyordu)
+            _session.NewGame(7);
             _session.BeginDay();
         }
 

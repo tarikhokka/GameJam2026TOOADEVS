@@ -339,6 +339,46 @@ namespace CivilJam.Core.Tests
         }
 
         [Test]
+        public void Clients_ComeOncePerDay_WhenPossible()
+        {
+            // EEE isteği: bir müteahhit günde bir kez gelir. 4 projelik günde (5 müteahhit) hiç tekrar yok;
+            // 6 projelik kabadayı gününde (6 müteahhit) tekrar sadece nadir, çözümsüz tür karışımında.
+            var clients = TarikClients();
+            var byId = new Dictionary<string, ClientSO>();
+            foreach (var c in clients) byId[c.Id] = c;
+            _config.AllowBribes = true;
+            _config.AllowFakeDocuments = true;
+
+            _config.ProjectsPerDay = 4; _config.NonCompliantRatio = 0.5f; _config.AllowThugs = false;
+            for (int seed = 0; seed < 300; seed++)
+            {
+                var seen = new HashSet<string>();
+                foreach (var p in ProjectGenerator.Generate(3, _config, _rules, _balance, null, clients, new System.Random(seed)))
+                    Assert.IsTrue(seen.Add(p.ClientId), $"seed {seed}: {p.ClientId} aynı gün iki kez geldi");
+            }
+
+            _config.ProjectsPerDay = 6; _config.NonCompliantRatio = 0.6f; _config.AllowThugs = true;
+            int daysWithRepeat = 0;
+            for (int seed = 0; seed < 300; seed++)
+            {
+                var seen = new HashSet<string>();
+                bool repeat = false;
+                foreach (var p in ProjectGenerator.Generate(8, _config, _rules, _balance, null, clients, new System.Random(seed)))
+                {
+                    if (!seen.Add(p.ClientId)) repeat = true;
+                    var c = byId[p.ClientId];
+                    if (c.IsHonest) Assert.IsFalse(p.OffersBribe || p.Kind == ProjectKind.Fake || p.Kind == ProjectKind.BribeFake,
+                        "Dürüst usta rüşvet / sahte belge getirmez");
+                    if (p.OffersBribe) Assert.IsTrue(c.OffersBribes, "Zarf sadece rüşvetçiden");
+                }
+                if (repeat) daysWithRepeat++;
+            }
+            Assert.Less(daysWithRepeat, 300 / 10, $"6 projelik günlerin %10'undan azında tekrar olmalı ({daysWithRepeat}/300)");
+
+            foreach (var c in clients) UnityEngine.Object.DestroyImmediate(c);
+        }
+
+        [Test]
         public void BuildingNames_DoNotRepeatWithinAGame()
         {
             var names = ScriptableObject.CreateInstance<NamePoolSO>();

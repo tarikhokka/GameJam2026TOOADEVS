@@ -43,15 +43,14 @@ namespace CivilJam.Core
             rng.Shuffle(compliance);
 
             usedNames = usedNames ?? new HashSet<string>();
+            // Türler önce belirlenir; müteahhitler günün tamamı için birlikte yerleştirilir (AssignClients).
+            var kinds = new List<ProjectKind>();
+            for (int i = 0; i < count; i++) kinds.Add(compliance[i] ? ProjectKind.Compliant : PickBadKind(config, rng));
+            var assigned = AssignClients(kinds, clients, config.AllowThugs, rng, previousClientId);
+
             var result = new List<ProjectData>();
-            string previous = previousClientId;
             for (int i = 0; i < count; i++)
-            {
-                var p = CreateProject(day, i, compliance[i] ? ProjectKind.Compliant : PickBadKind(config, rng),
-                    config, rules, balance, names, clients, rng, usedNames, previous);
-                previous = p.ClientId;
-                result.Add(p);
-            }
+                result.Add(CreateProject(day, i, kinds[i], config, rules, balance, names, assigned[i], rng, usedNames));
             return result;
         }
 
@@ -67,8 +66,7 @@ namespace CivilJam.Core
         }
 
         static ProjectData CreateProject(int day, int index, ProjectKind kind, DayConfigSO config, RuleSetSO rules,
-            BalanceSO balance, NamePoolSO names, IReadOnlyList<ClientSO> clients, Random rng, ICollection<string> usedNames,
-            string previousClientId)
+            BalanceSO balance, NamePoolSO names, ClientSO client, Random rng, ICollection<string> usedNames)
         {
             var type = config.AllowFactories && rng.Chance(0.3f) ? BuildingType.Factory : BuildingType.Residential;
             bool compliant = kind == ProjectKind.Compliant;
@@ -114,8 +112,7 @@ namespace CivilJam.Core
             }
 
             // Müşteri
-            var client = PickClient(clients, kind, config.AllowThugs, rng, previousClientId);
-            if (client != null) p.ClientId = client.Id;
+            if (client != null) p.ClientId = client.Id; // AssignClients seçti
 
             if (bribe)
             {
@@ -180,15 +177,12 @@ namespace CivilJam.Core
         ///  - Dikkatsiz:    %50 dürüst usta (dikkatsizlik), %50 dürüst olmayan
         ///  - Rüşvetli:     rüşvet veren müteahhit (OffersBribes); kabadayı sadece AllowThugs günlerinde
         ///  - Sahte belge:  %70 rüşvet vermeyen dürüst olmayan (Selim), %30 başka bir dürüst olmayan
-        /// Dürüst usta asla rüşvet teklif etmez ve sahte belge getirmez. Uygun müteahhit yoksa null.
-        /// (EEE, 17 Ekim) Aynı müteahhit arka arkaya gelmez: bir önceki (previousClientId) havuzdan çıkarılır; havuz boşalırsa
-        /// bu türe uyan diğer havuza geçilir (ör. Selim az önce geldiyse sahte belgeyi başka bir dürüst olmayan getirir).
-        /// Türe uyan başka kimse yoksa tekrar etmesine izin verilir.
+        /// Dürüst usta asla rüşvet teklif etmez ve sahte belge getirmez.
+        /// Bir projenin aday sırası: olasılıkla seçilen havuz (karışık) → türe uyan diğerleri (karışık) → son çare olarak
+        /// temiz / dikkatsiz projede kabadayı (rüşvetçi bazen temiz proje getirir).
         /// </summary>
-        static ClientSO PickClient(IReadOnlyList<ClientSO> clients, ProjectKind kind, bool allowThugs, Random rng,
-            string previousClientId = null)
+        static List<ClientSO> Candidates(IReadOnlyList<ClientSO> clients, ProjectKind kind, bool allowThugs, Random rng)
         {
-            if (clients == null || clients.Count == 0) return null;
             var honest = new List<ClientSO>();
             var dishonest = new List<ClientSO>();      // dürüst değil, kabadayı değil
             var bribers = new List<ClientSO>();        // rüşvet verir (kabadayı günlerinde kabadayı dahil)
@@ -203,6 +197,7 @@ namespace CivilJam.Core
             }
 
             bool bribeKind = kind == ProjectKind.Bribe || kind == ProjectKind.BribeFake;
+            bool cleanKind = kind == ProjectKind.Compliant || kind == ProjectKind.Sloppy;
             List<ClientSO> pool;
             switch (kind)
             {
@@ -212,22 +207,66 @@ namespace CivilJam.Core
                 case ProjectKind.BribeFake: pool = bribers; break;
                 default: pool = rng.Chance(0.7f) ? forgers : dishonest; break;
             }
-            if (pool.Count == 0) pool = bribeKind ? bribers : kind == ProjectKind.Compliant ? honest : dishonest;
+            // Türe uyan herkes (sözleşme: dürüst usta rüşvet / sahte almaz, rüşvet sadece rüşvetçiye)
+            var legal = bribeKind ? bribers : cleanKind ? Merge(honest, dishonest) : dishonest;
+            var thugs = bribers.FindAll(c => c.IsThug);
 
-            if (!string.IsNullOrEmpty(previousClientId))
+            var order = new List<ClientSO>(pool);
+            rng.Shuffle(order);
+            foreach (var group in new[] { legal, cleanKind ? thugs : new List<ClientSO>() })
             {
-                var fresh = pool.FindAll(c => c.Id != previousClientId);
-                if (fresh.Count == 0)
-                {
-                    // Bu türe uyan diğer havuzlar (sözleşme korunur: dürüst usta rüşvet/sahte almaz, rüşvet sadece rüşvetçiye)
-                    var alternatives = bribeKind ? bribers
-                        : kind == ProjectKind.Compliant || kind == ProjectKind.Sloppy ? Merge(honest, dishonest)
-                        : dishonest;
-                    fresh = alternatives.FindAll(c => c.Id != previousClientId);
-                }
-                if (fresh.Count > 0) pool = fresh;
+                var rest = group.FindAll(c => !order.Contains(c));
+                rng.Shuffle(rest);
+                order.AddRange(rest);
             }
-            return pool.Count > 0 ? rng.Pick(pool) : null;
+            return order;
+        }
+
+        /// <summary>
+        /// (EEE, 17 Ekim gece) Günün müteahhitleri birlikte yerleştirilir: her projeye aday sırasıyla biri denenir; bir
+        /// müteahhit günde bir kez gelir ve arka arkaya (dünün sonuncusu dahil) gelmez. Çıkmaza girilirse geri dönülüp başka
+        /// aday denenir (en çok 6 proje × 6 müteahhit, anında biter). Hiç mümkün değilse (ör. 4 sahte belge, 3 sahteci) tekrara
+        /// izin verilir ama yine arka arkaya değil.
+        /// </summary>
+        static ClientSO[] AssignClients(List<ProjectKind> kinds, IReadOnlyList<ClientSO> clients, bool allowThugs, Random rng,
+            string previousClientId)
+        {
+            int n = kinds.Count;
+            var result = new ClientSO[n];
+            if (clients == null || clients.Count == 0) return result;
+
+            var options = new List<List<ClientSO>>();
+            foreach (var k in kinds) options.Add(Candidates(clients, k, allowThugs, rng));
+
+            var used = new HashSet<string>();
+            bool Place(int i, string prev)
+            {
+                if (i == n) return true;
+                foreach (var c in options[i])
+                {
+                    if (c.Id == prev || used.Contains(c.Id)) continue;
+                    used.Add(c.Id);
+                    result[i] = c;
+                    if (Place(i + 1, c.Id)) return true;
+                    used.Remove(c.Id);
+                }
+                return false;
+            }
+            if (Place(0, previousClientId)) return result;
+
+            // Herkesi bir kez getirmek mümkün değil: sırayla, arka arkaya olmadan, mümkünse bugün gelmemiş olandan
+            used.Clear();
+            string last = previousClientId;
+            for (int i = 0; i < n; i++)
+            {
+                var opts = options[i];
+                ClientSO pick = opts.Find(c => c.Id != last && !used.Contains(c.Id))
+                                ?? opts.Find(c => c.Id != last)
+                                ?? (opts.Count > 0 ? opts[0] : null);
+                result[i] = pick;
+                if (pick != null) { used.Add(pick.Id); last = pick.Id; }
+            }
+            return result;
         }
 
         static List<ClientSO> Merge(List<ClientSO> a, List<ClientSO> b)

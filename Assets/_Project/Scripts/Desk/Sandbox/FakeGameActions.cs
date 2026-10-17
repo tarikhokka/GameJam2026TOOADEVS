@@ -62,6 +62,11 @@ namespace CivilJam.Desk
             // Gerçekte Core müteahhidin repliklerinden seçer (ClientReactions); sandbox'ta sabit cümle.
             project.ReactionText = project.BribeAccepted ? "Anlaşırız demiştim hocam." : "Sağ olun hocam, hayırlı işler!";
 
+            // Hediye: gerçekte Core dürüst ustaya bazen verir (ClientReactions, GiftChance); sandbox'ta test için her onayda.
+            var client = context.GetClient(project.ClientId);
+            if (client != null && client.IsHonest && client.Gift != null && !state.OfficeGifts.Contains(client.Gift.Id))
+                project.GiftId = client.Gift.Id;
+
             Debug.Log($"[FakeActions] Onay: {project.Name}{(project.BribeAccepted ? " +zarf" : "")}");
             context.NotifyStateChanged();
         }

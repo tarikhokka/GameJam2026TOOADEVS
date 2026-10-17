@@ -224,6 +224,53 @@ namespace CivilJam.Desk.Editor
             return view;
         }
 
+        // Hediye kartı (kağıtlarla aynı piksel tasarım): hafif perde + ortada kart; solda hediyenin görseli, sağda
+        // "HEDİYE", "<müteahhit> size bir <eşya> bıraktı.", notu ve sadece KABUL ET. Açılış/kapanış PopupMotion ("Card").
+        private static GiftOfferView BuildGiftOffer(Transform parent)
+        {
+            var panel = Stretch(NewRect("GiftOffer", parent));
+            AddImage(panel, new Color(0, 0, 0, 0.35f)); // perde: kabul edilene kadar masaya tıklanmasın
+
+            var card = NewRect("Card", panel);
+            card.anchorMin = card.anchorMax = card.pivot = new Vector2(0.5f, 0.5f);
+            card.sizeDelta = new Vector2(660, 300);
+            card.anchoredPosition = new Vector2(0, 60);
+            card.localRotation = Quaternion.Euler(0, 0, -1.5f);
+            var inner = Bordered(card, PaperCream);
+            var row = HLayout(inner, 24, new RectOffset(26, 26, 24, 24));
+            row.childAlignment = TextAnchor.MiddleLeft;
+
+            var picture = NewRect("Picture", inner);
+            Layout(picture, prefW: 210, prefH: 210);
+            var image = AddImage(picture, Color.white);
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+
+            var text = NewRect("Text", inner);
+            VLayout(text, 10, new RectOffset(0, 0, 0, 0));
+            Layout(text, prefW: 0, flexW: 1);
+            Small(text, "HEDİYE");
+            var body = NewText("Body", text, "Usta size bir hediye bıraktı.", 26, PaperInk, TextAlignmentOptions.TopLeft);
+            body.font = TitleFont;
+            var note = NewText("Note", text, "Not", 22, new Color(PaperInk.r, PaperInk.g, PaperInk.b, 0.8f), TextAlignmentOptions.TopLeft);
+            note.font = ValueFont;
+            Layout(NewRect("Spacer", text), flexH: 1);
+            var accept = BorderedButton("AcceptButton", text, FormFolderColor, "KABUL ET", 24, out _);
+            Layout(accept, prefH: 52);
+
+            panel.gameObject.SetActive(false);
+
+            // Bileşen panele değil, hep aktif ayrı bir objeye konur: pasif objede Awake çalışmaz.
+            var holder = Stretch(NewRect("GiftOfferController", parent));
+            var view = holder.gameObject.AddComponent<GiftOfferView>();
+            Wire(view, "panelRoot", panel.gameObject);
+            Wire(view, "giftImage", image);
+            Wire(view, "bodyText", body);
+            Wire(view, "noteText", note);
+            Wire(view, "acceptButton", accept);
+            return view;
+        }
+
         // Kök (PaperWindow, hep aktif) → Panel (açılıp kapanır) → Sheet (680x990, sürüklenir) → Klasör + Sekme + Kapat + Kağıt.
         // content: kağıdın içi (VLayout); paper: kağıdın kendisi (yerleşim dışı katmanlar için); tabText: sekme yazısı.
         private static PaperWindow BuildPaperWindow(Transform papers, string name, Color folderColor, Color shadowColor,

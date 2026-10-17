@@ -14,7 +14,10 @@ namespace CivilJam.Desk
 
         // portraits: sahte müşterilere sırayla verilen portreler (Sandbox_Desk kurulurken Art'tan bağlanır); boş olabilir.
         // rules: gerçek yönetmelik (Data/RuleSet.asset); boşsa aşağıdaki sahte 3 kural.
-        public static GameContext Create(IReadOnlyList<Sprite> portraits = null, RuleSetSO rules = null)
+        // gifts: Data/Gifts (EEE); dürüst usta (Hilmi) henüz kabul edilmemiş ilk hediyeyi getirir (FakeGameActions onayda verir).
+        // officeGifts: kabul edilen hediyeler; sandbox günleri boyunca aynı liste (gerçek oyunda kayıtla saklanır).
+        public static GameContext Create(IReadOnlyList<Sprite> portraits = null, RuleSetSO rules = null,
+            IReadOnlyList<GiftSO> gifts = null, List<string> officeGifts = null)
         {
             var balance = ScriptableObject.CreateInstance<BalanceSO>();
 
@@ -44,6 +47,18 @@ namespace CivilJam.Desk
             if (portraits != null && portraits.Count > 0)
                 for (int i = 0; i < context.Clients.Count; i++)
                     context.Clients[i].Portrait = portraits[i % portraits.Count];
+
+            if (officeGifts != null) context.State.OfficeGifts = officeGifts;
+            if (gifts != null && gifts.Count > 0)
+            {
+                context.Gifts = gifts;
+                foreach (var gift in gifts)
+                {
+                    if (gift == null || context.State.OfficeGifts.Contains(gift.Id)) continue;
+                    context.Clients[0].Gift = gift; // Hilmi Usta (dürüst)
+                    break;
+                }
+            }
 
             context.Actions = new FakeGameActions(context);
             return context;

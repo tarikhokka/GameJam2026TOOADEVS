@@ -28,6 +28,8 @@ namespace CivilJam.Desk
         [SerializeField] private TutorialView tutorial;
         [SerializeField] private EventCardView eventCard;
         [SerializeField] private FolderHandoffView handoff; // karar sonrası kaşeli klasör müteahhide gider
+        [SerializeField] private GiftOfferView giftOffer;   // onaydan sonra hediye kartı (sadece "Kabul et")
+        [SerializeField] private OfficeGiftsView officeGifts; // kabul edilen hediyeler masada
 
         [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -108,6 +110,8 @@ namespace CivilJam.Desk
             if (deskAudio != null) deskAudio.StartMusic();
             formWindow.Close(instant: true);
             labWindow.Close(instant: true);
+            if (giftOffer != null) giftOffer.Close();
+            if (officeGifts != null) officeGifts.Refresh(context); // önceki günlerde kabul edilenler (kayıttan da)
             scene.Clear();
             Select(FirstPendingId());
             if (tutorial != null && context.State.Day == 1) tutorial.Open();
@@ -123,6 +127,7 @@ namespace CivilJam.Desk
             if (rulebook != null) rulebook.Close(instant: true);
             if (tutorial != null) tutorial.Close();
             if (eventCard != null) eventCard.Close();
+            if (giftOffer != null) giftOffer.Close();
             if (deskAudio != null) deskAudio.StopMusic();
             gameObject.SetActive(false);
         }
@@ -202,9 +207,24 @@ namespace CivilJam.Desk
             else formWindow.Close();
 
             // Tepki: Core karardan sonra doldurur (ClientReactions); boşsa beklemeden geçilir.
-            if (project != null && !string.IsNullOrEmpty(project.ReactionText))
+            bool reacted = project != null && !string.IsNullOrEmpty(project.ReactionText);
+            if (reacted) scene.Say(project.ReactionText);
+
+            // Hediye (sadece onayda, Core dürüst ustaya bazen verir): tepki balonuyla aynı anda kart; "Kabul et" → masaya konur.
+            var gift = project != null && project.Verdict == ProjectVerdict.Approved ? context.GetGift(project.GiftId) : null;
+            if (gift != null && giftOffer != null)
             {
-                scene.Say(project.ReactionText);
+                var giver = context.GetClient(project.ClientId);
+                giftOffer.Open(gift, giver != null ? giver.DisplayName : "Müteahhit", () =>
+                {
+                    if (context.Actions.AcceptGift(project.Id) && officeGifts != null) officeGifts.Refresh(context, gift.Id);
+                    PlayPaper();
+                });
+                while (giftOffer.IsOpen) yield return null;
+            }
+
+            if (reacted)
+            {
                 while (scene.IsTyping) yield return null; // uzun replik yarıda kesilmesin (tıklayınca anında biter)
                 yield return new WaitForSeconds(reactionHold);
             }

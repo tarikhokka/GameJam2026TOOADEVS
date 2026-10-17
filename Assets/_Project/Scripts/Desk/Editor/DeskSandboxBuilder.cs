@@ -19,6 +19,7 @@ namespace CivilJam.Desk.Editor
         private const string AudioFolder = "Assets/_Project/Audio";
         private const string ArtFolder = "Assets/_Project/Art";
         private const string RuleSetPath = "Assets/_Project/Data/RuleSet.asset";
+        private const string GiftsFolder = "Assets/_Project/Data/Gifts";
 
         // Oda yerleşimi (desk_bg 1920x1080 üstünde px, EEE görseli): koltuk desk_bg'nin içinde (x 650-1310, üstü ~355),
         // masanın üst kenarı ~750 (desk_front bu kenardan aşağısıdır). Portre 600x600, karakter alta ortalı ve belden
@@ -92,6 +93,7 @@ namespace CivilJam.Desk.Editor
             Wire(bootstrap, "screen", screenGo.GetComponent<DeskScreen>());
             WirePortraits(bootstrap);
             Wire(bootstrap, "rules", AssetDatabase.LoadMainAssetAtPath(RuleSetPath)); // el kitabı oyundakiyle aynı olsun
+            WireGifts(bootstrap);
 
             EnsureFolder(SceneFolder);
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -108,6 +110,18 @@ namespace CivilJam.Desk.Editor
             for (int i = 0; i < guids.Length; i++)
                 list.GetArrayElementAtIndex(i).objectReferenceValue =
                     AssetDatabase.LoadAssetAtPath<Sprite>(AssetDatabase.GUIDToAssetPath(guids[i]));
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        // Sandbox'ta hediye denensin diye EEE'nin GiftSO'ları (Data/Gifts). Editor assembly'si Core'u görmez: tip adıyla aranır.
+        private static void WireGifts(DeskSandboxBootstrap bootstrap)
+        {
+            var so = new SerializedObject(bootstrap);
+            var list = so.FindProperty("gifts");
+            var guids = AssetDatabase.IsValidFolder(GiftsFolder) ? AssetDatabase.FindAssets("t:GiftSO", new[] { GiftsFolder }) : new string[0];
+            list.arraySize = guids.Length;
+            for (int i = 0; i < guids.Length; i++)
+                list.GetArrayElementAtIndex(i).objectReferenceValue = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[i]));
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -141,7 +155,8 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "scene", BuildScene(root, out var room, out var handoff));
             Wire(screen, "handoff", handoff);
             Wire(screen, "hud", BuildHud(root, out var clientTag));
-            Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook));
+            Wire(screen, "props", BuildProps(room, clientTag, out var handbookBook, out var officeGifts));
+            Wire(screen, "officeGifts", officeGifts);
 
             // Kağıt pencereler ortak katmanda: basılan en öne gelir (DraggableSheet.BringToFront). Ayrıntı: DeskSandboxBuilder.Papers.cs
             var papers = Stretch(NewRect("Papers", root));
@@ -152,6 +167,7 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "rulebook", BuildRulebook(papers, handbookBook));
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
+            Wire(screen, "giftOffer", BuildGiftOffer(root));
             Wire(screen, "deskAudio", BuildAudio(root));
 
             EnsureFolder(PrefabFolder);
@@ -455,9 +471,13 @@ namespace CivilJam.Desk.Editor
         // oyuncu tarafında LAB RAPORU (kupa/kalemlik ile isimlik arası) ve EL KİTABI (sağdaki boş alan) — EEE'nin önerdiği yer/boyut;
         // müteahhit tarafında (isimliğin arkası, masanın uzak kenarı) YAPI DENETİM FORMU klasörü ve zarf: müteahhit getirip bırakır.
         // Gün bitince boş koltuğun önünde "Mesaiyi bitir" (müteahhit / proje adı üst barda).
-        private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook)
+        private static DeskPropsView BuildProps(RectTransform room, TMP_Text clientTag, out Button handbookBook,
+            out OfficeGiftsView officeGifts)
         {
             var root = Stretch(NewRect("Props", room));
+
+            // Hediyeler kitaplardan önce: masanın uzak kenarında, kitapların arkasında kalırlar.
+            officeGifts = BuildOfficeGifts(root);
 
             // Kitaplar görselde perspektifle çizildi: eğim yok. Konum/boyut EEE önerisi (sol-üst x,y + genişlik; yükseklik görselden).
             var labBook = BookButton("LabBook", root, "book_lab", new Color(0.24f, 0.45f, 0.7f), 238, 0f, out var labBookRoot,
@@ -545,6 +565,64 @@ namespace CivilJam.Desk.Editor
 
             bookRoot = root.gameObject;
             return button;
+        }
+
+        // Hediye yerleri: masanın uzak kenarı (alt kenar y = GiftBottomY), form klasörü / zarf / isimlik açıkta kalır.
+        // Kabul sırasıyla dolar; sadece dürüst ustalar verdiği için pratikte 1-2 tanesi kullanılır.
+        private static readonly float[] GiftSlotCenterX = { 550, 1560, 1745, 380, 1380, 720 };
+        private const float GiftSize = 160f;      // EEE: ~140-180 px (gift_*.png 300x300, nesne alta oturur)
+        private const float GiftBottomY = 868f;
+        private const float GiftArtBottom = 0.09f; // görselde nesnenin altındaki şeffaf boşluk
+
+        private static OfficeGiftsView BuildOfficeGifts(RectTransform props)
+        {
+            var root = Stretch(NewRect("Gifts", props));
+            var slots = new GameObject[GiftSlotCenterX.Length];
+            var images = new Image[GiftSlotCenterX.Length];
+            var size = new Vector2(GiftSize, GiftSize);
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                var slot = NewRect("Gift" + i, root);
+                slot.anchorMin = slot.anchorMax = new Vector2(0f, 1f);
+                slot.pivot = new Vector2(0.5f, 0f); // masaya konma animasyonu alt kenardan büyür
+                slot.sizeDelta = size;
+                slot.anchoredPosition = new Vector2(GiftSlotCenterX[i], -GiftBottomY);
+
+                float baseY = size.y * GiftArtBottom;
+                var shadow = BookShadow("Shadow", slot, new Vector2(size.x * 0.75f, size.y * 0.16f), new Vector2(size.x * 0.05f, baseY));
+                var contact = BookShadow("Contact", slot, new Vector2(size.x * 0.6f, size.y * 0.05f), new Vector2(size.x * 0.01f, baseY + 1));
+
+                var item = Stretch(NewRect("Item", slot));
+                item.pivot = new Vector2(0.5f, 0f);
+                var image = AddImage(item, Color.white);
+                image.preserveAspect = true; // görsel çalışırken GiftSO'dan gelir
+
+                var prop = slot.gameObject.AddComponent<DeskBookProp>();
+                Wire(prop, "book", item);
+                Wire(prop, "bookImage", image);
+                Wire(prop, "shadow", shadow);
+                Wire(prop, "shadowImage", shadow.GetComponent<Image>());
+                Wire(prop, "contact", contact);
+                Wire(prop, "contactImage", contact.GetComponent<Image>());
+
+                slot.gameObject.SetActive(false);
+                slots[i] = slot.gameObject;
+                images[i] = image;
+            }
+
+            var view = root.gameObject.AddComponent<OfficeGiftsView>();
+            var so = new SerializedObject(view);
+            var slotsProp = so.FindProperty("slots");
+            var imagesProp = so.FindProperty("slotImages");
+            slotsProp.arraySize = imagesProp.arraySize = slots.Length;
+            for (int i = 0; i < slots.Length; i++)
+            {
+                slotsProp.GetArrayElementAtIndex(i).objectReferenceValue = slots[i];
+                imagesProp.GetArrayElementAtIndex(i).objectReferenceValue = images[i];
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return view;
         }
 
         // Kitabın alt kenarına ortalı gölge elipsi (sprite'ı DeskBookProp kodla üretir).

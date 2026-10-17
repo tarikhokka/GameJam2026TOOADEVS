@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using CivilJam.Core;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace CivilJam.Desk
         [SerializeField] private DeskScreen screen;
         [SerializeField] private Sprite[] portraits; // sahte müşterilere verilir (EEE'nin portrait_*.png'leri)
         [SerializeField] private RuleSetSO rules;    // Data/RuleSet.asset (oyundaki yönetmelik); boşsa sahte 3 kural
+        [SerializeField] private GiftSO[] gifts;     // Data/Gifts (EEE); dürüst usta onaylanınca birini verir
+
+        private readonly List<string> officeGifts = new List<string>(); // kabul edilen hediyeler sandbox günleri boyunca kalır
 
         private GameContext context;
         private int day;
@@ -23,7 +27,7 @@ namespace CivilJam.Desk
         // Aynı sahte gün tekrar açılır ama gün sayısı artar (öğretici sadece 1. gün çıkar).
         private void StartDay()
         {
-            context = SandboxDeskContext.Create(portraits, rules);
+            context = SandboxDeskContext.Create(portraits, rules, gifts, officeGifts);
             context.State.Day = ++day;
             screen.Show(context);
         }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.DayConfigSO
   FromDay: 5
   ProjectsPerDay: 5
-  NonCompliantRatio: 0.5
+  NonCompliantRatio: 0.6
   AllowBribes: 1
   AllowFakeDocuments: 1
   AllowThugs: 1

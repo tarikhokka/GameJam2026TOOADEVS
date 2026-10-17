@@ -180,7 +180,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | C1 `DeskHeaderView` (üst bar bileşeni, prefab'a dokunmadan) | Onur | ✅ `1b47ce6` |
 | 1 | T1 Görseller | Tarık | ✅ `f8842b5` |
 | 1 | T2 Metinler | Tarık | ✅ `1dd7870` |
-| 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | 🟢 başla |
+| 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` |
 | 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | 🟢 başla |
 | 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | 🟢 başla |
 | 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🔒 Faz 2 bekleniyor |
@@ -344,7 +344,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - `InspectCatcher` ve spot'lar ONAY / RED tıklamasını yutmamalı;
     - ONAY / RED tıklaması "boş masaya tıklandı, seçimi temizle" sayılmamalı.
   - Sandbox_Desk'te dene: mod aç/kapat, alan seç, karşılaştır, uyuşmazlık diyaloğu, modda ONAY ve RED. Prefab'ı builder'la kur, push, "B1 ✅ hash" yaz.
-- [ ] **B2 Düğmeler ve üst bar (madde 3, 4) — FAZ 2: Faz 1'in hepsi ✅ olmadan başlama:**
+- [x] **B2 ✅ `1c652eb`** (Sandbox_Desk'te denendi: İNCELE `btn_inspect` 160x46, masa kenarında lab raporunun üstünde, Oğuzhan'ın kararıyla küçük — 252x72 lab başlığına biniyordu; NASIL OYNANIR `btn_help`; yazılar Paytone One ikonun sağında, fare davranışı ONAY / RED gibi. Üst bar `DeskHeaderView`: `Refresh` / `SetClient` / `SetDayDone` bağlı, eski bant ve `DeskHud.cs` silindi, `DeskPropsView` artık müteahhit adını yazmıyor. Sandbox portreleri adla eşleşiyor.) **B2 Düğmeler ve üst bar (madde 3, 4):**
   - **Düğmeler:**
     - İNCELE → `btn_inspect` (`DeskSandboxBuilder.Inspect.cs`);
     - NASIL OYNANIR → `btn_help` (builder'daki `helpSprite`; TutorialView kurar);

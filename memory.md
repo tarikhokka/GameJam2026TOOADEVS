@@ -232,7 +232,7 @@ static class Inspection
 - [x] A: Core (API + (a) + (b) + testler) → push → "✅ Core hazır" notu.
 - [ ] Oğuzhan: İNCELE modu, tıklanabilir alanlar, seçim, çizgi, sıfırlama, `SelectedFloorGroup`, `StampLabName` gösterimi, Onur'un bileşenini prefab'a bağlama.
 - [ ] Onur: `InspectResultView` (görünüm + ses).
-- [ ] Tarık: 1. gün öğretici kartı ("İNCELE'ye bas, iki belgeden aynı bilgiye tıkla") + README satırı.
+- [ ] Tarık: 1. gün öğretici kartı metni + README satırı (ayrıntı §7 "Tarık (EEE)" ilk madde).
 
 **Durum:** Yeni hedef arayüz kuruldu (Onur → Tarık → Oğuzhan zinciri tamam, `f14d2ed`). A Game.unity'de oyunu oynatarak kontrol etti: müteahhit gelişi, balon, üç belge, El Kitabı, ONAY kaşesi, kasa ve sıradaki müteahhit çalışıyor; EditMode testleri 30/30. Eski "yeni iş başlatma" durdurması **kalktı**. Aşağıdaki hata/eksik listesi sürüyor; yeni özellikler Ahmet'in kararıyla eklenecek (eklenince buraya yazılır). Freeze 18 Ekim 12:00.
 
@@ -262,6 +262,10 @@ static class Inspection
 - [ ] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor.
 
 **Tarık (EEE):**
+- [ ] 🔴 **YENİ GÖREV — İnceleme modu metinleri (Ahmet, 17 Ekim akşam).** Ayrıntı: bu dosyada "🔎 YENİ ÖZELLİK — İnceleme modu". Oyuncu masadaki **İNCELE** düğmesine basar, iki ayrı belgeden aynı bilgiye tıklar (ör. formdaki Ada/Parsel ile lab raporundaki Ada/Parsel, ya da formdaki kolon kalınlığı ile El Kitabı'ndaki kolon satırı); oyun **SORUN YOK / UYUŞMAZLIK SAPTANDI / ALAKASIZ** der. El Kitabı ile karşılaştırırken önce doğru kat grubu seçilmeli, yoksa ALAKASIZ çıkar.
+  1. **1. gün öğretici kartı:** mevcut 4 kartın ardına gelecek 5. kartın başlığını ve metnini yaz (kısa, 2-3 cümle; "İNCELE", "iki belge", "aynı bilgi", "kat grubu" geçsin, cevabı vermesin). Metni `ICERIK_TASLAK.md` → "Öğretici: İnceleme kartı" başlığına yaz. **`TutorialView.cs`'e sen koyma**; Oğuzhan masayı bağlarken ekler (aynı dosyada çakışma olmasın).
+  2. **`README.md`:** "Nasıl oynanır"a tek madde (**İncele:** …) ve "Kontroller" tablosuna satır (İnceleme modu: İNCELE düğmesi, iki alana tıkla; sağ tık seçimi iptal eder). README'yi doğrudan düzenleyebilirsin.
+  3. Düğmenin yeri ve adı Oğuzhan push'layınca kesinleşir; metni yazdıktan sonra oyunda bir kez bakıp kelimeleri eşitle. Bitince bu maddeyi `[x]` yap.
 - [x] El Kitabı BETON / DONATI / YAPI / ZEMİN sekmeleri için birer kısa afet farkındalık cümlesi (doğru, korkutmayan). `ICERIK_TASLAK.md`'ye yaz; Oğuzhan `RulebookView.sectionNotes`'a koyar (şu an boş). — (EEE, `54c580d`) Yazıldı: `ICERIK_TASLAK.md` → "El Kitabı sekme notları". **Oğuzhan:** Inspector'dan aynen koy.
 - [x] Kurum adı kararı: değişiklik yok, üç ayrı kurum (Oğuzhan maddesine bak).
 - [ ] `README.md`: A "Nasıl oynanır"ı yeni arayüze göre güncelledi; son hali, oyun ekran görüntüsü ve video bağlantısı (Pazar).

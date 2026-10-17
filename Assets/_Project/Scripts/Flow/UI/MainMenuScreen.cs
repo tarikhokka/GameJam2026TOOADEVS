@@ -15,6 +15,14 @@ namespace CivilJam.Flow
         [SerializeField] Sprite background;     // menu_bg
         [SerializeField] Sprite logo;           // logo
         [SerializeField] string gameSceneName = "Game";
+        // (EEE, 17 Ekim) menu_bg'de İMZA logosu ve 3 tahta düğme çizili. Gerçek düğmeler btn_menu ile tam üstlerine oturur;
+        // kayıt varsa "Devam Et" en üste girer, diğerleri bir aşağı kayar (resimdeki düğmeler yine kapalı kalır).
+        [SerializeField] bool logoInBackground = true;
+        [SerializeField] Sprite buttonSprite;   // btn_menu
+        [SerializeField] TMP_FontAsset buttonFont; // FiraSans-Bold SDF
+
+        // Resimdeki düğme yuvaları (1600x900 menu_bg'den ölçüldü).
+        const float SlotLeft = 0.389f, SlotRight = 0.6026f, SlotTop = 0.498f, SlotHeight = 0.0878f, SlotGap = 0.0155f;
 
         // CREDITS_AND_AI.md "Oyun içi Emeği Geçenler metni" ile aynı tutulur (yeni CC BY asset gelince burayı da güncelle).
         // İki sütun: sol = oyun/ekip/yapay zekâ, sağ = sesler/görseller/yazı tipleri. (EEE, 17 Ekim)
@@ -40,7 +48,7 @@ namespace CivilJam.Flow
             "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0\n" +
             "Yazı sesi: \"Medium Text Blip\" — malakme (freesound.org), CC0\n\n" +
             "<b>GÖRSELLER</b>\n" +
-            "Müteahhit karakterleri ve ofis: yapay zekâ (ChatGPT)\n" +
+            "Müteahhit karakterleri, ofis, belgeler ve ana menü: yapay zekâ (ChatGPT)\n" +
             "Gazete şablonu: yapay zekâ (Gemini)\n\n" +
             "<b>YAZI TİPLERİ</b>\n" +
             "Liberation Sans — SIL Open Font License 1.1\n" +
@@ -59,7 +67,11 @@ namespace CivilJam.Flow
             UiKit.Image(root, "Bg", background, background != null ? Color.white : UiKit.Dark, Vector2.zero, Vector2.one);
 
             _menuPanel = UiKit.Stretch(root, "Menu").gameObject;
-            if (logo != null)
+            if (logoInBackground && background != null)
+            {
+                // logo arka planın içinde
+            }
+            else if (logo != null)
             {
                 var l = UiKit.Image(_menuPanel.transform, "Logo", logo, Color.white,
                     new Vector2(0.3f, 0.66f), new Vector2(0.7f, 0.92f));
@@ -72,27 +84,40 @@ namespace CivilJam.Flow
                 t.fontStyle = FontStyles.Bold;
             }
 
-            float y = 0.55f;
-            const float h = 0.085f, gap = 0.02f;
+            bool slots = buttonSprite != null;
+            float y = slots ? SlotTop : 0.55f;
             if (SaveSystem.HasSave)
             {
-                UiKit.Button(_menuPanel.transform, "Continue", "Devam Et", Continue, Anchor(ref y, h, gap, out var max), max, 38f);
+                MenuButton("Continue", "Devam Et", Continue, ref y);
             }
-            UiKit.Button(_menuPanel.transform, "New", "Yeni Oyun", NewGame, Anchor(ref y, h, gap, out var max2), max2, 38f);
-            UiKit.Button(_menuPanel.transform, "Credits", "Emeği Geçenler", () => SetCredits(true), Anchor(ref y, h, gap, out var max3), max3, 38f);
-            UiKit.Button(_menuPanel.transform, "Quit", "Çıkış", Quit, Anchor(ref y, h, gap, out var max4), max4, 38f);
+            MenuButton("New", "Yeni Oyun", NewGame, ref y);
+            MenuButton("Credits", "Emeği Geçenler", () => SetCredits(true), ref y);
+            MenuButton("Quit", "Çıkış", Quit, ref y);
 
             BuildCredits(root);
             SetCredits(false);
         }
 
-        // Düğmeleri yukarıdan aşağı dizer: min döner, max out ile verilir.
-        static Vector2 Anchor(ref float top, float height, float gap, out Vector2 max)
+        // Düğmeleri yukarıdan aşağı dizer (btn_menu varsa resimdeki yuvalara, yoksa eski düz düğmeler).
+        void MenuButton(string name, string label, System.Action onClick, ref float top)
         {
-            max = new Vector2(0.4f + 0.2f, top);
-            var min = new Vector2(0.4f, top - height);
+            bool slots = buttonSprite != null;
+            float left = slots ? SlotLeft : 0.4f, right = slots ? SlotRight : 0.6f;
+            float height = slots ? SlotHeight : 0.085f, gap = slots ? SlotGap : 0.02f;
+            var btn = UiKit.Button(_menuPanel.transform, name, label, onClick,
+                new Vector2(left, top - height), new Vector2(right, top), slots ? 40f : 38f);
+            Style(btn);
             top -= height + gap;
-            return min;
+        }
+
+        void Style(Button btn)
+        {
+            if (buttonSprite != null && btn.targetGraphic is Image img)
+            {
+                img.sprite = buttonSprite;
+                img.color = Color.white;
+            }
+            if (buttonFont != null) btn.GetComponentInChildren<TextMeshProUGUI>().font = buttonFont;
         }
 
         void BuildCredits(Transform root)
@@ -109,8 +134,8 @@ namespace CivilJam.Flow
                 new Vector2(0.12f, 0.2f), new Vector2(0.47f, 0.78f), true, 18);
             UiKit.Text(_creditsPanel.transform, "Right", CreditsRight, 30, UiKit.Ink, TextAlignmentOptions.TopLeft,
                 new Vector2(0.51f, 0.2f), new Vector2(0.88f, 0.78f), true, 18);
-            UiKit.Button(_creditsPanel.transform, "Back", "Geri", () => SetCredits(false),
-                new Vector2(0.42f, 0.09f), new Vector2(0.58f, 0.16f), 32f);
+            Style(UiKit.Button(_creditsPanel.transform, "Back", "Geri", () => SetCredits(false),
+                new Vector2(0.42f, 0.09f), new Vector2(0.58f, 0.16f), 32f));
         }
 
         void SetCredits(bool on)

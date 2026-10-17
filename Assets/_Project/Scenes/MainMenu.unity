@@ -435,6 +435,9 @@ MonoBehaviour:
   background: {fileID: 21300000, guid: 76b08a7d92ca37b4b9ce26368f4d36e9, type: 3}
   logo: {fileID: 21300000, guid: 94a3fa90866c60640831580766c81c77, type: 3}
   gameSceneName: Game
+  logoInBackground: 1
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -202,6 +202,61 @@ namespace CivilJam.Core
             return outcome;
         }
 
+        /// <summary>
+        /// (EEE, 18 Ekim) Jüri menüsü: masada en öne istenen sahnenin projesini koyar (rüşvetçi, hediye getiren dürüst usta
+        /// ya da kabadayı). Kabadayıya izin veren en geç günün ayarı kullanılır; 1. günse 2. güne geçilir (öğretici tekrar açılmasın).
+        /// Bulursa true. Proje kimliği "jury-" ile başlar, günün diğer projeleriyle çakışmaz.
+        /// </summary>
+        public bool JuryPrepareDesk(JuryScene scene)
+        {
+            if (Context.Rules == null || Context.Clients == null) return false;
+            if (State.Day < 2) State.Day = 2;
+            State.Ending = EndingType.None; // jüri önce bir son açtıysa gün sonunda yine sona düşmesin
+            DayConfigSO config = null;
+            for (int d = Balance.TotalDays; d >= 1 && config == null; d--)
+            {
+                var c = ConfigForDay(d);
+                if (c != null && c.AllowThugs) config = c;
+            }
+            config = config ?? ConfigForDay(State.Day);
+            if (config == null) return false;
+            Context.DayConfig = config;
+
+            var rng = new Random(Environment.TickCount);
+            for (int attempt = 0; attempt < 300; attempt++)
+            {
+                var list = ProjectGenerator.Generate(State.Day, config, Context.Rules, Balance, Context.Names, Context.Clients, rng,
+                    new HashSet<string>(State.UsedBuildingNames));
+                foreach (var p in list)
+                {
+                    var client = Context.GetClient(p.ClientId);
+                    if (client == null) continue;
+                    bool ok;
+                    switch (scene)
+                    {
+                        case JuryScene.Bribe: ok = p.OffersBribe && !client.IsThug; break;
+                        case JuryScene.Thug: ok = client.IsThug; break;
+                        case JuryScene.Gift: ok = client.IsHonest && client.Gift != null && !string.IsNullOrEmpty(client.Gift.Id); break;
+                        default: ok = false; break;
+                    }
+                    if (!ok) continue;
+
+                    p.Id = "jury-" + attempt + "-" + rng.Next(100000);
+                    p.GreetingText = rng.Pick(ClientReactions.LinesOf(Context, client, ClientReactions.LineKind.Greeting), "");
+                    if (scene == JuryScene.Gift)
+                    {
+                        State.OfficeGifts.Remove(client.Gift.Id); // masada yeniden sunulabilsin
+                        p.GiftId = client.Gift.Id;              // onaylanınca kesin gelir (normalde GiftChance)
+                    }
+                    Context.TodayProjects.RemoveAll(x => x.Id != null && x.Id.StartsWith("jury-") && x.Verdict == ProjectVerdict.Pending);
+                    Context.TodayProjects.Insert(0, p);
+                    Context.NotifyStateChanged();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool AcceptGift(string projectId)
         {
             var p = Context.GetTodayProject(projectId);

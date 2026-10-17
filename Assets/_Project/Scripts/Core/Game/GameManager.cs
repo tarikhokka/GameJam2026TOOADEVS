@@ -187,6 +187,42 @@ namespace CivilJam.Core
             }
         }
 
+        /// <summary>Jüri menüsü (Flow/JuryMenu) bununla açılır; F9/F10 ile aynı anahtar.</summary>
+        public bool DemoKeys => demoKeys;
+
+        /// <summary>
+        /// (EEE, 18 Ekim) Jüri menüsü: istenen sahneye atla. Sonlar doğrudan son ekranını açar; rüşvet, hediye ve kabadayı
+        /// masayı o müteahhit en önde olacak şekilde yeniden açar (GameSession.JuryPrepareDesk).
+        /// </summary>
+        public bool JuryJump(JuryScene scene)
+        {
+            if (Context == null || Context.State == null) return false;
+            EndingType ending;
+            switch (scene)
+            {
+                case JuryScene.EndingGood: ending = EndingType.Good; break;
+                case JuryScene.EndingBad: ending = EndingType.Bad; break;
+                case JuryScene.EndingCollapsed: ending = EndingType.MiddleCollapsed; break;
+                case JuryScene.EndingClosed: ending = EndingType.MiddleClosed; break;
+                default:
+                    if (!_session.JuryPrepareDesk(scene)) return false;
+                    Enter(GamePhase.Desk);
+                    return true;
+            }
+            // Son ekranına girmek kaydı siler (Enter); jüri sıçraması oyuncunun kaydını silmesin: dosya geri yazılır.
+            byte[] save = null;
+            try { if (SaveSystem.HasSave) save = System.IO.File.ReadAllBytes(SaveSystem.FilePath); }
+            catch (System.Exception e) { Debug.LogWarning("[Jüri] Kayıt yedeklenemedi: " + e.Message); }
+            Context.State.Ending = ending;
+            Enter(GamePhase.Ending);
+            if (save != null)
+            {
+                try { System.IO.File.WriteAllBytes(SaveSystem.FilePath, save); }
+                catch (System.Exception e) { Debug.LogWarning("[Jüri] Kayıt geri yazılamadı: " + e.Message); }
+            }
+            return true;
+        }
+
         void OnGUI()
         {
             if (UseFallback && _current == null && _waiting && Context != null)

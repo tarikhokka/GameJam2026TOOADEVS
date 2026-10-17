@@ -185,6 +185,7 @@ namespace CivilJam.Desk
         {
             PopupMotion.On(panelRoot).Hide();
             PageChanged?.Invoke();
+            if (!reopened) CivilJam.Core.JuryHooks.RaiseTutorialFinished(); // (EEE) jüri ipucu: "J'ye bas"
         }
 
         private void Next()

@@ -20,6 +20,7 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 | Tüm etkileşimler | Fare (sol tık) |
 | İnceleme modu | **İNCELE** düğmesi, sonra iki alana tıkla; sağ tık seçimi iptal eder |
 | Menü (ses ayarı, tam ekran) | Esc → Ayarlar |
+| Jüri menüsü (istenen sahneye atla: dört son, rüşvet, hediye, kabadayı) | **J** |
 
 ## Nasıl oynanır
 

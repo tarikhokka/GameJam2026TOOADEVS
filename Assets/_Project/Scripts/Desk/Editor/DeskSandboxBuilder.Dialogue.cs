@@ -14,13 +14,14 @@ namespace CivilJam.Desk.Editor
             var blocker = AddImage(layer, Color.clear);
             blocker.raycastTarget = false; // sadece diyalog sürerken açık (DeskDialogue)
 
-            // Denetçi balonu: kendi kağıdını, kuyruğunu, etiketini ve yazısını kurar. Masa tarafında, belgelerin üst kenarının hemen
-            // üstünde, solda (müteahhit balonu sağda); konum katmanın merkezine göre. Lab raporunun üstündeki İNCELE düğmesine
-            // (EEE, x ~760-1020) binmesin diye 600 px genişlikte ve x 160-760 arasında.
+            // Denetçi balonu: kendi kağıdını, kuyruğunu, etiketini ve yazısını kurar. Solda ofisin önünde, masa kenarının üstünde
+            // (x ~120-720, merkezi y ~290): hiçbir belgeyi ve portreyi (x 730-1190) kapatmaz; müteahhit balonu sağda.
+            // Formun başlığına biniyordu (A, 18 Ekim). Konum katmanın merkezine göre.
             var bubble = NewRect("InspectorBubble", layer);
-            bubble.anchorMin = bubble.anchorMax = bubble.pivot = new Vector2(0.5f, 0.5f);
-            bubble.anchoredPosition = new Vector2(-500f, 130f);
             var bubbleView = bubble.gameObject.AddComponent<InspectorBubbleView>();
+            // Konum bileşen eklendikten sonra: InspectorBubbleView.Reset (editörde AddComponent'te çalışır) kendi varsayılanını yazar.
+            bubble.anchorMin = bubble.anchorMax = bubble.pivot = new Vector2(0.5f, 0.5f);
+            bubble.anchoredPosition = new Vector2(-540f, 250f);
             var bubbleSo = new UnityEditor.SerializedObject(bubbleView);
             bubbleSo.FindProperty("preferredWidth").floatValue = 600f;
             bubbleSo.ApplyModifiedPropertiesWithoutUndo();

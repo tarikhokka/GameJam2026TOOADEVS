@@ -26,7 +26,7 @@ namespace CivilJam.Core.Tests
                 _rules.Rules.Add(R(ParamType.ColumnThickness, min, max, 30 + 5 * g, unit: "cm"));
                 _rules.Rules.Add(R(ParamType.FoundationDepth, min, max, 1.5f + 0.5f * g, unit: "m"));
                 _rules.Rules.Add(R(ParamType.ConcreteGrade, min, max, 1 + g, new List<string> { "C16", "C20", "C25", "C30", "C35" }));
-                _rules.Rules.Add(R(ParamType.RebarType, min, max, 1, new List<string> { "Düz", "Nervürlü" }));
+                _rules.Rules.Add(R(ParamType.RebarType, min, max, 1 + g, new List<string> { "B220 (düz)", "B420", "B500", "B500S" }));
                 _rules.Rules.Add(R(ParamType.SoilType, min, max, 1 + g, new List<string> { "Dolgu", "Yumuşak kil", "Sert kil", "Kaya" }));
             }
             // Genel (katsız) kural: kata özel kural varken seçilmemeli
@@ -62,7 +62,7 @@ namespace CivilJam.Core.Tests
         [Test]
         public void FormatValue_LabelsAndNumbers()
         {
-            Assert.AreEqual("Nervürlü", _rules.FormatValue(ParamType.RebarType, 1));
+            Assert.AreEqual("B500S", _rules.FormatValue(ParamType.RebarType, 3));
             Assert.AreEqual("Sert kil", _rules.FormatValue(ParamType.SoilType, 2));
             Assert.AreEqual("C25", _rules.FormatValue(ParamType.ConcreteGrade, 2));
             Assert.AreEqual("35 cm", _rules.FormatValue(ParamType.ColumnThickness, 35));
@@ -125,6 +125,15 @@ namespace CivilJam.Core.Tests
                     Assert.IsTrue(applied.Exists(r => r.Param == p), $"{floors} kat: {p} yok");
                 Assert.AreEqual(2, applied.FindAll(r => !r.IsLabeled).Count, "2 sayısal parametre");
             }
+            // Demir tipi kat grubuna göre 3 farklı tür ister; en zayıf seçenek (düz) hiçbir grupta yeterli değil
+            var rebar = new HashSet<float>();
+            foreach (int floors in new[] { 2, 5, 8 })
+            {
+                var r = real.FindRule(BuildingType.Residential, ParamType.RebarType, floors);
+                Assert.Greater(r.Required, 0f, "Düz demir hiçbir binada kabul edilmez");
+                rebar.Add(r.Required);
+            }
+            Assert.AreEqual(3, rebar.Count, "Demir tipi: kat grubuna göre 3 farklı tür");
             Assert.IsFalse(string.IsNullOrEmpty(real.HandbookIntro));
         }
     }

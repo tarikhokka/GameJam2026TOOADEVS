@@ -171,7 +171,7 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
   | Kolon kalınlığı (sayısal) | 30 cm | 35 cm | 40 cm |
   | Temel derinliği (sayısal) | 1,5 m | 2,0 m | 2,5 m |
   | Beton sınıfı (C16 / C20 / C25 / C30 / C35) | C20 | C25 | C30 |
-  | Demir tipi (Düz / Nervürlü) | Nervürlü | Nervürlü | Nervürlü |
+  | Demir tipi (B220 düz / B420 / B500 / B500S) | B420 | B500 | B500S |
   | Zemin türü (Dolgu / Yumuşak kil / Sert kil / Kaya) | Yumuşak kil | Sert kil | Kaya |
 
 - Değerler "en az" kuralıdır (seçeneklilerde sırada sağdaki daha iyi). Gerekli değer **sadece kat sayısına** göre değişir; binalar 2-9 kat. Oyuncu: başvurudan kat sayısını okur → el kitabı tablosunda sütunu bulur → lab raporuyla karşılaştırır. Masada "min." yok.
@@ -384,6 +384,7 @@ Eski satırlar tarihseldir; 21:09 güncellemesi level/ay sonunu, Ahmet’in 22:0
 | Ç1 Core | Deprem bölgesi 1 = en riskli (en sıkı değerler); kat grupları 1-4 / 5+; projede 5-6 parametre; harfli değerde yetersizlik 1-2 kademe | A. Simülasyon: dengeye etki yok (dikkatli %100 İyi; tek zarf %41/%45/%14) |
 | Ç4 Core | Tepki/selamlama Core'da seçilir (ProjectData metinleri); hediye onayda GiftChance ile, oyunda bir kez; Nuri her retten sonra +250 TL zarf | A. Replik listesi boşsa metin boş |
 | 17 Ekim öğle | El kitabı v2: mahalle/bölge tamamen kaldırıldı; 5 parametre (kolon kalınlığı, temel derinliği, beton sınıfı, demir tipi, zemin türü), gerekli değer kat grubuna göre (1-3 / 4-6 / 7+) | Ahmet kararı: daha az ama daha anlaşılır ve keyifli parametre; tek tabloda arama. Denge simülasyonla korundu |
+| 17 Ekim öğle | Demir tipi kat grubuna göre 3 farklı tür (B420 / B500 / B500S); B220 düz hiçbir binada kabul edilmez; gerçek sınıf kodları | Ahmet kararı: tek tip demir parametreyi anlamsızlaştırıyordu. Denge korundu (tek zarf %45/%45/%10) |
 
 ## Güncelleme kuralı
 - Önemli bir karar, mimari değişiklik, yeni kural veya tamamlanan büyük iş olduğunda ilgili bölümü güncelle ve karar günlüğüne tarih-saatle satır ekle.

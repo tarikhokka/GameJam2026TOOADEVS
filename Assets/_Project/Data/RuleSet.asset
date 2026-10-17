@@ -167,33 +167,39 @@ MonoBehaviour:
     MinFloors: 1
     MaxFloors: 3
     Labels:
-    - "D\xFCz"
-    - "Nerv\xFCrl\xFC"
-    Description: "Betonun i\xE7indeki demir. Nerv\xFCrl\xFC (t\u0131rt\u0131kl\u0131) demir betona tutunur; d\xFCz demir hi\xE7bir binada kabul edilmez."
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
     FailRatioRange: {x: 0.6, y: 0.9}
   - BuildingType: 0
     Param: 12
     DisplayName: Demir tipi
     Unit: 
-    Required: 1
+    Required: 2
     MinFloors: 4
     MaxFloors: 6
     Labels:
-    - "D\xFCz"
-    - "Nerv\xFCrl\xFC"
-    Description: "Betonun i\xE7indeki demir. Nerv\xFCrl\xFC (t\u0131rt\u0131kl\u0131) demir betona tutunur; d\xFCz demir hi\xE7bir binada kabul edilmez."
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
     FailRatioRange: {x: 0.6, y: 0.9}
   - BuildingType: 0
     Param: 12
     DisplayName: Demir tipi
     Unit: 
-    Required: 1
+    Required: 3
     MinFloors: 7
     MaxFloors: 0
     Labels:
-    - "D\xFCz"
-    - "Nerv\xFCrl\xFC"
-    Description: "Betonun i\xE7indeki demir. Nerv\xFCrl\xFC (t\u0131rt\u0131kl\u0131) demir betona tutunur; d\xFCz demir hi\xE7bir binada kabul edilmez."
+    - "B220 (d\xFCz)"
+    - B420
+    - B500
+    - B500S
+    Description: "Betonun i\xE7indeki demirin s\u0131n\u0131f\u0131. B220 d\xFCz demirdir, hi\xE7bir binada kabul edilmez. Nerv\xFCrl\xFC demirlerde say\u0131 b\xFCy\xFCd\xFCk\xE7e demir g\xFC\xE7lenir; S harfi depreme dayan\u0131kl\u0131 s\u0131n\u0131f demektir."
     FailRatioRange: {x: 0.6, y: 0.9}
   - BuildingType: 0
     Param: 13

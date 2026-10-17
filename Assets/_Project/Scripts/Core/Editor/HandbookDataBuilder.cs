@@ -36,9 +36,10 @@ namespace CivilJam.Core.Editor
                 Description = "Betonun dayanımı. Sayı büyüdükçe beton sağlamlaşır; belirtilen sınıf ve üstü kabul edilir.",
                 Required = new float[] { 1, 2, 3 } },                 // C20 / C25 / C30
             new Spec { Param = ParamType.RebarType, Name = "Demir tipi",
-                Labels = new List<string> { "Düz", "Nervürlü" },
-                Description = "Betonun içindeki demir. Nervürlü (tırtıklı) demir betona tutunur; düz demir hiçbir binada kabul edilmez.",
-                Required = new float[] { 1, 1, 1 } },                 // her zaman Nervürlü
+                Labels = new List<string> { "B220 (düz)", "B420", "B500", "B500S" },
+                Description = "Betonun içindeki demirin sınıfı. B220 düz demirdir, hiçbir binada kabul edilmez. " +
+                              "Nervürlü demirlerde sayı büyüdükçe demir güçlenir; S harfi depreme dayanıklı sınıf demektir.",
+                Required = new float[] { 1, 2, 3 } },                 // B420 / B500 / B500S (Ahmet kararı: kat grubuna göre 3 farklı tür)
             new Spec { Param = ParamType.SoilType, Name = "Zemin türü",
                 Labels = new List<string> { "Dolgu", "Yumuşak kil", "Sert kil", "Kaya" },
                 Description = "Binanın oturduğu toprak. Dolgu en zayıf, kaya en sağlam zemindir.",

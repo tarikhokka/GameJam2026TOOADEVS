@@ -13,16 +13,34 @@ MonoBehaviour:
   m_Name: Kemal
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: kemal
-  DisplayName: "Kemal Kestirme"
+  DisplayName: Kemal Kestirme
   Portrait: {fileID: 21300000, guid: 60d69496fb513fe4fad0fdab6b9b0c57, type: 3}
   IsHonest: 0
   IsThug: 0
   BribeRange: {x: 800, y: 1500}
   GreetingLines:
-  - "Hocam selamlar! Kısa keseceğim, sizin de vaktiniz kıymetli."
-  - "Evraklar tamam hocam, ufak tefek şeylere takılmayalım."
-  - "Benim işler hep hızlı hocam, adım üstünde."
+  - "Hocam selamlar! K\u0131sa kesece\u011Fim, sizin de vaktiniz k\u0131ymetli."
+  - "Evraklar tamam hocam, ufak tefek \u015Feylere tak\u0131lmayal\u0131m."
+  - "Benim i\u015Fler hep h\u0131zl\u0131 hocam, ad\u0131m \xFCst\xFCnde."
   BribeLines:
-  - "Bu zarfı masada unuttum galiba... Sizde kalsın, bir dahakine alırım."
-  - "Hocam bu işler uzatılmaz. Kestirmeden gidelim, ikimiz de kazanalım."
-  - "Çay parası diyelim hocam. Biraz kalabalık bir çay."
+  - "Bu zarf\u0131 masada unuttum galiba... Sizde kals\u0131n, bir dahakine al\u0131r\u0131m."
+  - "Hocam bu i\u015Fler uzat\u0131lmaz. Kestirmeden gidelim, ikimiz de kazanal\u0131m."
+  - "\xC7ay paras\u0131 diyelim hocam. Biraz kalabal\u0131k bir \xE7ay."
+  ApproveLines:
+  - "\u0130\u015Fte bu hocam! K\u0131sa ve net, tam benim sevdi\u011Fim gibi."
+  - "Hay\u0131rl\u0131 olsun hocam. Temeli yar\u0131n sabah at\u0131yoruz."
+  - "G\xF6r\xFCyor musunuz, uzatmad\u0131k, herkes kazand\u0131."
+  RejectLines:
+  - "Hocam bu kadar uzatmaya ne gerek vard\u0131?"
+  - "Peki peki... Bu \u015Fehirde ba\u015Fka kap\u0131 da var."
+  - Vaktimi yediniz hocam, vaktimi.
+  BribeRefusedLines:
+  - "Zarf\u0131 geri mi veriyorsunuz? Hocam, kimse bu kadar kitab\u0131na uygun \xE7al\u0131\u015Fm\u0131yor."
+  - "Ay\u0131p oluyor ama hocam... Ben iyilik yapay\u0131m dedim."
+  - "Siz bilirsiniz. Ama bu zarf ba\u015Fka masada kalmaz."
+  ReturnLines:
+  - "Hocam ben yine geldim, kestirmeden. Ge\xE7en sefer {last}, bu sefer de uzatmayal\u0131m."
+  - "Hat\u0131rlad\u0131n\u0131z m\u0131 beni? Ge\xE7en sefer {last}. Bug\xFCn daha h\u0131zl\u0131 bitiririz."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
+  BribeRaiseOnReject: 0

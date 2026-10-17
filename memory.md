@@ -228,7 +228,10 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
     - (B) `d9d4aca`'da yapıldı.
 - **Tarık (EEE) — içerik:**
   - [ ] El kitabı metinleri: `HandbookIntro`, parametre adları/birimleri/`Description` (8 parametre), ~16 mahalle adı (A bölgelere dağıtır).
-  - [ ] Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).
+  - [x] ~~Her müteahhide `ApproveLines`, `RejectLines`, `BribeRefusedLines`, `ReturnLines` (2-3'er).~~ **→ Ahmet devraldı (Ahmet kararı, Tarık görselle meşgul).** 6 müteahhit için 56 replik yazıldı: okunur kopyası `ICERIK_TASLAK.md` → "Tepki replikleri (Ç4) — A taslağı"; asset'lere `CivilJam > Core > Fill Empty Client Lines` ile yazılır.
+    - ⚠️ **Tarık:** bu replikleri **yeniden yazmana gerek yok**; istersen ton/üslup düzeltmesi yap. Düzeltmeyi doğrudan `Data/Clients/*.asset`'te (Inspector) yap ve `ICERIK_TASLAK.md`'deki kopyayı da güncelle. Araç sadece **boş** listeleri doldurur, senin düzeltmelerinin üzerine yazmaz. Yeni müteahhit eklersen onun repliklerini sen yaz (araç sadece bu 6 kişiyi bilir).
+    - Kural: `ReturnLines`'taki `{last}` hem "onaylamıştınız" hem "reddetmiştiniz" ile okunur; cümleyi ikisine de uyacak kur. Dürüst ustalar ve Selim rüşvet vermediği için `BribeRefusedLines` boş.
+    - Hediye asset'leri (`Data/Gifts/`) ve hangi müteahhidin vereceği **hâlâ sende**.
   - [ ] Hediye asset'leri: `Assets/_Project/Data/Gifts/` → Create → CivilJam → Gift (saat, tablo, masa isimliği...; `Id`, `DisplayName`, `Sprite`, `Note`) ve hangi müteahhidin vereceği (`ClientSO.Gift`). Bitince haber ver → A "Link Data" ile bağlar.
   - [ ] Yeni müteahhitler (10-12'ye) ve ~30 bina adı (Ç3, Ç5).
 

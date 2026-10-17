@@ -13,16 +13,33 @@ MonoBehaviour:
   m_Name: Rustem
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: rustem
-  DisplayName: "Balyoz Rüstem"
+  DisplayName: "Balyoz R\xFCstem"
   Portrait: {fileID: 21300000, guid: c313673d0ea7e824faf808a42c0995ef, type: 3}
   IsHonest: 0
   IsThug: 1
   BribeRange: {x: 1500, y: 2500}
   GreetingLines:
-  - "Hocam selamünaleyküm. Ben uzatmayı sevmem."
-  - "Projeyi getirdim. Siz de onaylayacaksınız, değil mi hocam?"
-  - "Bu mahallede herkes beni tanır hocam. Siz de tanıyın istedim."
+  - "Hocam selam\xFCnaleyk\xFCm. Ben uzatmay\u0131 sevmem."
+  - "Projeyi getirdim. Siz de onaylayacaks\u0131n\u0131z, de\u011Fil mi hocam?"
+  - "Bu mahallede herkes beni tan\u0131r hocam. Siz de tan\u0131y\u0131n istedim."
   BribeLines:
-  - "Al hocam bunu. Ofisinizin camları çok güzel bu arada... Kırılsa yazık olur."
-  - "İmza atarsın, zarfı alırsın. Atmazsan... neyse, sen atarsın."
-  - "Ben iyilikten anlarım hocam. Kötülükten de anlarım."
+  - "Al hocam bunu. Ofisinizin camlar\u0131 \xE7ok g\xFCzel bu arada... K\u0131r\u0131lsa yaz\u0131k olur."
+  - "\u0130mza atars\u0131n, zarf\u0131 al\u0131rs\u0131n. Atmazsan... neyse, sen atars\u0131n."
+  - "Ben iyilikten anlar\u0131m hocam. K\xF6t\xFCl\xFCkten de anlar\u0131m."
+  ApproveLines:
+  - "G\xF6rd\xFCn m\xFC hocam, ne g\xFCzel anla\u015Ft\u0131k."
+  - "Ak\u0131ll\u0131 adams\u0131n hocam. Camlar\u0131n da sa\u011Flam kal\u0131r."
+  - "Bu iyili\u011Fi unutmam hocam."
+  RejectLines:
+  - "Yanl\u0131\u015F yapt\u0131n hocam. \xC7ok yanl\u0131\u015F yapt\u0131n."
+  - "Bu mahallede b\xF6yle i\u015F olmaz hocam... G\xF6r\xFCrs\xFCn."
+  - "Peki hocam. Ak\u015Fama ofisin camlar\u0131na bir bak."
+  BribeRefusedLines:
+  - "Zarf\u0131m\u0131 geri mi itiyorsun? Bunu unutmam hocam."
+  - Sen bilirsin. Ben kibarca teklif ettim.
+  ReturnLines:
+  - "Yine ben hocam. Ge\xE7en sefer {last}; bunu ikimiz de hat\u0131rl\u0131yoruz."
+  - "Hocam, ge\xE7en sefer {last}. Bug\xFCn nas\u0131l bitece\u011Fi sana ba\u011Fl\u0131."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
+  BribeRaiseOnReject: 0

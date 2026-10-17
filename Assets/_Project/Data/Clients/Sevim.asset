@@ -13,13 +13,28 @@ MonoBehaviour:
   m_Name: Sevim
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: sevim
-  DisplayName: "Sevim Sağlamer"
+  DisplayName: "Sevim Sa\u011Flamer"
   Portrait: {fileID: 21300000, guid: ef7883c3b5cab554f9a980b59b8cca33, type: 3}
   IsHonest: 1
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "Merhaba hocam. Laboratuvar raporları ekte, numuneleri de kendim teslim ettim."
-  - "Biraz pahalıya çıktı ama içim rahat. Siz yine de inceleyin."
-  - "Bu sefer okul yolunun üstünde hocam, ona göre sağlam yaptık."
+  - "Merhaba hocam. Laboratuvar raporlar\u0131 ekte, numuneleri de kendim teslim ettim."
+  - "Biraz pahal\u0131ya \xE7\u0131kt\u0131 ama i\xE7im rahat. Siz yine de inceleyin."
+  - "Bu sefer okul yolunun \xFCst\xFCnde hocam, ona g\xF6re sa\u011Flam yapt\u0131k."
   BribeLines: []
+  ApproveLines:
+  - "Te\u015Fekk\xFCrler hocam. Raporlar\u0131n hepsini saklad\u0131m, ne zaman isterseniz bakar\u0131z."
+  - "\u0130\xE7im rahat hocam. \xC7ocuklar o sokaktan g\xFCvenle ge\xE7ecek."
+  - "Sa\u011F olun. Bu i\u015Fi sizin gibi yapan pek kalmad\u0131."
+  RejectLines:
+  - "Anl\u0131yorum hocam. Laboratuvarla tekrar konu\u015Fur, eksi\u011Fi kapat\u0131r\u0131m."
+  - "Bir yerde hata yapm\u0131\u015F\u0131m demek. \u0130yi ki yakalad\u0131n\u0131z."
+  - "Peki hocam. Pahal\u0131ya patlayacak ama do\u011Frusu bu."
+  BribeRefusedLines: []
+  ReturnLines:
+  - "Merhaba yine hocam. Ge\xE7en sefer {last}; bu dosyada her sat\u0131r\u0131 iki kez kontrol ettim."
+  - "Hocam, ge\xE7en sefer {last}. Bu sefer de numuneleri kendim teslim ettim."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
+  BribeRaiseOnReject: 0

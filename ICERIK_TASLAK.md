@@ -65,6 +65,102 @@ Rüşvet tutarları öneri; denge A'da (BalanceSO ile birlikte).
   - "İmza atarsın, zarfı alırsın. Atmazsan... neyse, sen atarsın."
   - "Ben iyilikten anlarım hocam. Kötülükten de anlarım."
 
+## Tepki replikleri (Ç4) — A taslağı, Tarık'tan devralındı
+
+Ahmet (A) Tarık meşgulken yazdı; **Tarık istediği gibi düzeltebilir.** Oyun metni `Data/Clients/*.asset` içinden okur;
+bu bölüm okunur kopyadır. Asset'e yazan araç (`CivilJam > Core > Fill Empty Client Lines`) sadece **boş** listeleri doldurur,
+yani asset'te yapılan düzeltmelerin üzerine yazmaz. Düzeltmeyi doğrudan asset'te (Inspector) yap; bu bölümü de güncelle.
+Dürüst ustalar (Rıfat, Sevim) ve Selim rüşvet vermediği için onlarda "zarf geri çevrildi" repliği yok.
+
+### Rıfat Usta
+- Onaylanınca (`ApproveLines`):
+  - "Allah razı olsun hocam. Temeline kendim baktım, gönül rahatlığıyla yükselir."
+  - "Sağ olun hocam. Bitince çaya beklerim, bir de siz görün."
+  - "Eksiksiz çıkmasına sevindim hocam. Usta işi böyle olur."
+- Reddedilince (`RejectLines`):
+  - "Haklısınız hocam, gözümden kaçmış. Düzeltip yeniden getiririm."
+  - "Otuz yılda pek başıma gelmezdi... Peki hocam, eksiği tamamlarım."
+  - "Kızamam size hocam. Siz bakmasanız kim bakacak?"
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "Yine ben geldim hocam. Geçen sefer projemi {last}; bunu daha da dikkatli hazırladım."
+  - "Hocam hatırlarsınız, geçen sefer {last}. Bu dosyayı da aynı titizlikle getirdim."
+
+### Sevim Sağlamer
+- Onaylanınca (`ApproveLines`):
+  - "Teşekkürler hocam. Raporların hepsini sakladım, ne zaman isterseniz bakarız."
+  - "İçim rahat hocam. Çocuklar o sokaktan güvenle geçecek."
+  - "Sağ olun. Bu işi sizin gibi yapan pek kalmadı."
+- Reddedilince (`RejectLines`):
+  - "Anlıyorum hocam. Laboratuvarla tekrar konuşur, eksiği kapatırım."
+  - "Bir yerde hata yapmışım demek. İyi ki yakaladınız."
+  - "Peki hocam. Pahalıya patlayacak ama doğrusu bu."
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "Merhaba yine hocam. Geçen sefer {last}; bu dosyada her satırı iki kez kontrol ettim."
+  - "Hocam, geçen sefer {last}. Bu sefer de numuneleri kendim teslim ettim."
+
+### Kemal Kestirme
+- Onaylanınca (`ApproveLines`):
+  - "İşte bu hocam! Kısa ve net, tam benim sevdiğim gibi."
+  - "Hayırlı olsun hocam. Temeli yarın sabah atıyoruz."
+  - "Görüyor musunuz, uzatmadık, herkes kazandı."
+- Reddedilince (`RejectLines`):
+  - "Hocam bu kadar uzatmaya ne gerek vardı?"
+  - "Peki peki... Bu şehirde başka kapı da var."
+  - "Vaktimi yediniz hocam, vaktimi."
+- Zarf geri çevrilip reddedilince (`BribeRefusedLines`):
+  - "Zarfı geri mi veriyorsunuz? Hocam, kimse bu kadar kitabına uygun çalışmıyor."
+  - "Ayıp oluyor ama hocam... Ben iyilik yapayım dedim."
+  - "Siz bilirsiniz. Ama bu zarf başka masada kalmaz."
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "Hocam ben yine geldim, kestirmeden. Geçen sefer {last}, bu sefer de uzatmayalım."
+  - "Hatırladınız mı beni? Geçen sefer {last}. Bugün daha hızlı bitiririz."
+
+### Nuri Göznuru
+- Onaylanınca (`ApproveLines`):
+  - "Maşallah hocam, imzanız da yüzünüz kadar güzel!"
+  - "Allah sizi başımızdan eksik etmesin hocam."
+  - "Yeğenime söyleyeceğim, hocamız yine yaptı diye."
+- Reddedilince (`RejectLines`):
+  - "Aaa hocam, yüreğim cız etti."
+  - "Olur mu böyle... Peki, hatırınız kalsın."
+  - "Kırıldım ama küsmem hocam, yine gelirim."
+- Zarf geri çevrilip reddedilince (`BribeRefusedLines`):
+  - "Hocam zarfı beğenmediniz galiba. Bir dahakine daha dolgun getiririm."
+  - "Göz nurumu geri çevirdiniz... Olsun, ben ısrarcı adamım."
+  - "Az geldi demek. Anladım hocam, anladım."
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "Hocaaam! Geçen sefer {last} ama ben size hiç küsmedim."
+  - "Yine ben, göz nurunuz! Geçen sefer {last}; bu sefer gönlünüzü hoş edeceğim."
+
+### Selim Kâğıtçıoğlu
+- Onaylanınca (`ApproveLines`):
+  - "Teşekkürler hocam. Evrak dediğin böyle olur."
+  - "Bilirdim. Kaşesi, imzası, hepsi yerinde."
+  - "İyi çalışmalar hocam. Arşivinize düzgün bir dosya daha kattık."
+- Reddedilince (`RejectLines`):
+  - "Hangi belgede sorun gördünüz hocam? Ben göremedim."
+  - "İlginç... Laboratuvara bir daha soracağım."
+  - "Peki hocam. Kâğıtlar tamamdı ama siz bilirsiniz."
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "İyi günler hocam. Geçen sefer {last}; bu dosya ondan da düzgün."
+  - "Yine ben hocam. Geçen sefer {last}. Evraklar her zamanki gibi eksiksiz."
+
+### Balyoz Rüstem
+- Onaylanınca (`ApproveLines`):
+  - "Gördün mü hocam, ne güzel anlaştık."
+  - "Akıllı adamsın hocam. Camların da sağlam kalır."
+  - "Bu iyiliği unutmam hocam."
+- Reddedilince (`RejectLines`):
+  - "Yanlış yaptın hocam. Çok yanlış yaptın."
+  - "Bu mahallede böyle iş olmaz hocam... Görürsün."
+  - "Peki hocam. Akşama ofisin camlarına bir bak."
+- Zarf geri çevrilip reddedilince (`BribeRefusedLines`):
+  - "Zarfımı geri mi itiyorsun? Bunu unutmam hocam."
+  - "Sen bilirsin. Ben kibarca teklif ettim."
+- Tekrar gelince (`ReturnLines`; {last} = onaylamıştınız / reddetmiştiniz):
+  - "Yine ben hocam. Geçen sefer {last}; bunu ikimiz de hatırlıyoruz."
+  - "Hocam, geçen sefer {last}. Bugün nasıl biteceği sana bağlı."
+
 ## Gazete manşetleri (HeadlineSO)
 
 Ton: ciddi, sade, saygılı. Depremzedeler asla olumsuz gösterilmez. Gerçek olay, tarih veya şehir adı yok.

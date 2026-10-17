@@ -13,13 +13,28 @@ MonoBehaviour:
   m_Name: Selim
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: selim
-  DisplayName: "Selim Kâğıtçıoğlu"
+  DisplayName: "Selim K\xE2\u011F\u0131t\xE7\u0131o\u011Flu"
   Portrait: {fileID: 21300000, guid: 8e50244066204e044a9f3ac2cc725647, type: 3}
   IsHonest: 0
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "İyi günler hocam. Bütün evraklar eksiksiz, laboratuvar raporu da taze."
-  - "Kaşesi de imzası da yerinde hocam, buyurun inceleyin."
-  - "Ek teste gerek yok hocam, raporlar her şeyi söylüyor zaten."
+  - "\u0130yi g\xFCnler hocam. B\xFCt\xFCn evraklar eksiksiz, laboratuvar raporu da taze."
+  - "Ka\u015Fesi de imzas\u0131 da yerinde hocam, buyurun inceleyin."
+  - "Ek teste gerek yok hocam, raporlar her \u015Feyi s\xF6yl\xFCyor zaten."
   BribeLines: []
+  ApproveLines:
+  - "Te\u015Fekk\xFCrler hocam. Evrak dedi\u011Fin b\xF6yle olur."
+  - "Bilirdim. Ka\u015Fesi, imzas\u0131, hepsi yerinde."
+  - "\u0130yi \xE7al\u0131\u015Fmalar hocam. Ar\u015Fivinize d\xFCzg\xFCn bir dosya daha katt\u0131k."
+  RejectLines:
+  - "Hangi belgede sorun g\xF6rd\xFCn\xFCz hocam? Ben g\xF6remedim."
+  - "\u0130lgin\xE7... Laboratuvara bir daha soraca\u011F\u0131m."
+  - "Peki hocam. K\xE2\u011F\u0131tlar tamamd\u0131 ama siz bilirsiniz."
+  BribeRefusedLines: []
+  ReturnLines:
+  - "\u0130yi g\xFCnler hocam. Ge\xE7en sefer {last}; bu dosya ondan da d\xFCzg\xFCn."
+  - "Yine ben hocam. Ge\xE7en sefer {last}. Evraklar her zamanki gibi eksiksiz."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
+  BribeRaiseOnReject: 0

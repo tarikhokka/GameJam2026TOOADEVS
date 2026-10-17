@@ -13,17 +13,34 @@ MonoBehaviour:
   m_Name: Nuri
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: nuri
-  DisplayName: "Nuri Göznuru"
+  DisplayName: "Nuri G\xF6znuru"
   Portrait: {fileID: 21300000, guid: 9fce580512db9cd46b5e78c03447e3ea, type: 3}
   IsHonest: 0
   IsThug: 0
   BribeRange: {x: 1000, y: 2000}
   GreetingLines:
-  - "Hocaaam! Sizi görmek ne güzel, maşallah yüzünüz nur gibi."
-  - "Getirdiğim proje de en az siz kadar güzel hocam."
-  - "Yeğenim sizi çok övdü hocam, dedim mutlaka uğrayayım."
+  - "Hocaaam! Sizi g\xF6rmek ne g\xFCzel, ma\u015Fallah y\xFCz\xFCn\xFCz nur gibi."
+  - "Getirdi\u011Fim proje de en az siz kadar g\xFCzel hocam."
+  - "Ye\u011Fenim sizi \xE7ok \xF6vd\xFC hocam, dedim mutlaka u\u011Frayay\u0131m."
   BribeLines:
-  - "Göz nuru olsun hocam, lafı mı olur."
-  - "Bayram değil seyran değil, ama ben size bir hediye getirdim."
-  - "Şimdi imza atarsanız zarf da sizin, hatır da sizin."
+  - "G\xF6z nuru olsun hocam, laf\u0131 m\u0131 olur."
+  - "Bayram de\u011Fil seyran de\u011Fil, ama ben size bir hediye getirdim."
+  - "\u015Eimdi imza atarsan\u0131z zarf da sizin, hat\u0131r da sizin."
+  ApproveLines:
+  - "Ma\u015Fallah hocam, imzan\u0131z da y\xFCz\xFCn\xFCz kadar g\xFCzel!"
+  - "Allah sizi ba\u015F\u0131m\u0131zdan eksik etmesin hocam."
+  - "Ye\u011Fenime s\xF6yleyece\u011Fim, hocam\u0131z yine yapt\u0131 diye."
+  RejectLines:
+  - "Aaa hocam, y\xFCre\u011Fim c\u0131z etti."
+  - "Olur mu b\xF6yle... Peki, hat\u0131r\u0131n\u0131z kals\u0131n."
+  - "K\u0131r\u0131ld\u0131m ama k\xFCsmem hocam, yine gelirim."
+  BribeRefusedLines:
+  - "Hocam zarf\u0131 be\u011Fenmediniz galiba. Bir dahakine daha dolgun getiririm."
+  - "G\xF6z nurumu geri \xE7evirdiniz... Olsun, ben \u0131srarc\u0131 adam\u0131m."
+  - "Az geldi demek. Anlad\u0131m hocam, anlad\u0131m."
+  ReturnLines:
+  - "Hocaaam! Ge\xE7en sefer {last} ama ben size hi\xE7 k\xFCsmedim."
+  - "Yine ben, g\xF6z nurunuz! Ge\xE7en sefer {last}; bu sefer g\xF6nl\xFCn\xFCz\xFC ho\u015F edece\u011Fim."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
   BribeRaiseOnReject: 250

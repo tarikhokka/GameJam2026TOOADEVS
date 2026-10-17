@@ -13,13 +13,28 @@ MonoBehaviour:
   m_Name: Rifat
   m_EditorClassIdentifier: CivilJam.Core::CivilJam.Core.ClientSO
   Id: rifat
-  DisplayName: "Rıfat Usta"
+  DisplayName: "R\u0131fat Usta"
   Portrait: {fileID: 21300000, guid: db63c515f380ee346a7401fb31a3727a, type: 3}
   IsHonest: 1
   IsThug: 0
   BribeRange: {x: 0, y: 0}
   GreetingLines:
-  - "Kolay gelsin hocam. Demirini de betonunu da kendim kontrol ettim, siz de bakın, içiniz rahat etsin."
-  - "Hocam acele yok. Eksik görürseniz söyleyin, düzeltir gelirim."
-  - "Otuz yıldır bu işi yaparım hocam. Yaptığım binada kendi torunum oturuyor."
+  - "Kolay gelsin hocam. Demirini de betonunu da kendim kontrol ettim, siz de bak\u0131n, i\xE7iniz rahat etsin."
+  - "Hocam acele yok. Eksik g\xF6r\xFCrseniz s\xF6yleyin, d\xFCzeltir gelirim."
+  - "Otuz y\u0131ld\u0131r bu i\u015Fi yapar\u0131m hocam. Yapt\u0131\u011F\u0131m binada kendi torunum oturuyor."
   BribeLines: []
+  ApproveLines:
+  - "Allah raz\u0131 olsun hocam. Temeline kendim bakt\u0131m, g\xF6n\xFCl rahatl\u0131\u011F\u0131yla y\xFCkselir."
+  - "Sa\u011F olun hocam. Bitince \xE7aya beklerim, bir de siz g\xF6r\xFCn."
+  - "Eksiksiz \xE7\u0131kmas\u0131na sevindim hocam. Usta i\u015Fi b\xF6yle olur."
+  RejectLines:
+  - "Hakl\u0131s\u0131n\u0131z hocam, g\xF6z\xFCmden ka\xE7m\u0131\u015F. D\xFCzeltip yeniden getiririm."
+  - "Otuz y\u0131lda pek ba\u015F\u0131ma gelmezdi... Peki hocam, eksi\u011Fi tamamlar\u0131m."
+  - "K\u0131zamam size hocam. Siz bakmasan\u0131z kim bakacak?"
+  BribeRefusedLines: []
+  ReturnLines:
+  - "Yine ben geldim hocam. Ge\xE7en sefer projemi {last}; bunu daha da dikkatli haz\u0131rlad\u0131m."
+  - "Hocam hat\u0131rlars\u0131n\u0131z, ge\xE7en sefer {last}. Bu dosyay\u0131 da ayn\u0131 titizlikle getirdim."
+  Gift: {fileID: 0}
+  GiftChance: 0.3
+  BribeRaiseOnReject: 0

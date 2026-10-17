@@ -199,7 +199,8 @@ namespace CivilJam.Core.Editor
                 FlowPrefabDir + "ResultScreen.prefab",
                 FlowPrefabDir + "DaySummaryScreen.prefab",
                 FlowPrefabDir + "DailyExpensesScreen.prefab",
-                FlowPrefabDir + "EndingScreen.prefab");
+                FlowPrefabDir + "EndingScreen.prefab",
+                FlowPrefabDir + "SaveScreen.prefab");   // EEE, 17 Ekim: gün sonu kayıt ekranı (IMGUI yedeği yerine)
         }
 
         /// <summary>

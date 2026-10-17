@@ -3,7 +3,7 @@
 Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 
 ## Kurallar
-- **Tarz: "İyi Pizza, Güzel Pizza" (Good Pizza, Great Pizza) benzeri flat cartoon** — düz renk, kalın kontur, sevimli karakterler. Müteahhit önden, masanın karşısında; yürüme animasyonu yok. O oyunun görselleri kopyalanmaz.
+- **Tarz: el çizimi 2D cartoon** — kalın koyu kahve kontur, yumuşak cel gölge, sıcak palet; Gemini/ChatGPT ile ortak tarz prompt'uyla üretilir. Müteahhit önden, masanın karşısında oturur; yürüme animasyonu yok. Beyaz arka planlı üretilen görsellerin arka planı script ile silinir.
 - **Stil (karar 02:20): hazır asset, piksel art yok.** Yeniden dağıtılabilir lisanslı (tercihen CC0) asset'ler; mümkünse tek kaynak/tek stil ailesinden. Her asset eklendiği anda `CREDITS_AND_AI.md`'ye yazılır; CC BY ise oyun içi Emeği Geçenler metnine de.
 - Referans çözünürlük 1920x1080. Sprite import: Texture Type = Sprite (2D and UI), Sprite Mode = Single, Pixels Per Unit = 100.
 - Önce placeholder konur; gerçek görsel **aynı dosya adıyla üzerine yazılır** (.meta/GUID korunur, prefab referansları bozulmaz).
@@ -32,7 +32,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `ending_closed.png` | Ending (Orta, ofis kapandı) | C | P |
 | `portrait_rifat/sevim/kemal/nuri/selim/rustem.png` | Desk (müteahhit, ClientSO.Portrait) | B | F (ChatGPT ile üretildi, arka planı silindi; 600x600 şeffaf, karakter alta ortalı, belden yukarısı) |
 | `chair_back.png` | KULLANILMIYOR (yeni desk_bg'de koltuk var). Silinmedi, referans kırılmasın diye duruyor | B | — |
-| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (ChatGPT, 600x400 şeffaf), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
-| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (ChatGPT, 600x400 şeffaf), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
+| `book_rules.png` | Desk: "EL KİTABI — Olması gereken değerler" (Gemini, 600x577 şeffaf; masada gölgeli ve hafif eğik durmalı), masada sağ altta HEP durur (tıklanınca El Kitabı penceresi) | B | F |
+| `book_lab.png` | Desk: "LAB RAPORU — Beyan edilen değerler" (Gemini, 600x546 şeffaf; masada gölgeli ve hafif eğik durmalı), müteahhitle GELİR, sol altta durur, kararla birlikte GİDER | B | F |
 
 Durum: `-` yok, `P` placeholder, `F` final.

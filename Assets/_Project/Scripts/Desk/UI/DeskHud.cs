@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CivilJam.Desk
 {
-    // Üst bar: gün, kasa, bugün onaylanan sayısı.
+    // Üst bar: gün, kasa, bugün onaylanan ve bekleyen müşteri sayısı.
     public class DeskHud : MonoBehaviour
     {
         [SerializeField] private TMP_Text levelTitleText;
@@ -20,8 +20,9 @@ namespace CivilJam.Desk
                 ? $"Kasa: {DeskFormat.Money(state.Money)}  <size=80%>Borç: {DeskFormat.Money(state.Debt)}</size>"
                 : $"Kasa: {DeskFormat.Money(state.Money)}";
 
-            // Kota yok (karar A); sadece bilgi.
-            quotaText.text = $"Bugün onaylanan: {state.ApprovedToday}";
+            // Kota yok (karar A); sadece bilgi. Müşteriler sırayla gelir; bekleyen = henüz karar verilmemiş dosya.
+            int waiting = context.TodayProjects.FindAll(p => p.Verdict == ProjectVerdict.Pending).Count;
+            quotaText.text = $"Onaylanan: {state.ApprovedToday}  ·  Bekleyen: {waiting}";
         }
     }
 }

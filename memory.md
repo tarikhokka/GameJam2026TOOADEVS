@@ -74,9 +74,12 @@
   - `UI/DeskScreen.cs` — IGameScreen (Phase = Desk). Show(GameContext); kararlar context.Actions ile; "Mesaiyi bitir" → Completed.
   - `UI/DeskAudio.cs` — masa sesleri: tık, kağıt, kaşe, cam kırılma + ofis müziği (döngü, %25); klipler prefab'da referansla bağlı.
   - `UI/EventCardView.cs` — masada olay kartı (perde + başlık/metin/Tamam). Kabadayı reddedilince "Camın kırıldı!" (Core `WindowRepairsToday`'i artırdıysa; masa kuralı kopyalamaz, sonucu okur).
-  - `UI/RulebookView.cs` — "El Kitabı" penceresi (üst bardaki buton): kontrol listesi, yönetmelik alt sınırları (`ctx.Rules`), akredite laboratuvarlar (`ctx.Names.LabNames`). Sadece gösterir.
+  - `UI/RulebookView.cs` — "El Kitabı" penceresi (masadaki EL KİTABI kitabı ya da açık dosyadaki "El Kitabı'na bak"): kontrol listesi, yönetmelik alt sınırları (`ctx.Rules`), akredite laboratuvarlar (`ctx.Names.LabNames`). Sadece gösterir.
+  - `UI/ClientSceneView.cs` — ofis sahnesi: oda (`desk_bg`) → koltuk → portre → masa önü (aynı görselin masa kısmı) → konuşma balonu. Müteahhit sağdan gelip oturur; balonda gelişte `GreetingText` (+ rüşvet repliği), karardan sonra `ReactionText`.
+  - `UI/DeskPropsView.cs` — masadakiler (dosya kapalıyken): LAB RAPORU kitabı (tıklayınca dosya açılır), zarf, müteahhit/proje adı, "Mesaiyi bitir".
+  - `UI/DossierView.cs` — açık dosya: ortada belge (DocumentView) + karar sütunu (ActionPanel), perde; "Kapat" ile masaya döner.
   - `UI/TutorialView.cs` — 1. gün masa açılınca 4 öğretici kart (metinler bu dosyada; taslak, EEE onayı bekliyor).
-  - `UI/` diğerleri — DeskHud, ProjectQueueView/Item, DocumentView (karar kaşesi animasyonu; lab raporunda parsel/tarih/imzanın yanında başvurudaki değer soluk yazılır, işaretlenmez), ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı/birimi RuleSetSO'dan).
+  - `UI/` diğerleri — DeskHud (gün, kasa, onaylanan · bekleyen), DocumentView (sekmeler, künye, kaşe, tablo Parametre | Beyan | Ek test; karar kaşesi animasyonu), ParamRowView, ActionPanel, UiPool, DeskFormat (parametre adı RuleSetSO'dan, değer `FormatValue` ile).
   - `Sandbox/FakeGameActions.cs` — sadece sandbox için sahte IGameActions.
   - `Sandbox/SandboxDeskContext.cs` — sahte gün: 4 proje (dürüst, rüşvetçi, sahte belgeli, kabadayı), 4 müşteri, RuleSet, akredite lab listesi.
   - `Sandbox/DeskSandboxBootstrap.cs` — Sandbox_Desk'i başlatır, mesai bitince sonucu loglar ve aynı sahte günü bir sonraki gün numarasıyla açar.
@@ -125,6 +128,7 @@
 - **Desk (B, 23:50):** Core tiplerini kullanıyor (IGameScreen, ctx.TodayProjects, ctx.Actions); kota yok (HUD: "Bugün onaylanan: N"); kaşe yazısı auto-size; sesler ve ONAYLANDI/REDDEDİLDİ kaşe animasyonu.
   - (B, 17 Ekim) Y1: "El Kitabı" penceresi (kontrol listesi + yönetmelik + akredite lab listesi), lab raporunda başvuru değerleri yan yana, 1. gün 4 öğretici kart. Kural değişikliği yok, Core'a dokunulmadı. Sandbox ve Game.unity'de test edildi. Kart metinleri taslak → Tarık onaylayacak.
   - (B, 17 Ekim) O4: kabadayı reddedilince kaşeden sonra cam sesi (`sfx_glass_break`) + "Camın kırıldı!" kartı (tamir ücreti `Balance.WindowRepairCost`, "bugünün giderlerine eklendi"). Sandbox (4. dosya: Rüstem) ve Game.unity'de test edildi.
+  - (B, 17 Ekim) Yeni masa düzeni: dosya listesi yok, müteahhitler sırayla gelip koltuğa oturur (konuşma balonu). Masada LAB RAPORU kitabı (tıklayınca dosya ortada açılır; kararlar dosyanın içinde) ve EL KİTABI kitabı. Dosya kapalıyken sahne tamamen görünür. Test edildi (Tarık'ın 600x600 portreleri sonradan geldi; yerleşim kontrol edilecek).
 - **Flow (C, 00:17):** Gazete, gün özeti, günlük ödeme, son ekranı prefab'ları + MainMenu (Emeği Geçenler dahil) + Sandbox_Flow; manşet `{count}` düzeltildi. A `0bebf9b`'de Game.unity'ye ekledi.
 - **Art/Audio/İçerik (EEE, 00:40):** 13 placeholder sprite + ending görselleri; masa sesleri (`sfx_click/stamp/paper`, `mus_office_ambient` CC BY 4.0 → credits MainMenu'de var); 6 ClientSO; Headlines.asset 20 manşet; son metinleri `ICERIK_TASLAK.md`'de. Stil: hazır asset (tercihen CC0), piksel art yok. Tarz: "İyi Pizza, Güzel Pizza" (Good Pizza, Great Pizza) benzeri flat cartoon; müteahhit masanın önüne kayarak gelir (karar 17 Ekim gece).
 - **Sırada:** bkz. aşağıda "📌 Analiz sonrası işler" (kişi bazlı). Özet: C → ödeme/Save, credits ve müzik (Esc tamam); B → öğretici/denetçi notu + lab listesi + intro kararı; EEE → MiddleCollapsed son metni, README son hali, final görsel/ses; A → denge turu, 20:00 ikinci build.
@@ -217,7 +221,8 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
     - (B, 17 Ekim) Tablo: Parametre | Beyan | Ek test; değerler `ctx.Rules.FormatValue` ile (`DeskFormat.Value`). Sandbox ve Game.unity'de test edildi.
   - [ ] Sayfalı "Denetçi El Kitabı" (sayfa çevirme, masada her an açılabilir): giriş + kontrol listesi, mahalle → bölge tablosu (`ctx.Rules.Zones`), bölge 1-4 sayfaları (`ctx.Rules.RulesFor(tür)`; kural satırı: `DisplayName`, kat aralığı, `FormatValue(Param, Required)`, `Description`), akredite laboratuvarlar (`ctx.Names.LabNames`).
   - [ ] Değerleri her yerde `ctx.Rules.FormatValue` ile göster (harfli parametreler).
-  - [ ] Masaya gelişte `GreetingText`, karardan sonra `ReactionText` konuşma balonu (müteahhit portresiyle).
+  - [x] Masaya gelişte `GreetingText`, karardan sonra `ReactionText` konuşma balonu (müteahhit portresiyle).
+    - (B, 17 Ekim) `ClientSceneView`: portre koltukta, balon başın üstünde; tepki varsa sıradaki 1,5 sn sonra gelir.
   - [ ] Hediye: `GiftId` doluysa "<müteahhit> size <GiftSO.DisplayName> bıraktı" + sadece "Kabul et" → `ctx.Actions.AcceptGift(id)`; kabul edilen hediyeler (`ctx.State.OfficeGifts` → `ctx.GetGift(id).Sprite`) masa ekranında ofiste kalıcı görünsün.
   - [x] Kabadayı reddedilince olay kartı + `sfx_glass_break` (O4).
     - (B) `d9d4aca`'da yapıldı.

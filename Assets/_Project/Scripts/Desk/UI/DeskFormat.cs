@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using CivilJam.Core;
 
@@ -41,6 +42,15 @@ namespace CivilJam.Desk
                 ParamType.ShearWallRatio => "Perde duvar oranı",
                 _ => type.ToString(),
             };
+        }
+
+        // Aynı proje her çizimde aynı repliği göstersin diye proje kimliğine göre seçilir.
+        public static string PickLine(List<string> lines, string projectId)
+        {
+            if (lines == null || lines.Count == 0) return null;
+            int hash = 0;
+            foreach (char c in projectId) hash = hash * 31 + c;
+            return lines[(hash & int.MaxValue) % lines.Count];
         }
 
         // Değer metni Core'dan (RuleSetSO.FormatValue): harfli parametrede etiket (C25), değilse sayı + birim.

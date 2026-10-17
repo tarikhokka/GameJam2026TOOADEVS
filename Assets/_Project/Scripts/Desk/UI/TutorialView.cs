@@ -20,8 +20,8 @@ namespace CivilJam.Desk
         [SerializeField] private Card[] cards =
         {
             new Card("İmar Müdürlüğü'ne hoş geldin",
-                "Masana her gün yeni bina başvuruları gelecek. Senin imzan olmadan hiçbir bina yükselmez.\n\n" +
-                "Soldaki listeden bir dosya seç; her dosyayı onayla ya da reddet."),
+                "Müteahhitler sırayla gelip karşına oturacak. Senin imzan olmadan hiçbir bina yükselmez.\n\n" +
+                "Dosyayı açmak için masadaki mavi <b>LAB RAPORU</b> kitabına tıkla; okuyup onayla ya da reddet."),
             new Card("Değerleri kontrol et",
                 "Her dosyada iki belge var: <b>Başvuru</b> ve <b>Laboratuvar Raporu</b>.\n\n" +
                 "Rapordaki beyan edilen her değer yönetmelikteki alt sınırı karşılamalı. Karşılamıyorsa bina yönetmeliğe aykırıdır."),
@@ -30,7 +30,7 @@ namespace CivilJam.Desk
                 "Beyana güvenmiyorsan ücretli <b>ek test</b> iste: gerçek değerleri gösterir."),
             new Card("İmza senin",
                 "Bazı müteahhitler dosyanın arasına zarf koyar. Karar senin.\n\n" +
-                "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan sağ üstteki <b>El Kitabı</b>'na bak."),
+                "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan masadaki yeşil <b>EL KİTABI</b>'na bak."),
         };
 
         public event Action PageChanged;

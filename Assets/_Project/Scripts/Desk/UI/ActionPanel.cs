@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using CivilJam.Core;
 using TMPro;
 using UnityEngine;
@@ -7,7 +6,8 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Sağ panel: başvuru sahibi, rüşvet zarfı, ek test ve onay/red butonları.
+    // Açık dosyanın sağ sütunu: başvuru sahibi, rüşvet zarfı, ek test ve onay/red butonları.
+    // Selamlama ve rüşvet repliği sahnedeki konuşma balonunda; "Mesaiyi bitir" masada (DeskPropsView).
     public class ActionPanel : MonoBehaviour
     {
         [Header("Başvuru sahibi")]
@@ -25,13 +25,11 @@ namespace CivilJam.Desk
         [SerializeField] private Button approveButton;
         [SerializeField] private Button rejectButton;
         [SerializeField] private TMP_Text verdictText;
-        [SerializeField] private Button finishButton;
 
         public event Action ExtraTestClicked;
         public event Action ApproveClicked;
         public event Action TakeBribeClicked;
         public event Action RejectClicked;
-        public event Action FinishClicked;
 
         private void Awake()
         {
@@ -39,34 +37,27 @@ namespace CivilJam.Desk
             approveButton.onClick.AddListener(() => ApproveClicked?.Invoke());
             takeBribeButton.onClick.AddListener(() => TakeBribeClicked?.Invoke());
             rejectButton.onClick.AddListener(() => RejectClicked?.Invoke());
-            finishButton.onClick.AddListener(() => FinishClicked?.Invoke());
         }
 
-        public void ShowEmpty(bool allDecided)
+        public void ShowEmpty()
         {
             clientNameText.text = "";
-            clientLineText.text = allDecided ? "Masada bekleyen dosya kalmadı." : "";
+            clientLineText.text = "";
             bribeRoot.SetActive(false);
             SetDecisionButtonsVisible(false);
             verdictText.text = "";
-            finishButton.gameObject.SetActive(allDecided);
         }
 
-        public void Show(ProjectData project, ClientSO client, bool canBuyTest, int testCost, bool allDecided)
+        public void Show(ProjectData project, ClientSO client, bool canBuyTest, int testCost)
         {
             clientNameText.text = client != null ? client.DisplayName : "Başvuru sahibi";
-            string greeting = PickLine(client?.GreetingLines, project.Id);
-            clientLineText.text = string.IsNullOrEmpty(greeting) ? "" : $"“{greeting}”";
+            clientLineText.text = project.Name;
 
             bool pending = project.Verdict == ProjectVerdict.Pending;
 
             bribeRoot.SetActive(pending && project.OffersBribe);
             if (project.OffersBribe)
-            {
-                string bribeLine = PickLine(client?.BribeLines, project.Id);
-                string quote = string.IsNullOrEmpty(bribeLine) ? "" : $"<i>“{bribeLine}”</i>\n";
-                bribeText.text = $"{quote}Dosyanın arasında bir zarf var: <b>{DeskFormat.Money(project.BribeAmount)}</b>";
-            }
+                bribeText.text = $"Dosyanın arasında bir zarf var: <b>{DeskFormat.Money(project.BribeAmount)}</b>";
 
             SetDecisionButtonsVisible(pending);
             extraTestButton.interactable = canBuyTest;
@@ -80,17 +71,6 @@ namespace CivilJam.Desk
                 ProjectVerdict.Rejected => "REDDEDİLDİ",
                 _ => "",
             };
-
-            finishButton.gameObject.SetActive(allDecided);
-        }
-
-        // Aynı proje her çizimde aynı repliği göstersin diye proje kimliğine göre seçilir.
-        private static string PickLine(List<string> lines, string projectId)
-        {
-            if (lines == null || lines.Count == 0) return null;
-            int hash = 0;
-            foreach (char c in projectId) hash = hash * 31 + c;
-            return lines[Mathf.Abs(hash) % lines.Count];
         }
 
         private void SetDecisionButtonsVisible(bool visible)

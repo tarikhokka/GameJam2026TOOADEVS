@@ -7,11 +7,12 @@ using UnityEngine.UI;
 
 namespace CivilJam.Desk
 {
-    // Denetçi el kitabı: üst bardaki butonla açılan pencere. Kontrol listesi, yönetmelikteki alt sınırlar (ctx.Rules)
+    // Denetçi el kitabı: masadaki EL KİTABI kitabıyla (ya da açık dosyadaki butonla) açılan pencere. Kontrol listesi, yönetmelikteki alt sınırlar (ctx.Rules)
     // ve akredite laboratuvarlar (ctx.Names.LabNames). Sadece mevcut kuralları gösterir; hiçbir şeyi değiştirmez.
     public class RulebookView : MonoBehaviour
     {
-        [SerializeField] private Button openButton;
+        [SerializeField] private Button openButton;        // masadaki EL KİTABI kitabı
+        [SerializeField] private Button dossierOpenButton; // açık dosyanın içindeki "El Kitabı" (belgeyle karşılaştırmak için)
         [SerializeField] private GameObject panelRoot;
         [SerializeField] private TMP_Text bodyText;
         [SerializeField] private Button closeButton;
@@ -24,6 +25,7 @@ namespace CivilJam.Desk
         private void Awake()
         {
             openButton.onClick.AddListener(() => SetOpen(!panelRoot.activeSelf));
+            if (dossierOpenButton != null) dossierOpenButton.onClick.AddListener(() => SetOpen(true));
             closeButton.onClick.AddListener(() => SetOpen(false));
             backdropButton.onClick.AddListener(() => SetOpen(false));
         }

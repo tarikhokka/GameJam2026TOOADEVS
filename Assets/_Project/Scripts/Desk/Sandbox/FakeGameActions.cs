@@ -59,6 +59,9 @@ namespace CivilJam.Desk
                 state.TotalBribesTaken++;
             }
 
+            // Gerçekte Core müteahhidin repliklerinden seçer (ClientReactions); sandbox'ta sabit cümle.
+            project.ReactionText = project.BribeAccepted ? "Anlaşırız demiştim hocam." : "Sağ olun hocam, hayırlı işler!";
+
             Debug.Log($"[FakeActions] Onay: {project.Name}{(project.BribeAccepted ? " +zarf" : "")}");
             context.NotifyStateChanged();
         }
@@ -73,6 +76,7 @@ namespace CivilJam.Desk
 
             var client = context.GetClient(project.ClientId);
             if (client != null && client.IsThug) context.State.WindowRepairsToday++;
+            project.ReactionText = client != null && client.IsThug ? "Bunu unutmam hocam..." : "Peki hocam, eksikleri tamamlayıp gelirim.";
 
             Debug.Log($"[FakeActions] Red: {project.Name}");
             context.NotifyStateChanged();

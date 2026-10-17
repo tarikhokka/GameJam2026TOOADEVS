@@ -8,6 +8,7 @@ namespace CivilJam.Desk
     public class DeskSandboxBootstrap : MonoBehaviour
     {
         [SerializeField] private DeskScreen screen;
+        [SerializeField] private Sprite[] portraits; // sahte müşterilere verilir (EEE'nin portrait_*.png'leri)
 
         private GameContext context;
         private int day;
@@ -21,7 +22,7 @@ namespace CivilJam.Desk
         // Aynı sahte gün tekrar açılır ama gün sayısı artar (öğretici sadece 1. gün çıkar).
         private void StartDay()
         {
-            context = SandboxDeskContext.Create();
+            context = SandboxDeskContext.Create(portraits);
             context.State.Day = ++day;
             screen.Show(context);
         }

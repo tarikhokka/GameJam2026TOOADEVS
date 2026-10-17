@@ -12,7 +12,8 @@ namespace CivilJam.Desk
         private const string MunicipalityStamp = "BELEDİYE · İMAR MÜDÜRLÜĞÜ";
         private const string GoodLab = "Betonya Yapı Lab.";
 
-        public static GameContext Create()
+        // portraits: sahte müşterilere sırayla verilen portreler (Sandbox_Desk kurulurken Art'tan bağlanır); boş olabilir.
+        public static GameContext Create(IReadOnlyList<Sprite> portraits = null)
         {
             var balance = ScriptableObject.CreateInstance<BalanceSO>();
 
@@ -38,6 +39,10 @@ namespace CivilJam.Desk
                 },
                 TodayProjects = new List<ProjectData> { HonestProject(), BribeProject(), FakeDocProject(), ThugProject() },
             };
+
+            if (portraits != null && portraits.Count > 0)
+                for (int i = 0; i < context.Clients.Count; i++)
+                    context.Clients[i].Portrait = portraits[i % portraits.Count];
 
             context.Actions = new FakeGameActions(context);
             return context;

@@ -10,6 +10,22 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 ## Benim alanım
 - `Scripts/Core/`, `Data/` (SO asset'leri; içerik Tarık'la ortak), `Scenes/Game.unity` (sadece ben; CoreSetupBuilder ile), build ve teslim.
 
+## Onur'dan teslim notu — 18 Ekim: yeni müşteriler ve kalan A işleri
+
+**Teslim edildi (`b1a40e8`):** Onur bu pakette Tarık'ın işlerini de üstlendi; 10 şeffaf 1000×1000 portre, `Generic01`–`Generic10` ClientSO, yedi havuzda 42 ortak replik, README'nin 7 güne uyarlanması ve AI kayıtları hazır. **g01 (Mahir ve Orhan) ve g04 (Vedat ve İdil), Onur'un açık tercihiyle birlikte gelen tek müşteridir:** tek ClientSO, tek ziyaret, tek proje; kişileri ayırma. Eşleme/önizleme: `Docs/Onur/YediGun_icerik_yol_haritasi.md`.
+
+**Tamamlananlar:**
+- [x] A, `17179b4` ile yeni müşterileri Game.unity'ye bağladı: 6 ana + 10 yeni = 16 müşteri. Link Data adımı tekrar yapılacak bir açık iş değil.
+- [x] A, gerçek kadroyla denge raporunu aldı: dikkatli %82 İyi / %18 ofis kapanır; tek zarf %44 İyi / %45 Enkazın Gölgesi / %11 hapis; her zarfı alan %76 hapis; reddeci 3. gün kapanır (`memory.md`). Ekonomi değişikliği kararı A'da.
+- [x] Onur'un teslim tabanı `8981203` üzerinde izole doğrulaması: 54/54 EditMode (52 mevcut + yalnızca geçici kopyada iki içerik kontrolü), 4/4 Flow PlayMode; gerçek kadroyla 300 program ve JSON kayıt roundtrip'i. Bunlar son zarf değişikliği sonrası Game.unity'de elle kabul testi yerine geçmez.
+
+**A'da kalanlar:**
+- [ ] Güncel `main` ile **yeni oyun** üzerinden uçtan uca 7 günlük akışı kontrol et. Eski kayıt, yeni kadronun kabul testi sayılmasın: program oyun başında üretilip kayıtla saklanıyor. 28 proje (3/3/4/4/4/5/5), ana müşteriler üçer, yeni müşteriler birer, toplam 14 uygun / 14 uygunsuz; zarf 2., sahte belge 3., kabadayı 4. günden.
+- [ ] Oğuzhan'ın yeni portrelerin masa kadrajı (özellikle iki ikili), isim/balon okunurluğu ve masadaki 10 → 7 metin kontrolü tamamlandığında final oyunda doğrula. README zaten Onur tarafından 7 güne çevrildi; Tarık'tan ayrıca içerik beklenmiyor.
+- [ ] Yeni müşterilerle selamlama → uyuşmazlık → teklif → tepki/kapanış akışını ve `4ff9139` zarf ekranını birlikte kontrol et: tutar açılmadan görünmesin; zarfı reddetmek projeyi sonuçlandırmasın; kabul etmek zarfla onaylasın; sonraki müşteride eski balon/zarf kalmasın.
+- [ ] Gün sonu kayıt → Devam Et akışında aynı ziyaret programının korunduğunu, yedi günlük yapıda dört sonu (F9/F10 dahil), sahte belge/ek test, kabadayı ve hediyeyi son entegrasyon üzerinde kontrol et.
+- [ ] Güncel main'de EditMode/PlayMode kontrollerini çalıştır; ardından `CivilJam > Core > Build Windows (Release)` ile final build/ZIP üret. Build ve repo aynı sürümde olsun; teslim belgeleri ve video bağlantıları son build'e göre kontrol edilsin.
+
 ## Yol haritası
 - [x] Faz 0 veri sözleşmesi, Faz 1 dikey dilim (16 Ekim gece).
 - [x] Analiz sonrası düzeltmeler (borç, 4 son, 10 gün, kayıt silme, F9/F10, build'de yedek arayüz kapalı), denge senaryosu E.
@@ -19,7 +35,7 @@ Ahmet'in görev takibi. Ortak kararlar `memory.md`'dedir; bu dosya onları deği
 - [x] Parametre sırası = El Kitabı sekme sırası (ProjectGenerator, test `GeneratedParams_FollowHandbookTabOrder`). Testler 31/31.
 - [x] Build aracı `ReleaseBuilder` (`CivilJam > Core > Build Windows (Release)`); 17 Ekim akşam build'i temiz. Otomatik uçtan uca oynanış temiz; görsel eksikler memory.md §7'de.
 - [ ] Elle oynanış: 4 son (F9/F10), sahte belge, ek test, kabadayı, hediye.
-- [x] **7 günlük yapı — Core** (52/52; kişiliksiz asset'ler gelince Link Data) (memory.md "📅"): 1. adım `ClientSO.IsGeneric` + ortak havuz + `GenericBribeRange`; 2. adım program kurucu, 14 / 14, gün kuralları, 7 gün verisi, testler, denge raporu.
+- [x] **7 günlük yapı — Core** (52/52; Onur'un içerik paketi `b1a40e8`, Game.unity'ye bağlantı + gerçek kadro denge raporu `17179b4`) (memory.md "📅"): `IsGeneric`, ortak havuz, `GenericBribeRange`, program kurucu, 14 / 14, gün kuralları, 7 gün verisi ve testler. Son kabul/build işleri yukarıdaki teslim notunda.
 - [x] İnceleme modu Core'u (`78a847c`) + Game.unity'de doğrulama + build.
 - [x] **Uyuşmazlık diyaloğu + rüşvet uyuşmazlıktan sonra — Core** (46/46, denge raporu) (memory.md "💬"): `IGameActions.Inspect` → `InspectOutcome` (`Result`, `Lines`, `BribeOffered`), `DialogueLine` / `DialogueSpeaker`, `ProjectData.BribeRevealed`, Approve/ret kuralları, `DialogueSO` + `Data/Dialogue.asset` + `GameContext.Dialogue`, `ClientSO.MismatchLines` / `BribeCloseLines`, LinkData, sandbox `Inspect` stub'ları, testler, denge simülasyonu.
 - [ ] Paz 12:00 freeze → final build, ZIP, README kontrolü, video (Tarık ile), yükleme 15:00-16:30.

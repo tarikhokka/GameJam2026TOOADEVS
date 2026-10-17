@@ -198,9 +198,9 @@ Ahmet oyunu baştan sona oynadı; 6 şikayet ve kararlaştırılan çözümler a
 - **Hediye (Ahmet kararı, güncel):** belirli bir karakter, projesi onaylanınca **bazen** ofis için bir eşya hediye eder (saat, tablo, masa isimliği...). **Para ya da risk etkisi yok**; kabul edilince ofiste (masa ekranında) kalıcı görünür. **Geri çevrilemez, sadece kabul edilir.**
 - A: müteahhit geçmişi (`GameState`), tepki seçimi, hediye kuralı. **EEE:** her müteahhide yeni replik grupları + hediye asset'leri. **B:** karar sonrası konuşma balonu + hediye kartı (sadece "Kabul et") + ofiste hediyelerin görünmesi.
 
-**Ç5 — İsim çeşitliliği (şikayet 5). A ✅ yapıldı (oyun başına tekrar 0); EEE'nin ad listesi bekleniyor.**
+**Ç5 — İsim çeşitliliği (şikayet 5). A ✅ yapıldı (oyun başına tekrar 0); EEE ✅ ad listesi 36.**
 - A: bir oyunda aynı bina adı iki kez çıkmaz; ad kalıpları: "… Apartmanı", "… Sitesi B Blok", "… Konutları", "… Evleri".
-- EEE: `NamePool.BuildingNames` ~30 ada çıksın (12 var).
+- [x] EEE: `NamePool.BuildingNames` ~30 ada çıksın (12 var). — (EEE, 17 Ekim) 36 ad: 24 yeni (çiçek, ağaç, kuş, hava; gerçek depremlerde gündeme gelmiş bina/site adları, ilçe/semt adları ve sokak adlarıyla çakışanlar bilerek kullanılmadı).
 
 **Ölçüm (A, `CivilJam > Core > Content Stats`, 300 oyun):** sahte belge 3. günden itibaren günde ~0,7-1; dikkatsiz (rüşvetsiz kötü) proje her gün ~0,7-1; tekrar eden bina adı 0; müteahhit adı türü ele vermiyor (testli). Denge korunuyor: dikkatli oyuncu %100 İyi son, kasa en fazla 1.562 TL'ye iner; tek zarf ~%49 İyi / %39 Enkazın Gölgesi / %12 hapis.
 - Gizli `ProjectData.Kind` (Compliant / Sloppy / Bribe / Fake / BribeFake) eklendi; **masada gösterilmez.**

@@ -20,6 +20,14 @@ namespace CivilJam.Desk.Editor
             catcherImage.raycastTarget = false;
             var catcher = catcherRect.gameObject.AddComponent<InspectCatcher>();
 
+            // Karartma (poliş B1, Ahmet K2): belgelerin hemen üstünde, İNCELE katmanının altında; tıklama almaz. Mod açıkken
+            // ofis, portre, üst bar ve belgeler hafifçe kararır; İNCELE katmanı (düğme, çizgi, kaşe) ve diyalog katmanı bunun
+            // üstünde olduğu için aydınlık kalır. Alfayı ve geçişi InspectController yönetir (kapalıyken pasif).
+            var dimRect = Stretch(NewRect("InspectDim", root));
+            var dim = AddImage(dimRect, new Color(0f, 0f, 0f, 0f));
+            dim.raycastTarget = false;
+            dimRect.gameObject.SetActive(false);
+
             // Belgelerin üstünde: çizgi, sonuç kartı ve İNCELE düğmesi. Katman tıklama almaz (düğme hariç).
             var overlay = Stretch(NewRect("Inspect", root));
 
@@ -61,10 +69,37 @@ namespace CivilJam.Desk.Editor
             Wire(controller, "toggleImage", buttonImage);
             Wire(controller, "catcher", catcher);
             Wire(controller, "catcherGraphic", catcherImage);
+            Wire(controller, "dim", dim);
             Wire(controller, "overlay", overlay);
             Wire(controller, "line", line);
             Wire(controller, "resultView", resultView);
+            SetObjects(controller, "topLayers", overlay.gameObject);
             return controller;
+        }
+
+        // Diyalog ve form kurulduktan sonra (BuildPrefab): karartmanın üstüne alınacaklar. ONAY / RED / müteahhit balonu bir kat,
+        // İNCELE katmanı ve diyalog katmanı (kilit + denetçi balonu) iki kat yukarı (InspectController.SetMode).
+        private static void WireInspectLift(InspectController controller, FormView form, ClientSceneView scene, DeskDialogue dialogue)
+        {
+            var formSo = new UnityEditor.SerializedObject(form);
+            var approve = formSo.FindProperty("approveButton").objectReferenceValue as Component;
+            var reject = formSo.FindProperty("rejectButton").objectReferenceValue as Component;
+            var balloon = new UnityEditor.SerializedObject(scene).FindProperty("balloonRoot").objectReferenceValue as GameObject;
+            SetObjects(controller, "keepLit", approve != null ? approve.gameObject : null,
+                reject != null ? reject.gameObject : null, balloon);
+
+            var overlay = new UnityEditor.SerializedObject(controller).FindProperty("overlay").objectReferenceValue as Component;
+            SetObjects(controller, "topLayers", overlay != null ? overlay.gameObject : null, dialogue.gameObject);
+        }
+
+        // GameObject dizisi alanı (Wire tek nesne bağlar).
+        private static void SetObjects(Object target, string field, params GameObject[] values)
+        {
+            var so = new UnityEditor.SerializedObject(target);
+            var list = so.FindProperty(field);
+            list.arraySize = values.Length;
+            for (int i = 0; i < values.Length; i++) list.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

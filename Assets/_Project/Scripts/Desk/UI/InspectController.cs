@@ -21,6 +21,16 @@ namespace CivilJam.Desk
         [SerializeField] private Image toggleImage;
         [SerializeField] private InspectCatcher catcher;
         [SerializeField] private Graphic catcherGraphic;
+        [Header("Karartma (mod açıkken; aydınlık kalanlar öne alınır)")]
+        [SerializeField] private Image dim;
+        [Tooltip("Mod açıkken karartmanın koyuluğu (0 = yok, 1 = simsiyah); Ahmet: \"çok azıcık\"")]
+        [SerializeField, Range(0f, 1f)] private float dimAlpha = 0.2f;
+        [Tooltip("Kararma / açılma süresi (sn)")]
+        [SerializeField] private float dimFade = 0.15f;
+        [Tooltip("Mod açıkken karartmanın üstüne alınanlar: ONAY, RED, müteahhit balonu (alanlar kendini öne alır)")]
+        [SerializeField] private GameObject[] keepLit;
+        [Tooltip("Öne alınanların da üstünde kalması gereken katmanlar: İNCELE katmanı (düğme, çizgi, kaşe), diyalog katmanı")]
+        [SerializeField] private GameObject[] topLayers;
         [SerializeField] private RectTransform overlay;   // belgelerin üstünde, tıklama almayan katman (çizgi + sonuç)
         [SerializeField] private RectTransform line;
         [SerializeField] private InspectResultView resultView; // Onur: sonuç kaşesi (renk, açıklama, giriş/çıkış hareketi ve ses kendisinde)
@@ -40,6 +50,18 @@ namespace CivilJam.Desk
         private InspectSpot first, second;
         private bool showing;
         private float shownAt;
+        private float dimLevel; // karartma geçişi: 0 = yok, 1 = tam (dimAlpha)
+
+        // Karartmanın üstü: masanın kök Canvas'ından iki fazla; alanların kağıt zemini bir fazla (her zaman alanın arkasında),
+        // İNCELE ve diyalog katmanları üç fazla. Onur'un Esc menüsü 32760, hep en üstte kalır.
+        internal int LiftOrder
+        {
+            get
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                return (canvas != null ? canvas.rootCanvas.sortingOrder : 0) + 2;
+            }
+        }
 
         private void Awake()
         {
@@ -62,6 +84,10 @@ namespace CivilJam.Desk
             if (IsOn == on) return;
             IsOn = on;
             foreach (var spot in spots) spot.SetMode(on);
+            // Karartmanın üstüne: ONAY / RED / müteahhit balonu (LiftOrder); İNCELE ve diyalog katmanları bunların da üstünde:
+            // kaşe öne alınmış satırın arkasında kalmaz, diyalog sürerken kilit katmanı öne alınmış alanları da örter.
+            if (keepLit != null) foreach (var go in keepLit) InspectLift.Set(go, on, LiftOrder);
+            if (topLayers != null) foreach (var go in topLayers) InspectLift.Set(go, on, LiftOrder + 1);
             ApplyLook();
             ModeChanged?.Invoke(on);
         }
@@ -122,10 +148,35 @@ namespace CivilJam.Desk
 
         private void Update()
         {
+            UpdateDim();
             if (!showing) return;
             float t = Time.unscaledTime - shownAt;
             DrawLine(DeskMotion.EaseOut(t / DeskMotion.Base)); // çizgi ilk alandan ikinciye doğru uzar
             if (t >= resultHold) ClearSelection();
+        }
+
+        // Karartma mod açılınca dimFade sn'de gelir, kapanınca aynı sürede gider (Esc ile zaman dursa da: unscaled).
+        private void UpdateDim()
+        {
+            if (dim == null) return;
+            float target = IsOn ? 1f : 0f;
+            if (dimLevel == target && dim.gameObject.activeSelf == IsOn) return;
+            dimLevel = Mathf.MoveTowards(dimLevel, target, Time.unscaledDeltaTime / Mathf.Max(dimFade, 0.01f));
+            ApplyDim();
+        }
+
+        private void ApplyDim()
+        {
+            if (dim == null) return;
+            dim.color = new Color(0f, 0f, 0f, dimAlpha * DeskMotion.EaseOut(dimLevel));
+            dim.gameObject.SetActive(dimLevel > 0f);
+        }
+
+        // Masa kapanırken (gün sonu) karartma beklemeden kalkar; tekrar açılınca kararmış başlamaz.
+        private void OnDisable()
+        {
+            dimLevel = 0f;
+            ApplyDim();
         }
 
         // Kağıtlar yay ile hareket ederken de uçlar alanların üstünde kalsın diye her kare yeniden çizilir.

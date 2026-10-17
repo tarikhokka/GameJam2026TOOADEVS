@@ -169,8 +169,11 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "labWindow", BuildLabWindow(papers, out var labView));
             Wire(screen, "labView", labView);
             Wire(screen, "rulebook", BuildRulebook(papers, handbookBook));
-            Wire(screen, "inspect", BuildInspect(root, papers)); // İnceleme modu: düğme, çizgi katmanı (belgelerin üstünde)
-            Wire(screen, "dialogue", BuildDialogue(root, sceneView)); // uyuşmazlık diyaloğu: tıklama katmanı + denetçi balonu
+            var inspect = BuildInspect(root, papers); // İnceleme modu: düğme, çizgi katmanı (belgelerin üstünde)
+            Wire(screen, "inspect", inspect);
+            var dialogue = BuildDialogue(root, sceneView); // uyuşmazlık diyaloğu: tıklama katmanı + denetçi balonu
+            Wire(screen, "dialogue", dialogue);
+            WireInspectLift(inspect, formView, sceneView, dialogue); // poliş B1: karartmanın üstünde kalacaklar
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "giftOffer", BuildGiftOffer(root));

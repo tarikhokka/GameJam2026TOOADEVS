@@ -58,7 +58,7 @@ namespace CivilJam.Desk
             takeBribeButton.onClick.AddListener(() => TakeBribeClicked?.Invoke());
         }
 
-        // İnceleme modu açıkken ONAY / RED / ZARF pasif.
+        // İnceleme modu açıkken ZARF pasif. ONAY / RED açık kalır (poliş K2: modda basılınca mod kapanır, karar verilir).
         public void SetLocked(bool on)
         {
             locked = on;
@@ -67,8 +67,8 @@ namespace CivilJam.Desk
 
         private void ApplyButtons()
         {
-            approveButton.interactable = pending && !locked;
-            rejectButton.interactable = pending && !locked;
+            approveButton.interactable = pending;
+            rejectButton.interactable = pending;
             takeBribeButton.interactable = pending && !locked;
         }
 

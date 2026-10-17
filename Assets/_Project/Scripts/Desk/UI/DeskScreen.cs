@@ -178,7 +178,8 @@ namespace CivilJam.Desk
         // müteahhit tepki verir, sıradaki gelir. Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı.
         private void Decide(Action decision)
         {
-            if (stamping || Inspecting) return;
+            if (stamping || (dialogue != null && dialogue.IsPlaying)) return;
+            if (Inspecting) inspect.SetMode(false); // poliş K2: inceleme modunda ONAY / RED → mod kapanır, karar bugünkü gibi
             stamping = true;
 
             int repairsBefore = context.State.WindowRepairsToday;

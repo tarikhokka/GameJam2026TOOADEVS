@@ -89,6 +89,29 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 
 ## 7. Durum ve açık işler (güncelleme: A, 17 Ekim ~17:30)
 
+### 💰 YENİ — Tıklanabilir rüşvet zarfı (Ahmet isteği, 18 Ekim ~00:30) — Oğuzhan ve Tarık OKUSUN
+> ✅ **Yapıldı ve push'landı (A).** Oyunda doğrulandı (PlayMode, ekran görüntüleriyle): masada zarf → tıkla → aç → reddet → zarf masaya döner, proje bekler → tekrar aç → kabul → zarfla onay. EditMode 52/52, PlayMode 4/4.
+
+**Nasıl çalışıyor:**
+- Zarf masaya düştüğünde (ilk uyuşmazlıktan sonra) üstünde **sadece "ZARF"** yazar. Para ve tutar görünmez.
+- Zarfa tıklanınca masadaki zarf kalkar. `BribeEnvelopeView` öne gelip büyür: karartılmış ekran, açık zarf, banknotlar ve ön banknotun ovalinde tutar (ör. "1.450 TL").
+- İki seçenek:
+  - **RÜŞVETİ KABUL ET** → zarfla onay (karar kaşesi, `Approve(id, acceptBribe: true)`).
+  - **RÜŞVETİ REDDET** → zarf masadaki yerine döner; proje **karar bekler**. Oyuncu sonra ONAY ya da RED verir ve zarfı tekrar açabilir.
+- Formdaki **"ZARFI AL VE ONAYLA" düğmesi kalktı**; zarfı almanın tek yolu zarfa tıklamak.
+- Core değişmedi.
+
+**Başkasının dosyasına dokunuldu (A, Ahmet isteğiyle):**
+- **Oğuzhan, pull et (masada çalışmadan önce):**
+  - yeni dosya `Desk/UI/BribeEnvelopeView.cs`;
+  - `DeskScreen.cs`: `bribeEnvelope` alanı, `OpenEnvelope` / `CloseEnvelope`; zarf açıkken `BribeVisible` false; yeni müteahhitte ve `Hide`'da kapanır;
+  - `DeskPropsView.cs`: zarf tıklanabilir (`EnvelopeClicked`, `EnvelopeWorld`), masada tutar yok;
+  - `FormView.cs`: `bribeRoot` hep kapalı;
+  - `Editor/DeskSandboxBuilder.cs`: `BuildBribeEnvelope` (fontlar, görsel, `sfx_paper` bağlanır).
+  - `DeskScreen.prefab` builder'la yeniden kuruldu (elle değişiklik yok).
+  - Senin de prefab değişikliğin varsa çakışmada **kendi prefab'ını al ve builder'ı bir kez çalıştır** (`CivilJam > Desk > Build Sandbox_Desk Scene`); zarf ekranı builder'da olduğu için kendiliğinden gelir.
+- **Tarık:** Gönderdiğin görsel `Art/bribe_envelope_open.png` olarak eklendi (beyaz arka plan silindi, kırpıldı, Sprite). Art klasörün olduğu için haber veriyorum. `Art/README.md` satırı ve `CREDITS_AND_AI.md` satırları A tarafından eklendi (ChatGPT: sen; arka plan silme: Claude/A). İstersen kontrol et.
+
 ### 📅 YENİ YAPI — 7 gün, 28 proje, ana müteahhitler 3'er kez + 10 kişiliksiz karakter (Ahmet kararı, 17 Ekim ~23:30) — HERKES ÖNCE BUNU OKUSUN
 > ✅ **Core 2. adım hazır (A, push'landı): 7 gün oyunda.**
 > - Oyun başında ziyaret programı kurulur (`VisitPlanner`, `GameState.Schedule`, kayıtla saklanır).
@@ -421,6 +444,7 @@ Bence en güçlüsü 1 ile 2'nin birlikte yapılması. Hiçbiri kural ya da Core
 | 17 Ekim ~19:20 | Rüşvet uyuşmazlıktan sonra: zarf başta yok; ilk UYUŞMAZLIK'tan sonra denetçi ve müteahhit birer cümle konuşur, rüşvetçi o anda teklif eder (teklif + denetçi tepkisi + kapanış); uyuşmazlık bulunmazsa zarf hiç teklif edilmez; diyalog farklı alan başına bir kez; denetçi cümlesi Core şablonundan; replikleri Tarık yazar | Ahmet kararı. Rüşvet "yakalanan müteahhidin hamlesi" olur; tema ve Papers, Please hissi |
 | 17 Ekim ~23:30 | **7 gün** (3-3-4-4-4-5-5 = 28 proje); 6 ana müteahhit 3'er kez (oyun başı sabit rastgele program, aynı gün iki kez değil, arka arkaya değil); 10 kişiliksiz karakter kalan 10 ziyaret (zarf/sahte belge getirebilir); projeler tam 14 uygun / 14 uygunsuz; gün planı: 2. gün zarf, 3. gün sahte belge, 4. gün kabadayı | Ahmet kararı: 10 gün sıkıcıydı; yüz kararı ele vermesin |
 | 17 Ekim gece | Esc menüsüne Ayarlar: ana ses (kaydedilir) + tam ekran | Ahmet isteği; müzik / efekt ayrımı şimdilik yok (ses kaynakları dağınık, ekibin dosyalarına dokunmamak için) |
+| 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 17 Ekim `1368c4f` | Aynı müteahhit arka arkaya gelmez (gün içinde ve dünün sonu → bugünün başı); yerine sadece o türe uyan biri gelir, rol kuralları ve oranlar aynı | Tarık isteği; `ProjectGenerator.PickClient(previousClientId)`, test `Clients_DoNotComeTwiceInARow` (EditMode 32/32). Core A dosyası: A inceledi, testler 32/32 |
 | 17 Ekim akşam | "Mesaiyi bitir" düğmesi kalktı: son müteahhitten sonra mesai zili (`sfx_shift_end.wav`) + "MESAİ BİTTİ" geçiş ekranı (günün özeti), ardından inşaat ekranı koyu örtüyle açılır | Tarık önerisi, A ve B onayladı. `DeskScreen.EndShift` + `ShiftEndOverlay`; süreler Inspector'da (1,2 / 0,7 / 1,8 sn) |
 | 17 Ekim gece | Yeni ekonomi: başlangıç 1.500, kira 700, kredi 350, ücret 350-550, ek test 250, borç limiti 2.500 | Tarık önerisi, Ahmet onayı. Eski değerlerde dikkatli oyuncu hiç borca girmiyordu; şimdi kıl payı kazanıyor (Balance Report §2) |

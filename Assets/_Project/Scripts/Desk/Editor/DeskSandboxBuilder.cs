@@ -174,6 +174,7 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "giftOffer", BuildGiftOffer(root));
+            Wire(screen, "bribeEnvelope", BuildBribeEnvelope(root)); // (A) zarfa tıklanınca açılan rüşvet ekranı
             Wire(screen, "deskAudio", BuildAudio(root));
             Wire(screen, "shiftTitleFont", TitleFont); // EEE: MESAİ BİTTİ geçiş ekranı
             Wire(screen, "shiftInfoFont", BoldFont);
@@ -252,6 +253,18 @@ namespace CivilJam.Desk.Editor
             Wire(view, "levelTitleText", title);
             Wire(view, "moneyText", money);
             Wire(view, "quotaText", quota);
+            return view;
+        }
+
+        // (A, Ahmet isteği) Zarf ekranı: tam ekran katman, kendini kurar (BribeEnvelopeView). Görsel Tarık'ın bribe_envelope_open.png'si.
+        private static BribeEnvelopeView BuildBribeEnvelope(Transform parent)
+        {
+            var host = Stretch(NewRect("BribeEnvelope", parent));
+            var view = host.gameObject.AddComponent<BribeEnvelopeView>();
+            Wire(view, "envelopeArt", FindSprite("bribe_envelope_open"));
+            Wire(view, "titleFont", TitleFont);
+            Wire(view, "bodyFont", BoldFont);
+            Wire(view, "openClip", FindClip("sfx_paper"));
             return view;
         }
 

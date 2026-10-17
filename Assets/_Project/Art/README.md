@@ -63,6 +63,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü boş tahta düğme (menu_bg'deki düğmeden); MainMenuScreen bağlı | C | F |
+| `bribe_envelope_open.png` | Açık rüşvet zarfı + kurgusal banknotlar (1226x1193 şeffaf; ChatGPT, Tarık; arka planı A sildi). Zarfa tıklanınca BribeEnvelopeView'da; tutar kodla ön banknotun ovaline yazılır | B | F |
 | `btn_wood.png` | Masa ahşabından (desk_surface) açık renkli düğme, 420x100; masadaki İNCELE düğmesinin ilk hali (şimdi btn_menu kullanıyor); şu an kullanılmıyor | B | F |
 | `ui_checkbox.png`, `ui_check.png` | Ödeme ekranı onay kutusu (krem kutu, koyu kontur) ve yeşil tik (işaretli = ödenecek), 96x96 | C | F |
 | `menu_lights_0..3.png` | Ana menü pencere ışıkları: menu_bg'deki sarı pencerelerden çıkarılmış 4 şeffaf katman (1920x1080; 0-1 "söner", 2-3 "parlar"). MenuAmbience yanıp söndürür | C | F |

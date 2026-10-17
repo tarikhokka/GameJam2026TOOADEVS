@@ -124,7 +124,8 @@ namespace CivilJam.Desk
 
             pending = project.Verdict == ProjectVerdict.Pending;
             ApplyButtons();
-            bribeRoot.SetActive(pending && bribeVisible);
+            // (A, Ahmet kararı) "ZARFI AL VE ONAYLA" kalktı: zarf masada tıklanarak açılır ve orada kabul / ret edilir.
+            bribeRoot.SetActive(false);
             if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict);
         }

@@ -30,6 +30,7 @@ namespace CivilJam.Desk
         [SerializeField] private OfficeGiftsView officeGifts; // kabul edilen hediyeler masada
         [SerializeField] private InspectController inspect; // İnceleme modu: İNCELE düğmesi, tıklanabilir alanlar, çizgi
         [SerializeField] private DeskDialogue dialogue;     // uyuşmazlık diyaloğu (denetçi ↔ müteahhit), sürerken masa kilitli
+        [SerializeField] private BribeEnvelopeView bribeEnvelope; // (A) zarfa tıklanınca açılan rüşvet ekranı (kabul / ret)
 
         [Tooltip("Karar kaşesi basıldıktan sonra form kapanmadan önce beklenen süre (sn)")]
         [SerializeField] private float stampDelay = 0.6f;
@@ -67,6 +68,7 @@ namespace CivilJam.Desk
 
             props.FinishClicked += Finish;
             props.EnvelopeRevealed += PlayPaper; // zarf masaya düştü
+            props.EnvelopeClicked += OpenEnvelope; // (A) zarf açılır: para + tutar, RÜŞVETİ KABUL ET / REDDET
 
             if (rulebook != null) rulebook.Toggled += PlayPaper;
             if (tutorial != null) tutorial.PageChanged += PlayPaper;
@@ -132,6 +134,7 @@ namespace CivilJam.Desk
             Unsubscribe();
             if (dialogue != null) dialogue.Stop();
             if (inspect != null) inspect.SetMode(false);
+            CloseEnvelope();
             StopAllCoroutines();
             stamping = false;
             endingShift = false;
@@ -157,6 +160,7 @@ namespace CivilJam.Desk
             selectedId = projectId;
             if (inspect != null) inspect.SetMode(false); // yeni müteahhit: inceleme modu kapanır, seçim temizlenir
             if (dialogue != null) dialogue.Stop(); // yeni müteahhit: diyalog sıfırlanır
+            CloseEnvelope();
             holdEnvelope = false;
             if (rulebook != null) rulebook.ResetFloorGroup(); // yeni müteahhit: kat grubunu oyuncu yeniden seçer (Ahmet kararı)
             Redraw();
@@ -352,7 +356,29 @@ namespace CivilJam.Desk
         // holdEnvelope: Inspect teklif edince Core ekranı hemen yeniden çizdirir; zarf diyalogdan önce düşmesin diye bekletilir.
         private bool BribeVisible(ProjectData project) =>
             project.Verdict == ProjectVerdict.Pending && project.BribeRevealed
-            && !holdEnvelope && (dialogue == null || !dialogue.IsPlaying);
+            && !holdEnvelope && !envelopeOpen && (dialogue == null || !dialogue.IsPlaying);
+
+        // (A, Ahmet isteği) Zarfa tıklanınca: masadaki zarf kalkar, zarf ekranı öne gelir. Kabul → zarfla onay (karar kaşesi);
+        // ret → zarf masadaki yerine döner, dosya karar bekler (oyuncu sonra ONAY / RED verir; zarfı tekrar açabilir).
+        private bool envelopeOpen;
+
+        private void OpenEnvelope()
+        {
+            var project = selectedId != null ? context.GetTodayProject(selectedId) : null;
+            if (bribeEnvelope == null || project == null || envelopeOpen || stamping || Inspecting || !BribeVisible(project)) return;
+            var from = props.EnvelopeWorld;
+            envelopeOpen = true;
+            Redraw(); // masadaki zarf kalkar
+            bribeEnvelope.Open(project.BribeAmount, from,
+                accept: () => { envelopeOpen = false; Decide(() => context.Actions.Approve(project.Id, acceptBribe: true)); },
+                decline: () => { envelopeOpen = false; Redraw(); });
+        }
+
+        private void CloseEnvelope()
+        {
+            envelopeOpen = false;
+            if (bribeEnvelope != null) bribeEnvelope.Close(instant: true);
+        }
 
         // İncelemenin kararı ve diyaloğu Core'da (memory.md "💬"): kaşe + sırayla satırlar + bu çağrıda teklif edildi mi.
         private InspectOutcome Inspect(InspectTarget a, InspectTarget b)

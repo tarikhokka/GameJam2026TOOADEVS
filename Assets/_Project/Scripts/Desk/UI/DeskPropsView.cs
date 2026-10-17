@@ -26,6 +26,9 @@ namespace CivilJam.Desk
         public event Action LabBookClicked;
         public event Action FinishClicked;
         public event Action EnvelopeRevealed; // zarf masaya geldi (kağıt sesi)
+        public event Action EnvelopeClicked;  // (A, Ahmet isteği) zarfa tıklandı → BribeEnvelopeView açılır
+
+        public Vector3 EnvelopeWorld => envelopeRoot.transform.position;
 
         private Vector2 envelopeRest;
         private Quaternion envelopeRestRotation;
@@ -37,6 +40,14 @@ namespace CivilJam.Desk
             if (formFolder != null) formFolder.onClick.AddListener(() => FormClicked?.Invoke());
             if (labBook != null) labBook.onClick.AddListener(() => LabBookClicked?.Invoke());
             finishButton.onClick.AddListener(() => FinishClicked?.Invoke());
+
+            // (A, Ahmet isteği) Masadaki zarf tıklanabilir: açılınca içindeki para ve tutar görünür (BribeEnvelopeView).
+            var envelopeImage = envelopeRoot.GetComponent<Image>();
+            if (envelopeImage != null) envelopeImage.raycastTarget = true;
+            var envelopeButton = envelopeRoot.GetComponent<Button>();
+            if (envelopeButton == null) envelopeButton = envelopeRoot.AddComponent<Button>();
+            if (envelopeImage != null) envelopeButton.targetGraphic = envelopeImage;
+            envelopeButton.onClick.AddListener(() => EnvelopeClicked?.Invoke());
         }
 
         private GameObject FormObject => formFolderRoot != null ? formFolderRoot : formFolder != null ? formFolder.gameObject : null;
@@ -49,7 +60,8 @@ namespace CivilJam.Desk
             FormObject?.SetActive(pending);
             LabBookObject?.SetActive(pending);
             SetEnvelope(bribeVisible);
-            if (project.OffersBribe) envelopeText.text = $"ZARF\n<b>{DeskFormat.Money(project.BribeAmount)}</b>";
+            // (A, Ahmet kararı) Masada tutar görünmez; zarf açılınca (BribeEnvelopeView) görünür.
+            envelopeText.text = "ZARF";
 
             string name = client != null ? client.DisplayName : "Başvuru sahibi";
             clientTagText.text = $"{name}  ·  {project.Name}";

@@ -81,16 +81,12 @@ namespace CivilJam.Desk.Editor
             return controller;
         }
 
-        // Diyalog ve form kurulduktan sonra (BuildPrefab): karartmanın üstüne alınacaklar. ONAY / RED / müteahhit balonu bir kat,
-        // İNCELE katmanı ve diyalog katmanı (kilit + denetçi balonu) iki kat yukarı (InspectController.SetMode).
-        private static void WireInspectLift(InspectController controller, FormView form, ClientSceneView scene, DeskDialogue dialogue)
+        // Diyalog kurulduktan sonra (BuildPrefab): karartmanın üstüne alınacaklar. Müteahhit balonu bir kat, İNCELE katmanı ve
+        // diyalog katmanı (kilit + denetçi balonu) iki kat yukarı (InspectController.SetMode). (belge turu B2: ONAY / RED kalktı)
+        private static void WireInspectLift(InspectController controller, ClientSceneView scene, DeskDialogue dialogue)
         {
-            var formSo = new UnityEditor.SerializedObject(form);
-            var approve = formSo.FindProperty("approveButton").objectReferenceValue as Component;
-            var reject = formSo.FindProperty("rejectButton").objectReferenceValue as Component;
             var balloon = new UnityEditor.SerializedObject(scene).FindProperty("balloonRoot").objectReferenceValue as GameObject;
-            SetObjects(controller, "keepLit", approve != null ? approve.gameObject : null,
-                reject != null ? reject.gameObject : null, balloon);
+            SetObjects(controller, "keepLit", balloon);
 
             var overlay = new UnityEditor.SerializedObject(controller).FindProperty("overlay").objectReferenceValue as Component;
             SetObjects(controller, "topLayers", overlay != null ? overlay.gameObject : null, dialogue.gameObject);

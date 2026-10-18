@@ -9,7 +9,7 @@ namespace CivilJam.Desk
 {
     // Uyuşmazlık diyaloğu (Ahmet kararı 17 Ekim ~19:20, memory.md "💬"): inceleme kaşesinden sonra satırlar sırayla oynatılır.
     // Denetçi satırı denetçi balonunda, müteahhit satırı müteahhidin balonunda (harf harf yazı + yazı sesi ClientSceneView'da).
-    // Diyalog sürerken tam ekran görünmez katman tıklamaları yakalar: masa kilitli (inceleme, ONAY / RED, sürükleme), tıklama
+    // Diyalog sürerken tam ekran görünmez katman tıklamaları yakalar: masa kilitli (inceleme, kaşe, sürükleme), tıklama
     // yazan satırı tamamlar, yazı bittiyse sıradakine geçer; tıklanmadan geçilmez (denetçi balonu "devam etmek için tıklayın" der; autoAdvance > 0 ise o kadar sn sonra kendiliğinden geçer).
     // Denetçi balonu Onur'un InspectorBubbleView'u (katmanın çocuğu): balona tıklama onda (yazıyı tamamlar / ContinueRequested),
     // başka yere tıklama bu katmanda; aynı tıklama iki kez işlenmez. Esc (timeScale 0) sürerken bekleme de durur.

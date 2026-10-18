@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using CivilJam.Core;
@@ -10,7 +9,8 @@ namespace CivilJam.Desk
 {
     // Yapı Denetim Formu (Documents[0]), yeni hedef arayüz (Onur'un referansı, EEE görselleri; içerik El Kitabı v2):
     // başlık (proje no, tarih), PROJE BİLGİLERİ ("etiket : değer" satırları + kat sayısına göre bina resmi), TEKNİK BİLGİLER
-    // tablosu (beyan edilen değerler), belediye kaşesi, ONAY / RED düğmeleri (EEE görselleri) ve varsa zarf.
+    // tablosu (beyan edilen değerler), belediye kaşesi ve altta kaşe alanı (belge turu B2: ONAY / RED düğmeleri kalktı, karar
+    // kaşe çekmecesinden kaşe buraya sürüklenerek verilir; StampTrayView → DeskScreen.StampDecision).
     // Tutarsızlıkları işaretlemez: oyuncu Lab Raporu ve El Kitabı ile karşılaştırır (parsel, tarih, mühendis imzası formda).
     public class FormView : MonoBehaviour
     {
@@ -36,55 +36,44 @@ namespace CivilJam.Desk
         [SerializeField] private TMP_Text municipalStampText;
 
         [Header("Karar")]
-        [SerializeField] private Button approveButton;
-        [SerializeField] private Button rejectButton;
-        [SerializeField] private GameObject bribeRoot;
-        [SerializeField] private Button takeBribeButton;
-        [SerializeField] private TMP_Text bribeLabel;
+        [SerializeField] private RectTransform stampArea; // kaşe alanı (eski ONAY / RED satırının yeri; boş, hafif çerçeveli)
+        [SerializeField] private Image stampGlow;         // kaşe alanının ilk çocuğu: çekmece açıkken kağıt rengi zemin, hafif parlar
         [SerializeField] private DecisionStampView decisionStamp;
-
-        public event Action ApproveClicked;
-        public event Action RejectClicked;
-        public event Action TakeBribeClicked;
 
         private readonly List<DottedRowView> infoRows = new List<DottedRowView>();
         private readonly List<DottedRowView> techRows = new List<DottedRowView>();
-        private bool pending, locked;
         private ProjectVerdict pendingStamp = ProjectVerdict.Pending; // (A, belge turu A1) basılmış ama henüz verilmemiş kaşe
 
-        // (A, belge turu A1) Kaşenin basılacağı alan: bugün ONAY / RED düğmelerinin satırı ("Decisions"). B2'de düğmeler kalkar,
-        // alan kalır; kaşe bölmesi (StampTrayView) kaşeyi buraya bırakınca basılır.
-        public RectTransform StampArea => approveButton != null ? approveButton.transform.parent as RectTransform : null;
+        // Kaşenin basılacağı alan: kaşe çekmecesi (StampTrayView) kaşeyi buraya bırakınca basılır.
+        public RectTransform StampArea => stampArea;
 
         // Kaşe basıldı ama karar henüz Core'a gitmedi (belgeler müteahhide verilince gider, memory.md "📂 BELGE TURU" D1):
         // form bu kaşeyi gösterir. Pending = kaşe yok (yeni müteahhit).
         public void SetPendingStamp(ProjectVerdict verdict) => pendingStamp = verdict;
 
-        private void Awake()
-        {
-            approveButton.onClick.AddListener(() => ApproveClicked?.Invoke());
-            rejectButton.onClick.AddListener(() => RejectClicked?.Invoke());
-            takeBribeButton.onClick.AddListener(() => TakeBribeClicked?.Invoke());
-        }
-
-        // İnceleme modu açıkken ZARF pasif. ONAY / RED açık kalır (poliş K2: modda basılınca mod kapanır, karar verilir).
-        public void SetLocked(bool on)
-        {
-            locked = on;
-            ApplyButtons();
-        }
-
-        private void ApplyButtons()
-        {
-            approveButton.interactable = pending;
-            rejectButton.interactable = pending;
-            takeBribeButton.interactable = pending && !locked;
-        }
-
         public void AnimateDecisionStamp() => decisionStamp.Animate();
 
-        // bribeVisible: "ZARFI AL VE ONAYLA" görünsün mü (DeskScreen: zarf teklif edildi ve diyalog bitti).
-        public void Show(GameContext ctx, ProjectData project, bool bribeVisible)
+        // (belge turu B2) Kaşe çekmecesi açıkken kaşe alanı karartmanın üstüne alınır (DeskScreen); altındaki kağıt kararmış
+        // kalmasın diye alan kağıt rengi bir zeminle aydınlanır ve sıcak bir tonla yavaşça nabız gibi parlar ("buraya bas").
+        private static readonly Color GlowPaper = new Color(0.97f, 0.94f, 0.86f);
+        private static readonly Color GlowWarm = new Color(1f, 0.9f, 0.62f);
+        private const float GlowPeriod = 1.1f; // sn
+
+        public void SetStampFocus(bool on)
+        {
+            if (stampGlow == null) return;
+            stampGlow.gameObject.SetActive(on);
+            if (on) stampGlow.color = GlowPaper;
+        }
+
+        private void Update()
+        {
+            if (stampGlow == null || !stampGlow.gameObject.activeSelf) return;
+            float k = 0.5f - 0.5f * Mathf.Cos(Time.unscaledTime * 2f * Mathf.PI / GlowPeriod);
+            stampGlow.color = Color.Lerp(GlowPaper, GlowWarm, 0.6f * k);
+        }
+
+        public void Show(GameContext ctx, ProjectData project)
         {
             var doc = project.Documents.Count > 0 ? project.Documents[0] : null;
             var client = ctx.GetClient(project.ClientId);
@@ -131,11 +120,6 @@ namespace CivilJam.Desk
             municipalStamp.SetActive(hasStamp);
             if (hasStamp && municipalStampText != null) municipalStampText.text = doc.StampId;
 
-            pending = project.Verdict == ProjectVerdict.Pending;
-            ApplyButtons();
-            // (A, Ahmet kararı) "ZARFI AL VE ONAYLA" kalktı: zarf masada tıklanarak açılır ve orada kabul / ret edilir.
-            bribeRoot.SetActive(false);
-            if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
             decisionStamp.Bind(project.Verdict != ProjectVerdict.Pending ? project.Verdict : pendingStamp);
             DocTextBoost.Apply(transform, 1.4f); // (EEE) yazılar sığdığı kadar %40 büyük, koyu ve kalın
         }

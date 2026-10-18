@@ -27,7 +27,7 @@ namespace CivilJam.Desk
         [SerializeField, Range(0f, 1f)] private float dimAlpha = 0.2f;
         [Tooltip("Kararma / açılma süresi (sn)")]
         [SerializeField] private float dimFade = 0.15f;
-        [Tooltip("Mod açıkken karartmanın üstüne alınanlar: ONAY, RED, müteahhit balonu (alanlar kendini öne alır)")]
+        [Tooltip("Mod açıkken karartmanın üstüne alınanlar: müteahhit balonu (alanlar kendini, kaşe çekmecesini DeskScreen öne alır)")]
         [SerializeField] private GameObject[] keepLit;
         [Tooltip("Öne alınanların da üstünde kalması gereken katmanlar: İNCELE katmanı (düğme, çizgi, kaşe), diyalog katmanı")]
         [SerializeField] private GameObject[] topLayers;
@@ -39,6 +39,8 @@ namespace CivilJam.Desk
         [SerializeField] private float resultHold = 1.6f;
 
         public bool IsOn { get; private set; }
+        // (belge turu B2) Kaşe çekmecesi açıkken de aynı karartma gelir (SetFocus); aydınlık kalanları DeskScreen öne alır.
+        public bool IsFocused { get; private set; }
         public event Action<bool> ModeChanged;
         public event Action Clicked; // alan seçildi / karşılaştırıldı (ses için)
         public event Action<InspectOutcome> Compared; // kaşe gösterildi (DeskScreen diyalog satırlarını oynatır)
@@ -84,12 +86,30 @@ namespace CivilJam.Desk
             if (IsOn == on) return;
             IsOn = on;
             foreach (var spot in spots) spot.SetMode(on);
-            // Karartmanın üstüne: ONAY / RED / müteahhit balonu (LiftOrder); İNCELE ve diyalog katmanları bunların da üstünde:
+            // Karartmanın üstüne: müteahhit balonu (LiftOrder; kaşe çekmecesini DeskScreen alır); İNCELE ve diyalog katmanları üstünde:
             // kaşe öne alınmış satırın arkasında kalmaz, diyalog sürerken kilit katmanı öne alınmış alanları da örter.
             if (keepLit != null) foreach (var go in keepLit) InspectLift.Set(go, on, LiftOrder);
             if (topLayers != null) foreach (var go in topLayers) InspectLift.Set(go, on, LiftOrder + 1);
+            if (IsFocused) LiftOverlay(); // kaşe çekmecesi açıkken İNCELE katmanı yüksekte kalır
             ApplyLook();
             ModeChanged?.Invoke(on);
+        }
+
+        // İnceleme modu dışında karartma (kaşe çekmecesi): alanlar vurgulanmaz, sadece masa hafif kararır. Çekmecenin "dışarı
+        // tıklama" katmanı da karartmanın üstünde; İNCELE katmanı onun da üstüne alınır ki düğmeye basılınca mod açılsın
+        // (mod açılınca DeskScreen çekmeceyi kapatır).
+        public void SetFocus(bool on)
+        {
+            if (IsFocused == on) return;
+            IsFocused = on;
+            LiftOverlay();
+        }
+
+        private void LiftOverlay()
+        {
+            if (overlay == null) return;
+            if (IsFocused) InspectLift.Set(overlay.gameObject, true, LiftOrder + 2);
+            else InspectLift.Set(overlay.gameObject, IsOn, LiftOrder + 1); // modda topLayers ile aynı kat; ikisi de kapalıysa iner
         }
 
         internal void Register(InspectSpot spot)
@@ -159,8 +179,9 @@ namespace CivilJam.Desk
         private void UpdateDim()
         {
             if (dim == null) return;
-            float target = IsOn ? 1f : 0f;
-            if (dimLevel == target && dim.gameObject.activeSelf == IsOn) return;
+            bool dimmed = IsOn || IsFocused;
+            float target = dimmed ? 1f : 0f;
+            if (dimLevel == target && dim.gameObject.activeSelf == dimmed) return;
             dimLevel = Mathf.MoveTowards(dimLevel, target, Time.unscaledDeltaTime / Mathf.Max(dimFade, 0.01f));
             ApplyDim();
         }
@@ -175,7 +196,7 @@ namespace CivilJam.Desk
         // Masa kapanırken (gün sonu) karartma beklemeden kalkar; tekrar açılınca kararmış başlamaz.
         private void OnDisable()
         {
-            dimLevel = 0f;
+            dimLevel = 0f; // odak (kaşe çekmecesi) DeskScreen.Hide'da çekmece kapanınca kalkar (burada DestroyImmediate yapılmaz)
             ApplyDim();
         }
 

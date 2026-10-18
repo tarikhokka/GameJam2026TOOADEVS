@@ -42,7 +42,6 @@ namespace CivilJam.Desk.Editor
         private static readonly Color LightText = new Color(0.93f, 0.9f, 0.84f);
         private static readonly Color StampRed = new Color(0.7f, 0.15f, 0.15f);
         private static readonly Color ApproveGreen = new Color(0.22f, 0.5f, 0.27f);
-        private static readonly Color RejectRed = new Color(0.66f, 0.2f, 0.18f);
         private static readonly Color NeutralButton = new Color(0.33f, 0.36f, 0.42f);
         private static readonly Color BribeButton = new Color(0.55f, 0.42f, 0.12f);
 
@@ -169,11 +168,12 @@ namespace CivilJam.Desk.Editor
             Wire(screen, "labWindow", BuildLabWindow(papers, out var labView));
             Wire(screen, "labView", labView);
             Wire(screen, "rulebook", BuildRulebook(papers, handbookBook));
+            Wire(screen, "stampTray", BuildStampTray(root)); // belge turu B2: kaşe çekmecesi (belgelerin üstünde, karartmanın altında)
             var inspect = BuildInspect(root, papers); // İnceleme modu: düğme, çizgi katmanı (belgelerin üstünde)
             Wire(screen, "inspect", inspect);
             var dialogue = BuildDialogue(root, sceneView); // uyuşmazlık diyaloğu: tıklama katmanı + denetçi balonu
             Wire(screen, "dialogue", dialogue);
-            WireInspectLift(inspect, formView, sceneView, dialogue); // poliş B1: karartmanın üstünde kalacaklar
+            WireInspectLift(inspect, sceneView, dialogue); // poliş B1: karartmanın üstünde kalacaklar
             Wire(screen, "tutorial", BuildTutorial(root));
             Wire(screen, "eventCard", BuildEventCard(root));
             Wire(screen, "giftOffer", BuildGiftOffer(root));

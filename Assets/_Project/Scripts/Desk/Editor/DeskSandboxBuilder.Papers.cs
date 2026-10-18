@@ -36,8 +36,8 @@ namespace CivilJam.Desk.Editor
 
         // ---------- Pencereler ----------
 
-        // Yapı Denetim Formu (yeni hedef arayüz): başlık, PROJE BİLGİLERİ (+ bina resmi), TEKNİK BİLGİLER tablosu, belediye kaşesi,
-        // zarf ve EEE'nin ONAY / RED düğmeleri. Tasarım boyutu 576x820, doc_form'un yazı alanına ölçeklenir.
+        // Yapı Denetim Formu (yeni hedef arayüz): başlık, PROJE BİLGİLERİ (+ bina resmi), TEKNİK BİLGİLER tablosu, belediye kaşesi
+        // ve altta kaşe alanı (belge turu B2). Tasarım boyutu 576x820, doc_form'un yazı alanına ölçeklenir.
         private static PaperWindow BuildFormWindow(Transform papers, out FormView formView)
         {
             var window = BuildPaperWindow(papers, "FormWindow", "doc_form", DocHomes().form, new Vector2(0.11f, 0.06f),
@@ -69,17 +69,9 @@ namespace CivilJam.Desk.Editor
 
             Layout(NewRect("Spacer", content), flexH: 1);
 
-            var bribe = BorderedButton("TakeBribeButton", content, EnvelopeColor, "ZARFI AL VE ONAYLA", 20, out var bribeLabel);
-            bribeLabel.font = BoldFont;
-            Layout(bribe, prefH: 44);
-
-            var decisions = NewRect("Decisions", content);
-            var decisionsLayout = HLayout(decisions, 18, new RectOffset(0, 0, 0, 0));
-            decisionsLayout.childForceExpandWidth = true;
-            decisionsLayout.childAlignment = TextAnchor.MiddleCenter;
-            Layout(decisions, prefH: 92);
-            var approve = SpriteButton("ApproveButton", decisions, "btn_approve", "ONAY", ApproveGreen);
-            var reject = SpriteButton("RejectButton", decisions, "btn_reject", "RED", RejectRed);
+            // Kaşe alanı (belge turu B2): eski ONAY / RED satırının yeri; boş, hafif çerçeveli, ortada soluk "KAŞE". Kaşe çekmecesinden
+            // (StampTrayView) kaşe buraya bırakılınca basılır.
+            var stampArea = BuildStampArea(content, out var stampGlow);
 
             // Belediye kaşesi: sağ üstte, bina resminin üstüne hafif yamuk basılmış (yerleşim dışı).
             var stamp = ArtStamp("MunicipalStamp", content, "stamp_municipal", new Vector2(120, 120), new Vector2(-6, -86), -10f,
@@ -97,11 +89,8 @@ namespace CivilJam.Desk.Editor
             Wire(formView, "techTemplate", techTemplate);
             Wire(formView, "municipalStamp", stamp.gameObject);
             Wire(formView, "municipalStampText", stampText);
-            Wire(formView, "approveButton", approve);
-            Wire(formView, "rejectButton", reject);
-            Wire(formView, "bribeRoot", bribe.gameObject);
-            Wire(formView, "takeBribeButton", bribe);
-            Wire(formView, "bribeLabel", bribeLabel);
+            Wire(formView, "stampArea", stampArea);
+            Wire(formView, "stampGlow", stampGlow);
             Wire(formView, "decisionStamp", decisionStamp);
 
             var so = new SerializedObject(formView);
@@ -630,20 +619,6 @@ namespace CivilJam.Desk.Editor
             return row.gameObject;
         }
 
-        // ONAY / RED: çerçeveli büyük kutu; üzerine gelince hafif yeşil/kırmızı.
-        private static Button DecisionBox(string name, Transform parent, string label, Color highlight)
-        {
-            var button = BorderedButton(name, parent, PaperCream, label, 28, out var text);
-            text.characterSpacing = 10;
-            var colors = button.colors;
-            colors.highlightedColor = highlight;
-            colors.pressedColor = highlight * 0.9f;
-            colors.selectedColor = Color.white;
-            colors.disabledColor = new Color(0.85f, 0.85f, 0.85f, 0.6f);
-            button.colors = colors;
-            return button;
-        }
-
         // Çerçeveli düğme: dış koyu çizgi, iç dolgu (hedef grafik), ortada başlık fontuyla yazı.
         private static Button BorderedButton(string name, Transform parent, Color fill, string label, float size, out TMP_Text text)
         {
@@ -683,15 +658,52 @@ namespace CivilJam.Desk.Editor
         }
 
         // ONAYLANDI / REDDEDİLDİ: kağıdın ortasında, en üstte, karar verilince görünür (DecisionStampView).
+        // Formun altındaki kaşe alanı (belge turu B2): çok hafif mürekkep zemin, ince çerçeve, ortada soluk "KAŞE". Tıklama almaz.
+        private static RectTransform BuildStampArea(RectTransform content, out Image glow)
+        {
+            var area = NewRect("StampArea", content);
+            Layout(area, prefH: 92);
+            AddImage(area, new Color(Ink.r, Ink.g, Ink.b, 0.04f)).raycastTarget = false;
+
+            // Çekmece açıkken (FormView.SetStampFocus): kağıt rengi zemin, sıcak tonla parlar; çerçeve ve yazı üstünde kalır.
+            glow = AddImage(Stretch(NewRect("Glow", area)), PaperColor);
+            glow.raycastTarget = false;
+            glow.gameObject.SetActive(false);
+
+            const float t = 2f;
+            var line = new Color(Ink.r, Ink.g, Ink.b, 0.35f);
+            FrameEdge(area, "Top", new Vector2(0, 1), Vector2.one, new Vector2(0, -t), Vector2.zero, line);
+            FrameEdge(area, "Bottom", Vector2.zero, new Vector2(1, 0), Vector2.zero, new Vector2(0, t), line);
+            FrameEdge(area, "Left", Vector2.zero, new Vector2(0, 1), Vector2.zero, new Vector2(t, 0), line);
+            FrameEdge(area, "Right", new Vector2(1, 0), Vector2.one, new Vector2(-t, 0), Vector2.zero, line);
+
+            var hint = NewText("Hint", area, "KAŞE", 30, new Color(Ink.r, Ink.g, Ink.b, 0.22f), TextAlignmentOptions.Center, FontStyles.Normal);
+            hint.font = TitleFont;
+            hint.characterSpacing = 12;
+            hint.raycastTarget = false;
+            Stretch(hint.rectTransform);
+            hint.gameObject.AddComponent<DocTextBoost>(); // DocTextBoost koyulaştırmasın: işaretli yazıya dokunmaz, soluk kalır
+            return area;
+        }
+
+        private static void FrameEdge(RectTransform parent, string name, Vector2 min, Vector2 max, Vector2 offsetMin, Vector2 offsetMax,
+            Color color)
+        {
+            var edge = Anchor(NewRect(name, parent), min, max, offsetMin, offsetMax);
+            AddImage(edge, color).raycastTarget = false;
+        }
+
         private static DecisionStampView BuildDecisionStamp(RectTransform paper)
         {
             var holder = Stretch(NewRect("DecisionStampLayer", paper));
             holder.gameObject.AddComponent<LayoutElement>().ignoreLayout = true; // içerik VLayout'unda yer kaplamaz
+            // (belge turu B2) İz, kaşenin basıldığı yerde: formun altındaki kaşe alanının (yükseklik 92, iç boşluk 0) ortası.
             var stamp = NewRect("DecisionStamp", holder);
-            stamp.anchorMin = stamp.anchorMax = stamp.pivot = new Vector2(0.5f, 0.5f);
-            stamp.sizeDelta = new Vector2(520, 140);
-            stamp.anchoredPosition = new Vector2(0, -40);
-            stamp.localRotation = Quaternion.Euler(0, 0, -8);
+            stamp.anchorMin = stamp.anchorMax = new Vector2(0.5f, 0f);
+            stamp.pivot = new Vector2(0.5f, 0.5f);
+            stamp.sizeDelta = new Vector2(460, 112);
+            stamp.anchoredPosition = new Vector2(0, 46);
+            stamp.localRotation = Quaternion.Euler(0, 0, -6);
             var image = AddImage(stamp, new Color(StampRed.r, StampRed.g, StampRed.b, 0.12f));
             image.raycastTarget = false;
             var label = NewText("Label", stamp, "ONAYLANDI", 80, StampRed, TextAlignmentOptions.Center, FontStyles.Bold);

@@ -38,7 +38,11 @@ namespace CivilJam.Desk
 
         public void PlayClick() => Play(click);
         public void PlayPaper() => Play(paper);
-        public void PlayStamp() => Play(stamp);
+        // (Tarık, 18 Ekim) Kaşe kararın ağırlığını taşısın: diğer efektlerden yüksek, tam ses.
+        public void PlayStamp()
+        {
+            if (stamp != null && sfxSource != null) sfxSource.PlayOneShot(stamp, 1f);
+        }
         public void PlayGlassBreak() => Play(glassBreak);
         public void PlayShiftEnd() => Play(shiftEnd != null ? shiftEnd : paper);
 

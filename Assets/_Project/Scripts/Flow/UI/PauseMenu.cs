@@ -99,9 +99,61 @@ namespace CivilJam.Flow
                 new Vector2(0.36f, 0.205f), new Vector2(0.64f, 0.275f), 34f, true).transform;
             _mainItems.Add(_quit.gameObject);
             BuildSettings(root);
+            ApplyTheme(root);
             ApplySavedVolume();
             FixFullscreenResolution();
             _panel.SetActive(false);
+        }
+
+        // ---------- Görünüm (Tarık, 18 Ekim): diğer akış ekranlarıyla aynı dil ----------
+        // Kağıt kart (paper, 9-slice), Paytone başlık, Fira yazı, tahta düğmeler (btn_menu). Yapı ve adlar değişmez (testler).
+        // Bu nesne kendi kendine kurulduğu için alan bağlanamaz: yüklü asset'ler adıyla bulunur; yoksa eski düz görünüm kalır.
+        static void ApplyTheme(RectTransform root)
+        {
+            TMP_FontAsset title = null, bold = null, body = null;
+            foreach (var f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
+            {
+                if (f.name.StartsWith("PaytoneOne")) title = f;
+                else if (f.name.StartsWith("FiraSans-Bold")) bold = f;
+                else if (f.name.StartsWith("FiraSans-Regular")) body = f;
+            }
+            Sprite button = null, paper = null;
+            foreach (var s in Resources.FindObjectsOfTypeAll<Sprite>())
+            {
+                if (s.name == "btn_menu") button = s;
+                else if (s.name == "paper") paper = s;
+            }
+
+            var card = root.Find("Paper")?.GetComponent<Image>();
+            if (card != null && paper != null)
+            {
+                card.sprite = paper;
+                card.type = Image.Type.Sliced;
+                card.color = Color.white;
+            }
+
+            foreach (var text in root.GetComponentsInChildren<TMP_Text>(true))
+            {
+                bool inButton = text.GetComponentInParent<Button>(true) != null;
+                if (inButton) continue;
+                if (text.name == "Title") { if (title != null) text.font = title; text.fontStyle = FontStyles.Normal; }
+                else if (body != null) text.font = body;
+            }
+
+            foreach (var btn in root.GetComponentsInChildren<Button>(true))
+            {
+                if (button != null && btn.targetGraphic is Image img)
+                {
+                    img.sprite = button;
+                    img.type = Image.Type.Simple;
+                    img.color = Color.white;
+                }
+                foreach (var label in btn.GetComponentsInChildren<TMP_Text>(true))
+                {
+                    if (bold != null) label.font = bold;
+                    label.color = UiKit.Paper;
+                }
+            }
         }
 
         // ---------- Ayarlar (A, Ahmet isteği) ----------
@@ -324,6 +376,7 @@ namespace CivilJam.Flow
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Resume();
+            if (_panel != null) ApplyTheme((RectTransform)_panel.transform); // ilk sahnede yüklü olmayan görsel sonra gelebilir
             _supportedScene = scene.name == "MainMenu" || scene.name == "Game"
                 || scene.name == "Sandbox_Flow" || scene.name == "Sandbox_Desk";
         }

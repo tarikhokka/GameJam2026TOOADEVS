@@ -225,7 +225,7 @@ namespace CivilJam.Desk
             acceptButton.onClick.AddListener(() => Choose(true));
             declineButton.onClick.AddListener(() => Choose(false));
 
-            var hint = NewText("Hint", card, "Reddedersen dosya masada kalır; kararı yine ONAY / RED ile verirsin.", 20f, bodyFont,
+            var hint = NewText("Hint", card, "Reddedersen dosya masada kalır; kararı yine kaşe çekmecesinden verirsin.", 20f, bodyFont,
                 new Color(Paper.r, Paper.g, Paper.b, 0.8f));
             Place(hint.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 14f), new Vector2(720f, 30f));
         }

@@ -12,6 +12,9 @@ namespace CivilJam.Core
     ///    ağırlıklı ama kesin değil: yüz kararı ele vermez.
     ///  - Uygunsuz türü gün kurallarına uyar: zarf AllowBribes, sahte belge AllowFakeDocuments günlerinde.
     ///  - Aynı müteahhit aynı gün iki kez gelmez; dünün sonuncusu bugünün ilki olmaz.
+    ///  - Jüri vitrini (BalanceSO.ShowcaseEarlyDays, Ahmet kararı 18 Ekim ~03:30): 1. gün bir dürüst usta uygun projeyle (onaylanırsa
+    ///    hediye kesin), 2. gün bir rüşvetçi zarflı projeyle ve kabadayı uygunsuz dosyayla gelir. Bu ziyaretler 3'er ziyaretin
+    ///    içindedir; kabadayının diğer ziyaretleri yine sadece AllowThugs günlerinde. 14/14 ve 1. gün kuralı aynen kalır.
     /// Saf fonksiyon; aynı seed → aynı program.
     /// </summary>
     public static class VisitPlanner
@@ -36,27 +39,69 @@ namespace CivilJam.Core
                 counts[d] = cfg != null ? Math.Max(0, cfg.ProjectsPerDay) : 0;
             }
 
-            var days = AssignClients(totalDays, counts, configFor, mains, generics, Math.Max(0, balance.MainClientVisits), rng);
-            AssignKinds(totalDays, days, configFor, balance, rng);
+            var show = Showcase.Pick(balance, totalDays, counts, mains, rng);
+            var days = AssignClients(totalDays, counts, configFor, mains, generics, Math.Max(0, balance.MainClientVisits), show, rng);
+            AssignKinds(totalDays, days, configFor, balance, show, rng);
 
             for (int d = 1; d <= totalDays; d++)
             {
                 var day = new ScheduledDay { Day = d };
-                foreach (var (client, kind) in days[d]) day.Slots.Add(new ScheduleSlot { ClientId = client.Id, Kind = kind });
+                foreach (var (client, kind) in days[d])
+                    day.Slots.Add(new ScheduleSlot { ClientId = client.Id, Kind = kind, Gift = show.IsGift(d, client) });
                 plan.Add(day);
             }
             return plan;
         }
 
+        // ---------- Jüri vitrini ----------
+
+        /// <summary>Vitrin ziyaretleri: kim, hangi gün, uygun mu uygunsuz mu. Kapalıysa boş.</summary>
+        sealed class Showcase
+        {
+            public readonly Dictionary<ClientSO, int> FixedDay = new Dictionary<ClientSO, int>();
+            public readonly HashSet<(int day, ClientSO client)> ForcedBad = new HashSet<(int, ClientSO)>();
+            public (int day, ClientSO client)? GiftSlot;
+
+            public bool IsGift(int day, ClientSO c) => GiftSlot.HasValue && GiftSlot.Value.day == day && GiftSlot.Value.client == c;
+            public bool IsForcedGood(int day, ClientSO c) => IsGift(day, c);
+
+            public static Showcase Pick(BalanceSO balance, int totalDays, int[] counts, List<ClientSO> mains, Random rng)
+            {
+                var show = new Showcase();
+                if (!balance.ShowcaseEarlyDays || totalDays < 2 || counts[1] < 1 || counts[2] < 2) return show;
+                var honest = mains.FindAll(c => c.IsHonest && c.Gift != null && !string.IsNullOrEmpty(c.Gift.Id));
+                var bribers = mains.FindAll(c => c.OffersBribes && !c.IsThug && !c.IsHonest);
+                var thug = mains.Find(c => c.IsThug);
+                if (honest.Count > 0)
+                {
+                    var h = honest[rng.Next(honest.Count)];
+                    show.FixedDay[h] = 1;
+                    show.GiftSlot = (1, h);
+                }
+                if (bribers.Count > 0)
+                {
+                    var b = bribers[rng.Next(bribers.Count)];
+                    show.FixedDay[b] = 2;
+                    show.ForcedBad.Add((2, b));
+                }
+                if (thug != null)
+                {
+                    show.FixedDay[thug] = 2;
+                    show.ForcedBad.Add((2, thug));
+                }
+                return show;
+            }
+        }
+
         // ---------- Kim hangi gün ----------
 
         static List<(ClientSO client, ProjectKind kind)>[] AssignClients(int totalDays, int[] counts, Func<int, DayConfigSO> configFor,
-            List<ClientSO> mains, List<ClientSO> generics, int visits, Random rng)
+            List<ClientSO> mains, List<ClientSO> generics, int visits, Showcase show, Random rng)
         {
             List<ClientSO>[] best = null;
             for (int attempt = 0; attempt < 200 && best == null; attempt++)
-                best = TryPlaceMains(totalDays, counts, configFor, mains, visits, rng);
-            if (best == null) best = TryPlaceMains(totalDays, counts, configFor, mains, 0, rng); // imkânsızsa ana ziyaret yok, aşağıda doldurulur
+                best = TryPlaceMains(totalDays, counts, configFor, mains, visits, show, rng);
+            if (best == null) best = TryPlaceMains(totalDays, counts, configFor, mains, 0, show, rng); // imkânsızsa ana ziyaret yok, aşağıda doldurulur
 
             // Kalan yerler: kişiliksizler (her biri bir kez, karışık sırayla), yetmezse o gün olmayan ana müteahhitler
             var pool = new List<ClientSO>(generics);
@@ -101,21 +146,26 @@ namespace CivilJam.Core
 
         /// <summary>Ana müteahhitleri farklı günlere yerleştirir (en kısıtlı önce: kabadayı). Sığmazsa null.</summary>
         static List<ClientSO>[] TryPlaceMains(int totalDays, int[] counts, Func<int, DayConfigSO> configFor, List<ClientSO> mains,
-            int visits, Random rng)
+            int visits, Showcase show, Random rng)
         {
             var days = new List<ClientSO>[totalDays + 1];
             for (int d = 0; d <= totalDays; d++) days[d] = new List<ClientSO>();
+
+            // Jüri vitrini: sabit günler önce (bu ziyaretler 3'er ziyaretin içinde sayılır)
+            foreach (var kv in show.FixedDay) if (visits > 0) days[kv.Value].Add(kv.Key);
 
             var order = Shuffled(mains, rng);
             order.Sort((a, b) => AllowedDays(a, totalDays, configFor).CompareTo(AllowedDays(b, totalDays, configFor)));
             foreach (var m in order)
             {
+                bool fixedVisit = visits > 0 && show.FixedDay.ContainsKey(m);
+                int remaining = fixedVisit ? visits - 1 : visits;
                 var candidates = new List<int>();
                 for (int d = 1; d <= totalDays; d++)
-                    if (Allowed(m, d, configFor) && days[d].Count < counts[d]) candidates.Add(d);
-                if (candidates.Count < visits) return null;
+                    if (Allowed(m, d, configFor) && days[d].Count < counts[d] && !days[d].Contains(m)) candidates.Add(d);
+                if (candidates.Count < remaining) return null;
                 // Boş yeri çok olan güne biraz daha meyilli rastgele seçim
-                for (int v = 0; v < visits; v++)
+                for (int v = 0; v < remaining; v++)
                 {
                     int total = 0;
                     foreach (int d in candidates) total += counts[d] - days[d].Count;
@@ -132,6 +182,7 @@ namespace CivilJam.Core
             return days;
         }
 
+        // Kabadayının sabit olmayan ziyaretleri sadece AllowThugs günlerinde (vitrin günü FixedDay ile ayrıca eklenir).
         static bool Allowed(ClientSO c, int day, Func<int, DayConfigSO> configFor)
         {
             if (!c.IsThug) return true;
@@ -149,7 +200,7 @@ namespace CivilJam.Core
         // ---------- Hangi proje uygun, hangisi değil ----------
 
         static void AssignKinds(int totalDays, List<(ClientSO client, ProjectKind kind)>[] days, Func<int, DayConfigSO> configFor,
-            BalanceSO balance, Random rng)
+            BalanceSO balance, Showcase show, Random rng)
         {
             var slots = new List<(int day, int index, double key)>();
             int total = 0;
@@ -168,9 +219,18 @@ namespace CivilJam.Core
             // 1. gün öğrenme günü: en çok 1 uygunsuz
             var chosen = new HashSet<(int, int)>();
             int dayOneBad = 0;
+            // Jüri vitrini: rüşvetçi ve kabadayının 2. gün ziyareti uygunsuz (toplam 14'ün içinde), hediye getiren usta uygun
+            for (int d = 1; d <= totalDays; d++)
+                for (int i = 0; i < days[d].Count; i++)
+                    if (show.ForcedBad.Contains((d, days[d][i].client)) && chosen.Count < bad)
+                    {
+                        chosen.Add((d, i));
+                        if (d == 1) dayOneBad++;
+                    }
             foreach (var s in slots)
             {
                 if (chosen.Count >= bad) break;
+                if (chosen.Contains((s.day, s.index)) || show.IsForcedGood(s.day, days[s.day][s.index].client)) continue;
                 if (s.day == 1)
                 {
                     if (dayOneBad >= 1) continue;

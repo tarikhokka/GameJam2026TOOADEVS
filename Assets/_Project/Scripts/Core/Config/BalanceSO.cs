@@ -21,6 +21,11 @@ namespace CivilJam.Core
         public int MainClientVisits = 3;
         [Range(0f, 1f)] public float CompliantShare = 0.5f;
 
+        [Tooltip("Jüri vitrini (Ahmet kararı 18 Ekim ~03:30): 1. gün dürüst usta uygun projeyle gelir ve onaylanırsa hediye kesin; " +
+                 "2. gün rüşvetçi zarflı projeyle ve kabadayı uygunsuz dosyayla gelir. Oranlar (14/14, 6×3 + 10×1, 1. gün en çok " +
+                 "1 uygunsuz) aynen kalır. Sadece UseVisitSchedule açıkken.")]
+        public bool ShowcaseEarlyDays;
+
         [Tooltip("Kişiliksiz müteahhitlerin (ClientSO.IsGeneric) zarf tutarı aralığı")]
         public Vector2Int GenericBribeRange = new Vector2Int(800, 1500);
         public Vector2Int ApprovalFeeRange = new Vector2Int(300, 500);
@@ -30,6 +35,8 @@ namespace CivilJam.Core
         [Range(0f, 1f)] public float DisasterChanceIncrement = 0.15f; // Afetsiz gün sonrası artış (karar, denge turu 17 Ekim)
         [Range(0f, 1f)] public float DisasterChanceCap = 1.00f;       // Tavan (karar)
         public bool ResetChanceAfterDisaster = true;                  // Karar: afet olunca tabana döner
+        [Tooltip("Jüri vitrini: o güne kadar hiç afet olmadıysa bu günün gecesi afet kesin (0 = kapalı). Önceki gecelerin zarı aynen atılır.")]
+        public int GuaranteedDisasterByDay;
 
         [Header("Yıkılma")]
         public float StrengthNoise = 0.15f; // ±

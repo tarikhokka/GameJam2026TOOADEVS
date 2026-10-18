@@ -38,6 +38,7 @@ namespace CivilJam.Core
         // Müteahhit konuşması (Ç4; Core doldurur, masa gösterir)
         public string GreetingText;  // Masaya gelişte (tekrar gelen müteahhitte "geçen sefer...")
         public string ReactionText;  // Karardan hemen sonra (teşekkür / söylenme / kavga)
+        public bool GiftGuaranteed;  // jüri vitrini (ScheduleSlot.Gift): onaylanınca hediye kesin, GiftChance zarı atılmaz
         public string GiftId;        // Onaydan sonra hediye varsa GiftSO.Id, yoksa boş. Kabul: IGameActions.AcceptGift
 
         // Yapıldıktan sonra

@@ -186,7 +186,8 @@ namespace CivilJam.Core
             p.DayDecided = State.Day;
 
             var client = Context.GetClient(p.ClientId);
-            if (client != null && client.IsThug && Context.DayConfig != null && Context.DayConfig.AllowThugs)
+            // Kabadayı sadece izinli günlerde ya da jüri vitrininde (2. gün) gelir; geldiği gün reddedilirse hasar verir.
+            if (client != null && client.IsThug)
                 State.WindowRepairsToday++;
             ClientReactions.OnRejected(Context, p, RngFor);
             Context.NotifyStateChanged();

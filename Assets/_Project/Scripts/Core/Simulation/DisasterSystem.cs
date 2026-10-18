@@ -7,6 +7,8 @@ namespace CivilJam.Core
     /// - DisasterChance ile zar atılır.
     /// - Afet olursa: EarthquakeSimulator çalışır, LastDisasterDay = bugün, olasılık tabana döner (ResetChanceAfterDisaster).
     /// - Olmazsa: olasılık Increment kadar artar, Cap'i geçmez.
+    /// - Jüri vitrini (BalanceSO.GuaranteedDisasterByDay): o güne kadar hiç afet olmadıysa o gece afet kesin. Zar yine atılır
+    ///   (rastgele akış ve önceki gecelerin olasılığı değişmez).
     /// </summary>
     public static class DisasterSystem
     {
@@ -15,7 +17,9 @@ namespace CivilJam.Core
             float chance = state.DisasterChance;
             QuakeResult result;
 
-            if (rng.NextDouble() < chance)
+            double roll = rng.NextDouble();
+            bool guaranteed = balance.GuaranteedDisasterByDay > 0 && state.LastDisasterDay == 0 && state.Day >= balance.GuaranteedDisasterByDay;
+            if (guaranteed || roll < chance)
             {
                 float intensity = Math.Min(1f, rng.Range(config.IntensityMin, config.IntensityMax));
                 result = EarthquakeSimulator.Run(state, intensity, balance, names, rng);

@@ -9,6 +9,7 @@ namespace CivilJam.Core
     {
         public string ClientId;
         public ProjectKind Kind;
+        public bool Gift; // jüri vitrini: onaylanırsa hediye kesin (ProjectData.GiftGuaranteed)
     }
 
     /// <summary>Bir günün ziyaretleri, geliş sırasıyla. GameState.Schedule'da kayıtla saklanır (memory.md "📅").</summary>

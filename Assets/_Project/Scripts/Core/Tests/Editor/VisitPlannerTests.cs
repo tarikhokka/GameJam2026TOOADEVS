@@ -96,7 +96,7 @@ namespace CivilJam.Core.Tests
                         Assert.IsTrue(today.Add(s.ClientId), $"seed {seed} gün {day.Day}: aynı müteahhit iki kez");
                         if (i == 0) Assert.AreNotEqual(last, s.ClientId, $"seed {seed} gün {day.Day}: arka arkaya");
                         visits[s.ClientId] = visits.TryGetValue(s.ClientId, out var v) ? v + 1 : 1;
-                        if (c.IsThug) Assert.IsTrue(cfg.AllowThugs, $"seed {seed}: kabadayı {day.Day}. günde");
+                        if (c.IsThug) Assert.IsTrue(cfg.AllowThugs || day.Day == 2, $"seed {seed}: kabadayı {day.Day}. günde (2. gün jüri vitrini)");
 
                         bool isBad = s.Kind != ProjectKind.Compliant;
                         if (isBad) { bad++; dayBad++; }
@@ -143,6 +143,99 @@ namespace CivilJam.Core.Tests
                 foreach (var c in cast)
                     Assert.AreEqual(c.IsGeneric ? 1 : 3, visits.TryGetValue(c.Id, out var n) ? n : 0, $"seed {seed}: {c.Id}");
             }
+        }
+
+        List<ClientSO> RealCast()
+        {
+            var cast = new List<ClientSO>();
+            foreach (var guid in AssetDatabase.FindAssets("t:ClientSO", new[] { "Assets/_Project/Data/Clients" }))
+                cast.Add(AssetDatabase.LoadAssetAtPath<ClientSO>(AssetDatabase.GUIDToAssetPath(guid)));
+            return cast;
+        }
+
+        [Test]
+        public void Showcase_FirstTwoDays_GiftBribeThug_RatesUnchanged()
+        {
+            // Jüri vitrini (Ahmet ~03:30): 1. gün dürüst usta uygun + hediye kesin; 2. gün rüşvetçi zarflı, kabadayı uygunsuz.
+            Assume.That(_balance.ShowcaseEarlyDays, Is.True);
+            var cast = RealCast();
+            for (int seed = 0; seed < 500; seed++)
+            {
+                var plan = VisitPlanner.Plan(7, ConfigFor, cast, _balance, new System.Random(seed));
+                ClientSO C(string id) => cast.Find(x => x.Id == id);
+                int gifts = 0, bad = 0, dayOneBad = 0;
+                bool honestGift = false, bribeDay2 = false, thugDay2 = false;
+                var visits = new Dictionary<string, int>();
+                foreach (var day in plan)
+                    foreach (var sl in day.Slots)
+                    {
+                        var c = C(sl.ClientId);
+                        visits[sl.ClientId] = visits.TryGetValue(sl.ClientId, out var v) ? v + 1 : 1;
+                        bool isBad = sl.Kind != ProjectKind.Compliant;
+                        if (isBad) { bad++; if (day.Day == 1) dayOneBad++; }
+                        if (sl.Gift)
+                        {
+                            gifts++;
+                            Assert.AreEqual(1, day.Day, $"seed {seed}: hediye 1. gün");
+                            Assert.IsTrue(c.IsHonest && sl.Kind == ProjectKind.Compliant, $"seed {seed}: hediyeyi dürüst usta uygun projeyle getirir");
+                            honestGift = true;
+                        }
+                        if (day.Day == 2 && c.OffersBribes && !c.IsThug && sl.Kind == ProjectKind.Bribe) bribeDay2 = true;
+                        if (day.Day == 2 && c.IsThug) { thugDay2 = true; Assert.IsTrue(isBad, $"seed {seed}: kabadayı 2. gün uygunsuz dosyayla"); }
+                        if (c.IsThug && day.Day != 2) Assert.IsTrue(ConfigFor(day.Day).AllowThugs, $"seed {seed}: kabadayının diğer ziyaretleri 4-7. gün");
+                    }
+                Assert.AreEqual(1, gifts, $"seed {seed}: tek vitrin hediyesi");
+                Assert.IsTrue(honestGift && bribeDay2 && thugDay2, $"seed {seed}: vitrin eksik");
+                Assert.AreEqual(14, bad, $"seed {seed}: 14 uygunsuz");
+                Assert.LessOrEqual(dayOneBad, 1, $"seed {seed}: 1. gün en çok 1 uygunsuz");
+                foreach (var c in cast) Assert.AreEqual(c.IsGeneric ? 1 : 3, visits[c.Id], $"seed {seed}: {c.Id} ziyaret sayısı");
+            }
+        }
+
+        [Test]
+        public void Showcase_Session_GiftOnDayOne_ThugDamageOnDayTwo()
+        {
+            var rules = AssetDatabase.LoadAssetAtPath<RuleSetSO>("Assets/_Project/Data/RuleSet.asset");
+            var names = AssetDatabase.LoadAssetAtPath<NamePoolSO>("Assets/_Project/Data/NamePool.asset");
+            for (int seed = 1; seed <= 20; seed++)
+            {
+                var ctx = new GameContext { Balance = _balance, Rules = rules, Names = names, Clients = RealCast() };
+                var session = new GameSession(ctx, _days, new ExpenseSO[0]);
+                session.NewGame(seed);
+                session.BeginDay();
+                var giftProject = ctx.TodayProjects.Find(p => p.GiftGuaranteed);
+                Assert.IsNotNull(giftProject, $"seed {seed}: 1. gün hediye projesi");
+                ctx.Actions.Approve(giftProject.Id, false);
+                Assert.IsFalse(string.IsNullOrEmpty(giftProject.GiftId), $"seed {seed}: onaylanınca hediye kesin");
+
+                ctx.State.Day = 2;
+                session.BeginDay();
+                var thug = ctx.TodayProjects.Find(p => ctx.GetClient(p.ClientId).IsThug);
+                Assert.IsNotNull(thug, $"seed {seed}: 2. gün kabadayı");
+                Assert.IsFalse(thug.IsCompliant, $"seed {seed}: kabadayı dosyası uygunsuz");
+                Assert.IsTrue(ctx.TodayProjects.Exists(p => p.OffersBribe && !ctx.GetClient(p.ClientId).IsThug), $"seed {seed}: 2. gün zarflı rüşvetçi");
+                int before = ctx.State.WindowRepairsToday;
+                ctx.Actions.Reject(thug.Id);
+                Assert.AreEqual(before + 1, ctx.State.WindowRepairsToday, $"seed {seed}: 2. gün kabadayı reddi hasar verir");
+            }
+        }
+
+        [Test]
+        public void Showcase_DisasterGuaranteedByDayTwo_ChanceUnchangedBefore()
+        {
+            var cfg = ConfigFor(1);
+            var names = AssetDatabase.LoadAssetAtPath<NamePoolSO>("Assets/_Project/Data/NamePool.asset");
+            Assume.That(_balance.GuaranteedDisasterByDay, Is.EqualTo(2));
+            // 1. gece: olasılık 0 ise afet yok (zar aynen)
+            var s1 = new GameState { Day = 1, DisasterChance = 0f };
+            Assert.IsFalse(DisasterSystem.EndOfDay(s1, cfg, _balance, names, new System.Random(1)).Occurred);
+            // 2. gece: hiç afet olmadıysa kesin
+            var s2 = new GameState { Day = 2, DisasterChance = 0f };
+            Assert.IsTrue(DisasterSystem.EndOfDay(s2, cfg, _balance, names, new System.Random(1)).Occurred);
+            Assert.AreEqual(_balance.DisasterChanceStart, s2.DisasterChance, 1e-6, "afetten sonra olasılık tabana döner");
+            // Daha önce afet olduysa garanti yok
+            var s3 = new GameState { Day = 2, DisasterChance = 0f, LastDisasterDay = 1 };
+            Assert.IsFalse(DisasterSystem.EndOfDay(s3, cfg, _balance, names, new System.Random(1)).Occurred);
         }
 
         [Test]

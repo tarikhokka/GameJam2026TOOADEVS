@@ -65,7 +65,9 @@ namespace CivilJam.Core
                 var slot = plan.Slots[i];
                 ClientSO client = null;
                 if (clients != null) foreach (var c in clients) if (c != null && c.Id == slot.ClientId) { client = c; break; }
-                result.Add(CreateProject(day, i, slot.Kind, config, rules, balance, names, client, rng, usedNames));
+                var project = CreateProject(day, i, slot.Kind, config, rules, balance, names, client, rng, usedNames);
+                project.GiftGuaranteed = slot.Gift;
+                result.Add(project);
             }
             return result;
         }

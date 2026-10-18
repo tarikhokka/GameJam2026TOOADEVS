@@ -103,7 +103,7 @@ namespace CivilJam.Core
             var gift = client.Gift;
             bool giftAlreadyToday = ctx.TodayProjects.Exists(x => x != p && !string.IsNullOrEmpty(x.GiftId) && x.GiftId == gift?.Id);
             if (client.IsHonest && gift != null && !string.IsNullOrEmpty(gift.Id) && !ctx.State.OfficeGifts.Contains(gift.Id)
-                && !giftAlreadyToday && rng.Chance(client.GiftChance))
+                && !giftAlreadyToday && (p.GiftGuaranteed || rng.Chance(client.GiftChance))) // vitrin: kesin
                 p.GiftId = gift.Id;
 
             var rec = RecordOf(ctx.State, client.Id, create: true);

@@ -22,6 +22,7 @@ namespace CivilJam.Desk
         private void Start()
         {
             screen.Completed += OnCompleted;
+            screen.HandBackByDrag = true; // (belge turu B1) ONAY / RED yalnız kaşe basar; belgeler müteahhide sürüklenerek verilir
             StartDay();
         }
 

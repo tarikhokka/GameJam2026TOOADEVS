@@ -9,9 +9,9 @@ namespace CivilJam.Desk
 {
     // Masa ekranı. GameContext'ten okur, oyuncu kararlarını sadece context.Actions ile Core'a iletir.
     // Yeni hedef arayüz (Ahmet kararı): üstte ofis, müteahhit masanın arkasında oturur (selamlama balonu); masada üç belge
-    // düz ve yan yana: soldan YAPI DENETİM FORMU, LABORATUVAR RAPORU (müteahhit oturunca aşağıdan kayarak gelir) ve hep açık
-    // DENETÇİ EL KİTABI. Formda ONAY / RED (ve zarf), lab raporunda ek test. Karar → kaşe forma basılır → form ve lab raporu
-    // masadan kayıp gider → tepki balonu (+ hediye) → sıradaki gelir. Son müteahhitten sonra mesai zili + "MESAİ BİTTİ"
+    // düz ve yan yana: soldan YAPI DENETİM FORMU, LABORATUVAR RAPORU (belge turu B1: müteahhit oturunca masanın solunda ikon olur,
+    // ikona tıklanınca açılır) ve hep açık DENETÇİ EL KİTABI. Formda ONAY / RED (ve zarf), lab raporunda ek test. Karar → kaşe
+    // forma basılır → belgeler müteahhide sürüklenip verilir → tepki balonu (+ hediye) → sıradaki gelir. Son müteahhitten sonra mesai zili + "MESAİ BİTTİ"
     // geçiş ekranı, ardından Completed bir kez kendiliğinden tetiklenir ("Mesaiyi bitir" düğmesi kalktı, EEE).
     // (A, belge turu A1 — memory.md "📂 BELGE TURU", D1) Karar iki adım: StampDecision (kaşe forma basılır, değiştirilemez, Core'a
     // gitmez) → HandBack (belgeler müteahhide verildi: karar Core'a gider, AfterDecision sırası). Geçici köprü: ONAY / RED ve zarf
@@ -120,10 +120,14 @@ namespace CivilJam.Desk
         }
 
         // Geçici köprü (B2'de kalkar): eski ONAY / RED düğmesi = kaşe + hemen iade.
+        // (B1) HandBackByDrag: sadece Sandbox_Desk açar (DeskSandboxBootstrap) — düğme yalnız kaşe basar, iade belgeleri müteahhide
+        // sürükleyerek yapılır. Oyunda (Game.unity) köprü B2'ye kadar aynen çalışır.
+        public bool HandBackByDrag { get; set; }
+
         private void StampAndHandBack(bool approve)
         {
             StampDecision(approve);
-            if (IsStamped) HandBack();
+            if (IsStamped && !HandBackByDrag) HandBack();
         }
 
 
@@ -138,6 +142,16 @@ namespace CivilJam.Desk
             labView.ExtraTestClicked += BuyExtraTest;
 
             props.FinishClicked += Finish;
+            props.FormIconClicked += () => OpenDocument(formWindow, props.FormIcon); // (belge turu B1) belge ikonundan açılır
+            props.LabIconClicked += () => OpenDocument(labWindow, props.LabIcon);
+            formWindow.Sheet.CanHandBack = () => IsStamped; // kaşeden sonra ofis tarafına taşınan belge ikon boyutuna küçülür
+            labWindow.Sheet.CanHandBack = () => IsStamped;
+            formWindow.HandBackTarget = scene.DropArea; // müteahhidin üstünde bırakılan kaşeli belge verilmiş olur
+            labWindow.HandBackTarget = scene.DropArea;
+            formWindow.HandedBack += OnHandedBack;
+            labWindow.HandedBack += OnHandedBack;
+            formWindow.HandBackRefused += StampFirst;
+            labWindow.HandBackRefused += StampFirst;
             props.EnvelopeRevealed += PlayPaper; // zarf masaya düştü
             props.EnvelopeClicked += OpenEnvelope; // (A) zarf açılır: para + tutar, RÜŞVETİ KABUL ET / REDDET
 
@@ -155,22 +169,52 @@ namespace CivilJam.Desk
             }
         }
 
-        // Yeni hedef arayüz: bekleyen bir dosya varken form ve lab raporu masada açık (sabit yerlerinde, yan yana);
-        // karar sırası (kaşe, tepki) sürerken ve müteahhit yokken kapalı. El Kitabı hep açık (Show).
+        // (belge turu B1) Form ve lab raporu kendiliğinden açılmaz: müteahhit oturunca masanın solunda ikon olarak durur, ikona
+        // tıklanınca açılır (OpenDocument); açık belgenin ikonu masada görünmez. Müteahhit yokken / karar verilmişken belgeler
+        // kapanır (karar sırası sürerken kapanışı AfterDecision yapar). El Kitabı hep açık (Show).
         private void SyncDocuments(ProjectData project)
         {
-            bool show = !stamping && project != null && project.Verdict == ProjectVerdict.Pending;
-            if (show && !formWindow.IsOpen)
-            {
-                formWindow.Open();
-                labWindow.Open();
-                PlayPaper();
-            }
-            else if (!show && formWindow.IsOpen && !stamping)
+            bool pending = !stamping && project != null && project.Verdict == ProjectVerdict.Pending;
+            if (!pending && !stamping)
             {
                 formWindow.Close();
                 labWindow.Close();
             }
+            props.SetDocIcons(pending && !formWindow.IsOpen && !formGiven, pending && !labWindow.IsOpen && !labGiven);
+        }
+
+        private bool formGiven, labGiven; // (belge turu B1) bu müteahhide verilen belgeler; ikisi de verilince HandBack
+
+        private void ClearGiven() => formGiven = labGiven = false;
+
+        // Kaşeli belge müteahhide verildi (PaperWindow sürükle-bırak). İkisi de verilince karar Core'a gider (HandBack).
+        private void OnHandedBack(PaperWindow window)
+        {
+            if (window == formWindow) formGiven = true;
+            else if (window == labWindow) labGiven = true;
+            PlayPaper();
+            Redraw();
+            if (formGiven && labGiven) HandBack();
+        }
+
+        // Kaşeden önce müteahhide uzatılan belge geri döner; müteahhit hatırlatır (EEE metni, memory.md "📂 BELGE TURU" T2).
+        private const string StampFirstLine = "Önce kaşeyi basın hocam, sonra alırım.";
+
+        private void StampFirst()
+        {
+            if (stamping || (dialogue != null && dialogue.IsPlaying)) return;
+            scene.Say(StampFirstLine);
+        }
+
+        // İkona tıklandı: belge ikonun yerinden büyüyerek bugünkü yerine açılır, ikon masadan kalkar.
+        private void OpenDocument(PaperWindow window, RectTransform icon)
+        {
+            var project = selectedId != null && context != null ? context.GetTodayProject(selectedId) : null;
+            if (stamping || window.IsOpen || project == null || project.Verdict != ProjectVerdict.Pending) return;
+            window.OpenFrom(icon);
+            window.Sheet.BringToFront();
+            PlayPaper();
+            Redraw();
         }
 
         public void Show(GameContext gameContext)
@@ -251,6 +295,7 @@ namespace CivilJam.Desk
         {
             stampedId = null;
             formView.SetPendingStamp(ProjectVerdict.Pending);
+            ClearGiven(); // (belge turu B1) yeni müteahhit: belgeler henüz verilmedi
         }
 
         // Karar Core'a gider (HandBack); sonra form ve lab raporu kalkar, müteahhit tepki verir, sıradaki gelir.
@@ -280,10 +325,14 @@ namespace CivilJam.Desk
         private IEnumerator AfterDecision(ProjectData project, bool windowBroken)
         {
             yield return new WaitForSeconds(stampDelay);
-            // Kaşeli form ve lab raporu masadan kayıp gider (yeni düzen: klasörün müteahhide uçması kalktı).
-            formWindow.Close();
-            labWindow.Close();
-            PlayPaper();
+            // (belge turu B1) Belgeler müteahhide verildiyse zaten masada değil. Hâlâ açık olan (geçici köprü: düğmeyle karar,
+            // B2'de kalkar) kaşeli form ve lab raporu masadan kayıp gider.
+            if (formWindow.IsOpen || labWindow.IsOpen)
+            {
+                formWindow.Close();
+                labWindow.Close();
+                PlayPaper();
+            }
 
             // Tepki: Core karardan sonra doldurur (ClientReactions); boşsa beklemeden geçilir.
             bool reacted = project != null && !string.IsNullOrEmpty(project.ReactionText);

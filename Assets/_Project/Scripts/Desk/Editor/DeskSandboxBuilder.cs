@@ -158,7 +158,7 @@ namespace CivilJam.Desk.Editor
             var sceneView = BuildScene(root, out var room);
             Wire(screen, "scene", sceneView);
             Wire(screen, "header", BuildHeader(root)); // poliş B2: Onur'un üst barı (eski koyu bant kalktı)
-            Wire(screen, "props", BuildProps(room, out var handbookBook, out var officeGifts));
+            Wire(screen, "props", BuildProps(room, sceneView, out var handbookBook, out var officeGifts));
             Wire(screen, "officeGifts", officeGifts);
             room.Find("Balloon").SetAsLastSibling(); // konuşma balonu masadakilerin (zarf, hediyeler) önünde
 
@@ -439,9 +439,9 @@ namespace CivilJam.Desk.Editor
             return rt;
         }
 
-        // Masadaki eşyalar (yeni hedef arayüz): hediyeler, zarf (4. adımda yeni yerine), gün bitince "Mesaiyi bitir"
-        // (müteahhit / proje adı üst barda). Belgeler burada değil: Papers katmanında, masada hep açık.
-        private static DeskPropsView BuildProps(RectTransform room, out Button handbookBook,
+        // Masadaki eşyalar (yeni hedef arayüz): hediyeler, belge ikonları (belge turu B1), zarf, gün bitince "Mesaiyi bitir"
+        // (müteahhit / proje adı üst barda). Belgelerin kendisi burada değil: Papers katmanında, ikona tıklanınca açılır.
+        private static DeskPropsView BuildProps(RectTransform room, ClientSceneView sceneView, out Button handbookBook,
             out OfficeGiftsView officeGifts)
         {
             var root = Stretch(NewRect("Props", room));
@@ -449,8 +449,12 @@ namespace CivilJam.Desk.Editor
             // Hediyeler: masa kenarının üstünde, müteahhidin iki yanında (balonun altında kalmayan yerlerde).
             officeGifts = BuildOfficeGifts(root);
 
-            // Yeni hedef arayüz: masada kitap / klasör yok; üç belge masada hep açık (kağıt pencereler, Papers katmanı).
+            // El Kitabı masada kitap olarak durmaz: hep açık (Papers katmanı).
             handbookBook = null;
+
+            // Belge ikonları (belge turu B1): müteahhidin solunda, masa kenarında (zarfın sağda durması gibi); soldan form, lab raporu.
+            var formIcon = BuildDocIcon(root, "FormIcon", "doc_icon_form", DocIconFormX, 5f);
+            var labIcon = BuildDocIcon(root, "LabIcon", "doc_icon_lab", DocIconLabX, -4f);
 
             // Zarf: müteahhidin sağında, masa kenarının üstünde (balonun altı, belgelerin üstü), hafif yamuk.
             var envelope = TopLeft(NewRect("Envelope", root), new Vector2(140, 76), 1200, DeskEdgeY - 64);
@@ -465,16 +469,64 @@ namespace CivilJam.Desk.Editor
             finish.gameObject.SetActive(false);
 
             var view = root.gameObject.AddComponent<DeskPropsView>();
+            Wire(view, "formIcon", formIcon);
+            Wire(view, "labIcon", labIcon);
+            Wire(view, "clientScene", sceneView);
             Wire(view, "envelopeRoot", envelope.gameObject);
             Wire(view, "envelopeText", envelopeText);
             Wire(view, "finishButton", finish);
             return view;
         }
 
+        // Belge ikonları (belge turu B1, EEE doc_icon_* 200x150): masada yatan küçük belge; alt kenarı masa kenarının biraz
+        // altında (zarf gibi masanın uzak kenarında durur), müteahhidin (x ~730) solunda biter.
+        private static readonly Vector2 DocIconSize = new Vector2(140, 105);
+        private const float DocIconFormX = 495f, DocIconLabX = 650f; // ortaları: form x 425-565, lab x 580-720
+        private const float DocIconBottomY = DeskEdgeY + 24f;
+
+        // Kök (pivot alt orta, eğim kökte) → [Shadow, Contact, Doc (Image + Button)]: DeskBookProp gölge ve üzerine gelince kalkma verir.
+        private static GameObject BuildDocIcon(RectTransform props, string name, string sprite, float centerX, float tilt)
+        {
+            var slot = NewRect(name, props);
+            slot.anchorMin = slot.anchorMax = new Vector2(0f, 1f);
+            slot.pivot = new Vector2(0.5f, 0f);
+            slot.sizeDelta = DocIconSize;
+            slot.anchoredPosition = new Vector2(centerX, -DocIconBottomY);
+            slot.localRotation = Quaternion.Euler(0, 0, tilt);
+
+            var size = DocIconSize;
+            var shadow = BookShadow("Shadow", slot, new Vector2(size.x * 0.95f, size.y * 0.22f), new Vector2(size.x * 0.05f, size.y * 0.06f));
+            var contact = BookShadow("Contact", slot, new Vector2(size.x * 0.85f, size.y * 0.07f), new Vector2(size.x * 0.01f, size.y * 0.04f));
+
+            var doc = Stretch(NewRect("Doc", slot));
+            doc.pivot = new Vector2(0.5f, 0f);
+            var image = SpriteImage(doc, FindSprite(sprite), PaperColor);
+            image.preserveAspect = true;
+            image.raycastTarget = true;
+            var button = doc.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            var colors = button.colors;
+            colors.highlightedColor = Color.white; // üzerine gelince DeskBookProp kaldırır; renk değişmesin
+            colors.pressedColor = new Color(0.85f, 0.85f, 0.85f);
+            button.colors = colors;
+
+            var prop = slot.gameObject.AddComponent<DeskBookProp>();
+            Wire(prop, "book", doc);
+            Wire(prop, "bookImage", image);
+            Wire(prop, "shadow", shadow);
+            Wire(prop, "shadowImage", shadow.GetComponent<Image>());
+            Wire(prop, "contact", contact);
+            Wire(prop, "contactImage", contact.GetComponent<Image>());
+
+            slot.gameObject.SetActive(false); // müteahhit oturunca gelir (DeskPropsView.SetDocIcons)
+            return slot.gameObject;
+        }
+
         // Hediye yerleri (yeni hedef arayüz): masa kenarının üstünde, müteahhidin iki yanında, ofisin önünde (alt kenar y = GiftBottomY).
         // Müteahhit (x ~730-1190), balon (x 1080-1540) ve zarf açıkta kalır; belgeler kenarın altından başladığı için örtmez.
-        // Kabul sırasıyla dolar; sadece dürüst ustalar verdiği için pratikte 1-2 tanesi kullanılır.
-        private static readonly float[] GiftSlotCenterX = { 460, 1640, 280, 1820, 640, 100 };
+        // Kabul sırasıyla dolar; sadece dürüst ustalar verdiği için pratikte 1-2 tanesi kullanılır. Belge ikonlarının yeri
+        // (x 425-720) en sona kaldı: ilk hediyeler ikonların altında kalmasın (belge turu B1).
+        private static readonly float[] GiftSlotCenterX = { 280, 1640, 100, 1820, 460, 640 };
         private const float GiftSize = 160f;      // EEE: ~140-180 px (gift_*.png 300x300, nesne alta oturur)
         private const float GiftBottomY = DeskEdgeY + 14f; // masa kenarının üst yüzeyi
         private const float GiftArtBottom = 0.09f; // görselde nesnenin altındaki şeffaf boşluk

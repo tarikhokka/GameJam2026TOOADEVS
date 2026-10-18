@@ -30,8 +30,22 @@ namespace CivilJam.Desk
         [Tooltip("Yeni hedef arayüzde belgeler masada sabit: sürükleme kapalı (açılış/kapanış hareketi kalır)")]
         [SerializeField] private bool draggable = true;
 
+        [Tooltip("Masa kenarı (ebeveyn ortasına göre y, px): fare bunun üstüne, ofis / müteahhit tarafına çıkınca belge iade için ikon boyutuna küçülür. 540 - DeskEdgeY (380)")]
+        [SerializeField] private float deskEdgeY = 160f;
+
         // İnceleme modu açıkken sürükleme kilitli (InspectController → DeskScreen); tıklama ve öne alma sürer.
         public bool Locked { get; set; }
+
+        // (belge turu B1) İade: kaşe basıldıysa (DeskScreen.IsStamped) masa kenarının üstüne taşınan belge ikon boyutuna
+        // (HandBackScale, home ölçeğine oran; PaperWindow.OpenFrom verir) küçülür, geri inince büyür. Ofis tarafında bırakılan
+        // belge (kaşeden önce de) masadaki yerine döner; müteahhide verme 4. adımda.
+        public Func<bool> CanHandBack { get; set; }
+        public float HandBackScale { get; set; } = 0.3f;
+        public bool OverOffice => dragging && overOffice;
+        // Bırakılan yer müteahhit mi (PaperWindow verir). Kaşeliyse HandBackDropped yayınlanır, kağıdı PaperWindow götürür.
+        public Func<PointerEventData, bool> IsHandBackTarget { get; set; }
+        public event Action HandBackDropped;
+        public event Action HandBackRefused; // kaşeden önce müteahhide bırakıldı (kağıt yerine döner)
 
         public event Action Grabbed;
         public event Action Dropped;
@@ -47,6 +61,10 @@ namespace CivilJam.Desk
         private float alpha = 1f, targetAlpha = 1f;
         private bool dragging;
         private Vector2 dragVel;          // sürükleme hızı (px/sn, yumuşatılmış)
+        private Vector2 pointer;          // farenin ebeveyndeki yeri
+        private Vector2 grab;             // tutulan noktanın kağıt ortasına uzaklığı (home ölçeğinde)
+        private Vector2 dragStartHome;    // ofis tarafında bırakılırsa döneceği yer
+        private bool overOffice;          // fare masa kenarının üstünde
 
         // Süreli hareket (kapanış / müteahhide verme): yay yerine eğriyle, bitince done.
         private bool tweening;
@@ -87,6 +105,10 @@ namespace CivilJam.Desk
             dragging = true;
             posVel = Vector2.zero;
             dragVel = Vector2.zero;
+            dragStartHome = homePos;
+            pointer = PointerLocal(eventData);
+            grab = (pointer - Rect.anchoredPosition) / ScaleRatio;
+            overOffice = pointer.y > deskEdgeY;
             BringToFront();
             Grabbed?.Invoke();
         }
@@ -96,7 +118,9 @@ namespace CivilJam.Desk
             if (!dragging) return;
             float canvasScale = canvas != null ? canvas.scaleFactor : 1f;
             Vector2 delta = eventData.delta / canvasScale;
-            Rect.anchoredPosition = Clamp(Rect.anchoredPosition + delta); // farenin altında birebir
+            pointer = PointerLocal(eventData);
+            overOffice = pointer.y > deskEdgeY;
+            FollowPointer(); // farenin altında birebir (küçülürken tutulan nokta farenin altında kalır)
             float dt = Mathf.Max(Time.unscaledDeltaTime, 0.001f);
             dragVel = Vector2.Lerp(dragVel, delta / dt, 0.5f);
         }
@@ -105,10 +129,39 @@ namespace CivilJam.Desk
         {
             if (!dragging) return;
             dragging = false;
+            if (overOffice)
+            {
+                overOffice = false;
+                bool onTarget = IsHandBackTarget != null && IsHandBackTarget(eventData);
+                if (onTarget && CanHandBack != null && CanHandBack())
+                {
+                    HandBackDropped?.Invoke(); // müteahhide verildi
+                    return;
+                }
+                if (onTarget) HandBackRefused?.Invoke();
+                // Ofis tarafında bırakıldı (müteahhide verilmedi ya da kaşe yok): masadaki yerine yayla döner, büyür.
+                homePos = dragStartHome;
+                posVel = Vector2.zero;
+                Dropped?.Invoke();
+                return;
+            }
             Vector2 throwVel = Vector2.ClampMagnitude(dragVel, MaxThrowSpeed);
             homePos = Clamp(Rect.anchoredPosition + throwVel * ThrowTime); // bırakıldığı yerde, biraz ileride durur
             posVel = throwVel * 0.5f;
             Dropped?.Invoke();
+        }
+
+        private float ScaleRatio => homeScale > 0.0001f ? scale / homeScale : 1f;
+
+        private bool Shrunk => dragging && overOffice && CanHandBack != null && CanHandBack();
+
+        private void FollowPointer() => Rect.anchoredPosition = Clamp(pointer - grab * ScaleRatio);
+
+        private Vector2 PointerLocal(PointerEventData eventData)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)Rect.parent, eventData.position,
+                eventData.pressEventCamera, out var local);
+            return local;
         }
 
         // Yerleşimdeki yeri (ortada / yan yana). Kağıt görünürse yayla gider, değilse hemen oraya konur.
@@ -120,7 +173,10 @@ namespace CivilJam.Desk
         }
 
         // Açılış: home'un offset kadar uzağından (masadaki kitabın yönü) küçük, saydam ve hafif yamuk başlar; yayla oturur.
-        public void AnimateIn(Vector2 offset)
+        public void AnimateIn(Vector2 offset) => AnimateIn(offset, 0.6f, 0f);
+
+        // startScale: home ölçeğine oranla başlangıç (ikondan açılışta ikon boyutu); startAlpha: başlangıç saydamlığı.
+        public void AnimateIn(Vector2 offset, float startScale, float startAlpha)
         {
             tweening = false;
             tweenDone = null;
@@ -128,9 +184,9 @@ namespace CivilJam.Desk
             FoldX = 1f;
             Rect.anchoredPosition = homePos + offset;
             posVel = Vector2.zero;
-            scale = homeScale * 0.6f;
+            scale = homeScale * startScale;
             scaleVel = 0f;
-            alpha = 0f;
+            alpha = startAlpha;
             targetAlpha = 1f;
             tilt = offset.x > 0 ? -6f : 6f;
             tiltVel = 0f;
@@ -141,6 +197,10 @@ namespace CivilJam.Desk
         public void AnimateOut(Vector2 offset, Action done) =>
             StartTween(Rect.anchoredPosition + offset, scale * 0.8f, 0f, offset.x > 0 ? -6f : 6f,
                 DeskMotion.Exit(DeskMotion.Slow), DeskMotion.EaseIn, done);
+
+        // (belge turu B1) Müteahhide verildi: bulunduğu boyuttan biraz daha küçülüp müteahhide kayar ve kaybolur; bitince done.
+        public void AnimateGive(Vector2 position, Action done) =>
+            StartTween(position, scale * 0.6f, 0f, 0f, DeskMotion.Base, DeskMotion.EaseIn, done);
 
         // Verilen yere (ör. müteahhidin elleri) küçülerek gider; saydamlaşmaz, bitince done.
         public void AnimateTo(Vector2 position, float sheetScale, Action done) =>
@@ -206,7 +266,9 @@ namespace CivilJam.Desk
             if (!dragging) Rect.anchoredPosition = DeskMotion.Spring(Rect.anchoredPosition, ref posVel, homePos, f, z, dt);
 
             lift = DeskMotion.Spring(lift, ref liftVel, dragging ? 1f : 0f, DeskMotion.HoverFrequency, 1f, dt);
-            scale = DeskMotion.Spring(scale, ref scaleVel, homeScale * Mathf.Lerp(1f, LiftScale, lift), f, z, dt);
+            float scaleTarget = Shrunk ? homeScale * HandBackScale : homeScale * Mathf.Lerp(1f, LiftScale, lift);
+            scale = DeskMotion.Spring(scale, ref scaleVel, scaleTarget, f, z, dt);
+            if (dragging) FollowPointer(); // ölçek değişirken tutulan nokta farenin altında kalsın
             alpha = Mathf.MoveTowards(alpha, targetAlpha, dt / DeskMotion.Base);
 
             if (dragging) dragVel = Vector2.Lerp(dragVel, Vector2.zero, 1f - Mathf.Exp(-8f * dt)); // fare durunca düzelir

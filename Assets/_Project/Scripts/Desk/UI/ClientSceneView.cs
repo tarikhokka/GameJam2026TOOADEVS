@@ -36,6 +36,8 @@ namespace CivilJam.Desk
 
         // Balon yazarken true: DeskScreen tepkiden sonra yazının bitmesini bekler.
         public bool IsTyping => typing != null;
+        public bool IsMoving => move != null; // müteahhit geliyor / gidiyor (masadaki belge ikonları oturunca gelir)
+        public RectTransform DropArea => portraitRoot; // (belge turu B1) belgeler müteahhide buraya bırakılarak verilir
 
         private Vector2 seatedPosition;
         private bool seatedPositionKnown;

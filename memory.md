@@ -134,6 +134,26 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - Teslim: Windows build ZIP + en fazla 1 dk video (MP4/AVI) + public repo + kurulum/kontrol talimatı (`README.md`).
 - Saatler: **feature freeze ve Git desteği 18 Ekim 12:00**; yükleme 15:00-16:30; son teslim 18 Ekim 18:00.
 
+## 🎉 TEŞEKKÜRLER, EKİP! (Ahmet, 18 Ekim 15:20)
+
+> **Oğuzhan, Onur, Tarık; hepinizin ellerine sağlık.** 48 saatte sıfırdan "İmza"yı çıkardık:
+> - masa başı denetim, inceleme modu ve uyuşmazlık diyalogları;
+> - rüşvet zarfı, kabadayılar, hediyeler;
+> - 7 günlük program ve jüri vitrini;
+> - Papers, Please hissiyle belge al / kaşe bas / geri ver;
+> - deprem gecesi gazetesi ve dört son.
+>
+> Gece boyunca fazlara bölünüp birbirimizi bekleyerek, birbirimizin dosyasına özenle dokunarak çalıştık. Her kapıda testler yeşil geçti.
+>
+> **Kim ne yaptı:**
+> - **Oğuzhan:** masanın kendisi.
+> - **Onur:** ekranlar, üst bar ve kaşe çekmecesi.
+> - **Tarık:** görsel, ses, metin, jüri menüsü, rehber ve teslim kuralları denetimi.
+>
+> Hepsi bir araya gelince ortaya gerçekten oynanan bir oyun çıktı. Ne olursa olsun bu takımla çalışmak harikaydı. 🙌
+>
+> **FINAL:** Teslim build'i ve ZIP'i **bu commit'ten** alınıyor (kod = `f94deb6`'da testli hâli: EditMode 58/58, PlayMode 4/4, 7 günlük otomatik oynanış geçti). **Bundan sonra lütfen kimse push atmasın.**
+
 ## 7. Durum ve açık işler (güncelleme: A, 18 Ekim ~01:50)
 **Durum:** İnceleme modu, uyuşmazlık diyaloğu, tıklanabilir zarf ve 7 günlük yapı bitti ve oyunda doğrulandı. EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (`AHMET.md`). **Final aday build** `Builds/Imza/Imza.exe` + teslim ZIP'i `Builds/Imza.zip` alındı. A'nın güncel teslim/kabul listesi: `AHMET.md` → "Onur'dan teslim notu — 18 Ekim". Freeze 18 Ekim 12:00.
 

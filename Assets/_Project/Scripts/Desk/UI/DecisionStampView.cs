@@ -16,8 +16,12 @@ namespace CivilJam.Desk
         [SerializeField] private Color rejectedColor = new Color(0.72f, 0.14f, 0.12f);
         [SerializeField] private float punchScale = 1.8f;
         [SerializeField] private float punchDuration = 0.18f;
+        [Header("Yuvarlak mühür izi (ink_approve / ink_reject): varsa yazı yerine görsel")]
+        [SerializeField] private Sprite approvedInk;
+        [SerializeField] private Sprite rejectedInk;
 
         private bool animating;
+        private Graphic Ink => stampImage.sprite != null ? stampImage : (Graphic)stampText; // basılırken belirginleşen
 
         public void Bind(ProjectVerdict verdict)
         {
@@ -26,10 +30,24 @@ namespace CivilJam.Desk
             if (!decided) return;
 
             bool approved = verdict == ProjectVerdict.Approved;
-            var color = approved ? approvedColor : rejectedColor;
-            stampText.text = approved ? "ONAYLANDI" : "REDDEDİLDİ";
-            stampText.color = color;
-            stampImage.color = new Color(color.r, color.g, color.b, 0.12f);
+            var ink = approved ? approvedInk : rejectedInk;
+            if (ink != null)
+            {
+                // Mühür izi görseli: renk ve yazı görselde; kutu ve yazı gizli.
+                stampImage.sprite = ink;
+                stampImage.preserveAspect = true;
+                if (!animating) stampImage.color = Color.white;
+                stampText.gameObject.SetActive(false);
+            }
+            else
+            {
+                var color = approved ? approvedColor : rejectedColor;
+                stampImage.sprite = null;
+                stampText.gameObject.SetActive(true);
+                stampText.text = approved ? "ONAYLANDI" : "REDDEDİLDİ";
+                stampText.color = color;
+                stampImage.color = new Color(color.r, color.g, color.b, 0.12f);
+            }
             if (!animating) stamp.localScale = Vector3.one;
         }
 
@@ -52,7 +70,8 @@ namespace CivilJam.Desk
         private IEnumerator Punch()
         {
             animating = true;
-            var ink = stampText.color;
+            var graphic = Ink;
+            var ink = graphic.color;
             const float impact = 0.92f;
             float drop = punchDuration * 0.6f, settle = DeskMotion.Fast;
 
@@ -60,10 +79,10 @@ namespace CivilJam.Desk
             {
                 float k = DeskMotion.EaseIn(t / drop);
                 stamp.localScale = Vector3.one * Mathf.Lerp(punchScale, impact, k);
-                stampText.color = new Color(ink.r, ink.g, ink.b, Mathf.Lerp(0.3f, ink.a, k));
+                graphic.color = new Color(ink.r, ink.g, ink.b, Mathf.Lerp(0.3f, ink.a, k));
                 yield return null;
             }
-            stampText.color = ink;
+            graphic.color = ink;
             for (float t = 0f; t < settle; t += Time.unscaledDeltaTime)
             {
                 stamp.localScale = Vector3.one * Mathf.Lerp(impact, 1f, DeskMotion.EaseOut(t / settle));

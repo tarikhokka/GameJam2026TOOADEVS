@@ -22,10 +22,11 @@ namespace CivilJam.Desk.Editor
             rect.anchoredPosition = new Vector2(StampTrayRightX, StampTrayCenterY);
 
             var tray = rect.gameObject.AddComponent<StampTrayView>();
-            Wire(tray, "buttonSprite", FindSprite("btn_stamps"));
+            Wire(tray, "buttonSprite", FindSprite("btn_stamps_wood") ?? FindSprite("btn_stamps")); // ahşap çekmece ailesi
             Wire(tray, "traySprite", FindSprite("stamp_tray"));
-            Wire(tray, "approveSprite", FindSprite("stamp_approve"));
-            Wire(tray, "rejectSprite", FindSprite("stamp_reject"));
+            // Ahşap mühür görselleri (Oğuzhan, ekip onayı); yoksa EEE'nin eski stamp_approve / stamp_reject / btn_stamps'i.
+            Wire(tray, "approveSprite", FindSprite("stamp_wood_approve") ?? FindSprite("stamp_approve"));
+            Wire(tray, "rejectSprite", FindSprite("stamp_wood_reject") ?? FindSprite("stamp_reject"));
             Wire(tray, "titleFont", TitleFont);
             return tray;
         }

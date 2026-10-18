@@ -396,6 +396,7 @@ namespace CivilJam.Desk
             stamp.Fallback.SetActive(sprite == null);
             stamp.Label.color = sprite != null ? Ink : Paper;
             stamp.Label.rectTransform.anchoredPosition = new Vector2(0f, sprite != null ? -24f : -40f);
+            stamp.Label.gameObject.SetActive(sprite == null); // (Oğuzhan, ekip onayıyla) ahşap mühürde ONAY / RED yazısı görselde kazılı
         }
 
         static void AddEvent(EventTrigger trigger, EventTriggerType type, Action<BaseEventData> callback)

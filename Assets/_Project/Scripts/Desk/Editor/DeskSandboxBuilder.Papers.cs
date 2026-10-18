@@ -718,6 +718,18 @@ namespace CivilJam.Desk.Editor
             Wire(view, "stamp", stamp);
             Wire(view, "stampImage", image);
             Wire(view, "stampText", label);
+
+            // (Oğuzhan, ekip onayı) Yuvarlak mühür izi: görsel varsa iz kare ve kaşe alanının ortasında (biraz yukarıda, kağıttan taşmasın).
+            var approvedInk = FindSprite("ink_approve");
+            var rejectedInk = FindSprite("ink_reject");
+            if (approvedInk != null && rejectedInk != null)
+            {
+                stamp.sizeDelta = new Vector2(150, 150);
+                stamp.anchoredPosition = new Vector2(0, 60);
+                stamp.localRotation = Quaternion.Euler(0, 0, 4);
+                Wire(view, "approvedInk", approvedInk);
+                Wire(view, "rejectedInk", rejectedInk);
+            }
             return view;
         }
 

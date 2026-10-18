@@ -35,7 +35,7 @@ namespace CivilJam.Desk
                 "Form ile lab raporunda bir <b>değer farklı</b> yazıyorsa ya yazım hatasıdır ya da biri yalan söylüyordur. " +
                 "Hangisi olduğunu lab raporundaki ücretli <b>EK TEST</b> gösterir: gerçek değerleri ortaya çıkarır."),
             new Card("İmza senin",
-                "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın.\n\n" +
+                "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın; zarf masadayken <b>ONAY</b>, zarfı almak demektir.\n\n" +
                 "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan sağdaki <b>EL KİTABI</b>'na bak."),
             new Card("İncele ve karşılaştır", // EEE metni (ICERIK_TASLAK.md "Öğretici: İnceleme kartı")
                 "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, " +

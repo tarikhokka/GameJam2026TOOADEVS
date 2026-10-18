@@ -10,7 +10,8 @@ namespace CivilJam.Desk
     /// (A, 17 Ekim gece — Ahmet isteği, memory.md "💰") Masadaki zarfa tıklanınca açılan rüşvet ekranı.
     /// Zarf masadaki yerinden oyuncunun önüne gelip büyür, içindeki para ve tutar görünür; iki seçenek:
     ///  - RÜŞVETİ KABUL ET → onAccept (masa: ctx.Actions.Approve(id, acceptBribe: true))
-    ///  - RÜŞVETİ REDDET  → onDecline (zarf masadaki yerine döner; proje karar bekler, oyuncu sonra ONAY / RED verir)
+    ///  - RÜŞVETİ REDDET ya da karartılmış boş alana tıklamak → onDecline (zarf masadaki yerine döner; proje karar bekler;
+    ///    zarf masadayken formdaki ONAY zarfla onaydır, RED zarfı da reddeder — Ahmet kararı 18 Ekim ~03:10)
     /// Kendi arayüzünü kurar. Görsel: envelopeArt (Tarık, Art/bribe_envelope_open.png) atanmışsa o, yoksa kodla çizilmiş
     /// geçici zarf + banknotlar. Tutar her durumda kodla yazılır. Kurgusal banknot; gerçek lira tasarımı yok.
     /// Kural bilmez: sadece gösterir ve seçimi bildirir. Tam ekran perde arkadaki masayı kilitler.
@@ -175,11 +176,19 @@ namespace CivilJam.Desk
             dim = NewImage("Dim", root, new Color(0f, 0f, 0f, 0f));
             Stretch(dim.rectTransform);
             dim.raycastTarget = true;
+            // (Tarık, Ahmet kararı 18 Ekim ~03:10) Karartılmış boş alana tıklamak = RÜŞVETİ REDDET.
+            var dimButton = dim.gameObject.AddComponent<Button>();
+            dimButton.transition = Selectable.Transition.None;
+            dimButton.onClick.AddListener(() => Choose(false));
 
             card = NewRect("Card", root);
             card.anchorMin = card.anchorMax = card.pivot = new Vector2(0.5f, 0.5f);
             card.sizeDelta = new Vector2(CardWidth, CardHeight);
             cardGroup = card.gameObject.AddComponent<CanvasGroup>();
+            // Kartın üstüne tıklamak boş alan sayılmasın (görünmez tutucu; düğmeler bunun üstünde)
+            var cardHit = card.gameObject.AddComponent<Image>();
+            cardHit.color = Color.clear;
+            cardHit.raycastTarget = true;
 
             art = NewRect("Art", card);
             if (envelopeArt != null)

@@ -61,7 +61,13 @@ namespace CivilJam.Desk
 
         private void Awake()
         {
-            formView.ApproveClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: false));
+            // (Tarık, Ahmet kararı 18 Ekim ~03:10) Zarf teklif edildiyse ONAY = zarfla onay; zarfsız onay yok.
+            // Teklif edilmemiş zarf yine alınamaz (Core BribeRevealed değilse kabul etmez).
+            formView.ApproveClicked += () => Decide(() =>
+            {
+                var p = context.GetTodayProject(selectedId);
+                context.Actions.Approve(selectedId, acceptBribe: p != null && p.BribeRevealed);
+            });
             formView.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
             formView.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
             labView.ExtraTestClicked += BuyExtraTest;

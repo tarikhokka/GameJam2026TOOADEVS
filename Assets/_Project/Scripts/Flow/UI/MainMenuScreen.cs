@@ -28,7 +28,7 @@ namespace CivilJam.Flow
 
         // 1920x1080 referansında yeni 520x120 düğmenin oranı korunur. Üç/dört düğmenin sütun merkezi aynıdır.
         static readonly Vector2 MenuCenter = new Vector2(0.5f, 0.33f);
-        const float MenuButtonWidth = 440f, MenuButtonHeight = 102f, MenuButtonGap = 14f;
+        const float MenuButtonWidth = 440f, MenuButtonHeight = 102f, MenuButtonGap = 14f, MenuButtonColumnGap = 36f;
 
         // CREDITS_AND_AI.md "Oyun içi Emeği Geçenler metni" ile aynı tutulur (yeni CC BY asset gelince burayı da güncelle).
         // İki sütun: sol = oyun/ekip/yapay zekâ, sağ = sesler/görseller/yazı tipleri. (EEE, 17 Ekim)
@@ -126,7 +126,12 @@ namespace CivilJam.Flow
                 MenuCenter, MenuCenter, 36f);
             var rt = (RectTransform)btn.transform;
             rt.sizeDelta = new Vector2(MenuButtonWidth, MenuButtonHeight);
-            rt.anchoredPosition = new Vector2(0f, ((count - 1) * 0.5f - index) * (MenuButtonHeight + MenuButtonGap));
+            // (Tarık, 18 Ekim) Tek sütun logoya çarpıyordu: iki sütun (sol, sağ), sayı tekse sonuncusu en altta ortada.
+            int rows = (count + 1) / 2;
+            int row = index / 2;
+            bool lastAlone = count % 2 == 1 && index == count - 1;
+            float x = lastAlone ? 0f : (index % 2 == 0 ? -1f : 1f) * (MenuButtonWidth * 0.5f + MenuButtonColumnGap * 0.5f);
+            rt.anchoredPosition = new Vector2(x, ((rows - 1) * 0.5f - row) * (MenuButtonHeight + MenuButtonGap));
             Style(btn);
         }
 

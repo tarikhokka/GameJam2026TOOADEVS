@@ -33,6 +33,11 @@ namespace CivilJam.Flow
                 $"Kasa: <color={UiKit.GoldHex}>{UiKit.Money(state.Money)}</color>\n" +
                 $"Borç: <color={(state.Debt > 0 ? UiKit.RedHex : UiKit.GoldHex)}>{UiKit.Money(state.Debt)}</color>";
 
+            // (Tarık, Onur'un incelemesi P1) "Devam Et" istendi ama kayıt okunamadıysa oyuncu neden yeni oyunda olduğunu bilsin.
+            if (Context.LoadFailed && state.Day == 1)
+                moneyInfo.text += $"\n<size=55%><color={UiKit.RedHex}>Kayıt okunamadı, yeni oyun başladı.</color>" +
+                    (string.IsNullOrEmpty(Context.LoadError) ? "" : $"\n({Context.LoadError})") + "</size>";
+
             startDayButton.interactable = true;
         }
 

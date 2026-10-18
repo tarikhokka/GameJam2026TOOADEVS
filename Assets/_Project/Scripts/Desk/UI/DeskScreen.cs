@@ -591,6 +591,7 @@ namespace CivilJam.Desk
 
         private bool CanBuyExtraTest(ProjectData project) =>
             project.Verdict == ProjectVerdict.Pending
+            && stampedId != project.Id // (Tarık, Onur'un incelemesi P2) kaşe basıldıysa karar değişmez: test parası kesilmesin
             && !project.ExtraTestBought
             && context.Balance != null
             && context.State.Money >= context.Balance.ExtraTestCost;

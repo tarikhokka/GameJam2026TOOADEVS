@@ -133,6 +133,8 @@ namespace CivilJam.Desk
 
             while (shown < total)
             {
+                // (Tarık, Onur'un incelemesi P1) Esc menüsü timeScale'i 0 yapar: duraklamada yazı ilerlemesin.
+                if (Time.timeScale <= 0f) { yield return null; continue; }
                 budget += Time.unscaledDeltaTime * charsPerSecond;
                 while (budget >= 1f && shown < total)
                 {
@@ -147,7 +149,7 @@ namespace CivilJam.Desk
                     if (pause > 0f && shown < total)
                     {
                         budget = 0f;
-                        yield return new WaitForSecondsRealtime(pause);
+                        for (float w = 0f; w < pause; w += Time.timeScale > 0f ? Time.unscaledDeltaTime : 0f) yield return null;
                     }
                 }
                 yield return null;

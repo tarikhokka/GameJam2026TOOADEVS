@@ -88,7 +88,7 @@ namespace CivilJam.Flow
                 var tint = UiKit.Image(paper, "Tint" + i, null, Color.clear, BoxMin(BuildingBoxes[i], 2f), BoxMax(BuildingBoxes[i], 2f));
                 var t = BoxText(paper, "Building" + i, BuildingBoxes[i], 26, TextAlignmentOptions.TopLeft, 11);
                 UiKit.StyleInk(t, bodyFont);
-                t.rectTransform.offsetMax = new Vector2(-70f, 0f); // sağ üstteki kaşeye yer
+                t.rectTransform.offsetMax = new Vector2(0f, -10f); // kaşe üst çizgide; yazı biraz aşağıdan başlar
                 _buildingTexts.Add(t);
                 _badges.Add(Badge(paper, i, tint));
             }
@@ -130,14 +130,15 @@ namespace CivilJam.Flow
             var box = BuildingBoxes[i];
             var img = UiKit.Image(paper, "Badge" + i, null, NewsInk, Vector2.zero, Vector2.zero);
             var r = img.rectTransform;
-            r.anchorMin = r.anchorMax = new Vector2((box[2] - 18f) / W, 1f - (box[1] + 18f) / H);
-            r.pivot = new Vector2(1f, 1f);
-            r.sizeDelta = new Vector2(150f, 44f);
+            // Kaşe kutunun üst çizgisine basılı (yarısı dışarıda): yazının üstüne binmez (Onur'un incelemesi P1)
+            r.anchorMin = r.anchorMax = new Vector2((box[2] - 10f) / W, 1f - box[1] / H);
+            r.pivot = new Vector2(1f, 0.5f);
+            r.sizeDelta = new Vector2(124f, 36f);
             r.localRotation = Quaternion.Euler(0f, 0f, 8f);
-            var t = UiKit.Text(r, "Text", "", 26, UiKit.Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+            var t = UiKit.Text(r, "Text", "", 21, UiKit.Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
             UiKit.StyleInk(t, titleFont);
             t.color = UiKit.Paper;
-            t.characterSpacing = 4f;
+            t.characterSpacing = 2f;
             return (r, img, t, tint);
         }
 
@@ -357,11 +358,21 @@ namespace CivilJam.Flow
                 sb.AppendLine($"Yaralı: {quake.TotalInjured}");
             }
 
+            // (Tarık, Onur'un incelemesi P1) Kalabalık gecede (ör. 12 yıkım) sütun taşıyordu: en fazla 3 bina, gerisi tek satır.
+            const int MaxStoryBuildings = 3;
+            int told = 0, rest = 0;
             foreach (var o in quake.Outcomes)
             {
                 if (!o.Collapsed || string.IsNullOrEmpty(o.ResponsibilityText)) continue;
+                if (told >= MaxStoryBuildings) { rest++; continue; }
+                told++;
                 sb.AppendLine();
                 sb.AppendLine($"<i>{o.BuildingName}:</i> {o.ResponsibilityText}");
+            }
+            if (rest > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"<i>İmzanızı taşıyan {rest} bina daha yıkıldı.</i>");
             }
 
             if (quake.Outcomes.Exists(o => o.Collapsed && o.WasBribed))

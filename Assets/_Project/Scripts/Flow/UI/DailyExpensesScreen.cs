@@ -107,11 +107,18 @@ namespace CivilJam.Flow
             if (pending != null)
                 foreach (var l in pending.Lines) if (!l.Paid) unpaid += l.Amount;
 
+            // (Tarık, Onur'un incelemesi P0) Ödeme sonrası rakamları ekran çıkarmaz: Core'un Apply ile birebir aynı önizlemesi.
+            // Kasa yetmezse zorunlu gider borca yazılır (500 TL kasada -650 değil, 100 TL kasa + borç).
+            var preview = ExpenseCalculator.Preview(s, pending);
+            int moneyAfter = preview != null ? preview.MoneyAfter : s.Money;
+            int debtAfter = preview != null ? preview.DebtAfter : s.Debt;
             string text =
                 $"Ödenecek toplam: {UiKit.Money(selected)}\n" +
-                $"Kasa: {UiKit.Money(s.Money)}  →  ödeme sonrası: {UiKit.Money(s.Money - selected)}\n" +
-                $"Mevcut borç: {UiKit.Money(s.Debt)}";
-            if (unpaid > 0)
+                $"Kasa: {UiKit.Money(s.Money)}  →  ödeme sonrası: {UiKit.Money(moneyAfter)}\n" +
+                $"Borç: {UiKit.Money(s.Debt)}  →  ödeme sonrası: {UiKit.Money(debtAfter)}";
+            if (preview != null && preview.AddedToDebt > 0)
+                text += $"\n<size=75%>Kasa yetmiyor: {UiKit.Money(preview.AddedToDebt)} zorunlu gider borca yazılacak.</size>";
+            else if (unpaid > 0)
                 text += $"\n<size=75%>Ödenmeyen giderler ({UiKit.Money(unpaid)}) borç olarak birikebilir.</size>";
             _totals.text = text;
         }

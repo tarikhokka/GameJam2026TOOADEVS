@@ -201,7 +201,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
 | 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | ✅ `76db5f3` |
-| 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🟢 başla |
+| 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | ✅ `5a9ee41` — 58/58 EditMode + 22/22 PlayMode |
 | 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | ✅ (06:36, B2 dahil) |
 | 3 | A3 Entegrasyon, §2-§3, build + ZIP | A | 🔒 |
 
@@ -310,7 +310,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - Zarf kabulü → `StampDecision(true)` (form kapalıysa önce açılır); kaşeden sonra zarf masada görünmez. İade oyuncuda.
     - Çekmece açıkken İNCELE karartması (`InspectController.SetFocus`); kaşe alanı aydınlık ve parlar, çekmece ve İNCELE katmanı karartmanın üstünde.
   - ✅ **AHMET ONAYLADI (~06:35):** öneri kabul, kodda kalır. **Öneri — (D kararlarındaki "inceleme modu açıkken bölme açılmaz" maddesi yerine):** Oğuzhan istedi: inceleme modunda kaşe düğmesi aydınlık ve basılabilir; basınca mod kapanır, çekmece açılır (poliş K2'deki ONAY / RED gibi). İkisi yine aynı anda açık olmaz; çekmece açıkken İNCELE'ye basınca çekmece kapanır. Bunun için `CanStamp` artık inceleme modunda da true olabiliyor (`StampDecision` modu kendisi kapatır). Ahmet uygun bulmazsa geri alınır (tek satır: `CanStamp`'e `!Inspecting`).
-  - **A için:** `BribeEnvelopeView.cs:228` ipucu hâlâ "kararı yine ONAY / RED ile verirsin" diyor; düğme kalktı. Öneri: "…kararı yine kaşe çekmecesinden verirsin." (A'nın dosyası, Oğuzhan dokunmadı.)
+  - **A `759a870` ile düzeltti.** Eski not: `BribeEnvelopeView.cs:228` ipucu hâlâ "kararı yine ONAY / RED ile verirsin" diyor; düğme kalktı. Öneri: "…kararı yine kaşe çekmecesinden verirsin." (A'nın dosyası, Oğuzhan dokunmadı.)
   - **Onur (C2):** B2 bu push'ta; kaşe çekmecesinin masadaki son ayarı Sandbox_Desk'te yapılabilir. Yer builder'da `DeskSandboxBuilder.StampTray.cs` (`StampTrayRightX` / `StampTrayCenterY`); değişmesi gerekirse Oğuzhan'a söyle.
   - (eski görev metni) **B2 Entegrasyon (Faz 2):**
   - ONAY / RED düğmeleri ve A1'in geçici köprüsü kalkar; kaşe alanı boş ve hafif çerçeveli görünür.
@@ -322,7 +322,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - T1 görselleri builder'da bağlanır; prefab'ı builder'la kur.
 
 #### Onur (C) — C1, C2
-- [x] **C1 ✅ `fe657b3` — `StampTrayView` (Özellik 2):** T1 görselleriyle hazır; taban `2e8643d` (A1 dahil). İzole Unity 6000.6.4f1'de 58/58 EditMode + 13/13 PlayMode (4 mevcut Flow + 9 geçici C1 kabulü), gerçek URP önizleme kontrolü geçti. Yanlış bırakma, izin/hedef/girdi kilidi kaybı, kapat/gizle/yeniden bağla ve olay içinde gizleme doğrulandı. Kalıcı Canvas/karartma, Core kararı veya ses yok: bunlar B2/masa tarafında. **Oğuzhan:** bağlantı rehberi `Docs/Onur/StampTrayView_baglanti.md`; kökü 640×260 önerilir, `Bind(() => desk.StampArea, () => desk.CanStamp)`, `Stamped += desk.StampDecision`, `OpenChanged` ile kaşe alanını ve bileşenin bütün kökünü yükselt. Prefab/builder/sahneler değiştirilmedi. C2 başlamadı; Faz 2 kapısını A açacak.
+- [x] **C1 ✅ `fe657b3` — `StampTrayView` (Özellik 2):** T1 görselleriyle hazır; taban `2e8643d` (A1 dahil). İzole Unity 6000.6.4f1'de 58/58 EditMode + 13/13 PlayMode (4 mevcut Flow + 9 geçici C1 kabulü), gerçek URP önizleme kontrolü geçti. Yanlış bırakma, izin/hedef/girdi kilidi kaybı, kapat/gizle/yeniden bağla ve olay içinde gizleme doğrulandı. Kalıcı Canvas/karartma, Core kararı veya ses yok: bunlar B2/masa tarafında. **Oğuzhan:** bağlantı rehberi `Docs/Onur/StampTrayView_baglanti.md`; kökü 640×260 önerilir, `Bind(() => desk.StampArea, () => desk.CanStamp)`, `Stamped += desk.StampDecision`, `OpenChanged` ile kaşe alanını ve bileşenin bütün kökünü yükselt. Prefab/builder/sahneler değiştirilmedi. C2 kabulü aşağıdaki C2 satırında tamamlandı; Faz 2 kapısı A tarafından açıldı.
   - **Dosya:** `Assets/_Project/Scripts/Desk/UI/StampTrayView.cs` (Desk asmdef). `BribeEnvelopeView` / `DeskHeaderView` gibi kendini kurar, `Reset()` T1 görsellerini ve fontları bağlar, görselsiz de çalışır.
   - **Düğme ve bölme:**
     - Kaşe düğmesi (`btn_stamps`) El Kitabı'nın sağında; yerleşimi Oğuzhan B2'de verir, sen kökün içinde düğmeyi sağa yasla.
@@ -339,7 +339,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - `OpenChanged` karartma için yayınlanır.
     - Esc menüsü açıkken (`PauseMenu.InputBlocked`, Flow'da) bu kontrolü yapma: Desk, Flow'u göremez. Masa zaten kilitli.
   - Prefab'a dokunma. Sandbox'ta kendi test sahnende dene.
-- [ ] **C2 (Faz 2):** B2 ara push'larıyla Sandbox_Desk'te son ayar (yerleşim, hızlar, karartmanın üstünde kalma); düzeltmeler sadece kendi dosyanda.
+- [x] **C2 ✅ `5a9ee41`:** B2 `76db5f3` dahil gerçek Sandbox_Desk, 1920×1080; taban `0b0a0b4`, izole Unity 6000.6.4f1: 58/58 EditMode + 22/22 PlayMode (4 mevcut Flow + 9 C1 + 9 C2). Gerçek raycast/katman, ONAY/RED, iki belgeyle gecikmiş karar, erken iade, yanlış kaşe, rüşvet diyaloğu/kabulü, Esc, gizle/göster ve kaşeden sonra lab açma geçti. C1/B2 düzeltmesi gerekmedi; runtime/prefab/builder/sahne değişmedi. Açık çekmecenin El Kitabı satırlarını örtmesi B2'nin açıkça tarifli yerleşimi: kaşe seçimi boyunca, kitap etkileşimi kilitliyken; konum korunuyor. A2 `759a870` alındı: mod geçişi Ahmet onaylı; düzeltilmiş zarf ipucu güncel dosyayla ek 1/1 kabul + taşmama kontrolünden geçti. Kabul ve 3 gerçek URP görüntü: `Docs/Onur/Belge_turu_C2_kabul_notlari.md`. **A:** Faz 2'nin B2/C2/A2 işleri tamam; kapı 2→3 ve A3 build/ZIP sende.
 
 #### Tarık (EEE) — T1, T2
 - [x] **T1 ✅ `4a88ff2`** — 6 zorunlu görsel (stamp_approve/reject eski yer tutucunun üstüne, aynı GUID). İsteğe bağlı `ink_*` ve `sfx_tray` yapılmadı: bugünkü `DecisionStampView` ve `sfx_paper` kullanılsın. — eski görev metni:
@@ -767,6 +767,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 8. Karar günlüğü (güncel kararlar; eski satırlar `f14d2ed`'de)
 | Ne zaman | Karar | Gerekçe |
 |---|---|---|
+| 18 Ekim | Belge turu C2 `5a9ee41` tamam: gerçek masa kabulü 58/58 EditMode + 22/22 PlayMode; son A2 zarf metni ek 1/1. Ürün kodu değişmedi; Faz 2'nin B2/C2/A2 işleri tamam. Faz 3 kapısını A açar | Onur teslimi; sonuç ve görüntüler Docs/Onur/Belge_turu_C2_kabul_notlari.md |
 | 18 Ekim | Belge turu C1 `fe657b3` tamam: bağımsız kaşe çekmecesi, temas olayı ve iptal davranışları, T1 görselleri, bağlantı rehberi; A1 dahil 58/58 EditMode + 13/13 PlayMode. B2 bağlantısı ve C2 masa kabulü Faz 2'de | Onur teslimi; API ve oyun kuralları değişmedi |
 | 16 Ekim | Oyun "İmza": masa başı mühendis onay oyunu; tek Game sahnesi + prefab ekranlar; saf C# Core, Core/Desk/Flow asmdef; Game.unity sadece A | Tema ile doğrudan bağ, paralel çalışma |
 | 16 Ekim | Strength ≥ 1 asla yıkılmaz; şiddet gizli, bina ayakta/yıkık | Dürüst oyuncu cezalandırılmaz |

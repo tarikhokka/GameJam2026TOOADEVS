@@ -28,6 +28,8 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |
 |---|---|---|---|---|---|
 | Unity .gitignore şablonu | `.gitignore` | https://github.com/github/gitignore/blob/main/Unity.gitignore | CC0-1.0 | Tarık | 2026-10-16 |
+| numpy (pip) | Tanıtım videosu: fragman müziğinin sentezi ve ses miksajı (yalnız üretimde; oyunda ve repoda yok) | https://numpy.org | BSD-3-Clause | Ahmet İlman | 2026-10-18 |
+| imageio-ffmpeg (pip; içindeki ffmpeg 7.1) | Tanıtım videosu: kırpma, geçişler, yazılar (oyunun kendi fontları Paytone One / Fira Sans ile), flaş ve MP4 kodlaması (yalnız üretimde; oyunda ve repoda yok) | https://github.com/imageio/imageio-ffmpeg · https://ffmpeg.org | imageio-ffmpeg BSD-2-Clause; ffmpeg LGPL / GPL | Ahmet İlman | 2026-10-18 |
 
 ## Font
 | Ne | Nerede kullanıldı | Kaynak | Lisans | Ekleyen | Tarih |

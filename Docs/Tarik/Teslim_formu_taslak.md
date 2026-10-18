@@ -31,6 +31,8 @@ Oyundaki görsellerin hepsi ekip tarafından üretildi (yapay zekâ ile ya da sc
 - Unity .gitignore şablonu · https://github.com/github/gitignore/blob/main/Unity.gitignore · CC0-1.0
 - Unity paketleri (uGUI + TextMeshPro, Input System, URP) · Unity Companion License
 - ui-ux-pro-max skill (nextlevelbuilder/ui-ux-pro-max-skill) · MIT · sadece animasyon tasarım rehberi olarak okundu, repoya dosya eklenmedi
+- numpy · https://numpy.org · BSD-3-Clause · tanıtım videosunun (fragman) müzik sentezi ve ses miksajı; yalnız üretimde kullanıldı, oyunda ve repoda yok
+- imageio-ffmpeg (içindeki ffmpeg 7.1 ile) · https://github.com/imageio/imageio-ffmpeg · imageio-ffmpeg BSD-2-Clause, ffmpeg LGPL/GPL · fragmanın kırpma, geçiş, yazı (oyunun kendi fontlarıyla) ve MP4 kodlaması; yalnız üretimde kullanıldı, oyunda ve repoda yok
 
 **Metin — Kullanılmadı**
 Oyundaki bütün metinler ekip tarafından yazıldı (yapay zekâ kullanımı AI beyanında).

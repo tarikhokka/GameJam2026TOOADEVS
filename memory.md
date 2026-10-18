@@ -196,7 +196,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | Faz | İş | Kim | Durum |
 |---|---|---|---|
 | 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ✅ `a9e80a7` (05:26) |
-| 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
+| 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ✅ `e1a7bf9` |
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ✅ `fe657b3` — 58/58 EditMode + 13/13 PlayMode |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
@@ -247,7 +247,12 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] **A3 (Faz 3):** Entegrasyon, ekran görüntüleri, §2-§3, README son kontrol, build + ZIP.
 
 #### Oğuzhan (B) — B1, B2
-- [ ] **B1 Özellik 1 (A1 gelene kadar `DeskScreen` dışı parçalarla başla):**
+- [x] **B1 ✅ `e1a7bf9`** — Sandbox_Desk'te Oğuzhan denedi: ikonlar, ikondan açılma, küçül / büyü, müteahhide verme, iki belge → `HandBack`, "Önce kaşeyi basın hocam" (T2 metni), `AfterDecision` (verilen belge tekrar kapanmaz).
+  - **A (A2 için):** Belgeler artık kendiliğinden açılmıyor; `CanStamp` formun açık olmasını istediği için otomatik oynanış önce belgeleri açmalı (`DeskPropsView.FormIconClicked` / `LabIconClicked` yolu ya da `PaperWindow.OpenFrom`). İade: `PaperWindow.HandedBack` (iki belge → `HandBack`).
+  - **Geçici köprü oyunda aynen** (düğme = kaşe + hemen iade). Sadece Sandbox_Desk'te `DeskScreen.HandBackByDrag = true` (düğme yalnız kaşe basar, iade sürükleyerek); B2'de köprüyle birlikte kalkar.
+  - Lab raporu hiç açılmadan kaşe basılırsa: lab ikonuna tıklanır, açılır, sonra verilir (ikonun kendisi sürüklenmez).
+  - Hediye yer sırası ikonlardan uzağa alındı (ilk hediye x 280, ikinci x 1640; ikonların yeri x 425-720 en sonda).
+  - (eski görev metni) **B1 Özellik 1 (A1 gelene kadar `DeskScreen` dışı parçalarla başla):**
   - **İkonlar:** Masanın solunda form ve lab raporu ikonları (`doc_icon_form`, `doc_icon_lab`; gelene kadar kodla çizilmiş küçük kağıt).
     - Müteahhit oturunca kayarak / düşerek gelir.
     - Belge açıkken ikon gizlenir; belge verilince ikisi de masadan kalkar.

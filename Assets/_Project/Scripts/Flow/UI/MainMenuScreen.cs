@@ -36,26 +36,35 @@ namespace CivilJam.Flow
             "<size=130%><b>İMZA</b></size>\n" +
             "TOOADEVS · Civil Game Jam 2026\n\n" +
             "<b>EKİP</b>\n" +
-            "Ahmet İlman — Oyun mantığı ve sistemler\n" +
-            "Oğuzhan Yurt — Masa ekranı\n" +
-            "Onur Kabadayılar — Akış ekranları ve menü\n" +
-            "Tarık Hokkaömeroğlu — Görsel, ses ve içerik\n\n" +
+            "<b>Ahmet İlman</b> — Oyun mantığı (Core), veri, entegrasyon, build\n" +
+            "<b>Oğuzhan Yurt</b> — Masa ekranı: belgeler, kararlar, inceleme, ses ve kaşe\n" +
+            "<b>Onur Kabadayılar</b> — Akış ekranları: gazete, gün özeti, ödeme, sonlar, ana menü, üst bar\n" +
+            "<b>Tarık Hokkaömeroğlu</b> — Görsel ve ses, son müzikleri, içerik metinleri " +
+            "(müteahhitler, manşetler, sonlar), jüri menüsü\n\n" +
             "<b>YAPAY ZEKÂ</b>\n" +
-            "Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları " +
-            "(Claude, ChatGPT/Codex, Gemini) kullanıldı. Ayrıntılı liste: CREDITS_AND_AI.md";
+            "Kodda, metinlerde ve görsellerde yapay zekâ araçları kullanıldı: " +
+            "Claude ve Claude Code (Anthropic), ChatGPT ve Codex (OpenAI), Gemini (Google). " +
+            "Hangi iş, hangi dosya ve kim: CREDITS_AND_AI.md\n\n" +
+            "<b>MOTOR</b>\n" +
+            "Unity 6 · uGUI + TextMeshPro · Input System\n\n" +
+            "Oynadığın için teşekkürler.";
 
         const string CreditsRight =
-            "<b>SESLER VE MÜZİKLER</b>\n" +
+            "<b>MÜZİKLER</b>\n" +
+            "Menü: \"Ambient Paulstretched Piano\" — waveplaysfx (freesound.org), CC0\n" +
+            "Hüküm sonu: \"The Sad Piano\" — dasgoat (freesound.org), CC0\n" +
+            "İyi son, Kapanan Kapı, Enkazın Gölgesi: ekibin kendi eseri (kodla sentezlendi)\n\n" +
+            "<b>SESLER</b>\n" +
             "Ortam sesi: \"Suburban House Ambience 02\" — msepitaph (freesound.org), CC BY 4.0\n" +
-            "Menü müziği: \"Ambient Paulstretched Piano\" — waveplaysfx (freesound.org), CC0\n" +
-            "Son müziği: \"The Sad Piano\" — dasgoat (freesound.org), CC0\n" +
             "Kağıt sesi: \"paper5\" — florian_reinke (freesound.org), CC0\n" +
             "Cam kırılma sesi: \"Breaking Glass\" — hifijohn (freesound.org), CC0\n" +
             "Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0\n" +
-            "Yazı sesi: \"Medium Text Blip\" — malakme (freesound.org), CC0\n\n" +
+            "Yazı sesi: \"Medium Text Blip\" — malakme (freesound.org), CC0\n" +
+            "Mesai zili: ekibin kendi eseri (kodla sentezlendi)\n\n" +
             "<b>GÖRSELLER</b>\n" +
-            "Müteahhit karakterleri, ofis, belgeler ve ana menü: yapay zekâ (ChatGPT)\n" +
-            "Gazete şablonu: yapay zekâ (Gemini)\n\n" +
+            "Müteahhitler, ofis, belgeler, son ekranları, zarf ve ana menü: yapay zekâ (ChatGPT)\n" +
+            "Gazete şablonu: yapay zekâ (Gemini)\n" +
+            "Düğmeler, üst bar, kaşeler, hediyeler ve menü/son canlandırmaları: ekip (Claude ile yazılan script'ler)\n\n" +
             "<b>YAZI TİPLERİ</b>\n" +
             "Liberation Sans — SIL Open Font License 1.1\n" +
             "Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1\n" +

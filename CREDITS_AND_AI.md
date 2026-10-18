@@ -83,6 +83,7 @@ Satır biçimi: `| Ne | Nerede kullanıldı | Kaynak (link) | Lisans | Ekleyen |
 | Claude Code (Anthropic) | Proje analizi ve yol haritası; borç/son kuralları, kayıt silme, demo tuşları, son ekranı asset'leri (metinler EEE'nin; MiddleCollapsed taslak metni), README taslağı, build ayarları ve şablon temizliği | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `README.md`, `memory.md`, `AHMET.md`, `Flow/UI/EndingScreen.cs` ve `ResultScreen.cs` (küçük düzeltme) | Ahmet İlman | 2026-10-17 |
 | Claude Code (Anthropic) | Core (17 Ekim gündüz-akşam): oynanış testi düzeltmeleri (proje türleri, müteahhit rolleri, tekrarsız adlar), El Kitabı v2 kuralları ve veri aracı, tepki/hafıza/hediye mantığı, 56 tepki repliği taslağı (Ahmet onayladı), denge simülasyonu, el kitabı sekmeleri, ödeme önizlemesi, kayıt sonucu; El Kitabı "Hızlı Bakış" tasarım taslağı; Game.unity bağlantıları ve PlayMode ekran kontrolü; md dosyalarının temizliği | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `ICERIK_TASLAK.md`, `Docs/Tasarim/el_kitabi_hizli_bakis.html`, `memory.md`, `AHMET.md`, `README.md` | Ahmet İlman | 2026-10-17 |
 | Claude Code (Anthropic) | Core (17 Ekim gece): İnceleme modu kontrolü, uyuşmazlık diyaloğu + rüşvetin uyuşmazlıktan sonra gelmesi, 7 günlük ziyaret programı (VisitPlanner), kişiliksiz karakter desteği, Windows build aracı; Esc menüsüne Ayarlar (ses, tam ekran); PlayMode ekran kontrolleri | `Assets/_Project/Scripts/Core/**`, `Assets/_Project/Data/**`, `Assets/_Project/Scripts/Flow/UI/PauseMenu.cs`, `Assets/_Project/Scripts/Flow/Tests/PlayMode/SettingsMenuTests.cs`, `memory.md`, `AHMET.md` | Ahmet İlman | 2026-10-17 |
+| Claude Code (Anthropic) | 18 Ekim: son ekranlarının canlandırması (`EndingAmbience`: hale, toz, buhar, yağmur, şimşek, kül, kule lambası) ve her sona müzik bağlantısı; 3 son müziğini sentezleyen script; Enkazın Gölgesi görselinin yeni ofisten yeniden üretimi; jüri menüsü (J: dört son, rüşvet, hediye, kabadayı; ipucu kartı; kayıt korunur); zarf davranışı (boş alana tıklama = reddet, zarf masadayken ONAY = zarfla onay); öğretici metin düzeltmeleri; video planı; Emeği Geçenler metninin son hâli | `Scripts/Flow/UI/EndingAmbience.cs`, `EndingScreen.cs`, `JuryMenu.cs`, `MainMenuScreen.cs`, `Scripts/Core/Game/JuryHooks.cs`, `GameManager.cs`, `GameSession.cs`, `Scripts/Desk/UI/DeskScreen.cs`, `BribeEnvelopeView.cs`, `TutorialView.cs`, `Prefabs/Flow/EndingScreen.prefab`, `Prefabs/Desk/DeskScreen.prefab`, `Audio/mus_ending_*.wav`, `Art/ending_collapsed.png`, `README.md`, `Docs/Tarik/Video_ve_README_plani.md` | Tarık | 2026-10-18 |
 | ChatGPT (OpenAI) | Açık rüşvet zarfı ve kurgusal banknotlar (yazısız; gerçek para tasarımı yok) | `Assets/_Project/Art/bribe_envelope_open.png` | Tarık | 2026-10-18 |
 | Claude Code (Anthropic) | Zarf görselinin beyaz arka planını silme ve kırpma; tıklanabilir rüşvet zarfı ekranı (BribeEnvelopeView) ve masaya bağlanması | `Assets/_Project/Art/bribe_envelope_open.png`, `Assets/_Project/Scripts/Desk/UI/BribeEnvelopeView.cs`, `DeskScreen.cs`, `DeskPropsView.cs`, `FormView.cs`, `Editor/DeskSandboxBuilder.cs` | Ahmet İlman | 2026-10-18 |
 | ChatGPT / Codex (OpenAI) | Gün sistemi, haftalık gider ve gün sonu kayıt kararlarıyla ortak hafızanın güncellenmesi; Onur için C rolü çalışma planı | `memory.md`, `ONUR.md`, `CREDITS_AND_AI.md` | Onur Kabadayılar | 2026-10-16 |
@@ -117,32 +118,42 @@ CC BY (atıf zorunlu) asset'ler oyunun credits ekranında da görünmeli. Yeni a
 TOOADEVS · Civil Game Jam 2026
 
 EKİP
-Ahmet İlman — Oyun mantığı ve sistemler
-Oğuzhan Yurt — Masa ekranı
-Onur Kabadayılar — Akış ekranları ve menü
-Tarık Hokkaömeroğlu — Görsel, ses ve içerik
+Ahmet İlman — Oyun mantığı (Core), veri, entegrasyon, build
+Oğuzhan Yurt — Masa ekranı: belgeler, kararlar, inceleme, ses ve kaşe
+Onur Kabadayılar — Akış ekranları: gazete, gün özeti, ödeme, sonlar, ana menü, üst bar
+Tarık Hokkaömeroğlu — Görsel ve ses, son müzikleri, içerik metinleri (müteahhitler, manşetler, sonlar), jüri menüsü
+
+YAPAY ZEKÂ
+Kodda, metinlerde ve görsellerde yapay zekâ araçları kullanıldı: Claude ve Claude Code (Anthropic),
+ChatGPT ve Codex (OpenAI), Gemini (Google). Hangi iş, hangi dosya ve kim: CREDITS_AND_AI.md
+
+MOTOR
+Unity 6 · uGUI + TextMeshPro · Input System
+
+Oynadığın için teşekkürler.
+
+MÜZİKLER
+Menü: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
+Hüküm sonu: "The Sad Piano" — dasgoat (freesound.org), CC0
+İyi son, Kapanan Kapı, Enkazın Gölgesi: ekibin kendi eseri (kodla sentezlendi)
 
 SESLER
 Ortam sesi: "Suburban House Ambience 02" — msepitaph (freesound.org), CC BY 4.0
 Kağıt sesi: "paper5" — florian_reinke (freesound.org), CC0
 Cam kırılma sesi: "Breaking Glass" — hifijohn (freesound.org), CC0
-Menü müziği: "Ambient Paulstretched Piano" — waveplaysfx (freesound.org), CC0
-Son müziği: "The Sad Piano" — dasgoat (freesound.org), CC0
 Arayüz ve kaşe sesleri: Kenney (kenney.nl), CC0
 Yazı sesi: "Medium Text Blip" — malakme (freesound.org), CC0
+Mesai zili: ekibin kendi eseri (kodla sentezlendi)
 
 GÖRSELLER
-Müteahhit karakterleri, ofis, belgeler ve ana menü: yapay zekâ (ChatGPT)
+Müteahhitler, ofis, belgeler, son ekranları, zarf ve ana menü: yapay zekâ (ChatGPT)
 Gazete şablonu: yapay zekâ (Gemini)
+Düğmeler, üst bar, kaşeler, hediyeler ve menü/son canlandırmaları: ekip (Claude ile yazılan script'ler)
 
-YAZI TİPİ
+YAZI TİPLERİ
 Liberation Sans — SIL Open Font License 1.1
 Lilita One (logo) — Juan Montoreano, SIL Open Font License 1.1
-Paytone One — The Paytone Project Authors, SIL Open Font License 1.1
-Fira Sans — Mozilla Foundation / Telefonica, SIL Open Font License 1.1
-
-YAPAY ZEKÂ
-Bu oyunun kodunda, metinlerinde ve bazı görsellerinde yapay zekâ araçları
-(Claude, ChatGPT/Codex, Gemini) kullanıldı. Ayrıntılı liste: CREDITS_AND_AI.md
+Paytone One — The Paytone Project Authors, SIL OFL 1.1
+Fira Sans — Mozilla Foundation / Telefonica, SIL OFL 1.1
 ```
-Not: Bu blok değişince `MainMenuScreen.cs` içindeki `CreditsLeft` / `CreditsRight` da güncellenmeli (oyunda iki sütun: sol = İMZA, EKİP, YAPAY ZEKÂ; sağ = SESLER VE MÜZİKLER, GÖRSELLER, YAZI TİPLERİ).
+Not: Bu blok değişince `MainMenuScreen.cs` içindeki `CreditsLeft` / `CreditsRight` da güncellenmeli (oyunda iki sütun: sol = İMZA, EKİP, YAPAY ZEKÂ, MOTOR; sağ = MÜZİKLER, SESLER, GÖRSELLER, YAZI TİPLERİ).

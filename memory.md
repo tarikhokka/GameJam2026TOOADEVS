@@ -47,7 +47,7 @@
 | 10 | Lab: kaşe | El Kitabı: LAB listesi | Başka (akredite olmayan) laboratuvarın kaşesi |
 
 **Uyuşmazlık diyaloğu ve rüşvet (`InspectionDialogue`):** zarf başta yoktur, rüşvetçi sadece selamlar. UYUŞMAZLIK bulununca (bu projede bu alan çifti için ilk kez) kaşeden sonra kısa diyalog: denetçi cümlesi (`Dialogue.asset` şablonu, gerçek veriyle) + müteahhit cevabı (`ClientSO.MismatchLines`). Projede zarf varsa **ilk uyuşmazlıkta** devam eder: teklif (`BribeLines`) + denetçi tepkisi (`BribeReactions`) + kapanış (`BribeCloseLines`); `ProjectData.BribeRevealed` = true ve zarf masaya düşer. Uyuşmazlık bulunmazsa zarf hiç teklif edilmez; teklif edilmemiş zarf alınamaz, ret sonrası "zarf geri çevrildi" repliği çıkmaz. SORUN YOK ve ALAKASIZ'da diyalog yok.
-**Zarf:** masada sadece "ZARF" yazar; tıklanınca açılır (para + tutar): RÜŞVETİ KABUL ET → zarfla onay; RÜŞVETİ REDDET → zarf masaya döner, proje karar bekler.
+**Zarf:** masada sadece "ZARF" yazar; tıklanınca açılır (para + tutar): RÜŞVETİ KABUL ET → zarfla onay; RÜŞVETİ REDDET → zarf masaya döner, proje karar bekler. ⚠️ **Değişiyor (§7, Tarık):** boş alana tıklamak = reddet; zarf teklif edildiyse formdaki ONAY = zarfla onay.
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner.
 
@@ -284,6 +284,23 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 >       - README "Kontroller"e J satırı eklenir.
 >     - **A'nın işi:** Core farkını inceler, testleri ve 7 günlük otomatik oynanışı yeniden koşar, sonra **tek** build + ZIP alır.
 >     - Bitince burada `[x]` + hash.
+>   - [x] Tarık: müellif `5cf42ee` ✅, jüri menüsü `c8e0c46` ✅. A inceledi: Core'da sadece J'ye basılınca çalışan iki fonksiyon, son sıçramasında kayıt korunuyor. Masa sahnelerine (rüşvet / hediye / kabadayı) atlamak o oyunu "jüri oyunu" yapar (gün ≥ 2, kabadayı günü ayarı, gün sonunda kaydedilir); bilerek kabul edildi.
+>   - [ ] **Tarık — zarf değişikliği — Ahmet istisna olarak onayladı (~03:10), build'den ÖNCE.** Oğuzhan'ın dosyaları, Tarık yapar, Oğuzhan bilgilensin:
+>     1. **Kapanma:** Zarf ekranı açıkken (`BribeEnvelopeView`) karartılmış boş alana tıklamak = RÜŞVETİ REDDET.
+>        - Zarf masadaki yerine döner, proje karar bekler, oyuncu belgelere bakmaya devam eder.
+>        - Reddet düğmesi bugün de aynen böyle çalışıyor; yeni olan sadece boş alana tıklama.
+>     2. **ONAY = zarfla onay:** Zarf **teklif edildiyse** (`project.BribeRevealed`) formdaki ONAY, rüşveti kabul etmek demektir.
+>        - `DeskScreen`: `ApproveClicked` → `Approve(selectedId, acceptBribe: project.BribeRevealed)`.
+>        - Kabul akışı ve animasyonu zarfın "RÜŞVETİ KABUL ET"iyle aynı olur.
+>        - Zarfsız onay seçeneği kalkar.
+>        - **Teklif edilmemiş zarf alınamaz kuralı aynen kalır:** uyuşmazlık bulunmadıysa zarf masada yoktur, ONAY normal onaydır (Core zaten `BribeRevealed` değilse kabul etmez).
+>        - RED bugünkü gibi zarfı da reddeder.
+>     - **Core değişmez.** EditMode 55/55, PlayMode yeşil.
+>     - **Metinler (Tarık):**
+>       - README "Zarf" satırı: "reddet (zarf masada kalır, kararı yine ONAY / RED ile verirsin)" → zarf varken ONAY zarfla onaydır, RED zarfı da reddeder;
+>       - 5. öğretici kartta gerekiyorsa yarım cümle.
+>     - **A, Faz 3'te:** §2 "Zarf" kuralını yazar, testleri ve 7 günlük oynanışı yeniden koşar, sonra tek build.
+>     - Bitince burada `[x]` + hash.
 > **Onur teslimi (18 Ekim):** B2 `1c652eb` alındı; C2 ve C1-K `d2dddb9` ile birleşmiş sürümde tamam. Ahmet artık A3 entegrasyon/oynanış/build/ZIP kontrolünü açabilir. Game.unity Onur tarafından değiştirilmedi. Tarık bölümündeki menü dolgu izi notu son görsel kontrolde değerlendirilsin. Kabul: `Docs/Onur/Faz2_kabul_notlari.md`.
 
 **Faz 3 (08:30 → 11:00) — A:**
@@ -518,6 +535,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 | 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
+| 18 Ekim ~03:10 | Zarf: açıkken boş alana tıklamak = reddet (zarf masaya döner); zarf teklif edildiyse ONAY = rüşveti kabul (zarfsız onay yok); teklif edilmemiş zarf yine alınamaz; RED zarfı da reddeder. Core değişmez; Tarık yapar (Oğuzhan'ın dosyaları) | Ahmet kararı (rüşvetli proje her zaman uygunsuz; zarfsız onay anlamsızdı) |
 | 18 Ekim ~03:00 | Faz 3'te istisna: Tarık'ın jüri menüsü (J: dört son, rüşvet, hediye, kabadayı) build'den önce alınır; Core'a sadece iki fonksiyon, normal akış ve kayıt değişmez, A inceler | Ahmet kararı (jüri bütün içeriği 7 gün oynamadan görsün; tek build) |
 | 18 Ekim 02:16 | Kapı 1 → 2 açıldı: Faz 1'in 6 işi ✅ (A1 `fb60575`, A2 `93686f0`, B1 `822495c`, C1 `1b47ce6`, T1 `f8842b5`, T2 `1dd7870`); birleşik kod testli (EditMode 55/55, PlayMode 4/4) | Ahmet onayı, A kontrol etti |
 | 18 Ekim ~02:15 | Poliş turu kapı kuralı: Faz 1'in 6 işi (A1, A2, B1, C1, T1, T2) hepsi ✅ olmadan kimse Faz 2'ye geçmez; Faz 2 bitmeden Faz 3 yok. Kapıyı A açar (§7 Faz durumu tablosu). Yedek plan (görsel gelmezse eskiyle bağla) kalktı, T1 geldi | Ahmet kararı |

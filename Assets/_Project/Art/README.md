@@ -67,7 +67,7 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `doc_icon_form.png` / `doc_icon_lab.png` | Belge turu T1: masanın solunda kapalı belge ikonları (200x150; bina / deney tüpü simgeli) | B | F |
 | `stamp_tray.png` | Belge turu T1: iki kaşe yuvalı ahşap bölme (520x220) | B | F |
 | `btn_stamps.png` | Belge turu T1: kaşe bölmesini açan düğme (110x110, kaşe ikonlu). **Yedek:** oyunda `btn_stamps_wood` kullanılıyor | B | — |
-| `stamp_wood_approve.png` / `stamp_wood_reject.png` | Ahşap mühür (Oğuzhan, ekip onayı; Claude ile SVG çizildi): fotoğraftaki ahşap mühürden uyarlanan ONAY / RED kaşeleri (400x480; yazı diskte kazılı, sapta renk halkası, çekmece yuvasına oturur). `stamp_approve` / `stamp_reject` yedek kaldı | B | F |
+| `stamp_wood_approve.png` / `stamp_wood_reject.png` | Ahşap mühür (Oğuzhan, ekip onayı; Claude ile SVG olarak sıfırdan çizildi): ahşap saplı yuvarlak ONAY / RED kaşeleri (400x480; yazı diskte kazılı, sapta renk halkası, çekmece yuvasına oturur). `stamp_approve` / `stamp_reject` yedek kaldı | B | F |
 | `ink_approve.png` / `ink_reject.png` | Ahşap mühür (Oğuzhan): formdaki yuvarlak ONAYLANDI / REDDEDİLDİ mühür izi (480x480, şeffaf; DecisionStampView) | B | F |
 | `btn_stamps_wood.png` | Ahşap mühür (Oğuzhan): kaşe çekmecesi düğmesi, ahşap çerçeveli mini çekmece içinde iki mühür (220x220) | B | F |
 | `btn_help.png` | Poliş T1: NASIL OYNANIR düğmesi (420x100, hardal, solda "?"; yazı kodla) | B | F |

@@ -147,7 +147,7 @@ namespace CivilJam.Core
         static InspectResult Same(string what, string x, string y) =>
             string.Equals(x ?? "", y ?? "", StringComparison.Ordinal)
                 ? Result(InspectVerdict.Match, $"{what} iki belgede aynı")
-                : Result(InspectVerdict.Mismatch, $"{what} farklı: {x} ↔ {y}");
+                : Result(InspectVerdict.Mismatch, $"{what} farklı: {x} — {y}");
 
         static InspectResult Accredited(GameContext ctx, string labName, string what) =>
             IsAccredited(ctx, labName)

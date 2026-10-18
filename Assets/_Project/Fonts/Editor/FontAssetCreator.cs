@@ -17,7 +17,30 @@ namespace CivilJam.EditorTools
         const string FontDir = "Assets/_Project/Fonts";
         const string Charset =
             " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~" +
-            "ÇĞİÖŞÜçğıöşüÂâÎîÛû·•—–…’‘“”«»°%×";
+            "ÇĞİÖŞÜçğıöşüÂâÎîÛû·•—–…’‘“”«»°%×" +
+            "→↔±²✓✕"; // (EEE, 18 Ekim) oyunda geçen ama ilk sette olmayanlar: düğmelerdeki ok, incelemedeki ↔
+
+        /// <summary>
+        /// (EEE, 18 Ekim) Var olan Static font asset'lerine Charset'te olup atlasta olmayan karakterleri ekler
+        /// (yoksa build'de kare görünür). Bir kez Dynamic yapıp ekler, yine Static'e alır. Fontta hiç olmayanlar Console'a yazılır.
+        /// </summary>
+        [MenuItem("CivilJam/EEE/Add Missing Characters To Font Assets")]
+        public static void AddMissingCharacters()
+        {
+            foreach (var guid in AssetDatabase.FindAssets("t:TMP_FontAsset", new[] { FontDir }))
+            {
+                var asset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(AssetDatabase.GUIDToAssetPath(guid));
+                if (asset == null) continue;
+                asset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+                bool ok = asset.TryAddCharacters(Charset, out string missing);
+                asset.atlasPopulationMode = AtlasPopulationMode.Static;
+                EditorUtility.SetDirty(asset);
+                if (asset.atlasTexture != null) EditorUtility.SetDirty(asset.atlasTexture);
+                Debug.Log($"[FontAssetCreator] {asset.name}: {asset.characterTable.Count} karakter" +
+                          (ok || string.IsNullOrEmpty(missing) ? ", eksik yok." : $", fontta olmayan: {missing}"));
+            }
+            AssetDatabase.SaveAssets();
+        }
 
         static FontAssetCreator()
         {

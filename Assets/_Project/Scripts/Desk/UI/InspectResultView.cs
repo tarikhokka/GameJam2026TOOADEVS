@@ -261,7 +261,7 @@ namespace CivilJam.Desk
         void PreviewMatch() => Preview(InspectVerdict.Match, Inspection.TitleMatch, "Ada / Parsel iki belgede aynı");
 
         [ContextMenu("Önizleme/UYUŞMAZLIK SAPTANDI")]
-        void PreviewMismatch() => Preview(InspectVerdict.Mismatch, Inspection.TitleMismatch, "Ada / Parsel farklı: 561/8 ↔ 123/4");
+        void PreviewMismatch() => Preview(InspectVerdict.Mismatch, Inspection.TitleMismatch, "Ada / Parsel farklı: 561/8 — 123/4");
 
         [ContextMenu("Önizleme/ALAKASIZ")]
         void PreviewUnrelated() => Preview(InspectVerdict.Unrelated, Inspection.TitleUnrelated, "Bu iki bilgi birbiriyle karşılaştırılamaz.");

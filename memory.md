@@ -267,6 +267,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - Faz 2 dosyalarına dokunmazlar.
 
 **Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
+> 🆕 **Güncel final aday build (A, 18 Ekim 04:22): `bd2d56d`** — jüri vitrini (`bc78f12`) + Tarık'ın Emeği Geçenler, font ve gazete düğmesi düzeltmeleri dahil. `Builds/Imza/Imza.exe`, `Builds/Imza.zip` (57 MB). EditMode 58/58, PlayMode 4/4, build başlatma denemesi hatasız. Aşağıdaki 03:21 notu eski build içindir.
+>
 > ✅ **POLİŞ TURU BİTTİ (A, 18 Ekim 03:21).** Final aday build `107f106` ile alındı: `Builds/Imza/Imza.exe`, teslim ZIP'i `Builds/Imza.zip` (56 MB).
 > - **Testler:** EditMode 55/55, PlayMode 4/4.
 > - **Otomatik 7 günlük oynanış geçti:**

@@ -2,9 +2,8 @@
 
 Takım temsilcisi teslim ekranında (https://game.ktimo.com.tr/jam/teslim) bu metinleri kopyalar. Kaynak: `CREDITS_AND_AI.md`. **Teslimden hemen önce CREDITS ile son bir kez karşılaştırın**; eksik ya da yanlış beyan diskalifiye sebebidir (4.4, 10.1).
 
-> ⚠️ Teslimden önce kapatılacak iki açık:
+> ⚠️ Teslimden önce kapatılacak açık:
 > - **Onur:** `Docs/Tasarim/hedef_arayuz.png` hangi araçla üretildi? (AI → Görsel'e eklenir)
-> - **Oğuzhan:** ahşap mühür görselleri "fotoğraftaki ahşap mühürden uyarlandı": fotoğraf internetten mi? İnternetten ise **Hazır kaynak → Görsel** "Kullanıldı" olur (kaynak + lisans yazılır); yalnız göz kararı referanssa bunu açıkça yazın.
 
 ## Oyun bilgileri
 - **Oyun adı:** İmza
@@ -15,8 +14,8 @@ Takım temsilcisi teslim ekranında (https://game.ktimo.com.tr/jam/teslim) bu me
 
 ## Hazır kaynaklar (madde 3.4)
 
-**Görsel — Kullanılmadı** *(Oğuzhan'ın mühür fotoğrafı internetten ise "Kullanıldı" yapın)*
-Oyundaki görsellerin hepsi ekip tarafından üretildi (yapay zekâ ile ya da script ile çizildi; aşağıda AI beyanında). Kenney "Modular Characters" bir süre denendi, sonra kaldırıldı; oyunda yok.
+**Görsel — Kullanılmadı**
+Oyundaki görsellerin hepsi ekip tarafından üretildi (yapay zekâ ile ya da script ile çizildi; aşağıda AI beyanında). Kenney "Modular Characters" bir süre denendi, sonra kaldırıldı; oyunda yok. Ahşap mühür görselleri Claude ile SVG olarak sıfırdan çizildi; genel biçim için bir ürün fotoğrafına yalnızca bakıldı, fotoğraf kullanılmadı ve repoda yok.
 
 **Ses — Kullanıldı**
 - Kenney Interface Sounds, `bong_001` → düğme tıklama sesi · https://kenney.nl/assets/interface-sounds · CC0 1.0

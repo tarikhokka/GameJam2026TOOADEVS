@@ -152,6 +152,8 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 >
 > Hepsi bir araya gelince ortaya gerçekten oynanan bir oyun çıktı. Ne olursa olsun bu takımla çalışmak harikaydı. 🙌
 >
+> **Fragman (A, 16:20):** `Builds/Imza_Fragman.mp4` (59,7 sn, 1080p, repoda değil, ZIP'ten ayrı teslim). Oyunun otomatik oynanışından kaydedildi; müzik Claude Code ile kodla sentezlendi. Beyanı CREDITS ve teslim formu taslağında. Build + ZIP bu commit'ten yeniden alındı.
+>
 > **FINAL:** Teslim build'i ve ZIP'i **bu commit'ten** alınıyor (kod = `f94deb6`'da testli hâli: EditMode 58/58, PlayMode 4/4, 7 günlük otomatik oynanış geçti). **Bundan sonra lütfen kimse push atmasın.**
 
 ## 7. Durum ve açık işler (güncelleme: A, 18 Ekim ~01:50)

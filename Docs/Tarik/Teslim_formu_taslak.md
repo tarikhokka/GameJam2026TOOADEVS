@@ -50,6 +50,7 @@ Oyundaki bütün metinler ekip tarafından yazıldı (yapay zekâ kullanımı AI
 
 **Ses — Kullanıldı**
 - Claude (Anthropic) ile yazılan sentez script'leri: üç son müziği (İyi son, Kapanan Kapı, Enkazın Gölgesi) ve mesai zili. Sesler kodla üretildi, dış kaynak yok.
+- Claude Code (Anthropic): tanıtım videosunun (fragman) müziği kodla sentezlendi (Python + numpy); hazır müzik, örnek ya da kayıt yok.
 
 **Kod — Kullanıldı**
 - Claude Code (Anthropic): oyun mantığı (Core), masa ekranı, akış ekranları, editör araçları, testler; ekip üyeleri kodu yönlendirdi, inceledi ve Unity'de test etti.
@@ -61,4 +62,5 @@ Oyundaki bütün metinler ekip tarafından yazıldı (yapay zekâ kullanımı AI
 
 **Diğer — Kullanıldı**
 - Claude / Claude Code ve ChatGPT / Codex: proje planı ve ortak hafıza dokümanı (`memory.md`), iş bölümü, ekonomi denge simülasyonu, görsel prompt'larının yazımı.
+- Claude Code (Anthropic): tanıtım videosu (fragman) — oyunun otomatik oynanışından kare kaydı, kurgu, yazılar; ffmpeg ile kodlandı. Görüntüler oyunun kendisinden.
 - Ayrıntılı dosya bazlı liste: `CREDITS_AND_AI.md`.

@@ -18,18 +18,23 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 | Eylem | Kontrol |
 |---|---|
 | Tüm etkileşimler | Fare (sol tık) |
+| Belge açma | Masanın solundaki belge ikonuna tıkla |
+| Karar | Kaşe düğmesi → kaşeyi forma sürükle (yeşil ONAY / kırmızı RED) |
+| Belgeleri geri verme | Kaşeden sonra belgeyi müteahhidin üstüne sürükle |
 | İnceleme modu | **İNCELE** düğmesi, sonra iki alana tıkla; sağ tık seçimi iptal eder |
 | Menü (ses ayarı, tam ekran) | Esc → Ayarlar |
 | Jüri menüsü (istenen sahneye atla: dört son, rüşvet, hediye, kabadayı) | **J** |
 
 ## Nasıl oynanır
 
-- **Masa:** Müteahhitler sırayla karşına oturur. Önünde üç belge durur: **Yapı Denetim Formu**, **Laboratuvar Raporu** ve **Denetçi El Kitabı**. Kararını formdaki **ONAY** ya da **RED** ile verirsin.
+- **Masa:** Müteahhitler sırayla karşına oturur. Getirdiği **Yapı Denetim Formu** ve **Laboratuvar Raporu** masanın solunda küçük ikonlar olarak durur; tıklayınca açılır. **Denetçi El Kitabı** hep açıktır.
+- **Kaşe:** Kararını El Kitabı'nın sağındaki **kaşe düğmesiyle** verirsin: bölme açılır, yeşil **ONAY** ya da kırmızı **RED** kaşesini tutup formdaki kaşe alanına sürükle. Basılan kaşe değiştirilemez.
+- **Belgeleri geri ver:** Kaşeden sonra iki belgeyi de müteahhide sürükle. İkisi de verilince karar kesinleşir ve sıradaki müteahhit gelir.
 - **El Kitabı:** **Hızlı Bakış** sayfası formdaki kat adedine göre doğru kat grubunu kendisi gösterir. Beş değerin (beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü) hepsi yeşil bölgede olmalı; tek bir kırmızı, binanın güvenli olmadığı demektir. El Kitabı'nda Hızlı Bakış ve LAB (akredite laboratuvarlar) sayfaları var. İlk gün kısa bir anlatım seni karşılar; masadaki **NASIL OYNANIR** ile istediğin an yeniden açarsın.
 - **Belgeleri karşılaştır:** Form ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporu yazan laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
 - **İncele:** **İNCELE** düğmesine bas, iki ayrı belgeden aynı bilgiye tıkla (ör. formdaki ve rapordaki parsel ya da formdaki bir değer ile El Kitabı'ndaki satırı). Oyun **SORUN YOK**, **UYUŞMAZLIK SAPTANDI** ya da **ALAKASIZ** der. Uyuşmazlık bulursan müteahhide söylersin, o da cevap verir. İnceleme ücretsiz ve sınırsızdır; kararı yine sen verirsin.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar. Sahte belgede kâğıttaki beyan temiz görünür, gerçek değer ancak ek testte görünür. Form ile lab raporunda bir değer farklı yazıyorsa ya masum bir yazım hatasıdır ya da biri yalan söylüyordur; hangisi olduğunu ek test gösterir. Ama her test kasadan çıkar.
-- **Zarf:** Rüşvetçi müteahhit, sen bir uyuşmazlık bulunca masaya zarf bırakır. Zarfa tıklarsan açılır ve içindeki parayı görürsün: **rüşveti kabul et** (zarfla onaylarsın) ya da **reddet** (ya da boş bir yere tıkla; zarf masaya döner, belgelere bakmaya devam edersin). Zarf masadayken **ONAY** zarfla onay demektir; **RED** zarfı da reddeder. Rüşvet teklif edilen her proje kurallara aykırıdır.
+- **Zarf:** Rüşvetçi müteahhit, sen bir uyuşmazlık bulunca masaya zarf bırakır. Zarfa tıklarsan açılır ve içindeki parayı görürsün: **rüşveti kabul et** (zarfı alırsın, forma yeşil ONAY kaşesi kendiliğinden basılır) ya da **reddet** (ya da boş bir yere tıkla; zarf masaya döner, belgelere bakmaya devam edersin). Zarf masadayken yeşil **ONAY** kaşesi zarfla onay demektir; kırmızı **RED** kaşesi zarfı da reddeder. Rüşvet teklif edilen her proje kurallara aykırıdır.
 - **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen camın kırılabilir, masana tekme atılabilir, kapının kilidi ya da arabanın lastikleri gidebilir; tamiri sana kalır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.

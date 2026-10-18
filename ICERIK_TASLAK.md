@@ -322,3 +322,9 @@ Mevcut 4 kartın ardına 5. kart. **Oğuzhan `TutorialView.cards`'a ekler** (Tar
 
 ## İnceleme modu metinleri — README
 README'ye doğrudan yazıldı ("Nasıl oynanır" → **İncele**, **Ek test**, **Zarf**; "Kontroller" → İnceleme modu satırı).
+
+## Belge turu metinleri (18 Ekim, EEE)
+- Öğretici 1. kart: belgeler masanın solundaki ikonlardan açılır; karar sağdaki KAŞE bölmesinden kaşeyi forma sürükleyerek verilir; sonra iki belge müteahhide sürüklenir (`TutorialView.cs`; prefab metnini B2'de builder kurar).
+- Öğretici 4. kart: zarf masadayken yeşil ONAY kaşesi zarfı almak demektir.
+- README: Nasıl oynanır (Kaşe, Belgeleri geri ver, Zarf) ve Kontroller (belge açma, karar, geri verme) yazıldı.
+- Müteahhidin 'önce kaşe' satırı (Oğuzhan'a, koda gömülecek): "Önce kaşeyi basın hocam, sonra alırım."

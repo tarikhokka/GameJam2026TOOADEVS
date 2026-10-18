@@ -25,8 +25,10 @@ namespace CivilJam.Desk
         {
             new Card("Ulusal Yapı Denetim Kurumu'na hoş geldin",
                 "Müteahhitler sırayla gelip karşına oturacak. Senin imzan olmadan hiçbir bina yükselmez.\n\n" +
-                "Önündeki üç belgeyi soldan sağa karşılaştır: <b>YAPI DENETİM FORMU</b>, <b>LABORATUVAR RAPORU</b> ve " +
-                "<b>DENETÇİ EL KİTABI</b>. Kararı formdaki <b>ONAY / RED</b> düğmeleriyle verirsin."),
+                "Müteahhidin belgeleri masanın solunda durur; ikonlara tıklayıp <b>YAPI DENETİM FORMU</b>'nu ve " +
+                "<b>LABORATUVAR RAPORU</b>'nu aç, <b>DENETÇİ EL KİTABI</b> ile karşılaştır.\n\n" +
+                "Kararını sağdaki <b>KAŞE</b> bölmesinden ver: yeşil ONAY ya da kırmızı RED kaşesini forma sürükle. " +
+                "Sonra iki belgeyi de müteahhide sürükleyerek geri ver."),
             new Card("Değerleri kontrol et",
                 "Formdaki <b>KAT ADEDİ</b>'ne bak: El Kitabı'nın <b>HIZLI BAKIŞ</b> sayfası doğru kat grubunu kendisi gösterir.\n\n" +
                 "Beyan edilen her değer yeşil alanda olmalı. Tek bir kırmızı bile varsa bina reddedilir."),
@@ -35,7 +37,7 @@ namespace CivilJam.Desk
                 "Form ile lab raporunda bir <b>değer farklı</b> yazıyorsa ya yazım hatasıdır ya da biri yalan söylüyordur. " +
                 "Hangisi olduğunu lab raporundaki ücretli <b>EK TEST</b> gösterir: gerçek değerleri ortaya çıkarır."),
             new Card("İmza senin",
-                "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın; zarf masadayken <b>ONAY</b>, zarfı almak demektir.\n\n" +
+                "Bir uyuşmazlık bulduğunda bazı müteahhitler masaya zarf bırakır. Almak da reddetmek de senin kararın; zarf masadayken yeşil <b>ONAY</b> kaşesi, zarfı almak demektir.\n\n" +
                 "Onayladığın her bina bir gün afetle sınanacak. Kuralları unutursan sağdaki <b>EL KİTABI</b>'na bak."),
             new Card("İncele ve karşılaştır", // EEE metni (ICERIK_TASLAK.md "Öğretici: İnceleme kartı")
                 "Masadaki <b>İNCELE</b> düğmesine bas ve iki belgeden aynı bilgiye tıkla. Oyun sana <b>SORUN YOK</b>, " +

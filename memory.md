@@ -199,7 +199,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ⏳ |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
-| 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ⏳ |
+| 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
 | 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🔒 |
 | 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🔒 |
 | 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🔒 |
@@ -297,7 +297,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - (İsteğe bağlı) `ink_approve.png` / `ink_reject.png`: kaşe izi, "ONAYLANDI" / "REDDEDİLDİ" görselde olabilir. Yoksa bugünkü `DecisionStampView` kullanılır.
   - **Ses (isteğe bağlı):** `sfx_tray.wav` (bölme kayma). Kaşe için `sfx_stamp` var.
   - Her biri için CREDITS ve `Art/README` satırı. **Tek push**, "T1 ✅ hash".
-- [ ] **T2 Metinler:**
+- [x] **T2 ✅** — 1. ve 4. kart (`TutorialView.cs`), README (Nasıl oynanır + Kontroller), ICERIK_TASLAK. **Oğuzhan:** "önce kaşe" satırı: "Önce kaşeyi basın hocam, sonra alırım." — eski görev metni:
   - Öğretici kartlar (`TutorialView` + prefab metni; Oğuzhan B2'de builder'la kurunca koddaki gelir):
     - belgeleri masadaki ikonlardan aç;
     - kararı sağdaki kaşe bölmesinden kaşeyi forma sürükleyerek ver;

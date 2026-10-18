@@ -68,6 +68,7 @@ namespace CivilJam.Flow
                 else if (s.name == "paper") _paper = s;
             }
             Build();
+            ShowTag(); // küçük "Jüri menüsü: J" etiketi baştan sol altta
             JuryHooks.TutorialFinished += ShowHint;
         }
 
@@ -183,10 +184,10 @@ namespace CivilJam.Flow
 
         void ShowHint()
         {
+            // (Tarık, 18 Ekim) Büyük "JÜRİ İÇİN" kartı kalktı: sadece sol alttaki küçük etiket (oyun başından beri görünür).
             if (_hintShown) return;
             _hintShown = true;
-            _hintRt.gameObject.SetActive(true);
-            _hintTime = 0f;
+            if (!_tag.gameObject.activeSelf) ShowTag();
         }
 
         void ShowTag()

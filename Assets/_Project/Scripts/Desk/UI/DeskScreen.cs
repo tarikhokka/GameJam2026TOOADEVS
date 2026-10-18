@@ -151,6 +151,7 @@ namespace CivilJam.Desk
             formWindow.HandBackRefused += StampFirst;
             labWindow.HandBackRefused += StampFirst;
             props.EnvelopeRevealed += PlayPaper; // zarf masaya düştü
+            props.EnvelopeRevealed += () => FirstRunCoach.BribeHint(transform); // (Tarık) ilk zarfta bir kez rüşvet kartı
             props.EnvelopeClicked += OpenEnvelope; // (A) zarf açılır: para + tutar, RÜŞVETİ KABUL ET / REDDET
 
             if (rulebook != null) rulebook.Toggled += PlayPaper;
@@ -240,7 +241,8 @@ namespace CivilJam.Desk
             if (officeGifts != null) officeGifts.Refresh(context); // önceki günlerde kabul edilenler (kayıttan da)
             scene.Clear();
             Select(FirstPendingId());
-            if (tutorial != null && context.State.Day == 1) tutorial.Open();
+            // (Tarık) 1. günde kartlar yerine oklu rehber (FirstRunCoach); NASIL OYNANIR kartları açmaya devam eder.
+            if (tutorial != null && context.State.Day == 1 && !FirstRunCoach.TryStart(transform)) tutorial.Open();
         }
 
         public void Hide()

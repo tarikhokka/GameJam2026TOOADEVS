@@ -202,7 +202,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
 | 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🟢 başla |
 | 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🟢 başla |
-| 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🟢 başla |
+| 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🟡 test hazır (06:20), son koşu B2'den sonra |
 | 3 | A3 Entegrasyon, §2-§3, build + ZIP | A | 🔒 |
 
 > 🟢 **BELGE TURU KAPI 1 → 2 AÇILDI — FAZ 2 BAŞLADI (A, 18 Ekim ~06:00, Ahmet'in onayıyla).** Faz 1'in beşi ✅: A1 `a9e80a7`, B1 `e1a7bf9`, C1 `fe657b3`, T1 `4a88ff2`, T2 `2daba93`.
@@ -256,7 +256,16 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - `FormView.StampArea`: ONAY / RED düğmelerini kapsayan alan.
   - **Geçici köprü:** Eski ONAY / RED düğmeleri `StampDecision` + hemen `HandBack` çağırır, böylece oyun Faz 2'ye kadar bugünkü gibi oynanır. Zarf kabulü `StampDecision(true)` + `HandBack`. B2 köprüyü kaldırır.
   - Testler: EditMode 58/58, PlayMode yeşil.
-- [ ] **A2 (Faz 2):** Otomatik 7 günlük oynanışı yeni akışla günceller (bölme ve iade API'si üzerinden); jüri menüsü masa sahnelerini dener.
+- [ ] **A2 (Faz 2) — 🟡 hazır, B2'yi bekliyor:** Otomatik 7 günlük oynanış yeni akışa göre yazıldı ve **B1 + köprüyle geçti** (06:17).
+  - **Akış:** 56 belge ikondan açıldı; **27 karar gerçek sürükle-bırakla iade edildi**; her üçüncü kararda inceleme modu açıkken kaşe basıldı (mod kapanıyor).
+  - **Kontroller:**
+    - kaşeden önce verilen belge yerinde kalıyor;
+    - kaşede ve tek belgede karar Core'a gitmiyor, iki belgede gidiyor;
+    - zarf masadayken ONAY kaşesi + iade = zarfla onay;
+    - jüri menüsü çalışıyor.
+  - **Kaşe:** Masada `StampTrayView` varsa test bölmeyi açıp kaşeyi gerçek sürüklemeyle forma basıyor; B2 gelince bu yol da denenecek.
+  - **Oğuzhan, B2 için:** bölmenin açma düğmesi `StampTrayView.toggle`, kaşeler `approve` / `reject` (`.Art`). Bu adlar değişirse A'ya yaz.
+- (eski) **A2 (Faz 2):** Otomatik 7 günlük oynanışı yeni akışla günceller (bölme ve iade API'si üzerinden); jüri menüsü masa sahnelerini dener.
 - [ ] **A3 (Faz 3):** Entegrasyon, ekran görüntüleri, §2-§3, README son kontrol, build + ZIP.
 
 #### Oğuzhan (B) — B1, B2

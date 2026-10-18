@@ -50,3 +50,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: CivilJam.Flow::CivilJam.Flow.ResultScreen
   background: {fileID: 21300000, guid: e16cb6e2339c0534591029dbf26c2a94, type: 3}
   maxVictimNames: 6
+  table: {fileID: 21300000, guid: f6f8919d01da4c2cbe6d08600806d748, type: 3}
+  paperClip: {fileID: 8300000, guid: ab61e838ee4490848a8163b2451d9edb, type: 3}
+  stampClip: {fileID: 8300000, guid: 684a8d0ed7a7c0b4b9e85ee095b4dbb5, type: 3}
+  buttonSprite: {fileID: 21300000, guid: 1130df5ba37c43a0ad648da9399f8ace, type: 3}
+  buttonFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  titleFont: {fileID: 11400000, guid: 691a94f196862d74a90bd87be6d766c3, type: 2}
+  infoFont: {fileID: 11400000, guid: c9799eda0b436f047adcd5ded76fc33e, type: 2}
+  bodyFont: {fileID: 11400000, guid: 8af5995d193981a4797d0ddd25143df8, type: 2}
+  paperSprite: {fileID: 21300000, guid: 9c8d9b1b996ff334e9117cb256043efe, type: 3}

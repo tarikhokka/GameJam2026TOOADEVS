@@ -15,6 +15,16 @@ namespace CivilJam.Flow
     {
         [SerializeField] Sprite background;     // newspaper_bg
         [SerializeField] int maxVictimNames = 6;
+        // (EEE, 18 Ekim) Gazete masaya atılır: ahşap masa, gölge, hafif eğik kağıt; siyah-beyaz eski gazete teması: siyah manşet bandı, SON DAKİKA
+        // şeridi, gün mührü, bina kutularında YIKILDI / AYAKTA kaşeleri. Açılış hareketi + kağıt ve kaşe sesi.
+        [SerializeField] Sprite table;          // newspaper_table
+        [SerializeField] AudioClip paperClip;   // sfx_paper
+        [SerializeField] AudioClip stampClip;   // sfx_stamp
+
+        // Eski gazete: sadece mürekkep siyahı ve kağıt kremi (renkli vurgu yok).
+        const string InkHex = "#141210";
+        static readonly Color NewsInk = new Color(0.08f, 0.07f, 0.06f);
+        static readonly Color NewsCream = new Color(0.95f, 0.91f, 0.82f);
 
         public override GamePhase Phase => GamePhase.Result;
 
@@ -30,40 +40,114 @@ namespace CivilJam.Flow
             new float[] { 804, 699, 1144, 854 },   // sağ alt
         };
 
-        TextMeshProUGUI _headline, _story;
+        TextMeshProUGUI _headline, _story, _dayText;
         readonly List<TextMeshProUGUI> _buildingTexts = new List<TextMeshProUGUI>();
+        readonly List<(RectTransform rt, Image img, TextMeshProUGUI text, Image tint)> _badges =
+            new List<(RectTransform, Image, TextMeshProUGUI, Image)>();
         Button _continue;
+        RectTransform _root, _paper, _ribbon, _dayStamp, _headlineRt;
+        CanvasGroup _continueGroup;
+        AudioSource _audio;
+        Coroutine _intro;
+
+        static readonly Vector2 PaperSize = new Vector2(1180f, 885f); // 1200x900 oranında, masa kenarlardan görünsün
+        const float PaperTilt = -1.5f;
 
         protected override void Build()
         {
-            var root = UiKit.Stretch(transform, "Root");
-            UiKit.Image(root, "Table", null, UiKit.Dark, Vector2.zero, Vector2.one);
+            var root = _root = UiKit.Stretch(transform, "Root");
+            UiKit.Image(root, "Table", table, table != null ? Color.white : UiKit.Dark, Vector2.zero, Vector2.one);
 
-            var paper = UiKit.Stretch(root, "Paper");
-            var fitter = paper.gameObject.AddComponent<AspectRatioFitter>();
-            fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
-            fitter.aspectRatio = W / H;
+            // Kağıdın gölgesi ve kendisi: ortada sabit boyut, hafif eğik
+            var holder = UiKit.Rect(root, "PaperHolder", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            holder.sizeDelta = PaperSize;
+            holder.anchoredPosition = new Vector2(0f, 22f);
+            _paper = holder;
+            var shadow = UiKit.Image(holder, "Shadow", null, new Color(0f, 0f, 0f, 0.5f), Vector2.zero, Vector2.one);
+            shadow.rectTransform.offsetMin = new Vector2(16f, -22f);
+            shadow.rectTransform.offsetMax = new Vector2(16f, -22f);
+            var paper = UiKit.Stretch(holder, "Paper");
             var bg = paper.gameObject.AddComponent<Image>();
             bg.sprite = background;
             bg.color = background != null ? Color.white : UiKit.Paper;
             bg.raycastTarget = false;
 
-            _headline = BoxText(paper, "Headline", HeadlineBox, 64, TextAlignmentOptions.Center, 28);
-            _headline.fontStyle = FontStyles.Bold;
+            // Manşet: siyah bant + krem Paytone
+            var band = UiKit.Image(paper, "HeadlineBand", null, NewsInk, BoxMin(HeadlineBox, 2f), BoxMax(HeadlineBox, 2f));
+            _headlineRt = band.rectTransform;
+            _headline = UiKit.Text(band.transform, "Headline", "", 66, UiKit.Paper, TextAlignmentOptions.Center,
+                new Vector2(0.02f, 0.06f), new Vector2(0.98f, 0.94f), true, 28);
+            UiKit.StyleInk(_headline, titleFont); // krem, düz (altın geçiş yok)
+            _headline.color = NewsCream;
+            _headline.textWrappingMode = TextWrappingModes.Normal;
+
             _story = BoxText(paper, "Story", StoryBox, 28, TextAlignmentOptions.TopLeft, 14);
+            UiKit.StyleInk(_story, bodyFont);
             for (int i = 0; i < BuildingBoxes.Length; i++)
-                _buildingTexts.Add(BoxText(paper, "Building" + i, BuildingBoxes[i], 26, TextAlignmentOptions.TopLeft, 11));
+            {
+                var tint = UiKit.Image(paper, "Tint" + i, null, Color.clear, BoxMin(BuildingBoxes[i], 2f), BoxMax(BuildingBoxes[i], 2f));
+                var t = BoxText(paper, "Building" + i, BuildingBoxes[i], 26, TextAlignmentOptions.TopLeft, 11);
+                UiKit.StyleInk(t, bodyFont);
+                t.rectTransform.offsetMax = new Vector2(-70f, 0f); // sağ üstteki kaşeye yer
+                _buildingTexts.Add(t);
+                _badges.Add(Badge(paper, i, tint));
+            }
+
+            // SON DAKİKA şeridi (sol üst köşe, eğik) ve gün mührü (başlığın sağı)
+            var ribbon = UiKit.Image(paper, "Ribbon", null, NewsInk, new Vector2(0f, 1f), new Vector2(0f, 1f));
+            _ribbon = ribbon.rectTransform;
+            _ribbon.sizeDelta = new Vector2(250f, 58f);
+            _ribbon.anchoredPosition = new Vector2(80f, -28f); // başlığın Ş'sini örtmeden köşede
+            _ribbon.localRotation = Quaternion.Euler(0f, 0f, 14f);
+            ribbon.gameObject.AddComponent<Shadow>().effectDistance = new Vector2(4f, -5f);
+            var rt = UiKit.Text(_ribbon, "Text", "SON DAKİKA!", 34, NewsCream, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+            UiKit.StyleInk(rt, titleFont);
+            rt.color = NewsCream;
+
+            var stamp = UiKit.Image(paper, "DayStamp", null, NewsInk, new Vector2(1f, 1f), new Vector2(1f, 1f));
+            _dayStamp = stamp.rectTransform;
+            _dayStamp.sizeDelta = new Vector2(124f, 124f);
+            _dayStamp.anchoredPosition = new Vector2(-104f, -108f);
+            _dayStamp.localRotation = Quaternion.Euler(0f, 0f, -10f);
+            stamp.gameObject.AddComponent<Shadow>().effectDistance = new Vector2(3f, -4f);
+            _dayText = UiKit.Text(_dayStamp, "Text", "", 30, UiKit.Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+            UiKit.StyleInk(_dayText, titleFont);
+            _dayText.color = UiKit.Paper;
+            _dayText.lineSpacing = -18f;
+
+            holder.localRotation = Quaternion.Euler(0f, 0f, PaperTilt);
 
             _continue = UiKit.Button(root, "Continue", "Hesaplaşmaya geç  →", Finish,
                 new Vector2(0.74f, 0.02f), new Vector2(0.98f, 0.09f), 30f);
+            _continueGroup = _continue.gameObject.AddComponent<CanvasGroup>();
+
+            _audio = gameObject.AddComponent<AudioSource>();
+            _audio.playOnAwake = false;
         }
+
+        (RectTransform, Image, TextMeshProUGUI, Image) Badge(Transform paper, int i, Image tint)
+        {
+            var box = BuildingBoxes[i];
+            var img = UiKit.Image(paper, "Badge" + i, null, NewsInk, Vector2.zero, Vector2.zero);
+            var r = img.rectTransform;
+            r.anchorMin = r.anchorMax = new Vector2((box[2] - 18f) / W, 1f - (box[1] + 18f) / H);
+            r.pivot = new Vector2(1f, 1f);
+            r.sizeDelta = new Vector2(150f, 44f);
+            r.localRotation = Quaternion.Euler(0f, 0f, 8f);
+            var t = UiKit.Text(r, "Text", "", 26, UiKit.Paper, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+            UiKit.StyleInk(t, titleFont);
+            t.color = UiKit.Paper;
+            t.characterSpacing = 4f;
+            return (r, img, t, tint);
+        }
+
+        static Vector2 BoxMin(float[] box, float inset) => new Vector2((box[0] + inset) / W, 1f - (box[3] - inset) / H);
+        static Vector2 BoxMax(float[] box, float inset) => new Vector2((box[2] - inset) / W, 1f - (box[1] + inset) / H);
 
         static TextMeshProUGUI BoxText(Transform parent, string name, float[] box, float size,
             TextAlignmentOptions align, float minSize)
         {
-            var min = new Vector2((box[0] + Pad) / W, 1f - (box[3] - Pad) / H);
-            var max = new Vector2((box[2] - Pad) / W, 1f - (box[1] + Pad) / H);
-            return UiKit.Text(parent, name, "", size, UiKit.Ink, align, min, max, true, minSize);
+            return UiKit.Text(parent, name, "", size, UiKit.Ink, align, BoxMin(box, Pad), BoxMax(box, Pad), true, minSize);
         }
 
         protected override void Refresh()
@@ -71,6 +155,7 @@ namespace CivilJam.Flow
             var quake = Context.LastQuake;
             _headline.text = PickHeadline(quake);
             _story.text = BuildStory(quake);
+            _dayText.text = quake != null ? $"{quake.Day}.\n<size=70%>GÜN</size>" : "";
 
             // Yıkılanlar önce, sonra ayakta kalanlar
             var outcomes = new List<BuildingOutcome>();
@@ -84,20 +169,128 @@ namespace CivilJam.Flow
             for (int i = 0; i < slots; i++)
             {
                 var t = _buildingTexts[i];
+                var badge = _badges[i];
                 bool overflowSlot = outcomes.Count > slots && i == slots - 1;
                 if (overflowSlot)
                 {
                     t.text = $"<b>Ve {outcomes.Count - (slots - 1)} bina daha</b>\n" + SummarizeRest(outcomes, slots - 1);
+                    SetBadge(badge, null);
                 }
                 else if (i < outcomes.Count)
                 {
                     t.text = BuildBuilding(outcomes[i]);
+                    SetBadge(badge, outcomes[i]);
                 }
                 else
                 {
                     t.text = "";
+                    SetBadge(badge, null);
                 }
             }
+
+            if (_intro != null) StopCoroutine(_intro);
+            _intro = StartCoroutine(Intro(quake != null && quake.CollapsedCount > 0));
+        }
+
+        static void SetBadge((RectTransform rt, Image img, TextMeshProUGUI text, Image tint) b, BuildingOutcome o)
+        {
+            b.rt.gameObject.SetActive(o != null);
+            if (o == null) { b.tint.color = Color.clear; return; }
+            b.img.color = o.Collapsed ? NewsInk : NewsCream;                 // YIKILDI: siyah kaşe; AYAKTA: krem kaşe, siyah çerçeve
+            b.text.color = o.Collapsed ? NewsCream : NewsInk;
+            var frame = b.img.GetComponent<Outline>();
+            if (frame == null) { frame = b.img.gameObject.AddComponent<Outline>(); frame.effectColor = NewsInk; frame.effectDistance = new Vector2(3f, -3f); }
+            frame.enabled = !o.Collapsed;
+            b.text.text = o.Collapsed ? "YIKILDI" : "AYAKTA";
+            b.tint.color = o.Collapsed ? new Color(NewsInk.r, NewsInk.g, NewsInk.b, 0.08f) : Color.clear;
+        }
+
+        // ---------- açılış hareketi ----------
+
+        // Gazete aşağıdan dönerek masaya atılır (kağıt sesi); yıkım varsa ekran sarsılır; manşet vurgulanır;
+        // SON DAKİKA ve gün mührü belirir; kaşeler sırayla basılır (kaşe sesi); en son devam düğmesi gelir.
+        System.Collections.IEnumerator Intro(bool collapsed)
+        {
+            var activeBadges = _badges.FindAll(b => b.rt.gameObject.activeSelf);
+            foreach (var b in activeBadges) b.rt.localScale = Vector3.zero;
+            _ribbon.localScale = Vector3.zero;
+            _dayStamp.localScale = Vector3.zero;
+            _continueGroup.alpha = 0f;
+            _continueGroup.interactable = false;
+            Play(paperClip, 0.9f);
+
+            var rest = new Vector2(0f, 22f);
+            var start = new Vector2(-260f, -1250f);
+            for (float t = 0f; t < 0.6f; t += Dt())
+            {
+                float k = EaseOutBack(t / 0.6f, 1.2f);
+                _paper.anchoredPosition = Vector2.LerpUnclamped(start, rest, k);
+                _paper.localRotation = Quaternion.Euler(0f, 0f, Mathf.LerpUnclamped(28f, PaperTilt, k));
+                float s = Mathf.LerpUnclamped(1.12f, 1f, k);
+                _paper.localScale = new Vector3(s, s, 1f);
+                yield return null;
+            }
+            _paper.anchoredPosition = rest;
+            _paper.localRotation = Quaternion.Euler(0f, 0f, PaperTilt);
+            _paper.localScale = Vector3.one;
+
+            if (collapsed)
+                for (float t = 0f; t < 0.35f; t += Dt())
+                {
+                    float amp = 14f * (1f - t / 0.35f);
+                    _root.anchoredPosition = new Vector2(Random.Range(-amp, amp), Random.Range(-amp, amp));
+                    yield return null;
+                }
+            _root.anchoredPosition = Vector2.zero;
+
+            yield return Pop(_headlineRt, 1.12f, 0.28f);
+            Play(stampClip, 0.7f);
+            yield return Pop(_dayStamp, 0f, 0.22f);
+            yield return Pop(_ribbon, 0f, 0.22f);
+            foreach (var b in activeBadges)
+            {
+                Play(stampClip, 0.8f);
+                yield return Pop(b.rt, 0f, 0.18f, 1.8f);
+            }
+
+            for (float t = 0f; t < 0.3f; t += Dt()) { _continueGroup.alpha = t / 0.3f; yield return null; }
+            _continueGroup.alpha = 1f;
+            _continueGroup.interactable = true;
+
+            // SON DAKİKA şeridi hafifçe nabız atar
+            for (float t = 0f; ; t += Dt())
+            {
+                float s = 1f + 0.04f * Mathf.Sin(t * 5f);
+                _ribbon.localScale = new Vector3(s, s, 1f);
+                yield return null;
+            }
+        }
+
+        // from = 0: yoktan büyüyerek gelir; from > 1: büyükten yerine oturur (kaşe gibi: overshoot = başlangıç ölçeği)
+        System.Collections.IEnumerator Pop(RectTransform rt, float from, float duration, float stampFrom = 0f)
+        {
+            float s0 = stampFrom > 0f ? stampFrom : from;
+            for (float t = 0f; t < duration; t += Dt())
+            {
+                float k = t / duration;
+                float s = s0 > 1f ? Mathf.Lerp(s0, 1f, 1f - (1f - k) * (1f - k)) : Mathf.LerpUnclamped(s0, 1f, EaseOutBack(k, 2f));
+                rt.localScale = new Vector3(s, s, 1f);
+                yield return null;
+            }
+            rt.localScale = Vector3.one;
+        }
+
+        static float EaseOutBack(float k, float c)
+        {
+            k = Mathf.Clamp01(k) - 1f;
+            return 1f + (c + 1f) * k * k * k + c * k * k;
+        }
+
+        static float Dt() => Mathf.Min(PauseMenu.AnimationDeltaTime, 0.05f);
+
+        void Play(AudioClip clip, float volume)
+        {
+            if (clip != null && _audio != null) _audio.PlayOneShot(clip, volume);
         }
 
         // ---------- manşet ----------
@@ -146,7 +339,7 @@ namespace CivilJam.Flow
         {
             if (quake == null) return "";
             var sb = new StringBuilder();
-            sb.AppendLine("<b>GÜNÜN ÖZETİ</b>");
+            sb.AppendLine($"<color={InkHex}><b>GÜNÜN ÖZETİ</b></color>");
 
             if (quake.Outcomes.Count == 0)
             {
@@ -159,8 +352,8 @@ namespace CivilJam.Flow
             }
             else
             {
-                sb.AppendLine($"Yıkılan bina: {quake.CollapsedCount}");
-                sb.AppendLine($"Can kaybı: {quake.TotalDeaths}");
+                sb.AppendLine($"Yıkılan bina: <color={InkHex}><b>{quake.CollapsedCount}</b></color>");
+                sb.AppendLine($"Can kaybı: <color={InkHex}><b>{quake.TotalDeaths}</b></color>");
                 sb.AppendLine($"Yaralı: {quake.TotalInjured}");
             }
 
@@ -199,7 +392,7 @@ namespace CivilJam.Flow
                 return sb.ToString();
             }
 
-            sb.AppendLine("<b>YIKILDI</b>");
+            sb.AppendLine($"<color={InkHex}><b>YIKILDI</b></color>");
             sb.AppendLine($"Can kaybı: {o.Deaths} · Yaralı: {o.Injured}");
 
             if (o.VictimNames != null && o.VictimNames.Count > 0)

@@ -121,6 +121,191 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 7. Durum ve açık işler (güncelleme: A, 18 Ekim ~01:50)
 **Durum:** İnceleme modu, uyuşmazlık diyaloğu, tıklanabilir zarf ve 7 günlük yapı bitti ve oyunda doğrulandı. EditMode 52/52, PlayMode 4/4; otomatik 7 günlük kabul oynanışı geçti (`AHMET.md`). **Final aday build** `Builds/Imza/Imza.exe` + teslim ZIP'i `Builds/Imza.zip` alındı. A'nın güncel teslim/kabul listesi: `AHMET.md` → "Onur'dan teslim notu — 18 Ekim". Freeze 18 Ekim 12:00.
 
+### 📂 BELGE TURU — 2 major özellik: belge al / ver + kaşe bölmesi (Ahmet kararı, 18 Ekim ~04:40) — HERKES OKUSUN · lider: A
+> Herkes şunları yapsın:
+> 1. **Önce pull.**
+> 2. Kendi bölümünü, **Dosya kilitleri**ni ve **API sözleşmesi**ni oku.
+> 3. Bitirince **Faz durumu** tablosunda satırını ✅ + hash yap.
+>
+> **Kural:** Faz 1'in hepsi ✅ olmadan Faz 2 yok, Faz 2 bitmeden Faz 3 yok (poliş turundaki gibi; kapıyı A açar).
+>
+> **Saatler:** Son kod push'u **11:00**, freeze **12:00**.
+>
+> **Güvence:** Elimizde çalışan final aday build var (`bd2d56d`, `Builds/Imza.zip`). Tur yetişmezse o teslim edilir; karar Ahmet'in.
+
+**Özellik 1 — Belgeyi al, kaşeden sonra geri ver (Papers, Please gibi):**
+- **Gelişte:** Müteahhit oturunca "Yapı Denetim Formu" ve "Lab Raporu" masanın **solunda küçük ikonlar** olarak durur. Rüşvet zarfının masada sağda durması gibi, bunlar solda.
+  - Belgeler artık kendiliğinden açılmaz.
+- **Açılma:** İkona tıklanınca belge abartısız bir animasyonla (ikonun yerinden büyüyerek) bugünkü yerinde ve bugünkü görünümüyle açılır. El Kitabı bugünkü gibi hep açık.
+- **İade:** Kaşe basıldıktan sonra oyuncu belgeleri tek tek tutup müteahhide sürükler.
+  - Sürüklenen belge, belgelerin durduğu alandan çıkıp masa kenarına / müteahhit tarafına geçtiği anda **küçük ikon boyutuna döner** (geri inerse büyür).
+  - Müteahhidin üstünde bırakılan belge **verilmiş** olur. Başka yerde bırakılırsa yerine döner.
+  - Kaşeden önce belge verilemez: müteahhide bırakılırsa yerine döner.
+- **Sahnenin sonu:** **İki belge de verilince** sahne biter: karar Core'a gider; tepki, hediye ve kabadayı olayı gelir; sıradaki müteahhit oturur.
+
+**Özellik 2 — ONAY / RED düğmeleri yerine kaşe bölmesi:**
+- **Düğmeler:** Formdaki ONAY / RED düğmeleri kalkar. Yerinde **kaşe alanı** kalır (`FormView.StampArea`). Kaşe **sadece forma** basılır.
+- **Bölme:** El Kitabı'nın sağında bir **kaşe düğmesi** olur. Basınca düğmenin yerinden sola doğru bir **bölme** kayarak açılır; içinde yan yana **yeşil ONAY** ve **kırmızı RED** kaşeleri durur.
+- **Karartma:** Bölme açıkken kaşe alanı ve bölme dışındaki her yer hafif kararır, kaşe alanı parlar (İNCELE modundaki karartmanın aynısı).
+- **Kaşe basma:** Oyuncu bir kaşeyi tutup kaşe alanına sürükler, bırakınca kaşe basılır: aşağı iner, iz kalır, ses çıkar.
+  - Kaşe kendiliğinden bölmeye döner, bölme sağa kayıp kapanır.
+  - Kaşe basılan formda bölme bir daha açılmaz.
+- **Sonrası:** Oyuncu belgeleri müteahhide verir (Özellik 1).
+
+**Kararlar (Ahmet, ~04:40):**
+- **D1:** Karar belgeler müteahhide **verilince** kesinleşir. Kaşe basılınca formda kaşe izi kalır ve değiştirilemez. Karar (`Approve` / `Reject`) iki belge de verilince Core'a gider. Tepki, hediye ve kabadayı olayı iadeden sonra gelir. **Core değişmez** (`IGameActions` aynı).
+- **D2:** İki belge **ayrı ayrı** verilir; ikisi de verilince sahne biter.
+- **D3:** Kaşe **sadece forma** basılır (eski ONAY / RED düğmelerinin yeri).
+- **D4:** Zarf ekranında **RÜŞVETİ KABUL ET** zarfı alır ve forma **yeşil ONAY kaşesini kendiliğinden basar**; sonra oyuncu belgeleri verir.
+  - Zarf masadayken yeşil kaşe = zarfla onay (bugünkü kural); kırmızı kaşe zarfı da reddeder.
+  - Teklif edilmemiş zarf yine alınamaz.
+- **Etkilenen eski kurallar:**
+  - inceleme modunda ONAY / RED düğmeleri (K2) düğmelerle birlikte kalkar;
+  - bölme açılınca inceleme modu kapanır, inceleme modu açıkken bölme açılmaz;
+  - diyalog sürerken bölme ve iade kilitli.
+
+**API sözleşmesi (herkes buna göre yazar; değiştirmek gerekirse önce burada yaz):**
+- `DeskScreen` (A1'de A ekler, sonra Oğuzhan'ın):
+  - `public RectTransform StampArea`: formdaki kaşe alanı (`FormView.StampArea`).
+  - `public bool CanStamp`: dosya bekliyor, form açık, kaşe basılmamış, kaşe sırası / diyalog / zarf ekranı yok.
+  - `public bool IsStamped`: bu formda kaşe basıldı mı.
+  - `public void StampDecision(bool approve)`:
+    - bekleyen kararı tutar, formda kaşe izini canlandırır (`DecisionStampView`), kaşe sesini çalar;
+    - `event Action<bool> DecisionStamped` yayınlar;
+    - Core'a **gitmez**.
+  - `public void HandBack()`: karar Core'a gider ve bugünkü `AfterDecision` sırası çalışır.
+    - approve için: `Approve(id, acceptBribe: project.BribeRevealed)`;
+    - reject için: `Reject(id)`.
+    - Oğuzhan bunu iki belge de verilince çağırır.
+- `StampTrayView` (C1'de Onur yazar, `Desk/UI`, kendini kurar):
+  - `Bind(Func<RectTransform> target, Func<bool> canOpen)`;
+  - `bool IsOpen`;
+  - `event Action<bool> OpenChanged` (karartma için);
+  - `event Action<bool> Stamped` (true = ONAY; bırakıldığı yer hedefin üstündeyse);
+  - `void Close(bool instant)`;
+  - `void SetVisible(bool)`.
+  - Kaşe ve bölme animasyonları, kaşenin geri dönmesi ve bölmenin kapanması bileşenin içinde.
+- Oğuzhan (B1):
+  - `DeskPropsView`: `FormIcon` ve `LabIcon` (masada solda; tıklanınca `FormIconClicked` / `LabIconClicked`).
+  - `PaperWindow` / `DraggableSheet` iade desteği:
+    - "ikon boyutuna küçül / büyü";
+    - `event Action<PaperWindow> HandedBack`;
+    - bırakma hedefi `ClientSceneView`'daki portre alanı.
+
+**Faz durumu (belge turu):**
+| Faz | İş | Kim | Durum |
+|---|---|---|---|
+| 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ⏳ (hedef 05:15, ERKEN push) |
+| 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
+| 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ⏳ |
+| 1 | T1 Görseller + sesler | Tarık | ⏳ (hedef 05:30, ERKEN push) |
+| 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ⏳ |
+| 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🔒 |
+| 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🔒 |
+| 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🔒 |
+| 3 | A3 Entegrasyon, §2-§3, build + ZIP | A | 🔒 |
+
+**Fazlar ve bekleme:**
+- **Faz 1 (paralel, hedef 07:00):**
+  - **A1 ERKEN push:** Oğuzhan `DeskScreen.cs`'e **A1'i pull etmeden dokunmaz**. O sırada `DeskPropsView`, `PaperWindow`, `DraggableSheet`, builder ikon kısmı gibi `DeskScreen` dışındaki parçalarla başlar.
+  - **T1 ERKEN push:** Onur ve Oğuzhan görsel gelene kadar kodla çizilmiş yer tutucu kullanır. Görsel sonra **aynı dosya adıyla** gelir, kod değişmez.
+  - C1 kimseyi beklemez; prefab'a dokunmaz.
+  - T2, kararlar belli olduğu için hemen yapılabilir.
+- **Kapı 1 → 2:** A1, B1, C1, T1, T2 ✅ olunca A Faz 2 satırlarını 🟢 yapar.
+- **Faz 2 (hedef 09:30):**
+  - B2 (prefab'ı kuran **tek** iş);
+  - C2, B2'nin ara push'larıyla Sandbox_Desk'te;
+  - A2.
+- **Faz 3 (09:30 → 11:00, A):** A3. 11:00 sonrası sadece hata düzeltme; 12:00 freeze.
+- **10:00'da Faz 2 bitmemişse** Ahmet karar verir: ya o hâliyle bitirilir ya da `bd2d56d` build'i teslim edilir.
+
+**Dosya kilitleri (belge turu):**
+| Dosya | Kim |
+|---|---|
+| `Scripts/Core/**`, `Data/**`, `Scenes/Game.unity`, `Desk/UI/BribeEnvelopeView.cs` | A |
+| `Desk/UI/DeskScreen.cs` | **A1 bitene kadar A**, sonra Oğuzhan |
+| `Desk/UI/DeskPropsView.cs`, `PaperWindow.cs`, `DraggableSheet.cs`, `FormView.cs`, `LabReportView.cs`, `DecisionStampView.cs`, `ClientSceneView.cs`, `Inspect*.cs`, `DeskAudio.cs`, `Desk/Editor/**`, `Prefabs/Desk/DeskScreen.prefab`, `Scenes/Sandbox_Desk.unity` | Oğuzhan (FormView'da `StampArea`'yı A1'de A ekler, 1-2 satır) |
+| `Desk/UI/StampTrayView.cs` (yeni), `InspectResultView.cs`, `InspectorBubbleView.cs`, `DeskHeaderView.cs`, `Flow/**` (JuryMenu hariç) | Onur |
+| `Art/**`, `Audio/**`, `Desk/UI/TutorialView.cs` (sadece metin), `README.md`, `ICERIK_TASLAK.md`, `CREDITS_AND_AI.md`, `Flow/UI/JuryMenu.cs`, `Core/Game/JuryHooks.cs` | Tarık |
+
+#### A — A1, A2, A3
+- [ ] **A1 (ERKEN):**
+  - `DeskScreen`: kararı ikiye ayırır, API sözleşmesindeki gibi: `StampArea`, `CanStamp`, `IsStamped`, `StampDecision`, `HandBack`, `DecisionStamped`.
+  - `FormView.StampArea`: ONAY / RED düğmelerini kapsayan alan.
+  - **Geçici köprü:** Eski ONAY / RED düğmeleri `StampDecision` + hemen `HandBack` çağırır, böylece oyun Faz 2'ye kadar bugünkü gibi oynanır. Zarf kabulü `StampDecision(true)` + `HandBack`. B2 köprüyü kaldırır.
+  - Testler: EditMode 58/58, PlayMode yeşil.
+- [ ] **A2 (Faz 2):** Otomatik 7 günlük oynanışı yeni akışla günceller (bölme ve iade API'si üzerinden); jüri menüsü masa sahnelerini dener.
+- [ ] **A3 (Faz 3):** Entegrasyon, ekran görüntüleri, §2-§3, README son kontrol, build + ZIP.
+
+#### Oğuzhan (B) — B1, B2
+- [ ] **B1 Özellik 1 (A1 gelene kadar `DeskScreen` dışı parçalarla başla):**
+  - **İkonlar:** Masanın solunda form ve lab raporu ikonları (`doc_icon_form`, `doc_icon_lab`; gelene kadar kodla çizilmiş küçük kağıt).
+    - Müteahhit oturunca kayarak / düşerek gelir.
+    - Belge açıkken ikon gizlenir; belge verilince ikisi de masadan kalkar.
+    - `DeskBookProp` gibi masaya konmuş görünsün (gölge, hafif eğim).
+  - **Açılma:** İkona tıklanınca `PaperWindow` ikonun yerinden küçük başlayıp bugünkü yerine yayla gelir (`DeskMotion`; abartısız, yaklaşık 0,3 sn).
+    - Belgeler artık `SyncDocuments` ile kendiliğinden açılmaz.
+    - El Kitabı hep açık kalır.
+  - **İade sürüklemesi** (`DraggableSheet` / `PaperWindow`):
+    - Kaşe basılmışsa (`DeskScreen.IsStamped`) belge, belge alanından çıkıp masa kenarına / ofis tarafına geçtiği anda ikon boyutuna yumuşakça küçülür, geri inerse büyür.
+    - Müteahhit portresinin (`ClientSceneView`) üstünde bırakılırsa verilmiş olur: ikon müteahhide doğru kayıp kaybolur, `sfx_paper` çalar.
+    - Başka yerde bırakılırsa yerine döner.
+    - Kaşeden önce verilemez: müteahhide bırakılırsa yerine döner. İstersen müteahhit "Önce imzalayın hocam" gibi tek satır söyler (Tarık yazar).
+  - **İki belge de verilince** `DeskScreen.HandBack()`.
+  - `AfterDecision`'daki "form ve lab raporu kayıp gider" kısmı yeni akışa uyarlanır (belgeler zaten verildi).
+- [ ] **B2 Entegrasyon (Faz 2):**
+  - ONAY / RED düğmeleri ve A1'in geçici köprüsü kalkar; kaşe alanı boş ve hafif çerçeveli görünür.
+  - `StampTrayView` builder'da El Kitabı'nın sağına kurulur: `Bind(() => StampArea, () => CanStamp)`, `Stamped += StampDecision`.
+  - **Bölme açıkken karartma:** `InspectDim` / `InspectLift` ile kaşe alanı + bölme aydınlık, gerisi hafif karanlık; kaşe alanı hafif parlar.
+  - **İnceleme ↔ bölme:** bölme açılınca inceleme modu kapanır; inceleme modu ya da diyalog sürerken bölme açılmaz.
+  - **Zarf:** RÜŞVETİ KABUL ET → `StampDecision(true)` (otomatik iade yok, oyuncu belgeleri verir).
+  - **İNCELE modunda karar:** K2 kalkar (düğme yok).
+  - T1 görselleri builder'da bağlanır; prefab'ı builder'la kur.
+
+#### Onur (C) — C1, C2
+- [ ] **C1 `StampTrayView` (Özellik 2):**
+  - **Dosya:** `Assets/_Project/Scripts/Desk/UI/StampTrayView.cs` (Desk asmdef). `BribeEnvelopeView` / `DeskHeaderView` gibi kendini kurar, `Reset()` T1 görsellerini ve fontları bağlar, görselsiz de çalışır.
+  - **Düğme ve bölme:**
+    - Kaşe düğmesi (`btn_stamps`) El Kitabı'nın sağında; yerleşimi Oğuzhan B2'de verir, sen kökün içinde düğmeyi sağa yasla.
+    - Basınca bölme (`stamp_tray`) düğmenin yerinden **sola** kayarak açılır (yaklaşık 0,25 sn, unscaled).
+    - İçinde yan yana `stamp_approve` (yeşil) ve `stamp_reject` (kırmızı) durur.
+    - Düğmeye tekrar basmak ya da boş yere tıklamak bölmeyi kapatır.
+  - **Kaşe sürükleme:**
+    - Kaşe tutulunca fareyle gider, hafif büyür ve gölgelenir.
+    - Hedefin (`target()`) üstünde bırakılırsa kısa bir "basma" animasyonu yapar (iner, ezilir, kalkar) ve `Stamped(approve)` yayınlar. Kaşe izini ve sesi masa çizer / çalar.
+    - Kaşe sonra bölmedeki yerine döner, bölme sağa kayıp kapanır.
+    - Hedef dışında bırakılırsa kaşe yerine döner, bölme açık kalır.
+  - **Kurallar:**
+    - `canOpen()` false iken düğme pasif görünür.
+    - `OpenChanged` karartma için yayınlanır.
+    - Esc menüsü açıkken (`PauseMenu.InputBlocked`, Flow'da) bu kontrolü yapma: Desk, Flow'u göremez. Masa zaten kilitli.
+  - Prefab'a dokunma. Sandbox'ta kendi test sahnende dene.
+- [ ] **C2 (Faz 2):** B2 ara push'larıyla Sandbox_Desk'te son ayar (yerleşim, hızlar, karartmanın üstünde kalma); düzeltmeler sadece kendi dosyanda.
+
+#### Tarık (EEE) — T1, T2
+- [ ] **T1 Görseller ve sesler (ERKEN, hedef 05:30; Onur ve Oğuzhan bekliyor):**
+  - **Ortak kurallar:**
+    - Hepsi el çizimi 2D cartoon, kalın kahve kontur, ONAY / RED / EK TEST ailesi;
+    - **yazı görselde yok** (kaşe izi hariç, aşağıda);
+    - şeffaf PNG, Sprite.
+  - **Dosyalar:**
+    - `doc_icon_form.png` (~200x150): masada yatan küçük Yapı Denetim Formu, klasör / kağıt, hafif perspektif.
+    - `doc_icon_lab.png` (~200x150): masada yatan küçük Lab Raporu (deney tüpü simgeli).
+    - `stamp_approve.png` (~200x240, yeşil) ve `stamp_reject.png` (~200x240, kırmızı): ahşap saplı kaşe, yan / 3⁄4 görünüş.
+    - `stamp_tray.png` (~520x220): iki kaşe yuvalı ahşap bölme / çekmece.
+    - `btn_stamps.png` (~110x110): bölmeyi açan düğme, kaşe ikonlu, `btn_inspect` ailesi.
+    - (İsteğe bağlı) `ink_approve.png` / `ink_reject.png`: kaşe izi, "ONAYLANDI" / "REDDEDİLDİ" görselde olabilir. Yoksa bugünkü `DecisionStampView` kullanılır.
+  - **Ses (isteğe bağlı):** `sfx_tray.wav` (bölme kayma). Kaşe için `sfx_stamp` var.
+  - Her biri için CREDITS ve `Art/README` satırı. **Tek push**, "T1 ✅ hash".
+- [ ] **T2 Metinler:**
+  - Öğretici kartlar (`TutorialView` + prefab metni; Oğuzhan B2'de builder'la kurunca koddaki gelir):
+    - belgeleri masadaki ikonlardan aç;
+    - kararı sağdaki kaşe bölmesinden kaşeyi forma sürükleyerek ver;
+    - sonra iki belgeyi müteahhide sürükle.
+  - README "Nasıl oynanır" + "Kontroller": ONAY / RED düğmesi yok, kaşe ve iade var.
+  - `ICERIK_TASLAK.md`.
+  - İstersen müteahhidin "önce kaşe" tek satırı (`Dialogue.asset`'e değil, Oğuzhan'a metin olarak ver).
+
 ### 🛠️ POLİŞ TURU — 7 madde (Ahmet kararı, 18 Ekim ~01:50) — HERKES OKUSUN · lider: A (Ahmet'in ajanı)
 > Ahmet 7 maddelik özellik ve cila listesi verdi. A iş bölümünü ve fazları kurdu, Ahmet 4 kararı onayladı (aşağıda **Kararlar**).
 >
@@ -551,6 +736,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 | 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
+| 18 Ekim ~04:40 | **Belge turu:** belgeler masada solda ikon, tıklayınca açılır; ONAY / RED düğmeleri yerine El Kitabı'nın sağından açılan kaşe bölmesi (yeşil ONAY / kırmızı RED kaşeyi forma sürükle-bas); kaşeden sonra iki belge ayrı ayrı müteahhide sürüklenip verilir (masaya geçerken ikona küçülür). Karar iki belge verilince Core'a gider (Core değişmez); kaşe sadece forma; zarf kabulü otomatik ONAY kaşesi. İş bölümü ve fazlar §7 | Ahmet kararı (Papers, Please hissi, jüriye pazarlama) |
 | 18 Ekim ~03:30 | **Jüri vitrini:** ilk 2 günde kesin rüşvet (2. gün rüşvetçi zarflı), kesin kabadayı uygunsuz dosyayla (2. gün; diğer ziyaretleri 4-7. gün), kesin hediye (1. gün dürüst usta, onaylanırsa), en geç 2. gece deprem. Mevcut olasılıklar (14/14, 6×3 + 10×1, 1. gün en çok 1 uygunsuz, ağırlıklar, %20 + %15) aynen; kabadayı hasarı artık gün ayarına değil müteahhide bağlı | Ahmet kararı (jüriye oyunu iyi göstermek); A uyguladı, EditMode 58/58 |
 | 18 Ekim ~03:10 | Zarf: açıkken boş alana tıklamak = reddet (zarf masaya döner); zarf teklif edildiyse ONAY = rüşveti kabul (zarfsız onay yok); teklif edilmemiş zarf yine alınamaz; RED zarfı da reddeder. Core değişmez; Tarık yapar (Oğuzhan'ın dosyaları) | Ahmet kararı (rüşvetli proje her zaman uygunsuz; zarfsız onay anlamsızdı) |
 | 18 Ekim ~03:00 | Faz 3'te istisna: Tarık'ın jüri menüsü (J: dört son, rüşvet, hediye, kabadayı) build'den önce alınır; Core'a sadece iki fonksiyon, normal akış ve kayıt değişmez, A inceler | Ahmet kararı (jüri bütün içeriği 7 gün oynamadan görsün; tek build) |

@@ -236,7 +236,7 @@ namespace CivilJam.Core
                     switch (scene)
                     {
                         case JuryScene.Bribe: ok = p.OffersBribe && !client.IsThug; break;
-                        case JuryScene.Thug: ok = client.IsThug; break;
+                        case JuryScene.Thug: ok = client.IsThug && !p.IsCompliant; break; // reddetmek için gerçek bir sebep olsun (vitrindeki gibi)
                         case JuryScene.Gift: ok = client.IsHonest && client.Gift != null && !string.IsNullOrEmpty(client.Gift.Id); break;
                         default: ok = false; break;
                     }

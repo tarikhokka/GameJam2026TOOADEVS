@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.7287959">
+  <test-suite type="TestSuite" id="1025" name="CivilAudit20261018" fullname="CivilAudit20261018" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.728796" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1043" name="CivilJam.Flow.PlayModeTests.dll" fullname="/private/tmp/civil-audit-20261018/project/Library/ScriptAssemblies/CivilJam.Flow.PlayModeTests.dll" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.725744" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9752" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1044" name="CivilJam" fullname="CivilJam" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.725223" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1045" name="Flow" fullname="CivilJam.Flow" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.724909" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1046" name="Tests" fullname="CivilJam.Flow.Tests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.724686" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1026" name="AuditProbeTests" fullname="CivilJam.Flow.Tests.AuditProbeTests" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.724059" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1033" name="CoachFrame_MatchesActualIconCoordinates" fullname="CivilJam.Flow.Tests.AuditProbeTests.CoachFrame_MatchesActualIconCoordinates" methodname="CoachFrame_MatchesActualIconCoordinates" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="191032929" result="Passed" start-time="2026-10-18 11:40:32Z" end-time="2026-10-18 11:40:34Z" duration="1.716069" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /Users/onur/Library/Application Support/TOOADEVS/CivilAudit20261018/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

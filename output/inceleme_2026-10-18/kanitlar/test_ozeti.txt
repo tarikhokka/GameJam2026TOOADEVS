@@ -1,0 +1,71 @@
+İMZA - 18 Ekim 2026 inceleme test özeti
+Test edilen ürün kaynak commit: 2c050338d8a6ae1b4b37ea5f760e3eba5229cd08
+Unity: 6000.6.4f1; ayrı geçici proje; şirket TOOADEVS, yalnız kopyada ürün CivilAudit20261018.
+Ortam: oturum başındaki yerel paketler ve ayarlar da kopyalandı; com.unity.ai.inference 2.6.1 ve yerel scripting define değişiklikleri mevcut. Temiz public clone / final Windows build doğrulaması değildir.
+
+edit-results.xml: total=58; passed=58; failed=0
+play-results.xml: total=13; passed=7; failed=6
+  AfterStamp_ExtraTestShouldBeDisabled: Failed
+  Extra test charged after irreversible stamp, while verdict is still Pending
+  Expected: 1500
+  But was:  1250
+
+  DeskTyping_ShouldFreezeWhenPaused: Failed
+  Client dialogue continued behind pause menu
+  Expected: 4
+  But was:  24
+
+  FirstRunCoach_ActualPointerStampAndDocumentReturn: Passed
+
+  LoadFailure_ShouldBeVisible: Failed
+  LoadFailed has no visible notice: 1. GÜN
+Kasa: <color=#FFD27A>1.500 TL</color>
+Borç: <color=#FFD27A>0 TL</color>
+Mesaiye başla
+  Expected: True
+  But was:  False
+
+  PaymentPreview_ShouldMatchCore: Failed
+  UI and actual Core result differ: Ödenecek toplam: 1.150 TL
+Kasa: 500 TL  →  ödeme sonrası: -650 TL
+Mevcut borç: 0 TL; Core MoneyAfter=100 DebtAfter=750
+  Expected: True
+  But was:  False
+
+  RealWorstCaseNews_ShouldRemainWithinBoxes: Failed
+  Real simulated newspaper text extends beyond its allocated box
+  Expected: False
+  But was:  True
+
+  SaveFailure_ShouldNotClaimSuccess: Failed
+  Save failed but success is shown: 1. Gün kaydedildi
+Dosyalar arşive kaldırıldı, ofisin ışıkları söndü.
+Yarın masanda yeni başvurular olacak.
+Kasa: 1.500 TL    ·    Borç: 0 TL
+KAYDEDİLDİ
+2. güne geç  →
+  Expected: False
+  But was:  True
+
+  SevenDays_StampAndReturnBothDocuments: Passed
+
+  VisualAudit_AllPrimaryScreens: Passed
+
+  Escape_BlocksDayIntroAndRestoresTimeAndInput: Passed
+
+  PausingIntro_FreezesTypewriterAndResumeDoesNotAdvancePage: Passed
+
+  ReturningToMenu_RestoresGlobalsAndKeepsOneOverlay: Passed
+
+  VolumeSlider_SetsAndSaves_AndMenuReturnsToMain: Passed
+
+coach-geometry.xml: total=1; passed=1; failed=0
+  CoachFrame_MatchesActualIconCoordinates: Passed
+
+
+Altı yeni tanı başarısızlığı ürün bulgularıdır. Mevcut 58+4 testin tamamı geçti.
+Yedi gün akış kontrolünde başlangıç kasası 100000 yapıldı; karar için IsCompliant okundu. Bu kontrol denge veya yeni oyuncu başarısı ölçmez.
+Rehberde gerçek Unity pointer handlerları kullanıldı; bu fiziksel fare ile Windows kullanıcı testi değildir.
+Save/Load hata UI kontrollerinde hata bayrakları enjekte edildi; disk arızası oluşturulmadı.
+Renderlar 1920x1080 kamera çıktısıdır; Canvas render mode geçici değiştirildi. Rehber hedefi ayrıca normal 640x480 batch Game View koordinatlarında kontrol edildi.
+Araç kaynakları ürünün dışındadır; yeniden kullanmak için geçici kopyaya alınmalı, PlayMode asmdef CivilJam.Desk referansı eklenmeli ve Out yolları uyarlanmalıdır.

@@ -1,0 +1,1 @@
+Screen=640x480; Target=(139.26, 312.48); Frame=(139.26, 312.48); Difference=0

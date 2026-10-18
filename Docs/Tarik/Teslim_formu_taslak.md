@@ -2,8 +2,7 @@
 
 Takım temsilcisi teslim ekranında (https://game.ktimo.com.tr/jam/teslim) bu metinleri kopyalar. Kaynak: `CREDITS_AND_AI.md`. **Teslimden hemen önce CREDITS ile son bir kez karşılaştırın**; eksik ya da yanlış beyan diskalifiye sebebidir (4.4, 10.1).
 
-> ⚠️ Teslimden önce kapatılacak açık:
-> - **Onur:** `Docs/Tasarim/hedef_arayuz.png` hangi araçla üretildi? (AI → Görsel'e eklenir)
+> 18 Ekim güncellemesi: Onur, `Docs/Tasarim/hedef_arayuz.png` tasarım referansını ChatGPT ile oluşturduğunu teyit etti; AI / Görsel açıklamasına ve CREDITS kaydına eklendi.
 
 ## Oyun bilgileri
 - **Oyun adı:** İmza
@@ -47,7 +46,7 @@ Oyundaki bütün metinler ekip tarafından yazıldı (yapay zekâ kullanımı AI
 - ChatGPT (OpenAI): müteahhit portreleri (6 ana + 10 genel), ofis ve masa, belge kabukları (form, lab raporu, El Kitabı), son ekranı görselleri, ana menü arka planı ve logo, rüşvet zarfı. Prompt'ların bir kısmı Claude ile yazıldı.
 - Gemini (Google): gazete şablonu ("ŞEHİR POSTASI").
 - Claude / Claude Code (Anthropic): script ile çizilen görseller — düğmeler, üst bar, ikonlar, kaşeler, kaşe çekmecesi, belge ikonları, hediyeler, gazete masası, menü ve son ekranı canlandırma katmanları; AI görsellerinin arka plan temizliği, kırpma, renk/ışık türevleri (gün sonu, ödeme, kayıt, Enkazın Gölgesi ekranları).
-- *(Onur'un `hedef_arayuz.png` aracı buraya eklenecek — sadece tasarım referansı, oyunda yok)*
+- ChatGPT (OpenAI): masa arayüzünü planlamak için görsel tasarım referansı (`Docs/Tasarim/hedef_arayuz.png`, Onur Kabadayılar; araç 18 Ekim'de teyit edildi). Görsel tasarım referansı olarak kullanıldı; oyunda doğrudan asset olarak yer almıyor.
 
 **Ses — Kullanıldı**
 - Claude (Anthropic) ile yazılan sentez script'leri: üç son müziği (İyi son, Kapanan Kapı, Enkazın Gölgesi) ve mesai zili. Sesler kodla üretildi, dış kaynak yok.

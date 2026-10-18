@@ -1,0 +1,4 @@
+300 actual-data bribery runs: max outcomes=22, max collapsed=12
+Ending with five bribes, one unsafe standing building, no collapses: Good
+Windows build target supported on this Editor: False
+Unsafe building scoped after first earthquake: False

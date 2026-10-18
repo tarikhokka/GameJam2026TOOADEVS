@@ -1,0 +1,1 @@
+IsStamped=True; ButtonBefore=True; ButtonAfter=False; Money 1500->1250

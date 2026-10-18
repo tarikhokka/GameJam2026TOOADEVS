@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="58" result="Passed" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.8130877">
+  <test-suite type="TestSuite" id="1000" name="CivilAudit20261018" fullname="CivilAudit20261018" runstate="Runnable" testcasecount="58" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.813088" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1067" name="CivilJam.Core.Tests.dll" fullname="/private/tmp/civil-audit-20261018/project/Library/ScriptAssemblies/CivilJam.Core.Tests.dll" runstate="Runnable" testcasecount="58" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.809794" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9141" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1068" name="CivilJam" fullname="CivilJam" runstate="Runnable" testcasecount="58" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.809468" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1069" name="Core" fullname="CivilJam.Core" runstate="Runnable" testcasecount="58" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.809217" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1070" name="Tests" fullname="CivilJam.Core.Tests" runstate="Runnable" testcasecount="58" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.808902" total="58" passed="58" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="CoreRulesTests" fullname="CivilJam.Core.Tests.CoreRulesTests" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.233719" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1015" name="BadProjects_IncludeSloppyEveryDay_AndFakesWhenAllowed" fullname="CivilJam.Core.Tests.CoreRulesTests.BadProjects_IncludeSloppyEveryDay_AndFakesWhenAllowed" methodname="BadProjects_IncludeSloppyEveryDay_AndFakesWhenAllowed" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="987981472" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.020230" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="BuildingNames_DoNotRepeatWithinAGame" fullname="CivilJam.Core.Tests.CoreRulesTests.BuildingNames_DoNotRepeatWithinAGame" methodname="BuildingNames_DoNotRepeatWithinAGame" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1091416152" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001148" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="Clients_ComeOncePerDay_WhenPossible" fullname="CivilJam.Core.Tests.CoreRulesTests.Clients_ComeOncePerDay_WhenPossible" methodname="Clients_ComeOncePerDay_WhenPossible" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1791806784" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.034582" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="Clients_DoNotComeTwiceInARow" fullname="CivilJam.Core.Tests.CoreRulesTests.Clients_DoNotComeTwiceInARow" methodname="Clients_DoNotComeTwiceInARow" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1916966428" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.054500" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="Clients_FollowRoleRules_ButNameDoesNotRevealKind" fullname="CivilJam.Core.Tests.CoreRulesTests.Clients_FollowRoleRules_ButNameDoesNotRevealKind" methodname="Clients_FollowRoleRules_ButNameDoesNotRevealKind" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="354679410" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.053604" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="Collapse_ProducesCasualtiesAndResponsibility" fullname="CivilJam.Core.Tests.CoreRulesTests.Collapse_ProducesCasualtiesAndResponsibility" methodname="Collapse_ProducesCasualtiesAndResponsibility" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="400879904" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001252" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="DisasterChance_IncreasesUntilCap_AndResetsAfterDisaster" fullname="CivilJam.Core.Tests.CoreRulesTests.DisasterChance_IncreasesUntilCap_AndResetsAfterDisaster" methodname="DisasterChance_IncreasesUntilCap_AndResetsAfterDisaster" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1462948751" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="Endings_FollowPriority" fullname="CivilJam.Core.Tests.CoreRulesTests.Endings_FollowPriority" methodname="Endings_FollowPriority" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1910905976" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000460" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1023" name="ExpensePreview_MatchesApply" fullname="CivilJam.Core.Tests.CoreRulesTests.ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.006417" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1018" name="Preview_YeterliKasa" fullname="CivilJam.Core.Tests.CoreRulesTests.Preview_YeterliKasa" methodname="ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1837848880" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001465" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1019" name="Preview_YetersizKasa" fullname="CivilJam.Core.Tests.CoreRulesTests.Preview_YetersizKasa" methodname="ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="399163174" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000101" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1020" name="Preview_CamTamiri" fullname="CivilJam.Core.Tests.CoreRulesTests.Preview_CamTamiri" methodname="ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1407124145" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000088" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1021" name="Preview_BorcKismenOdenir" fullname="CivilJam.Core.Tests.CoreRulesTests.Preview_BorcKismenOdenir" methodname="ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="478897323" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000083" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1022" name="Preview_BorcOdemesiSecilmedi" fullname="CivilJam.Core.Tests.CoreRulesTests.Preview_BorcOdemesiSecilmedi" methodname="ExpensePreview_MatchesApply" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="874188305" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000079" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1008" name="Expenses_NeverMakeMoneyNegative_UnpaidMandatoryBecomesDebt" fullname="CivilJam.Core.Tests.CoreRulesTests.Expenses_NeverMakeMoneyNegative_UnpaidMandatoryBecomesDebt" methodname="Expenses_NeverMakeMoneyNegative_UnpaidMandatoryBecomesDebt" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="2031701002" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000315" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="Generator_IsDeterministic_AndRespectsRatio" fullname="CivilJam.Core.Tests.CoreRulesTests.Generator_IsDeterministic_AndRespectsRatio" methodname="Generator_IsDeterministic_AndRespectsRatio" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1384038344" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000462" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="Quake_OnlyEvaluatesBuildingsSinceLastDisaster" fullname="CivilJam.Core.Tests.CoreRulesTests.Quake_OnlyEvaluatesBuildingsSinceLastDisaster" methodname="Quake_OnlyEvaluatesBuildingsSinceLastDisaster" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1656890276" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000153" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="RejectEverything_LosesOfficeOnDaySeven" fullname="CivilJam.Core.Tests.CoreRulesTests.RejectEverything_LosesOfficeOnDaySeven" methodname="RejectEverything_LosesOfficeOnDaySeven" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1823714603" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001032" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="Save_ResultReported_RetryDoesNotAdvanceDay" fullname="CivilJam.Core.Tests.CoreRulesTests.Save_ResultReported_RetryDoesNotAdvanceDay" methodname="Save_ResultReported_RetryDoesNotAdvanceDay" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="265605816" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001932" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="Session_FullDayLoop_DoesNotDoublePay" fullname="CivilJam.Core.Tests.CoreRulesTests.Session_FullDayLoop_DoesNotDoublePay" methodname="Session_FullDayLoop_DoesNotDoublePay" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1150203612" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000422" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="Stamps_AreReadableText_AndWrongStampMismatchesLab" fullname="CivilJam.Core.Tests.CoreRulesTests.Stamps_AreReadableText_AndWrongStampMismatchesLab" methodname="Stamps_AreReadableText_AndWrongStampMismatchesLab" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="285690324" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.011756" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="StrengthAtLeastOne_NeverCollapses" fullname="CivilJam.Core.Tests.CoreRulesTests.StrengthAtLeastOne_NeverCollapses" methodname="StrengthAtLeastOne_NeverCollapses" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="1387038979" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.037762" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="WeakBuilding_CollapsesUnderStrongQuake" fullname="CivilJam.Core.Tests.CoreRulesTests.WeakBuilding_CollapsesUnderStrongQuake" methodname="WeakBuilding_CollapsesUnderStrongQuake" classname="CivilJam.Core.Tests.CoreRulesTests" runstate="Runnable" seed="82721636" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000141" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1025" name="GameSceneTests" fullname="CivilJam.Core.Tests.GameSceneTests" classname="CivilJam.Core.Tests.GameSceneTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.108265" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1026" name="GameScene_HasManagerEventSystemAndUniqueScreens" fullname="CivilJam.Core.Tests.GameSceneTests.GameScene_HasManagerEventSystemAndUniqueScreens" methodname="GameScene_HasManagerEventSystemAndUniqueScreens" classname="CivilJam.Core.Tests.GameSceneTests" runstate="Runnable" seed="942422529" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.107832" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1027" name="HandbookTests" fullname="CivilJam.Core.Tests.HandbookTests" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.193905" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1029" name="FormatValue_LabelsAndNumbers" fullname="CivilJam.Core.Tests.HandbookTests.FormatValue_LabelsAndNumbers" methodname="FormatValue_LabelsAndNumbers" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" seed="156930443" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000918" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="GeneratedParams_FollowHandbookTabOrder" fullname="CivilJam.Core.Tests.HandbookTests.GeneratedParams_FollowHandbookTabOrder" methodname="GeneratedParams_FollowHandbookTabOrder" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" seed="1817095823" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.005479" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="GeneratedProjects_MatchHandbook" fullname="CivilJam.Core.Tests.HandbookTests.GeneratedProjects_MatchHandbook" methodname="GeneratedProjects_MatchHandbook" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" seed="478148962" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.143301" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="RealRuleSet_IsHandbookV2" fullname="CivilJam.Core.Tests.HandbookTests.RealRuleSet_IsHandbookV2" methodname="RealRuleSet_IsHandbookV2" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" seed="611590315" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001289" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="Rules_PickByFloorGroup" fullname="CivilJam.Core.Tests.HandbookTests.Rules_PickByFloorGroup" methodname="Rules_PickByFloorGroup" classname="CivilJam.Core.Tests.HandbookTests" runstate="Runnable" seed="533809211" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000161" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1033" name="InspectionDialogueTests" fullname="CivilJam.Core.Tests.InspectionDialogueTests" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.005970" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1036" name="BribeCannotBeTaken_BeforeOffer" fullname="CivilJam.Core.Tests.InspectionDialogueTests.BribeCannotBeTaken_BeforeOffer" methodname="BribeCannotBeTaken_BeforeOffer" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1675368474" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000971" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="BribeHidden_UntilFirstMismatch_ThenOfferDialogue" fullname="CivilJam.Core.Tests.InspectionDialogueTests.BribeHidden_UntilFirstMismatch_ThenOfferDialogue" methodname="BribeHidden_UntilFirstMismatch_ThenOfferDialogue" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1184953624" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.002365" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="BribeTaken_AfterOffer" fullname="CivilJam.Core.Tests.InspectionDialogueTests.BribeTaken_AfterOffer" methodname="BribeTaken_AfterOffer" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1436539185" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000224" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1041" name="EmptyClientLines_StillGiveInspectorLine" fullname="CivilJam.Core.Tests.InspectionDialogueTests.EmptyClientLines_StillGiveInspectorLine" methodname="EmptyClientLines_StillGiveInspectorLine" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1568288769" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000253" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="GenericClient_UsesSharedPool_WhenOwnListsEmpty" fullname="CivilJam.Core.Tests.InspectionDialogueTests.GenericClient_UsesSharedPool_WhenOwnListsEmpty" methodname="GenericClient_UsesSharedPool_WhenOwnListsEmpty" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="504706080" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000359" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="Inspect_IgnoresDeskFloorGroup_UsesBuildingGroup" fullname="CivilJam.Core.Tests.InspectionDialogueTests.Inspect_IgnoresDeskFloorGroup_UsesBuildingGroup" methodname="Inspect_IgnoresDeskFloorGroup_UsesBuildingGroup" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="2069050248" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000178" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="MatchAndUnrelated_HaveNoDialogue_AndDoNotOffer" fullname="CivilJam.Core.Tests.InspectionDialogueTests.MatchAndUnrelated_HaveNoDialogue_AndDoNotOffer" methodname="MatchAndUnrelated_HaveNoDialogue_AndDoNotOffer" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="84094951" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000238" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="RejectWithoutOffer_IsNotBribeRefusal" fullname="CivilJam.Core.Tests.InspectionDialogueTests.RejectWithoutOffer_IsNotBribeRefusal" methodname="RejectWithoutOffer_IsNotBribeRefusal" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1663836165" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000164" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="SecondDifferentMismatch_TalksAgain_ButNoSecondOffer" fullname="CivilJam.Core.Tests.InspectionDialogueTests.SecondDifferentMismatch_TalksAgain_ButNoSecondOffer" methodname="SecondDifferentMismatch_TalksAgain_ButNoSecondOffer" classname="CivilJam.Core.Tests.InspectionDialogueTests" runstate="Runnable" seed="1906876857" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000230" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1043" name="InspectionTests" fullname="CivilJam.Core.Tests.InspectionTests" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.075892" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1045" name="FloorGroupOf_FollowsBuildingFloors" fullname="CivilJam.Core.Tests.InspectionTests.FloorGroupOf_FollowsBuildingFloors" methodname="FloorGroupOf_FollowsBuildingFloors" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="1629020372" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000423" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1051" name="GeneratedProjects_KunyeMismatchOnlyOnFakes_ValueDiffInnocentOnHonest_AndEveryFakeIsCatchable" fullname="CivilJam.Core.Tests.InspectionTests.GeneratedProjects_KunyeMismatchOnlyOnFakes_ValueDiffInnocentOnHonest_AndEveryFakeIsCatchable" methodname="GeneratedProjects_KunyeMismatchOnlyOnFakes_ValueDiffInnocentOnHonest_AndEveryFakeIsCatchable" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="1795601212" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.073247" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="Row5_FormVsLabDeclared_MatchUnlessLabDiffers" fullname="CivilJam.Core.Tests.InspectionTests.Row5_FormVsLabDeclared_MatchUnlessLabDiffers" methodname="Row5_FormVsLabDeclared_MatchUnlessLabDiffers" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="881268280" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000423" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1044" name="Rows1And2_DeclaredValueVsHandbook_UsesSelectedGroup" fullname="CivilJam.Core.Tests.InspectionTests.Rows1And2_DeclaredValueVsHandbook_UsesSelectedGroup" methodname="Rows1And2_DeclaredValueVsHandbook_UsesSelectedGroup" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="669429394" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000202" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="Rows3And4_ExtraTest_OnlyAfterTest" fullname="CivilJam.Core.Tests.InspectionTests.Rows3And4_ExtraTest_OnlyAfterTest" methodname="Rows3And4_ExtraTest_OnlyAfterTest" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="286066352" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000172" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="Rows6To8_Kunye" fullname="CivilJam.Core.Tests.InspectionTests.Rows6To8_Kunye" methodname="Rows6To8_Kunye" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="277598318" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000188" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="Rows9And10_AccreditedList" fullname="CivilJam.Core.Tests.InspectionTests.Rows9And10_AccreditedList" methodname="Rows9And10_AccreditedList" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="883741297" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000178" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="Unrelated_Pairs" fullname="CivilJam.Core.Tests.InspectionTests.Unrelated_Pairs" methodname="Unrelated_Pairs" classname="CivilJam.Core.Tests.InspectionTests" runstate="Runnable" seed="243715373" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000185" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1052" name="ReactionTests" fullname="CivilJam.Core.Tests.ReactionTests" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.003572" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1054" name="Approve_ThanksAndGivesGiftOnce" fullname="CivilJam.Core.Tests.ReactionTests.Approve_ThanksAndGivesGiftOnce" methodname="Approve_ThanksAndGivesGiftOnce" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" seed="593636433" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001470" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1057" name="EmptyLines_LeaveTextsEmpty_AndHistorySurvivesSave" fullname="CivilJam.Core.Tests.ReactionTests.EmptyLines_LeaveTextsEmpty_AndHistorySurvivesSave" methodname="EmptyLines_LeaveTextsEmpty_AndHistorySurvivesSave" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" seed="158545113" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000279" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1053" name="FirstVisitGreets_ReturnVisitRemembersLastVerdict" fullname="CivilJam.Core.Tests.ReactionTests.FirstVisitGreets_ReturnVisitRemembersLastVerdict" methodname="FirstVisitGreets_ReturnVisitRemembersLastVerdict" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" seed="1375520465" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000247" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1055" name="OnlyHonestClientsGiveGifts" fullname="CivilJam.Core.Tests.ReactionTests.OnlyHonestClientsGiveGifts" methodname="OnlyHonestClientsGiveGifts" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" seed="1674700931" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000478" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1056" name="RefusedBribe_HasOwnReaction_AndNextBribeGrows" fullname="CivilJam.Core.Tests.ReactionTests.RefusedBribe_HasOwnReaction_AndNextBribeGrows" methodname="RefusedBribe_HasOwnReaction_AndNextBribeGrows" classname="CivilJam.Core.Tests.ReactionTests" runstate="Runnable" seed="276340312" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.000410" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1058" name="VisitPlannerTests" fullname="CivilJam.Core.Tests.VisitPlannerTests" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.186616" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1065" name="Backup_WithoutGenerics_MainsFillTheRest" fullname="CivilJam.Core.Tests.VisitPlannerTests.Backup_WithoutGenerics_MainsFillTheRest" methodname="Backup_WithoutGenerics_MainsFillTheRest" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="2029885362" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.016328" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="Plan_FollowsAllRules_ForManySeeds" fullname="CivilJam.Core.Tests.VisitPlannerTests.Plan_FollowsAllRules_ForManySeeds" methodname="Plan_FollowsAllRules_ForManySeeds" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="1788797669" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.043209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1061" name="RealCast_MainsThreeTimesOnDifferentDays_GenericsOnce" fullname="CivilJam.Core.Tests.VisitPlannerTests.RealCast_MainsThreeTimesOnDifferentDays_GenericsOnce" methodname="RealCast_MainsThreeTimesOnDifferentDays_GenericsOnce" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="1519264100" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.048901" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1066" name="Session_UsesSchedule_AndKeepsItInSave" fullname="CivilJam.Core.Tests.VisitPlannerTests.Session_UsesSchedule_AndKeepsItInSave" methodname="Session_UsesSchedule_AndKeepsItInSave" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="1252244693" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.003665" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1059" name="SevenDays_3_3_4_4_4_5_5" fullname="CivilJam.Core.Tests.VisitPlannerTests.SevenDays_3_3_4_4_4_5_5" methodname="SevenDays_3_3_4_4_4_5_5" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="391487233" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.002644" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1064" name="Showcase_DisasterGuaranteedByDayTwo_ChanceUnchangedBefore" fullname="CivilJam.Core.Tests.VisitPlannerTests.Showcase_DisasterGuaranteedByDayTwo_ChanceUnchangedBefore" methodname="Showcase_DisasterGuaranteedByDayTwo_ChanceUnchangedBefore" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="223000550" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.001549" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1062" name="Showcase_FirstTwoDays_GiftBribeThug_RatesUnchanged" fullname="CivilJam.Core.Tests.VisitPlannerTests.Showcase_FirstTwoDays_GiftBribeThug_RatesUnchanged" methodname="Showcase_FirstTwoDays_GiftBribeThug_RatesUnchanged" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="164642213" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.050978" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1063" name="Showcase_Session_GiftOnDayOne_ThugDamageOnDayTwo" fullname="CivilJam.Core.Tests.VisitPlannerTests.Showcase_Session_GiftOnDayOne_ThugDamageOnDayTwo" methodname="Showcase_Session_GiftOnDayOne_ThugDamageOnDayTwo" classname="CivilJam.Core.Tests.VisitPlannerTests" runstate="Runnable" seed="1597468363" result="Passed" start-time="2026-10-18 11:37:39Z" end-time="2026-10-18 11:37:39Z" duration="0.018280" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /Users/onur/Library/Application Support/TOOADEVS/CivilAudit20261018/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

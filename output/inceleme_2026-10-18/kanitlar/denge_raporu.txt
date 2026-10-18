@@ -1,0 +1,32 @@
+DENGE RAPORU — 300 oyun/tip · 7 gün · başlangıç 1500 TL · borç limiti 2000 TL
+Afet: taban 20 %, +15 %/gün, tavan 100 % · onay ücreti 500-700
+
+■ Dikkatli (ipucu + değer + değer farkında ek test, zarf yok)
+  Sonlar: Good %88 · MiddleCollapsed %0 · MiddleClosed %12 · Bad %0
+  Ort. bitiş günü 6.8 · deprem 2.6 · onay 12.8 · yıkım 0.0 · zarf 0.0
+  Ort. son kasa 733 TL · borç 1221 TL · görülen en düşük kasa 4 TL
+
+■ Saf (sadece değer, zarf yok)
+  Sonlar: Good %43 · MiddleCollapsed %40 · MiddleClosed %0 · Bad %16
+  Ort. bitiş günü 6.8 · deprem 2.6 · onay 16.3 · yıkım 1.0 · zarf 0.0
+  Ort. son kasa 2480 TL · borç 351 TL · görülen en düşük kasa 0 TL
+
+■ Rüşvetçi (her şeyi onayla + zarf)
+  Sonlar: Good %2 · MiddleCollapsed %6 · MiddleClosed %0 · Bad %92
+  Ort. bitiş günü 4.7 · deprem 2.1 · onay 17.4 · yıkım 4.2 · zarf 5.1
+  Ort. son kasa 14095 TL · borç 0 TL · görülen en düşük kasa 1905 TL
+
+■ Reddeci (her şeyi reddet)
+  Sonlar: Good %0 · MiddleCollapsed %0 · MiddleClosed %100 · Bad %0
+  Ort. bitiş günü 3.0 · deprem 1.4 · onay 0.0 · yıkım 0.0 · zarf 0.0
+  Ort. son kasa 350 TL · borç 2900 TL · görülen en düşük kasa 350 TL
+
+■ Karışık (dikkatli ama zarfı alır)
+  Sonlar: Good %3 · MiddleCollapsed %14 · MiddleClosed %0 · Bad %84
+  Ort. bitiş günü 4.9 · deprem 2.1 · onay 13.6 · yıkım 2.9 · zarf 5.4
+  Ort. son kasa 11950 TL · borç 0 TL · görülen en düşük kasa 1377 TL
+
+■ Tek-zarf (dikkatli, sadece ilk zarfı alır)
+  Sonlar: Good %46 · MiddleCollapsed %38 · MiddleClosed %1 · Bad %15
+  Ort. bitiş günü 6.2 · deprem 2.4 · onay 11.8 · yıkım 0.5 · zarf 1.0
+  Ort. son kasa 2152 TL · borç 94 TL · görülen en düşük kasa 11 TL

@@ -1,0 +1,1 @@
+Before=4; After=24; IsOpen=True; timeScale=0

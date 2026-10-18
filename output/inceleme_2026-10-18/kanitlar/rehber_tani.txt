@@ -1,0 +1,1 @@
+9 tutorial steps completed with comparison event, tray pointer drop and both document pointer returns.

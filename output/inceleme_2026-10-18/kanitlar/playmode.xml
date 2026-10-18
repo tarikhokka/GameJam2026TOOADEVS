@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="13" result="Failed(Child)" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.5704743">
+  <test-suite type="TestSuite" id="1024" name="CivilAudit20261018" fullname="CivilAudit20261018" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.570474" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1041" name="CivilJam.Flow.PlayModeTests.dll" fullname="/private/tmp/civil-audit-20261018/project/Library/ScriptAssemblies/CivilJam.Flow.PlayModeTests.dll" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.567523" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9442" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1042" name="CivilJam" fullname="CivilJam" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.567102" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1043" name="Flow" fullname="CivilJam.Flow" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.566846" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1044" name="Tests" fullname="CivilJam.Flow.Tests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:15Z" duration="17.566588" total="13" passed="7" failed="6" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1025" name="AuditProbeTests" fullname="CivilJam.Flow.Tests.AuditProbeTests" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:38:14Z" duration="16.149495" total="9" passed="3" failed="6" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1030" name="AfterStamp_ExtraTestShouldBeDisabled" fullname="CivilJam.Flow.Tests.AuditProbeTests.AfterStamp_ExtraTestShouldBeDisabled" methodname="AfterStamp_ExtraTestShouldBeDisabled" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1551792177" result="Failed" start-time="2026-10-18 11:37:57Z" end-time="2026-10-18 11:37:58Z" duration="0.927061" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Extra test charged after irreversible stamp, while verdict is still Pending
+  Expected: 1500
+  But was:  1250
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<AfterStamp_ExtraTestShouldBeDisabled>d__15.MoveNext () [0x00158] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:71
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1029" name="DeskTyping_ShouldFreezeWhenPaused" fullname="CivilJam.Flow.Tests.AuditProbeTests.DeskTyping_ShouldFreezeWhenPaused" methodname="DeskTyping_ShouldFreezeWhenPaused" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1478014212" result="Failed" start-time="2026-10-18 11:37:58Z" end-time="2026-10-18 11:38:00Z" duration="1.375869" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Client dialogue continued behind pause menu
+  Expected: 4
+  But was:  24
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<DeskTyping_ShouldFreezeWhenPaused>d__14.MoveNext () [0x0013d] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:66
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1032" name="FirstRunCoach_ActualPointerStampAndDocumentReturn" fullname="CivilJam.Flow.Tests.AuditProbeTests.FirstRunCoach_ActualPointerStampAndDocumentReturn" methodname="FirstRunCoach_ActualPointerStampAndDocumentReturn" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="615065686" result="Passed" start-time="2026-10-18 11:38:00Z" end-time="2026-10-18 11:38:02Z" duration="2.324888" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="LoadFailure_ShouldBeVisible" fullname="CivilJam.Flow.Tests.AuditProbeTests.LoadFailure_ShouldBeVisible" methodname="LoadFailure_ShouldBeVisible" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1052098041" result="Failed" start-time="2026-10-18 11:38:02Z" end-time="2026-10-18 11:38:02Z" duration="0.087557" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  LoadFailed has no visible notice: 1. GÜN
+Kasa: <color=#FFD27A>1.500 TL</color>
+Borç: <color=#FFD27A>0 TL</color>
+Mesaiye başla
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<LoadFailure_ShouldBeVisible>d__13.MoveNext () [0x00099] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:61
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1026" name="PaymentPreview_ShouldMatchCore" fullname="CivilJam.Flow.Tests.AuditProbeTests.PaymentPreview_ShouldMatchCore" methodname="PaymentPreview_ShouldMatchCore" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1049289988" result="Failed" start-time="2026-10-18 11:38:02Z" end-time="2026-10-18 11:38:02Z" duration="0.082653" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  UI and actual Core result differ: Ödenecek toplam: 1.150 TL
+Kasa: 500 TL  →  ödeme sonrası: -650 TL
+Mevcut borç: 0 TL; Core MoneyAfter=100 DebtAfter=750
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<PaymentPreview_ShouldMatchCore>d__11.MoveNext () [0x00176] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:52
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1033" name="RealWorstCaseNews_ShouldRemainWithinBoxes" fullname="CivilJam.Flow.Tests.AuditProbeTests.RealWorstCaseNews_ShouldRemainWithinBoxes" methodname="RealWorstCaseNews_ShouldRemainWithinBoxes" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1205203542" result="Failed" start-time="2026-10-18 11:38:02Z" end-time="2026-10-18 11:38:05Z" duration="3.122765" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Real simulated newspaper text extends beyond its allocated box
+  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<RealWorstCaseNews_ShouldRemainWithinBoxes>d__18.MoveNext () [0x0014d] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:102
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1027" name="SaveFailure_ShouldNotClaimSuccess" fullname="CivilJam.Flow.Tests.AuditProbeTests.SaveFailure_ShouldNotClaimSuccess" methodname="SaveFailure_ShouldNotClaimSuccess" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="1967528502" result="Failed" start-time="2026-10-18 11:38:05Z" end-time="2026-10-18 11:38:05Z" duration="0.081102" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Save failed but success is shown: 1. Gün kaydedildi
+Dosyalar arşive kaldırıldı, ofisin ışıkları söndü.
+Yarın masanda yeni başvurular olacak.
+Kasa: 1.500 TL    ·    Borç: 0 TL
+KAYDEDİLDİ
+2. güne geç  →
+  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at CivilJam.Flow.Tests.AuditProbeTests+<SaveFailure_ShouldNotClaimSuccess>d__12.MoveNext () [0x000c5] in /private/tmp/civil-audit-20261018/project/Assets/_Project/Scripts/Flow/Tests/PlayMode/AuditProbeTests.cs:57
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@80f691d4262b/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1034" name="SevenDays_StampAndReturnBothDocuments" fullname="CivilJam.Flow.Tests.AuditProbeTests.SevenDays_StampAndReturnBothDocuments" methodname="SevenDays_StampAndReturnBothDocuments" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="484510890" result="Passed" start-time="2026-10-18 11:38:05Z" end-time="2026-10-18 11:38:07Z" duration="1.197633" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="VisualAudit_AllPrimaryScreens" fullname="CivilJam.Flow.Tests.AuditProbeTests.VisualAudit_AllPrimaryScreens" methodname="VisualAudit_AllPrimaryScreens" classname="CivilJam.Flow.Tests.AuditProbeTests" runstate="Runnable" seed="306767204" result="Passed" start-time="2026-10-18 11:38:07Z" end-time="2026-10-18 11:38:14Z" duration="6.943802" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <reason>
+                  <message><![CDATA[Rendered primary screens at 1920x1080 with actual Game scene references; synthetic long newspaper case]]></message>
+                </reason>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1035" name="PauseMenuTests" fullname="CivilJam.Flow.Tests.PauseMenuTests" classname="CivilJam.Flow.Tests.PauseMenuTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-18 11:38:14Z" end-time="2026-10-18 11:38:15Z" duration="1.386688" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1036" name="Escape_BlocksDayIntroAndRestoresTimeAndInput" fullname="CivilJam.Flow.Tests.PauseMenuTests.Escape_BlocksDayIntroAndRestoresTimeAndInput" methodname="Escape_BlocksDayIntroAndRestoresTimeAndInput" classname="CivilJam.Flow.Tests.PauseMenuTests" runstate="Runnable" seed="1557520616" result="Passed" start-time="2026-10-18 11:38:14Z" end-time="2026-10-18 11:38:14Z" duration="0.247471" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="PausingIntro_FreezesTypewriterAndResumeDoesNotAdvancePage" fullname="CivilJam.Flow.Tests.PauseMenuTests.PausingIntro_FreezesTypewriterAndResumeDoesNotAdvancePage" methodname="PausingIntro_FreezesTypewriterAndResumeDoesNotAdvancePage" classname="CivilJam.Flow.Tests.PauseMenuTests" runstate="Runnable" seed="185164592" result="Passed" start-time="2026-10-18 11:38:14Z" end-time="2026-10-18 11:38:15Z" duration="1.034503" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="ReturningToMenu_RestoresGlobalsAndKeepsOneOverlay" fullname="CivilJam.Flow.Tests.PauseMenuTests.ReturningToMenu_RestoresGlobalsAndKeepsOneOverlay" methodname="ReturningToMenu_RestoresGlobalsAndKeepsOneOverlay" classname="CivilJam.Flow.Tests.PauseMenuTests" runstate="Runnable" seed="1361243351" result="Passed" start-time="2026-10-18 11:38:15Z" end-time="2026-10-18 11:38:15Z" duration="0.103628" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1039" name="SettingsMenuTests" fullname="CivilJam.Flow.Tests.SettingsMenuTests" classname="CivilJam.Flow.Tests.SettingsMenuTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-18 11:38:15Z" end-time="2026-10-18 11:38:15Z" duration="0.029671" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1040" name="VolumeSlider_SetsAndSaves_AndMenuReturnsToMain" fullname="CivilJam.Flow.Tests.SettingsMenuTests.VolumeSlider_SetsAndSaves_AndMenuReturnsToMain" methodname="VolumeSlider_SetsAndSaves_AndMenuReturnsToMain" classname="CivilJam.Flow.Tests.SettingsMenuTests" runstate="Runnable" seed="87032903" result="Passed" start-time="2026-10-18 11:38:15Z" end-time="2026-10-18 11:38:15Z" duration="0.029106" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /Users/onur/Library/Application Support/TOOADEVS/CivilAudit20261018/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

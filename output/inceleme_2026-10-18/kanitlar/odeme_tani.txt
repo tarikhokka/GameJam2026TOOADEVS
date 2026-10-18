@@ -1,0 +1,4 @@
+Ödenecek toplam: 1.150 TL
+Kasa: 500 TL  →  ödeme sonrası: -650 TL
+Mevcut borç: 0 TL
+CORE: MoneyAfter=100, DebtAfter=750, PaidTotal=400, AddedToDebt=750

@@ -1,0 +1,14 @@
+Headline | font=66.0 | overflow=False | Belgeler sahte, imza gerçek
+Building0 | font=19.3 | overflow=False | <b>Yasemin Sitesi A Blok</b> Erguvan Sokak No: 34 <color=#141210><b>YIKILDI</b></color> Can kaybı: 14 · Yaralı: 20 Hayatını kaybedenler: Melis Ormancı, Melis Bozdemir, Baran Kumru, Ece Tepeli, Baran Bozdemir, Ece Sarıçam ve 8 kişi daha Neden: demir tipi ve kolon kalınlığı yetersizdi.
+Text | font=18.0 | overflow=False | Jüri menüsü: <b>J</b>
+Building3 | font=26.0 | overflow=False | <b>Ve 19 bina daha</b> Yıkılan: 9 · Ayakta: 10
+Text | font=26.0 | overflow=False | YIKILDI
+Text | font=34.0 | overflow=False | SON DAKİKA!
+Text | font=26.0 | overflow=False | YIKILDI
+Text | font=30.0 | overflow=False | 7. <size=70%>GÜN</size>
+X | font=16.5 | overflow=False | X
+Story | font=14.0 | overflow=True | <color=#141210><b>GÜNÜN ÖZETİ</b></color> Yıkılan bina: <color=#141210><b>12</b></color> Can kaybı: <color=#141210><b>147</b></color> Yaralı: 230  <i>Yasemin Sitesi A Blok:</i> Yasemin Sitesi A Blok yıkıldı. Onayında sizin imzanız vardı (3. gün).  <i>Şafak Evleri:</i> Şafak Evleri yıkıldı. Onayında sizin imzanız vardı (3. gün).  <i>Orkide Evleri:</i> Orkide Evleri yıkıldı. Onayında sizin imzanız vardı (4. gün).  <i>Sedir Sitesi D Blok:</i> Sedir Sitesi D Blok yıkıldı. Onayında sizin imzanız vardı (4. gün).  <i>Ardıç Sitesi A Blok:</i> Ardıç Sitesi A Blok yıkıldı. Rüşvet alarak imzaladığınız bina (4. gün).  <i>Esinti Apartmanı:</i> Esinti Apartmanı yıkıldı. Rüşvet alarak imzaladığınız bina (5. gün).  <i>Zeytin Apartmanı:</i> Zeytin Apartmanı yıkıldı. Rüşvet alarak imzaladığınız bina (5. gün).  <i>Menekşe Evleri:</i> Menekşe Evleri yıkıldı. Rüşvet alarak imzaladığınız bina (6. gün).  <i>Turna Sitesi D Blok:</i> Turna Sitesi D Blok yıkıldı. Rüşvet alarak imzaladığınız bina (6. gün).  <i>Karanfil Apartmanı:</i> Karanfil Apartmanı yıkıldı. Rüşvet alarak imzaladığınız bina (6. gün).  <i>Nergis Sitesi C Blok:</i> Nergis Sitesi C Blok yıkıldı. Rüşvet alarak imzaladığınız bina (6. gün).  <i>Martı Apartmanı:</i> Martı Apartmanı yıkıldı. Onayında sizin imzanız vardı (7. gün).  Yıkılan yapının onayında usulsüzlük şüphesi var.  <b>Savcılık, imzanızın bulunduğu dosyalar hakkında soruşturma başlattı.</b>
+Text | font=26.0 | overflow=False | YIKILDI
+Label | font=30.0 | overflow=False | Hesaplaşmaya geç  →
+Building2 | font=12.7 | overflow=False | <b>Orkide Evleri</b> Nar Sokak No: 28 <color=#141210><b>YIKILDI</b></color> Can kaybı: 14 · Yaralı: 18 Hayatını kaybedenler: Cem Gökalp, Arda Kumru, Arda Demirtaşlı, Doruk Eryaman, Elif Koyuncu, Elif Kayalı ve 8 kişi daha Neden: kolon kalınlığı yetersizdi.
+Building1 | font=20.9 | overflow=False | <b>Şafak Evleri</b> Akasya Sokak No: 23 <color=#141210><b>YIKILDI</b></color> Can kaybı: 4 · Yaralı: 8 Hayatını kaybedenler: Nehir Taşkıran, Hatice Sevindik, Orhan Ormancı, Defne Eryaman Neden: beton sınıfı ve temel derinliği yetersizdi.

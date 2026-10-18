@@ -1,0 +1,1 @@
+Day=7; Outcomes=22; Collapsed=12; StoryOverflow=True; StoryFont=14

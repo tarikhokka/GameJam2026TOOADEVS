@@ -197,7 +197,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 |---|---|---|---|
 | 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ✅ `a9e80a7` (05:26) |
 | 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
-| 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ⏳ |
+| 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ✅ `fe657b3` — 58/58 EditMode + 13/13 PlayMode |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
 | 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🔒 |
@@ -272,7 +272,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - T1 görselleri builder'da bağlanır; prefab'ı builder'la kur.
 
 #### Onur (C) — C1, C2
-- [ ] **C1 `StampTrayView` (Özellik 2):**
+- [x] **C1 ✅ `fe657b3` — `StampTrayView` (Özellik 2):** T1 görselleriyle hazır; taban `2e8643d` (A1 dahil). İzole Unity 6000.6.4f1'de 58/58 EditMode + 13/13 PlayMode (4 mevcut Flow + 9 geçici C1 kabulü), gerçek URP önizleme kontrolü geçti. Yanlış bırakma, izin/hedef/girdi kilidi kaybı, kapat/gizle/yeniden bağla ve olay içinde gizleme doğrulandı. Kalıcı Canvas/karartma, Core kararı veya ses yok: bunlar B2/masa tarafında. **Oğuzhan:** bağlantı rehberi `Docs/Onur/StampTrayView_baglanti.md`; kökü 640×260 önerilir, `Bind(() => desk.StampArea, () => desk.CanStamp)`, `Stamped += desk.StampDecision`, `OpenChanged` ile kaşe alanını ve bileşenin bütün kökünü yükselt. Prefab/builder/sahneler değiştirilmedi. C2 başlamadı; Faz 2 kapısını A açacak.
   - **Dosya:** `Assets/_Project/Scripts/Desk/UI/StampTrayView.cs` (Desk asmdef). `BribeEnvelopeView` / `DeskHeaderView` gibi kendini kurar, `Reset()` T1 görsellerini ve fontları bağlar, görselsiz de çalışır.
   - **Düğme ve bölme:**
     - Kaşe düğmesi (`btn_stamps`) El Kitabı'nın sağında; yerleşimi Oğuzhan B2'de verir, sen kökün içinde düğmeyi sağa yasla.
@@ -717,6 +717,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 ## 8. Karar günlüğü (güncel kararlar; eski satırlar `f14d2ed`'de)
 | Ne zaman | Karar | Gerekçe |
 |---|---|---|
+| 18 Ekim | Belge turu C1 `fe657b3` tamam: bağımsız kaşe çekmecesi, temas olayı ve iptal davranışları, T1 görselleri, bağlantı rehberi; A1 dahil 58/58 EditMode + 13/13 PlayMode. B2 bağlantısı ve C2 masa kabulü Faz 2'de | Onur teslimi; API ve oyun kuralları değişmedi |
 | 16 Ekim | Oyun "İmza": masa başı mühendis onay oyunu; tek Game sahnesi + prefab ekranlar; saf C# Core, Core/Desk/Flow asmdef; Game.unity sadece A | Tema ile doğrudan bağ, paralel çalışma |
 | 16 Ekim | Strength ≥ 1 asla yıkılmaz; şiddet gizli, bina ayakta/yıkık | Dürüst oyuncu cezalandırılmaz |
 | 16 Ekim | İki katmanlı sahte belge: bedava ipuçları (parsel/tarih/lab/kaşe/imza) + ücretli ek test; kaşe ve imza metin olarak | Dikkat ödüllendirilir; ipucu veriden sızmaz |

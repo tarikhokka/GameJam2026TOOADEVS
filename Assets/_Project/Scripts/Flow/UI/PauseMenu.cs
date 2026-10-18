@@ -161,8 +161,25 @@ namespace CivilJam.Flow
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(_volume.gameObject);
         }
 
+        /// <summary>
+        /// (Tarık, 18 Ekim) Ana menüdeki "Ayarlar" düğmesi: aynı ayarlar paneli doğrudan açılır, Geri menüyü kapatır.
+        /// Müzik duraklamaz (ses ayarı duyularak yapılsın).
+        /// </summary>
+        public static void OpenSettings()
+        {
+            if (_instance == null) return;
+            _instance.Open();
+            if (!_instance._open) return;
+            AudioListener.pause = _instance._previousAudioPause;
+            _instance._settingsOnly = true;
+            _instance.ShowSettings();
+        }
+
+        bool _settingsOnly;
+
         void ShowMain()
         {
+            if (_settingsOnly) { _settingsOnly = false; Resume(); return; }
             _settings.SetActive(false);
             foreach (var item in _mainItems) item.SetActive(true);
             _menuButton.SetActive(_menuButtonWanted);
@@ -272,6 +289,7 @@ namespace CivilJam.Flow
         {
             if (!_open) return;
             _open = false;
+            _settingsOnly = false;
             _resumeFrame = Time.frameCount;
             Time.timeScale = _previousTimeScale;
             AudioListener.pause = _previousAudioPause;

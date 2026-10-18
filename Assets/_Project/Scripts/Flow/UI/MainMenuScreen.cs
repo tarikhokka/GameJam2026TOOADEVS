@@ -100,13 +100,14 @@ namespace CivilJam.Flow
             }
 
             bool hasSave = SaveSystem.HasSave;
-            int count = hasSave ? 4 : 3;
+            int count = hasSave ? 5 : 4;
             int index = 0;
             if (hasSave)
             {
                 MenuButton("Continue", "Devam Et", Continue, index++, count);
             }
             MenuButton("New", "Yeni Oyun", NewGame, index++, count);
+            MenuButton("Settings", "Ayarlar", PauseMenu.OpenSettings, index++, count); // (Tarık) Esc menüsündeki ayarlar paneli
             MenuButton("Credits", "Emeği Geçenler", () => SetCredits(true), index++, count);
             MenuButton("Quit", "Çıkış", Quit, index, count);
 

@@ -510,7 +510,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] Müzikler oyunda çalmıyor: `mus_menu` (ana menü) ve `mus_ending_sad` (Kötü + iki Orta son) hiçbir sahne/prefab/koda bağlı değil.
 - [ ] (İsteğe bağlı) Gün başında `Context.LoadFailed` ise "Kayıt okunamadı, yeni oyun başladı." yaz.
 - [x] Gazete: "Hesaplaşmaya geç" düğmesi gazetenin sağ alt köşesinden taşıyor → gazete küçüldü ve masaya kondu, düğme kağıdın sağında, tahta düğme (Tarık, `fc75cac` + düğme konumu ayrı commit).
-- [x] Akış ekranlarının görsel dili: gazete de yenilendi (Tarık, 18 Ekim `fc75cac`): ahşap masa (`newspaper_table`), siyah-beyaz eski gazete teması, YIKILDI / AYAKTA kaşeleri, masaya atılma hareketi ve sarsıntı. **Esc menüsü** hâlâ eski görünümde. ⚠️ **A:** final aday build `107f106`'dan sonra geldi (gazete, jüri ipucu X ile köşeye; Core'a dokunmaz) — build'i yeniden almak gerekir.
+- [x] Akış ekranlarının görsel dili: gazete de yenilendi (Tarık, 18 Ekim `fc75cac`): ahşap masa (`newspaper_table`), siyah-beyaz eski gazete teması, YIKILDI / AYAKTA kaşeleri, masaya atılma hareketi ve sarsıntı. **Esc menüsü** hâlâ eski görünümde. ⚠️ **A:** final aday build `107f106`'dan sonra geldi (gazete, jüri ipucu X ile köşeye; ana menüde **Ayarlar** düğmesi → `PauseMenu.OpenSettings`, Esc menüsündeki aynı panel, Geri menüyü kapatır; Core'a dokunmaz; PlayMode testleri yeşil) — build'i yeniden almak gerekir.
 - ℹ️ `Flow/UI/PauseMenu.cs`'e A dokundu (Ahmet isteği): Ayarlar (ana ses `PlayerPrefs` "imza.masterVolume" + tam ekran), tam ekran ekranın gerçek çözünürlüğüne geçer. Test `Tests/PlayMode/SettingsMenuTests.cs`.
 
 **Tarık (EEE):**

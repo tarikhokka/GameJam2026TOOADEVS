@@ -50,6 +50,15 @@ namespace CivilJam.Desk
         private readonly List<DottedRowView> infoRows = new List<DottedRowView>();
         private readonly List<DottedRowView> techRows = new List<DottedRowView>();
         private bool pending, locked;
+        private ProjectVerdict pendingStamp = ProjectVerdict.Pending; // (A, belge turu A1) basılmış ama henüz verilmemiş kaşe
+
+        // (A, belge turu A1) Kaşenin basılacağı alan: bugün ONAY / RED düğmelerinin satırı ("Decisions"). B2'de düğmeler kalkar,
+        // alan kalır; kaşe bölmesi (StampTrayView) kaşeyi buraya bırakınca basılır.
+        public RectTransform StampArea => approveButton != null ? approveButton.transform.parent as RectTransform : null;
+
+        // Kaşe basıldı ama karar henüz Core'a gitmedi (belgeler müteahhide verilince gider, memory.md "📂 BELGE TURU" D1):
+        // form bu kaşeyi gösterir. Pending = kaşe yok (yeni müteahhit).
+        public void SetPendingStamp(ProjectVerdict verdict) => pendingStamp = verdict;
 
         private void Awake()
         {
@@ -127,7 +136,7 @@ namespace CivilJam.Desk
             // (A, Ahmet kararı) "ZARFI AL VE ONAYLA" kalktı: zarf masada tıklanarak açılır ve orada kabul / ret edilir.
             bribeRoot.SetActive(false);
             if (project.OffersBribe) bribeLabel.text = $"ZARFI AL VE ONAYLA · {DeskFormat.Money(project.BribeAmount)}";
-            decisionStamp.Bind(project.Verdict);
+            decisionStamp.Bind(project.Verdict != ProjectVerdict.Pending ? project.Verdict : pendingStamp);
             DocTextBoost.Apply(transform, 1.4f); // (EEE) yazılar sığdığı kadar %40 büyük, koyu ve kalın
         }
 

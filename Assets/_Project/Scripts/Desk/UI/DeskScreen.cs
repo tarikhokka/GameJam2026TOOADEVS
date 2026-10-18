@@ -13,6 +13,9 @@ namespace CivilJam.Desk
     // DENETÇİ EL KİTABI. Formda ONAY / RED (ve zarf), lab raporunda ek test. Karar → kaşe forma basılır → form ve lab raporu
     // masadan kayıp gider → tepki balonu (+ hediye) → sıradaki gelir. Son müteahhitten sonra mesai zili + "MESAİ BİTTİ"
     // geçiş ekranı, ardından Completed bir kez kendiliğinden tetiklenir ("Mesaiyi bitir" düğmesi kalktı, EEE).
+    // (A, belge turu A1 — memory.md "📂 BELGE TURU", D1) Karar iki adım: StampDecision (kaşe forma basılır, değiştirilemez, Core'a
+    // gitmez) → HandBack (belgeler müteahhide verildi: karar Core'a gider, AfterDecision sırası). Geçici köprü: ONAY / RED ve zarf
+    // kabulü ikisini arka arkaya çağırır; B2'de kaşe bölmesi StampDecision'ı, belge iadesi HandBack'i çağırır.
     public class DeskScreen : MonoBehaviour, IGameScreen
     {
         [SerializeField] private DeskHeaderView header; // üst bar (Onur'un bileşeni, poliş B2): gün, kasa, müteahhit · proje, sayaçlar
@@ -58,18 +61,80 @@ namespace CivilJam.Desk
 
         private bool holdEnvelope; // inceleme diyaloğu bitene kadar teklif edilen zarf masaya düşmez
 
+        // ---------- (A, belge turu A1) Kaşe → iade API'si (memory.md "API sözleşmesi") ----------
+        private string stampedId;    // kaşesi basılmış dosya (bu müteahhit); null = kaşe yok
+        private bool stampedApprove; // basılan kaşe: true = ONAY
+
+        /// <summary>Formdaki kaşe alanı (kaşe bölmesi buraya bırakılınca basar).</summary>
+        public RectTransform StampArea => formView.StampArea;
+
+        /// <summary>Bu dosyaya kaşe basıldı mı (karar henüz Core'a gitmemiş olabilir; HandBack'te gider).</summary>
+        public bool IsStamped => stampedId != null && stampedId == selectedId;
+
+        /// <summary>Kaşe basılabilir mi: dosya bekliyor, form açık, kaşe yok; karar sırası, diyalog, zarf ekranı ve inceleme modu yok.</summary>
+        public bool CanStamp
+        {
+            get
+            {
+                var project = selectedId != null && context != null ? context.GetTodayProject(selectedId) : null;
+                return project != null && project.Verdict == ProjectVerdict.Pending && formWindow.IsOpen && !IsStamped
+                    && !stamping && !envelopeOpen && !Inspecting && (dialogue == null || !dialogue.IsPlaying);
+            }
+        }
+
+        /// <summary>Kaşe basıldı (true = ONAY). Karar henüz Core'da değil.</summary>
+        public event Action<bool> DecisionStamped;
+
+        /// <summary>
+        /// Kaşeyi forma bas: kaşe izi görünür, ses çalar, karar artık değiştirilemez. Core'a gitmez (D1).
+        /// Zarf masadayken ONAY kaşesi = zarfla onay (HandBack'te BribeRevealed'e göre).
+        /// </summary>
+        public void StampDecision(bool approve)
+        {
+            if (Inspecting && !stamping) inspect.SetMode(false);
+            if (!CanStamp) return;
+            stampedId = selectedId;
+            stampedApprove = approve;
+            formView.SetPendingStamp(approve ? ProjectVerdict.Approved : ProjectVerdict.Rejected);
+            Redraw();
+            formView.AnimateDecisionStamp();
+            if (deskAudio != null) deskAudio.PlayStamp();
+            DecisionStamped?.Invoke(approve);
+        }
+
+        /// <summary>
+        /// Belgeler müteahhide verildi: karar Core'a gider (ONAY: Approve(id, acceptBribe: BribeRevealed); RED: Reject) ve
+        /// tepki / hediye / kabadayı / sıradaki sırası başlar. Kaşe yoksa ya da sıra / diyalog sürüyorsa false.
+        /// </summary>
+        public bool HandBack()
+        {
+            if (!IsStamped || stamping || (dialogue != null && dialogue.IsPlaying)) return false;
+            string id = selectedId;
+            if (stampedApprove)
+            {
+                var p = context.GetTodayProject(id);
+                Decide(() => context.Actions.Approve(id, acceptBribe: p != null && p.BribeRevealed), stampNow: false);
+            }
+            else Decide(() => context.Actions.Reject(id), stampNow: false);
+            return true;
+        }
+
+        // Geçici köprü (B2'de kalkar): eski ONAY / RED düğmesi = kaşe + hemen iade.
+        private void StampAndHandBack(bool approve)
+        {
+            StampDecision(approve);
+            if (IsStamped) HandBack();
+        }
+
 
         private void Awake()
         {
             // (Tarık, Ahmet kararı 18 Ekim ~03:10) Zarf teklif edildiyse ONAY = zarfla onay; zarfsız onay yok.
-            // Teklif edilmemiş zarf yine alınamaz (Core BribeRevealed değilse kabul etmez).
-            formView.ApproveClicked += () => Decide(() =>
-            {
-                var p = context.GetTodayProject(selectedId);
-                context.Actions.Approve(selectedId, acceptBribe: p != null && p.BribeRevealed);
-            });
-            formView.TakeBribeClicked += () => Decide(() => context.Actions.Approve(selectedId, acceptBribe: true));
-            formView.RejectClicked += () => Decide(() => context.Actions.Reject(selectedId));
+            // Teklif edilmemiş zarf yine alınamaz (Core BribeRevealed değilse kabul etmez) — HandBack'te.
+            // (A, belge turu A1) Geçici köprü: düğmeler kaşe + hemen iade; B2'de düğmeler kalkar.
+            formView.ApproveClicked += () => StampAndHandBack(true);
+            formView.TakeBribeClicked += () => StampAndHandBack(true);
+            formView.RejectClicked += () => StampAndHandBack(false);
             labView.ExtraTestClicked += BuyExtraTest;
 
             props.FinishClicked += Finish;
@@ -118,6 +183,7 @@ namespace CivilJam.Desk
             endingShift = false;
             if (shiftOverlay != null) shiftOverlay.Hide();
             holdEnvelope = false;
+            ClearStamp();
 
             gameObject.SetActive(true);
             if (rulebook != null)
@@ -168,6 +234,7 @@ namespace CivilJam.Desk
             if (dialogue != null) dialogue.Stop(); // yeni müteahhit: diyalog sıfırlanır
             CloseEnvelope();
             holdEnvelope = false;
+            ClearStamp(); // (A, belge turu A1) yeni müteahhit: kaşe yok
             if (rulebook != null) rulebook.ShowProject(context.GetTodayProject(projectId)); // (A, poliş K1) kat grubu otomatik
             Redraw();
         }
@@ -180,9 +247,16 @@ namespace CivilJam.Desk
             Redraw();
         }
 
-        // Karar kaşesi forma basılır; sonra form kaşeli klasör olarak müteahhide gider, lab raporu kitabına döner,
-        // müteahhit tepki verir, sıradaki gelir. Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı.
-        private void Decide(Action decision)
+        private void ClearStamp()
+        {
+            stampedId = null;
+            formView.SetPendingStamp(ProjectVerdict.Pending);
+        }
+
+        // Karar Core'a gider (HandBack); sonra form ve lab raporu kalkar, müteahhit tepki verir, sıradaki gelir.
+        // Karar Core'da cam tamiri doğurduysa (kabadayı reddedildi) önce olay kartı. stampNow: kaşe animasyonu ve sesi burada mı
+        // (belge turunda kaşe StampDecision'da basıldı → false).
+        private void Decide(Action decision, bool stampNow = true)
         {
             if (stamping || (dialogue != null && dialogue.IsPlaying)) return;
             if (Inspecting) inspect.SetMode(false); // poliş K2: inceleme modunda ONAY / RED → mod kapanır, karar bugünkü gibi
@@ -193,8 +267,11 @@ namespace CivilJam.Desk
 
             decision();
             Redraw();
-            formView.AnimateDecisionStamp();
-            if (deskAudio != null) deskAudio.PlayStamp();
+            if (stampNow)
+            {
+                formView.AnimateDecisionStamp();
+                if (deskAudio != null) deskAudio.PlayStamp();
+            }
 
             bool windowBroken = context.State.WindowRepairsToday > repairsBefore;
             StartCoroutine(AfterDecision(project, windowBroken));
@@ -377,7 +454,9 @@ namespace CivilJam.Desk
             envelopeOpen = true;
             Redraw(); // masadaki zarf kalkar
             bribeEnvelope.Open(project.BribeAmount, from,
-                accept: () => { envelopeOpen = false; Decide(() => context.Actions.Approve(project.Id, acceptBribe: true)); },
+                // (A, belge turu D4) Kabul = zarf alınır + ONAY kaşesi kendiliğinden basılır. Geçici köprü: hemen iade (B2'de kalkar,
+                // oyuncu belgeleri müteahhide verir). Zarf teklif edildiği için HandBack zarfla onaylar (BribeRevealed).
+                accept: () => { envelopeOpen = false; StampAndHandBack(true); },
                 decline: () => { envelopeOpen = false; Redraw(); });
         }
 
@@ -459,7 +538,7 @@ namespace CivilJam.Desk
             labView.Show(context, project, CanBuyExtraTest(project),
                 context.Balance != null ? context.Balance.ExtraTestCost : 0);
             SyncDocuments(project);
-            if (inspect != null) inspect.SetAvailable(!stamping && project.Verdict == ProjectVerdict.Pending);
+            if (inspect != null) inspect.SetAvailable(!stamping && !IsStamped && project.Verdict == ProjectVerdict.Pending);
         }
     }
 }

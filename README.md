@@ -13,6 +13,13 @@ Ertesi sabah gazete, imzanın neye mal olduğunu yazıyor.
 
 Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 
+### Bilinen sorunlar
+
+- **Windows SmartScreen uyarısı:** `Imza.exe` imzasız olduğu için Windows "bilgisayarınız korundu" diyebilir. **Ek bilgi → Yine de çalıştır** ile açılır.
+- **ZIP içinden çalıştırmayın:** Önce klasöre çıkarın; ZIP içinden açılan oyun dosyalarını bulamayabilir.
+- **Pencere modu / çözünürlük:** Ekran farklı oranda ise kenarlarda boşluk kalabilir. Esc → Ayarlar → Tam ekran ile pencere ve tam ekran arasında geçilir.
+- **Kayıt:** Oyun her gün sonunda kaydedilir (gün içinde çıkılırsa o günün ilerlemesi kaydedilmez). Kayıt Windows'ta `%USERPROFILE%\AppData\LocalLow\TOOADEVS\Imza\` klasöründedir; silinirse ana menüde "Devam Et" görünmez.
+
 ## Kontroller
 
 | Eylem | Kontrol |

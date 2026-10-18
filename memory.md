@@ -47,7 +47,7 @@
 | 10 | Lab: kaşe | El Kitabı: LAB listesi | Başka (akredite olmayan) laboratuvarın kaşesi |
 
 **Uyuşmazlık diyaloğu ve rüşvet (`InspectionDialogue`):** zarf başta yoktur, rüşvetçi sadece selamlar. UYUŞMAZLIK bulununca (bu projede bu alan çifti için ilk kez) kaşeden sonra kısa diyalog: denetçi cümlesi (`Dialogue.asset` şablonu, gerçek veriyle) + müteahhit cevabı (`ClientSO.MismatchLines`). Projede zarf varsa **ilk uyuşmazlıkta** devam eder: teklif (`BribeLines`) + denetçi tepkisi (`BribeReactions`) + kapanış (`BribeCloseLines`); `ProjectData.BribeRevealed` = true ve zarf masaya düşer. Uyuşmazlık bulunmazsa zarf hiç teklif edilmez; teklif edilmemiş zarf alınamaz, ret sonrası "zarf geri çevrildi" repliği çıkmaz. SORUN YOK ve ALAKASIZ'da diyalog yok.
-**Zarf:** masada sadece "ZARF" yazar; tıklanınca açılır (para + tutar): RÜŞVETİ KABUL ET → zarfla onay; RÜŞVETİ REDDET → zarf masaya döner, proje karar bekler. ⚠️ **Değişiyor (§7, Tarık):** boş alana tıklamak = reddet; zarf teklif edildiyse formdaki ONAY = zarfla onay.
+**Zarf:** masada sadece "ZARF" yazar; tıklanınca açılır (para + tutar): RÜŞVETİ KABUL ET → zarfla onay; RÜŞVETİ REDDET → zarf masaya döner, proje karar bekler. Zarf ekranında boş alana tıklamak da reddettir. **Zarf masadayken formdaki ONAY = zarfla onay** (zarfsız onay yok); RED zarfı da reddeder. Teklif edilmemiş zarf alınamaz.
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner.
 
@@ -192,7 +192,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 2 | B2 İNCELE / NASIL OYNANIR görselleri + üst barı masaya bağlama | Oğuzhan | ✅ `1c652eb` + `9be7aec` (imza satırı "Mühendis", vakit kalırsa maddesi; A3 build'ine dahil) |
 | 2 | C2 Ana menü düğmeleri (+ Geri, vakit varsa Esc menüsü) | Onur | ✅ `d2dddb9` |
 | 2 | C1-K Karartma kontrolü (`InspectResultView`, `InspectorBubbleView` karartmanın üstünde mi) | Onur | ✅ `d2dddb9` |
-| 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | 🟡 sürüyor (02:45) |
+| 3 | A3 Entegrasyon, test, ekran görüntüleri, build + ZIP | A | ✅ build `107f106` (03:21) |
 
 **Faz 0 (bitti, `d0c4e59`):** Plan push'landı.
 
@@ -267,6 +267,18 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
   - Faz 2 dosyalarına dokunmazlar.
 
 **Kapı 2 → 3:** B2, C2 ve C1-K ✅ olduğunda A Faz 3'e başlar.
+> ✅ **POLİŞ TURU BİTTİ (A, 18 Ekim 03:21).** Final aday build `107f106` ile alındı: `Builds/Imza/Imza.exe`, teslim ZIP'i `Builds/Imza.zip` (56 MB).
+> - **Testler:** EditMode 55/55, PlayMode 4/4.
+> - **Otomatik 7 günlük oynanış geçti:**
+>   - program 3-3-4-4-4-5-5, 14 uygunsuz; 6 ana müteahhit 3'er, 10 kişiliksiz 1'er kez;
+>   - 8 karar inceleme modunda ONAY / RED ile verildi;
+>   - zarf: boş alana tıklama kapatır, zarf masadayken ONAY = zarfla onay;
+>   - Devam Et programı korur; kabadayı ve hediye kartları çıktı;
+>   - jüri menüsü rüşvet / hediye / kabadayı sahnelerini açtı;
+>   - 4 son ve ana menü ekran görüntüleri tamam.
+> - **Build:** başlatma denemesi hatasız (12 sn).
+> - Kod değişirse A yeniden build + ZIP alır. Son kod push'u 11:00, freeze 12:00.
+> - Bilinen, engel olmayan: Esc menüsü eski düz görünümde (C2'de isteğe bağlıydı); İNCELE düğmesi küçük (160x46).
 > 🟡 **KAPI AÇILDI — FAZ 3 BAŞLADI (A, 18 Ekim 02:45, Ahmet'in onayıyla).** Faz 2'nin üç işi ✅ (B2 `1c652eb`, C2 + C1-K `d2dddb9`).
 > - A şimdi: birleşik kodla testler, otomatik 7 günlük oynanış, ekran görüntüleri, §2-§3 güncellemesi.
 > - **Build + ZIP herkesin işi bittikten sonra alınır.** Şu an açık tek iş:

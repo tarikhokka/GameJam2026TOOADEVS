@@ -200,10 +200,23 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ✅ `fe657b3` — 58/58 EditMode + 13/13 PlayMode |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
-| 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🔒 |
-| 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🔒 |
-| 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🔒 |
+| 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🟢 başla |
+| 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🟢 başla |
+| 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🟢 başla |
 | 3 | A3 Entegrasyon, §2-§3, build + ZIP | A | 🔒 |
+
+> 🟢 **BELGE TURU KAPI 1 → 2 AÇILDI — FAZ 2 BAŞLADI (A, 18 Ekim ~06:00, Ahmet'in onayıyla).** Faz 1'in beşi ✅: A1 `a9e80a7`, B1 `e1a7bf9`, C1 `fe657b3`, T1 `4a88ff2`, T2 `2daba93`.
+> - **A'nın birleşik kod kontrolü (`72a6375`):**
+>   - EditMode 58/58, PlayMode 4/4.
+>   - 7 günlük otomatik oynanış geçti: 56 belge ikondan açıldı; 7 karar kaşe + iade API'siyle verildi; zarf, Devam Et, kabadayı, hediye ve jüri menüsü çalışıyor.
+>   - Ekran görüntüsünde ikonlar masanın sol kenarında doğru.
+> - **Şimdi başlar (önce pull):**
+>   - **Oğuzhan → B2** (prefab'ı kuran tek iş);
+>   - **Onur → C2** (B2'nin ara push'larıyla Sandbox_Desk'te);
+>   - **A → A2**.
+> - **B2 bağlantı rehberi:** `Docs/Onur/StampTrayView_baglanti.md`.
+> - **Geçici köprü (`StampAndHandBack`, `HandBackByDrag`) B2'de kalkar:** düğme yok, kaşe = `StampTrayView.Stamped → StampDecision`, iade = sürükle-ver → `HandBack`. Zarf kabulü = `StampDecision(true)` (iade oyuncuda).
+> - **Hedef 09:30.** Bitince tabloda ✅ + hash. Faz 2 bitince A Faz 3'e (build) geçer. **Son kod push'u 11:00.**
 
 **Fazlar ve bekleme:**
 - **Faz 1 (paralel, hedef 07:00):**
@@ -751,6 +764,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 18 Ekim ~00:30 | Rüşvet zarfı tıklanabilir: masada tutar görünmez; açılınca para + tutar, RÜŞVETİ KABUL ET (zarfla onay) / RÜŞVETİ REDDET (zarf masaya döner, proje bekler); formdaki "ZARFI AL VE ONAYLA" kalktı | Ahmet isteği; görsel Tarık (ChatGPT) |
 | 18 Ekim ~01:00 | Denetçi balonu solda ofisin önünde; İNCELE düğmesi lab raporunun üstünde (Tarık'ın yeri) kalır | Oğuzhan kararı (A'nın yerleşim notu üzerine) |
 | 18 Ekim ~01:50 | **Poliş turu (7 madde):** kat grubu otomatik ve düğmeler sadece gösterge (inceleme hep binanın grubuyla, Core hesaplar); inceleme modunda tıklanabilir alanlar + ONAY/RED + İNCELE dışı hafif kararır, ONAY/RED basılabilir (basınca mod kapanır, karar verilir; EK TEST ve zarf pasif); İNCELE, NASIL OYNANIR ve ana menü düğmeleri ONAY/RED/EK TEST ailesinden; üst bar yeniden tasarlanır; Hızlı Bakış'taki RED kutusu kalkar, parametreler büyür; BETON/DONATI/YAPI/ZEMİN sekmeleri kalkar (HIZLI BAKIŞ ve LAB kalır, sekme notları taşınmaz); ziyaret kuralı (6×3, 10×1, aynı gün yok) zaten kodda. İş bölümü ve fazlar §7 | Ahmet kararı; plan A |
+| 18 Ekim ~06:00 | Belge turu kapı 1 → 2 açıldı (Faz 1'in beşi ✅, birleşik kod testli: 58/58, 4/4, 7 gün oynanış) | Ahmet onayı, A kontrol etti |
 | 18 Ekim ~04:40 | **Belge turu:** belgeler masada solda ikon, tıklayınca açılır; ONAY / RED düğmeleri yerine El Kitabı'nın sağından açılan kaşe bölmesi (yeşil ONAY / kırmızı RED kaşeyi forma sürükle-bas); kaşeden sonra iki belge ayrı ayrı müteahhide sürüklenip verilir (masaya geçerken ikona küçülür). Karar iki belge verilince Core'a gider (Core değişmez); kaşe sadece forma; zarf kabulü otomatik ONAY kaşesi. İş bölümü ve fazlar §7 | Ahmet kararı (Papers, Please hissi, jüriye pazarlama) |
 | 18 Ekim ~03:30 | **Jüri vitrini:** ilk 2 günde kesin rüşvet (2. gün rüşvetçi zarflı), kesin kabadayı uygunsuz dosyayla (2. gün; diğer ziyaretleri 4-7. gün), kesin hediye (1. gün dürüst usta, onaylanırsa), en geç 2. gece deprem. Mevcut olasılıklar (14/14, 6×3 + 10×1, 1. gün en çok 1 uygunsuz, ağırlıklar, %20 + %15) aynen; kabadayı hasarı artık gün ayarına değil müteahhide bağlı | Ahmet kararı (jüriye oyunu iyi göstermek); A uyguladı, EditMode 58/58 |
 | 18 Ekim ~03:10 | Zarf: açıkken boş alana tıklamak = reddet (zarf masaya döner); zarf teklif edildiyse ONAY = rüşveti kabul (zarfsız onay yok); teklif edilmemiş zarf yine alınamaz; RED zarfı da reddeder. Core değişmez; Tarık yapar (Oğuzhan'ın dosyaları) | Ahmet kararı (rüşvetli proje her zaman uygunsuz; zarfsız onay anlamsızdı) |

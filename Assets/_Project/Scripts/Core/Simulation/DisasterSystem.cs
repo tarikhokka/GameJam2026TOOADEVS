@@ -19,6 +19,10 @@ namespace CivilJam.Core
 
             double roll = rng.NextDouble();
             bool guaranteed = balance.GuaranteedDisasterByDay > 0 && state.LastDisasterDay == 0 && state.Day >= balance.GuaranteedDisasterByDay;
+            // (Tarık, 18 Ekim) Son gün rüşvet alındıysa o gece afet kesin: "son gün kumarı" (%40 zarla +1.667 TL) olmasın.
+            // Zar yukarıda yine atıldı (rastgelelik sırası değişmez).
+            if (state.Day >= balance.TotalDays && state.Buildings.Exists(b => b.BribeAccepted && b.DayDecided == state.Day))
+                guaranteed = true;
             if (guaranteed || roll < chance)
             {
                 float intensity = Math.Min(1f, rng.Range(config.IntensityMin, config.IntensityMax));

@@ -57,7 +57,7 @@
 
 **Yıkılma (`EarthquakeSimulator`):** Strength = en kötü oran (sayısalda Actual/Required; seçenekli parametrede her eksik kademe −%25). Strength ≥ 1 asla yıkılmaz. Değilse Strength + gürültü (±0,15) < şiddet (0,5-0,9) ise yıkılır. Afet sadece son afetten bu yana onaylanan binaları değerlendirir. Afet olasılığı %20, afetsiz her gün +%15, tavan %100, afette %20'ye döner. **Jüri vitrini** (`BalanceSO.GuaranteedDisasterByDay` = 2): 1. gece afet olmadıysa 2. gece afet kesin (1. gecenin zarı aynen).
 
-**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 500-700 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 400; borç limiti 2.000. **Bilerek zor (Tarık kararı).** Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
+**Ekonomi (`Data/Balance.asset`, `Data/Expenses`):** başlangıç 1.500 TL; onay ücreti 500-700 TL; her gün kira 750 + kredi 400 (+ kabadayı hasarı 600); ek test 250 (18 Ekim, Tarık: 400'de test alan ile direkt reddeden aynı sonucu alıyordu; yazım hatasını testle bulup onaylamak artık kârlı); borç limiti 2.000. Son gün rüşvet alınırsa o gece afet kesin; 1. günde yazım hatası (masum değer farkı) yok. **Bilerek zor (Tarık kararı).** Kasa asla eksiye düşmez; yetmeyen zorunlu gider borca yazılır; borç varsa isteğe bağlı (kısmen ödenebilir) "Borç ödemesi" kalemi çıkar.
 
 **Hapis ve sonlar** (günlük ödemeden sonra, öncelik sırasıyla): yıkılan bina JailRisk +0,15, rüşvetle onaylanmış yıkılan bina +0,25; her yıkımdan sonra hapis zarı.
 1. **Kötü** "Hüküm": hapis zarı tuttu.

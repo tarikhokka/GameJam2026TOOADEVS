@@ -144,7 +144,7 @@ namespace CivilJam.Core
             bool kunyeClues = fake;
             if (fake && rng.Chance(FakeValueDiffChance) && AddLabDifference(p, selected, failing, rng))
                 kunyeClues = !rng.Chance(FakeOnlyValueDiffChance);
-            else if (compliant && rng.Chance(TypoChance))
+            else if (compliant && rng.Chance(TypoChance) && day >= 2) // (Tarık) 1. günde yazım hatası yok: rehberle öğrenen oyuncu takılmasın
                 AddLabDifference(p, selected, null, rng);
 
             CreateDocuments(p, day, fake, kunyeClues, names, rng);
@@ -298,9 +298,23 @@ namespace CivilJam.Core
         /// <summary>Ç5: bir oyunda aynı bina adı iki kez gelmez; ad kalıpları çeşitlenir.</summary>
         static string MakeBuildingName(BuildingType type, NamePoolSO names, Random rng, ICollection<string> used)
         {
+            // (Tarık, 18 Ekim) Kök ad da tekrar etmesin: bir oyunda 4 ayrı "Dolunay ..." gazetede hangi binanın yıkıldığını
+            // karıştırıyordu. Önce hiç kullanılmamış kökler; havuz tükenince eski davranış (tam ad yine tekrarsız).
+            var pool = names != null ? names.BuildingNames : null;
+            List<string> fresh = null;
+            if (pool != null)
+            {
+                fresh = new List<string>();
+                foreach (var root in pool)
+                {
+                    bool taken = false;
+                    foreach (var u in used) if (u.StartsWith(root + " ", StringComparison.Ordinal)) { taken = true; break; }
+                    if (!taken) fresh.Add(root);
+                }
+            }
             for (int attempt = 0; attempt < 40; attempt++)
             {
-                string baseName = rng.Pick(names != null ? names.BuildingNames : null, "Yeni");
+                string baseName = fresh != null && fresh.Count > 0 ? rng.Pick(fresh, "Yeni") : rng.Pick(pool, "Yeni");
                 string name;
                 if (type == BuildingType.Factory) name = $"{baseName} Fabrikası";
                 else

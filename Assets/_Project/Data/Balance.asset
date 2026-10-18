@@ -15,7 +15,7 @@ MonoBehaviour:
   TotalDays: 7
   StartMoney: 1500
   DebtLimit: 2000
-  ExtraTestCost: 400
+  ExtraTestCost: 250
   WindowRepairCost: 600
   UseVisitSchedule: 1
   MainClientVisits: 3

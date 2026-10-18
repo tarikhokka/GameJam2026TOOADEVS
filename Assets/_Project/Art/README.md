@@ -19,8 +19,8 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `desk_bg.png` | Desk ARKA katman: oda + koltuk + masa (ChatGPT, 1920x1080; masa sadeleştirildi: kaşe, kağıtlar, notlar, kalem kaldırıldı, kupa/kalemlik/isimlik kaldı). Çizim sırası: desk_bg → portre → desk_front → kitaplar | B | F |
 | `desk_front.png` | Desk ÖN katman: sadece masa (şeffaf, 1920x1080, tam ekran). Portrenin ÖNÜNE çizilir, karakterin belden aşağısını kapatır | B | F |
 | `doc_paper.png` | Desk | B | P |
-| `stamp_approve.png` | Desk | B | P |
-| `stamp_reject.png` | Desk | B | P |
+| `stamp_approve.png` | Belge turu T1: yeşil ONAY kaşesi (200x240, ahşap saplı, 3/4) | B | F |
+| `stamp_reject.png` | Belge turu T1: kırmızı RED kaşesi (200x240, ahşap saplı, 3/4) | B | F |
 | `signature.png` | Desk | B | P |
 | `bld_house_standing.png` | Construction/Result | C | P |
 | `bld_house_collapsed.png` | Result (gazete) | C | P |
@@ -64,6 +64,9 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü ve akış ekranı düğmesi (poliş T1, 520x120: koyu ahşap kahve, ince damar, ikonsuz; ONAY/RED/EK TEST ailesi; yazı kodla). Eskisi menu_bg'deki tahtadan kesilmişti | C | F |
 | `btn_inspect.png` | Poliş T1: İNCELE düğmesi (420x120, koyu kömür, solda büyüteç; yazı kodla). ONAY/RED/EK TEST ailesi | B | F |
+| `doc_icon_form.png` / `doc_icon_lab.png` | Belge turu T1: masanın solunda kapalı belge ikonları (200x150; bina / deney tüpü simgeli) | B | F |
+| `stamp_tray.png` | Belge turu T1: iki kaşe yuvalı ahşap bölme (520x220) | B | F |
+| `btn_stamps.png` | Belge turu T1: kaşe bölmesini açan düğme (110x110, kaşe ikonlu) | B | F |
 | `btn_help.png` | Poliş T1: NASIL OYNANIR düğmesi (420x100, hardal, solda "?"; yazı kodla) | B | F |
 | `hud_bar.png` | Poliş T1: üst bar şeridi (1920x88, koyu ahşap, alt kontur + gölge; 76 px pano + 12 px gölge) | C | F |
 | `hud_tag.png` | Poliş T1: üst bar kağıt etiketi (256x72, krem, mürekkep kontur). **9-slice, Sprite Border 24** | C | F |

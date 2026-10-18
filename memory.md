@@ -198,7 +198,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ⏳ (hedef 05:15, ERKEN push) |
 | 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ⏳ |
-| 1 | T1 Görseller + sesler | Tarık | ⏳ (hedef 05:30, ERKEN push) |
+| 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ⏳ |
 | 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🔒 |
 | 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🔒 |
@@ -283,7 +283,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 - [ ] **C2 (Faz 2):** B2 ara push'larıyla Sandbox_Desk'te son ayar (yerleşim, hızlar, karartmanın üstünde kalma); düzeltmeler sadece kendi dosyanda.
 
 #### Tarık (EEE) — T1, T2
-- [ ] **T1 Görseller ve sesler (ERKEN, hedef 05:30; Onur ve Oğuzhan bekliyor):**
+- [x] **T1 ✅ `4a88ff2`** — 6 zorunlu görsel (stamp_approve/reject eski yer tutucunun üstüne, aynı GUID). İsteğe bağlı `ink_*` ve `sfx_tray` yapılmadı: bugünkü `DecisionStampView` ve `sfx_paper` kullanılsın. — eski görev metni:
   - **Ortak kurallar:**
     - Hepsi el çizimi 2D cartoon, kalın kahve kontur, ONAY / RED / EK TEST ailesi;
     - **yazı görselde yok** (kaşe izi hariç, aşağıda);

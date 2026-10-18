@@ -30,7 +30,6 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 | Belgeleri geri verme | Kaşeden sonra belgeyi müteahhidin üstüne sürükle |
 | İnceleme modu | **İNCELE** düğmesi, sonra iki alana tıkla; sağ tık seçimi iptal eder |
 | Menü (ses ayarı, tam ekran) | Esc → Ayarlar |
-| Jüri menüsü (istenen sahneye atla: dört son, rüşvet, hediye, kabadayı) | **J** |
 
 ## Nasıl oynanır
 
@@ -56,6 +55,7 @@ Oyun 7 gün sürer. Dört farklı son var; hangisini göreceğin, attığın imz
 |---|---|
 | F9 | Son güne atlar (o günün sonunda son belirlenir) |
 | F10 | O gecenin sonunda afet kesin olur |
+| **J** | Jüri menüsü: istenen sahneye atlar (dört son, rüşvet, hediye, kabadayı). Sol alttaki "Jüri menüsü: J" etiketine tıklayarak da açılır |
 
 ## Ekip
 

@@ -60,13 +60,16 @@ Bu klasöre sadece EEE yazar. Başkası görsel isterse EEE'ye söyler.
 | `doc_lab.png` | Laboratuvar Raporu: boş kağıt destesi (1057x1295) | B | F |
 | `doc_handbook.png` | Denetçi El Kitabı: solda spiralli boş defter (1093x1279) | B | F |
 | `tab_beton/donati/yapi/zemin.png` | **Artık kullanılmıyor** (poliş K3: BETON/DONATI/YAPI/ZEMİN sekmeleri kalktı). Silinmedi, prefab'da bağlı. Eskiden: El Kitabı sekmeleri (120x300) | B | — |
-| `btn_approve.png`, `btn_reject.png` | Formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | F |
+| `btn_approve.png`, `btn_reject.png` | **Artık kullanılmıyor** (belge turu B2: ONAY / RED düğmeleri kalktı, karar kaşe çekmecesinden). Silinmedi. Eskiden: formdaki ONAY (yeşil ✓) / RED (kırmızı ✕) kaşe düğmeleri (440x150) | B | — |
 | `btn_test.png` | Lab raporundaki mavi EK TEST düğmesi (420x120) | B | F |
 | `btn_menu.png` | Ana menü ve akış ekranı düğmesi (poliş T1, 520x120: koyu ahşap kahve, ince damar, ikonsuz; ONAY/RED/EK TEST ailesi; yazı kodla). Eskisi menu_bg'deki tahtadan kesilmişti | C | F |
 | `btn_inspect.png` | Poliş T1: İNCELE düğmesi (420x120, koyu kömür, solda büyüteç; yazı kodla). ONAY/RED/EK TEST ailesi | B | F |
 | `doc_icon_form.png` / `doc_icon_lab.png` | Belge turu T1: masanın solunda kapalı belge ikonları (200x150; bina / deney tüpü simgeli) | B | F |
 | `stamp_tray.png` | Belge turu T1: iki kaşe yuvalı ahşap bölme (520x220) | B | F |
-| `btn_stamps.png` | Belge turu T1: kaşe bölmesini açan düğme (110x110, kaşe ikonlu) | B | F |
+| `btn_stamps.png` | Belge turu T1: kaşe bölmesini açan düğme (110x110, kaşe ikonlu). **Yedek:** oyunda `btn_stamps_wood` kullanılıyor | B | — |
+| `stamp_wood_approve.png` / `stamp_wood_reject.png` | Ahşap mühür (Oğuzhan, ekip onayı; Claude ile SVG çizildi): fotoğraftaki ahşap mühürden uyarlanan ONAY / RED kaşeleri (400x480; yazı diskte kazılı, sapta renk halkası, çekmece yuvasına oturur). `stamp_approve` / `stamp_reject` yedek kaldı | B | F |
+| `ink_approve.png` / `ink_reject.png` | Ahşap mühür (Oğuzhan): formdaki yuvarlak ONAYLANDI / REDDEDİLDİ mühür izi (480x480, şeffaf; DecisionStampView) | B | F |
+| `btn_stamps_wood.png` | Ahşap mühür (Oğuzhan): kaşe çekmecesi düğmesi, ahşap çerçeveli mini çekmece içinde iki mühür (220x220) | B | F |
 | `btn_help.png` | Poliş T1: NASIL OYNANIR düğmesi (420x100, hardal, solda "?"; yazı kodla) | B | F |
 | `hud_bar.png` | Poliş T1: üst bar şeridi (1920x88, koyu ahşap, alt kontur + gölge; 76 px pano + 12 px gölge) | C | F |
 | `hud_tag.png` | Poliş T1: üst bar kağıt etiketi (256x72, krem, mürekkep kontur). **9-slice, Sprite Border 24** | C | F |

@@ -29,19 +29,20 @@ Windows 10/11, 64 bit. Kurulum gerekmez. Oyun 1920×1080 tam ekran açılır.
 | Karar | Kaşe düğmesi → kaşeyi forma sürükle (yeşil ONAY / kırmızı RED) |
 | Belgeleri geri verme | Kaşeden sonra belgeyi müteahhidin üstüne sürükle |
 | İnceleme modu | **İNCELE** düğmesi, sonra iki alana tıkla; sağ tık seçimi iptal eder |
-| Menü (ses ayarı, tam ekran) | Esc → Ayarlar |
+| Menü (ses ayarı, tam ekran) | Esc → Ayarlar (ya da ana menüde **Ayarlar**) |
 
 ## Nasıl oynanır
 
 - **Masa:** Müteahhitler sırayla karşına oturur. Getirdiği **Yapı Denetim Formu** ve **Laboratuvar Raporu** masanın solunda küçük ikonlar olarak durur; tıklayınca açılır. **Denetçi El Kitabı** hep açıktır.
 - **Kaşe:** Kararını El Kitabı'nın sağındaki **kaşe düğmesiyle** verirsin: bölme açılır, yeşil **ONAY** ya da kırmızı **RED** kaşesini tutup formdaki kaşe alanına sürükle. Basılan kaşe değiştirilemez.
 - **Belgeleri geri ver:** Kaşeden sonra iki belgeyi de müteahhide sürükle. İkisi de verilince karar kesinleşir ve sıradaki müteahhit gelir.
-- **El Kitabı:** **Hızlı Bakış** sayfası formdaki kat adedine göre doğru kat grubunu kendisi gösterir. Beş değerin (beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü) hepsi yeşil bölgede olmalı; tek bir kırmızı, binanın güvenli olmadığı demektir. El Kitabı'nda Hızlı Bakış ve LAB (akredite laboratuvarlar) sayfaları var. İlk gün kısa bir anlatım seni karşılar; masadaki **NASIL OYNANIR** ile istediğin an yeniden açarsın.
+- **El Kitabı:** **Hızlı Bakış** sayfası formdaki kat adedine göre doğru kat grubunu kendisi gösterir. Beş değerin (beton sınıfı, demir tipi, kolon kalınlığı, temel derinliği, zemin türü) hepsi yeşil bölgede olmalı; tek bir kırmızı, binanın güvenli olmadığı demektir. El Kitabı'nda Hızlı Bakış ve LAB (akredite laboratuvarlar) sayfaları var. Her yeni oyunun 1. gününde **oklu bir rehber** masadaki öğeleri sırayla gösterir (belgeleri aç, incele, kaşe bas, belgeleri geri ver; istersen atlayabilirsin). Kuralları sonra masadaki **NASIL OYNANIR** ile istediğin an yeniden açarsın.
 - **Belgeleri karşılaştır:** Form ile laboratuvar raporu aynı parseli, aynı tarihi ve aynı mühendisin imzasını taşımalı. Rapordaki kaşe, raporu yazan laboratuvara ait olmalı ve o laboratuvar akredite listede bulunmalı. Tutmayan bir ayrıntı sahte belge işaretidir.
 - **İncele:** **İNCELE** düğmesine bas, iki ayrı belgeden aynı bilgiye tıkla (ör. formdaki ve rapordaki parsel ya da formdaki bir değer ile El Kitabı'ndaki satırı). Oyun **SORUN YOK**, **UYUŞMAZLIK SAPTANDI** ya da **ALAKASIZ** der. Uyuşmazlık bulursan müteahhide söylersin, o da cevap verir. İnceleme ücretsiz ve sınırsızdır; kararı yine sen verirsin.
 - **Ek test:** Şüphelendiğin projede ücretli ek test iste; gerçek değerler ortaya çıkar. Sahte belgede kâğıttaki beyan temiz görünür, gerçek değer ancak ek testte görünür. Form ile lab raporunda bir değer farklı yazıyorsa ya masum bir yazım hatasıdır ya da biri yalan söylüyordur; hangisi olduğunu ek test gösterir. Ama her test kasadan çıkar.
 - **Zarf:** Rüşvetçi müteahhit, sen bir uyuşmazlık bulunca masaya zarf bırakır. Zarfa tıklarsan açılır ve içindeki parayı görürsün: **rüşveti kabul et** (zarfı alırsın, forma yeşil ONAY kaşesi kendiliğinden basılır) ya da **reddet** (ya da boş bir yere tıkla; zarf masaya döner, belgelere bakmaya devam edersin). Zarf masadayken yeşil **ONAY** kaşesi zarfla onay demektir; kırmızı **RED** kaşesi zarfı da reddeder. Rüşvet teklif edilen her proje kurallara aykırıdır.
 - **Kabadayı:** Bazı müteahhitler "hayır" cevabını sevmez. Reddedersen camın kırılabilir, masana tekme atılabilir, kapının kilidi ya da arabanın lastikleri gidebilir; tamiri sana kalır.
+- **Hediye:** Dürüst bir usta, projesini onaylarsan bazen teşekkür için hediye getirir; kabul edersen hediye ofisinde kalır.
 - **Gün sonu:** Afet olursa gazete, onayladığın binaların akıbetini yazar. Olmazsa günün özetini görürsün.
 - **Ödeme:** Her gün kira ve kredi ödenir. Kasada yetmeyen gider borca yazılır; borç çok büyürse ofis kapanır.
 
@@ -61,10 +62,10 @@ Oyun 7 gün sürer. Dört farklı son var; hangisini göreceğin, attığın imz
 
 | Kişi | Rol |
 |---|---|
-| Ahmet İlman | Oyun mantığı (Core), veri, entegrasyon, build |
-| Oğuzhan Yurt | Masa ekranı (belgeler, kararlar, ses ve kaşe) |
-| Onur Kabadayılar | Akış ekranları (gazete, gün özeti, ödeme, sonlar, ana menü) |
-| Tarık Hokkaömeroğlu | Görsel ve ses, içerik metinleri (müteahhitler, gazete manşetleri, sonlar), asset ve yapay zekâ kaydı |
+| Ahmet İlman | Oyun mantığı (Core), veri, entegrasyon, build, tanıtım videosu |
+| Oğuzhan Yurt | Masa ekranı (belgeler, inceleme, kaşe ve belge iadesi, ses) |
+| Onur Kabadayılar | Akış ekranları (gazete, gün özeti, ödeme, sonlar, ana menü), üst bar, kaşe çekmecesi |
+| Tarık Hokkaömeroğlu | Görsel ve ses, son müzikleri, içerik metinleri (müteahhitler, manşetler, sonlar), ilk gün rehberi, jüri menüsü, asset ve yapay zekâ kaydı |
 
 ## Hazır asset ve yapay zekâ kullanımı
 
@@ -77,6 +78,7 @@ Oyundaki bütün kişi, bina, mahalle ve şirket adları kurgusaldır. Gerçek b
 ## Teknik
 
 - Kaynak kod: https://github.com/tarikhokka/GameJam2026TOOADEVS
+- **Görsel ve ses dosyaları Git LFS'tedir.** Projeyi açmak için önce `git lfs install`, sonra `git clone https://github.com/tarikhokka/GameJam2026TOOADEVS.git` (GitHub'ın "Download ZIP" seçeneği LFS dosyalarını indirmez).
 - Unity **6000.6.4f1**, 2D (URP), uGUI + TextMeshPro, Input System.
 - Kod klasörleri: `Assets/_Project/Scripts/` (`Core`, `Desk`, `Flow`).
 - Geliştirici notları: `memory.md` (ortak kararlar), `AHMET.md`, `OGUZHAN.md`, `ONUR.md`.

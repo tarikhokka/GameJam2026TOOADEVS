@@ -195,7 +195,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 **Faz durumu (belge turu):**
 | Faz | İş | Kim | Durum |
 |---|---|---|---|
-| 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ⏳ (hedef 05:15, ERKEN push) |
+| 1 | A1 Karar akışını ikiye böl: `StampDecision` / `HandBack` / `StampArea` / `CanStamp` (geçici: eski ONAY/RED = kaşe + otomatik iade, oyun çalışır) | A | ✅ `a9e80a7` (05:26) |
 | 1 | B1 Özellik 1: masada sol ikonlar, tıkla-aç animasyonu, sürükle-ver (ikona küçülme, müteahhide bırakma), iki belge verilince `HandBack` | Oğuzhan | ⏳ |
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ⏳ |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
@@ -229,7 +229,16 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | `Art/**`, `Audio/**`, `Desk/UI/TutorialView.cs` (sadece metin), `README.md`, `ICERIK_TASLAK.md`, `CREDITS_AND_AI.md`, `Flow/UI/JuryMenu.cs`, `Core/Game/JuryHooks.cs` | Tarık |
 
 #### A — A1, A2, A3
-- [ ] **A1 (ERKEN):**
+- [x] **A1 ✅ `a9e80a7`:** EditMode 58/58, PlayMode 4/4; 7 günlük otomatik oynanış geçti (kaşe + iade API'siyle 7 karar; kaşede karar Core'a gitmiyor, iadede gidiyor).
+  - **Oğuzhan, artık `DeskScreen.cs` senin, pull et.**
+  - **API:**
+    - `HandBack()` **`bool` döner**: kaşe yoksa ya da sıra / diyalog sürüyorsa false;
+    - `CanStamp` inceleme modu açıkken false;
+    - `StampDecision` modu kendisi kapatır.
+  - **Formdaki kaşe:** `FormView.SetPendingStamp(verdict)` basılmış ama verilmemiş kaşeyi gösterir; `StampArea` şimdilik ONAY / RED satırı ("Decisions").
+  - **Geçici köprü:** `StampAndHandBack` (ONAY / RED / zarf kabulü); B2'de kaldır.
+  - `AfterDecision` hâlâ form ve lab raporunu kapatıyor; B1/B2'de iade akışına göre değiştir.
+  - (eski plan) **A1 (ERKEN):**
   - `DeskScreen`: kararı ikiye ayırır, API sözleşmesindeki gibi: `StampArea`, `CanStamp`, `IsStamped`, `StampDecision`, `HandBack`, `DecisionStamped`.
   - `FormView.StampArea`: ONAY / RED düğmelerini kapsayan alan.
   - **Geçici köprü:** Eski ONAY / RED düğmeleri `StampDecision` + hemen `HandBack` çağırır, böylece oyun Faz 2'ye kadar bugünkü gibi oynanır. Zarf kabulü `StampDecision(true)` + `HandBack`. B2 köprüyü kaldırır.

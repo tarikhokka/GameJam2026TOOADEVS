@@ -65,9 +65,8 @@ namespace CivilJam.Desk
         // El Kitabı satırı) çocuk önüne çizileceği için kardeşi olur, hemen arkasına konur ve boyutu her karede alana uydurulur.
         private void BuildBack()
         {
-            // Görsel alan (kaşe) zaten kendisi aydınlık kalır; arkasına kare kağıt koyulmaz.
-            var image = GetComponent<Image>();
-            if (image != null && image.sprite != null) return;
+            // (Tarık, 18 Ekim) Görsel alan (lab kaşesi) da kağıt zemin alır: kaşe mürekkebi şeffaf ve soluk olduğu için
+            // karartma üstünde tek başına sönük görünüyordu, diğer alanlar gibi parlasın.
             backIsSibling = GetComponent<Graphic>() != null && transform.parent != null;
             if (!backIsSibling)
             {

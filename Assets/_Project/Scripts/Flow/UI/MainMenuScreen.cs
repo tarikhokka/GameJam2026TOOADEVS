@@ -41,10 +41,12 @@ namespace CivilJam.Flow
             "<b>Onur Kabadayılar</b> — Akış ekranları: gazete, gün özeti, ödeme, sonlar, ana menü, üst bar\n" +
             "<b>Tarık Hokkaömeroğlu</b> — Görsel ve ses, son müzikleri, içerik metinleri " +
             "(müteahhitler, manşetler, sonlar), jüri menüsü\n\n" +
-            "<b>YAPAY ZEKÂ</b>\n" +
-            "Kodda, metinlerde ve görsellerde yapay zekâ araçları kullanıldı: " +
-            "Claude ve Claude Code (Anthropic), ChatGPT ve Codex (OpenAI), Gemini (Google). " +
-            "Hangi iş, hangi dosya ve kim: CREDITS_AND_AI.md\n\n" +
+            "<b>YAPAY ZEKÂ KULLANIMI</b>\n" +
+            "<b>Görsel:</b> Müteahhit portreleri, ofis, belgeler, son ekranları, zarf ve ana menü ChatGPT ile; " +
+            "gazete şablonu Gemini ile üretildi. Düğmeler, ikonlar, kaşeler ve canlandırmalar Claude ile yazılan çizim kodlarıyla yapıldı.\n" +
+            "<b>Kod:</b> Claude Code ve Codex ile yazıldı; ekip yönlendirdi, inceledi ve test etti.\n" +
+            "<b>Metin:</b> Müteahhit replikleri, manşetler, son ve öğretici metinlerinin taslakları Claude ve ChatGPT ile yazıldı, ekip düzenledi.\n" +
+            "<b>Ses:</b> Üç son müziği ve mesai zili Claude ile yazılan ses üretim koduyla yapıldı. Diğer sesler hazır kaynaktır (sağda).\n\n" +
             "<b>MOTOR</b>\n" +
             "Unity 6 · uGUI + TextMeshPro · Input System\n\n" +
             "Oynadığın için teşekkürler.";

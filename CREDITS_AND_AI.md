@@ -129,9 +129,11 @@ Oğuzhan Yurt — Masa ekranı: belgeler, kararlar, inceleme, ses ve kaşe
 Onur Kabadayılar — Akış ekranları: gazete, gün özeti, ödeme, sonlar, ana menü, üst bar
 Tarık Hokkaömeroğlu — Görsel ve ses, son müzikleri, içerik metinleri (müteahhitler, manşetler, sonlar), jüri menüsü
 
-YAPAY ZEKÂ
-Kodda, metinlerde ve görsellerde yapay zekâ araçları kullanıldı: Claude ve Claude Code (Anthropic),
-ChatGPT ve Codex (OpenAI), Gemini (Google). Hangi iş, hangi dosya ve kim: CREDITS_AND_AI.md
+YAPAY ZEKÂ KULLANIMI
+Görsel: Müteahhit portreleri, ofis, belgeler, son ekranları, zarf ve ana menü ChatGPT ile; gazete şablonu Gemini ile üretildi. Düğmeler, ikonlar, kaşeler ve canlandırmalar Claude ile yazılan çizim kodlarıyla yapıldı.
+Kod: Claude Code ve Codex ile yazıldı; ekip yönlendirdi, inceledi ve test etti.
+Metin: Müteahhit replikleri, manşetler, son ve öğretici metinlerinin taslakları Claude ve ChatGPT ile yazıldı, ekip düzenledi.
+Ses: Üç son müziği ve mesai zili Claude ile yazılan ses üretim koduyla yapıldı. Diğer sesler hazır kaynaktır.
 
 MOTOR
 Unity 6 · uGUI + TextMeshPro · Input System

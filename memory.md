@@ -200,7 +200,7 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
 | 1 | C1 Özellik 2: `StampTrayView` (düğme, sola açılan bölme, iki kaşe, sürükle-bas, geri dönüş, kapanış) | Onur | ✅ `fe657b3` — 58/58 EditMode + 13/13 PlayMode |
 | 1 | T1 Görseller + sesler | Tarık | ✅ `4a88ff2` |
 | 1 | T2 Metinler: öğretici kartlar, README, ICERIK_TASLAK | Tarık | ✅ (bu commit) |
-| 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | 🟢 başla |
+| 2 | B2 Entegrasyon: ONAY/RED düğmeleri ve geçici otomatik iade kalkar, bölme builder'a, kaşe karartması, inceleme ↔ bölme dışlaması, zarf kabul = otomatik ONAY kaşesi, T1 görselleri, prefab | Oğuzhan | ✅ `76db5f3` |
 | 2 | C2 Bölmenin masada son ayarı (Sandbox_Desk'te B2 ile), kendi bileşenindeki düzeltmeler | Onur | 🟢 başla |
 | 2 | A2 Otomatik 7 günlük oynanış yeni akışla, jüri menüsü uyumu, ekran görüntüleri | A | 🟡 test hazır (06:20), son koşu B2'den sonra |
 | 3 | A3 Entegrasyon, §2-§3, build + ZIP | A | 🔒 |
@@ -289,7 +289,17 @@ Referans: `Docs/Tasarim/hedef_arayuz.png` (Onur). El kitabı ilk sekmesi: `Docs/
     - Kaşeden önce verilemez: müteahhide bırakılırsa yerine döner. İstersen müteahhit "Önce imzalayın hocam" gibi tek satır söyler (Tarık yazar).
   - **İki belge de verilince** `DeskScreen.HandBack()`.
   - `AfterDecision`'daki "form ve lab raporu kayıp gider" kısmı yeni akışa uyarlanır (belgeler zaten verildi).
-- [ ] **B2 Entegrasyon (Faz 2):**
+- [x] **B2 ✅ `76db5f3`** — Sandbox_Desk'te Oğuzhan tam turla denedi (ikon → aç → İNCELE → kaşe → iki belge ver → sıradaki; onay, ret, zarf kabulü, gün sonu, 1. gün öğretici). Prefab builder'la kuruldu (T2 öğretici metinleri prefab'da).
+  - **Yapılanlar:**
+    - ONAY / RED, "ZARFI AL VE ONAYLA" ve geçici köprü (`StampAndHandBack`, `HandBackByDrag`) kalktı.
+    - Formun altında çerçeveli kaşe alanı (`FormView.StampArea` artık kendi alanı); ONAYLANDI / REDDEDİLDİ izi orada.
+    - `StampTrayView` builder'da ekranın sağ kenarında, El Kitabı sekmelerinin altında (kök 640×260); `Bind(StampArea, CanStamp)`, `Stamped → StampDecision`; yeni müteahhit / gizlenme / gün sonunda kapanır.
+    - Zarf kabulü → `StampDecision(true)` (form kapalıysa önce açılır); kaşeden sonra zarf masada görünmez. İade oyuncuda.
+    - Çekmece açıkken İNCELE karartması (`InspectController.SetFocus`); kaşe alanı aydınlık ve parlar, çekmece ve İNCELE katmanı karartmanın üstünde.
+  - **Öneri — Ahmet'in onayına (D kararlarındaki "inceleme modu açıkken bölme açılmaz" maddesi):** Oğuzhan istedi: inceleme modunda kaşe düğmesi aydınlık ve basılabilir; basınca mod kapanır, çekmece açılır (poliş K2'deki ONAY / RED gibi). İkisi yine aynı anda açık olmaz; çekmece açıkken İNCELE'ye basınca çekmece kapanır. Bunun için `CanStamp` artık inceleme modunda da true olabiliyor (`StampDecision` modu kendisi kapatır). Ahmet uygun bulmazsa geri alınır (tek satır: `CanStamp`'e `!Inspecting`).
+  - **A için:** `BribeEnvelopeView.cs:228` ipucu hâlâ "kararı yine ONAY / RED ile verirsin" diyor; düğme kalktı. Öneri: "…kararı yine kaşe çekmecesinden verirsin." (A'nın dosyası, Oğuzhan dokunmadı.)
+  - **Onur (C2):** B2 bu push'ta; kaşe çekmecesinin masadaki son ayarı Sandbox_Desk'te yapılabilir. Yer builder'da `DeskSandboxBuilder.StampTray.cs` (`StampTrayRightX` / `StampTrayCenterY`); değişmesi gerekirse Oğuzhan'a söyle.
+  - (eski görev metni) **B2 Entegrasyon (Faz 2):**
   - ONAY / RED düğmeleri ve A1'in geçici köprüsü kalkar; kaşe alanı boş ve hafif çerçeveli görünür.
   - `StampTrayView` builder'da El Kitabı'nın sağına kurulur: `Bind(() => StampArea, () => CanStamp)`, `Stamped += StampDecision`.
   - **Bölme açıkken karartma:** `InspectDim` / `InspectLift` ile kaşe alanı + bölme aydınlık, gerisi hafif karanlık; kaşe alanı hafif parlar.

@@ -118,7 +118,7 @@ namespace CivilJam.Flow
             holder.localRotation = Quaternion.Euler(0f, 0f, PaperTilt);
 
             _continue = UiKit.Button(root, "Continue", "Hesaplaşmaya geç  →", Finish,
-                new Vector2(0.74f, 0.02f), new Vector2(0.98f, 0.09f), 30f);
+                new Vector2(0.815f, 0.02f), new Vector2(0.99f, 0.09f), 30f); // gazetenin (x 370-1550) sağında, kağıdın üstüne binmez
             _continueGroup = _continue.gameObject.AddComponent<CanvasGroup>();
 
             _audio = gameObject.AddComponent<AudioSource>();
